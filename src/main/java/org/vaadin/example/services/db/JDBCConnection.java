@@ -14,31 +14,22 @@ import java.util.logging.Logger;
  * @editor Julian
  */
 public class JDBCConnection {
-
     private static JDBCConnection connection = null;
-
     private String url = "jdbc:postgresql://dumbo.inf.h-brs.de/gwolni2s";
-
     private Connection conn;
-
     private String login = "gwolni2s";
-
     private String password = "gwolni2s";
 
     public static JDBCConnection getInstance() throws DatabaseLayerException {
-
         if ( connection == null ) {
             connection = new JDBCConnection();
         }
         return connection;
-
     }
 
     private JDBCConnection() throws DatabaseLayerException {
         this.initConnection();
-
     }
-
 
     public void initConnection() throws DatabaseLayerException {
         try {
@@ -47,16 +38,13 @@ public class JDBCConnection {
             Logger.getLogger(JDBCConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.openConnection();
-
     }
 
     public void openConnection() throws DatabaseLayerException {
-
         try {
             Properties props = new Properties();
             props.setProperty("user", "gwolni2s" );
             props.setProperty("password", "gwolni2s" );
-
 
             this.conn = DriverManager.getConnection(this.url, props);
 
@@ -68,19 +56,16 @@ public class JDBCConnection {
     }
 
     public Statement getStatement() throws DatabaseLayerException {
-
         try {
             if ( this.conn.isClosed() ) {
                 this.openConnection();
             }
-
             return this.conn.createStatement();
         } catch (SQLException ex) {
             Logger.getLogger(JDBCConnection.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
             return null;
         }
-
     }
 
     public PreparedStatement getPreparedStatement( String sql  ) throws DatabaseLayerException {
@@ -88,13 +73,11 @@ public class JDBCConnection {
             if ( this.conn.isClosed() ) {
                 this.openConnection();
             }
-
             return this.conn.prepareStatement(sql);
         } catch (SQLException ex) {
             Logger.getLogger(JDBCConnection.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
-
     }
 
     public void closeConnection(){
@@ -103,9 +86,6 @@ public class JDBCConnection {
         } catch (SQLException ex) {
             Logger.getLogger(JDBCConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-
-
 }
 

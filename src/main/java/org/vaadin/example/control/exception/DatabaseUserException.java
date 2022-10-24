@@ -1,15 +1,17 @@
-package org.vaadin.example.services.db.exception;
+package org.vaadin.example.control.exception;
 
-public class DatabaseLayerException extends Exception {
+public class DatabaseUserException extends Exception{
     private String reason = null;
+
     public String getReason() {
         return reason;
     }
+
     public void setReason(String reason) {
         this.reason = reason;
     }
-    public DatabaseLayerException(String reason ) {
+
+    public DatabaseUserException( String reason ) {
         this.reason = reason;
     }
-
 }
