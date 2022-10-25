@@ -1,13 +1,9 @@
 package org.hbrs.se2.project;
 
 import org.hbrs.se2.project.control.LoginControl;
-import org.hbrs.se2.project.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.dtos.UserDTO;
-import org.hbrs.se2.project.repository.UserRepository;
 import org.junit.Assert;
 
 import org.junit.Test;
-import org.hbrs.se2.project.dao.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.ResultSet;
@@ -21,7 +17,8 @@ public class DbConnection {
     // Tests UserDAO Class which makes a query with jdbc
     // But we want to use JPA
     // ToDo Tests for JPA
-    @Test
+
+    /*@Test
     public void connectionToDbTabUserSelectAllWhereIDAndPasswdIsTestWorks() throws SQLException {
         UserDAO testDAO = new UserDAO();
         ResultSet testset = null;
@@ -43,4 +40,6 @@ public class DbConnection {
             Assert.assertNotNull(null);
         }
     }
+
+     */
 }

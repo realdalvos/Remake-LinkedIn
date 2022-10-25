@@ -10,8 +10,13 @@ public class User {
     private String password;
     private String email;
     private String role;
+
+    public User() {
+
+    }
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="userid")
     public int getUserid() {
         return userid;
