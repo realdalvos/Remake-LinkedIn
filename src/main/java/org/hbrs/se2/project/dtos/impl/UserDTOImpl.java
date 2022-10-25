@@ -7,10 +7,12 @@ public class UserDTOImpl implements UserDTO {
     private String username;
     private String password;
     private String email;
+    private String role;
     public void setUserid(int id) {this.userid = id;}
     public void setUsername(String name) {this.username = name;}
     public void setPassword(String password) {this.password = password;}
     public void setEmail(String email) {this.email = email;}
+    public void setRole(String role) {this.role = role;}
     @Override
     public int getUserid() {return this.userid;}
     @Override
@@ -19,6 +21,8 @@ public class UserDTOImpl implements UserDTO {
     public String getPassword() {return this.password;}
     @Override
     public String getEmail() {return this.email;}
+    @Override
+    public String getRole() {return this.role;}
     @Override
     public String toString() {
         return "UserDTOImpl{" +
