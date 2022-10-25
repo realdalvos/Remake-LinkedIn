@@ -42,7 +42,7 @@ public class Student {
     public void setMatrikelnumber(int number) {this.matrikelnumber = number;}
 
     @Basic
-    @Column(name="study major")
+    @Column(name="studymajor")
     public String getStudyMajor() {return studyMajor;}
     public void setStudyMajor(String major) {this.studyMajor = major;}
 

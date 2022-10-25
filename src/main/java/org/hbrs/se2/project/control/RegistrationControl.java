@@ -43,7 +43,7 @@ public class RegistrationControl {
         System.out.println(student.getStudyMajor());
         System.out.println(student.getMatrikelnumber());
 
-        //this.createStudentProfile(student);
+        this.createStudentProfile(student);
         return true;
     };
 
@@ -53,7 +53,7 @@ public class RegistrationControl {
         company.setUserid(userDTO2.getUserid());
 
         System.out.println(userDTO2.getUserid() + " " + userDTO2.getUsername());
-        //this.createCompanyProfile(company);
+        this.createCompanyProfile(company);
         return true;
     }
 
