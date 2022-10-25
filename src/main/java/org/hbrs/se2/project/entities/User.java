@@ -9,6 +9,7 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private String role;
     @Id
     @GeneratedValue
     @Column(name="userid")
@@ -35,12 +36,17 @@ public class User {
         this.password = password;
     }
     @Basic
-    @Column(name="emailaddr")
+    @Column(name="email")
     public String getEmail() {
         return email;
     }
     public void setEmail(String email) {
         this.email = email;
     }
+    @Basic
+    @Column(name = "role")
+    public String getRole() {return role;}
+    public void setRole(String role) {this.role = role;}
 }
+
 
