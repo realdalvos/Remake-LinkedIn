@@ -10,13 +10,20 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.hbrs.se2.project.control.RegistrationControl;
+import org.hbrs.se2.project.control.exception.DatabaseUserException;
+import org.hbrs.se2.project.entities.Company;
+import org.hbrs.se2.project.entities.User;
 import org.hbrs.se2.project.util.Globals;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Route(value = "register-company")
 @PageTitle("Register as a Company")
 public class RegisterCompanyView extends VerticalLayout {
 
     // register controller
+    @Autowired
+    private RegistrationControl registrationControl;
 
     private H4 registerText = new H4();
 
@@ -30,9 +37,9 @@ public class RegisterCompanyView extends VerticalLayout {
         EmailField email = new EmailField("Email address");
         email.getElement().setAttribute("name", "email");
         email.setPlaceholder("username@example.com");
-        email.setErrorMessage("Please enter a valid example.com email address");
+        //email.setErrorMessage("Please enter a valid example.com email address");
         email.setClearButtonVisible(true);
-        email.setPattern("^.+@example\\.com$");
+        email.setPattern("^(.+)@(\\S+)$");
 
         // password fields
         PasswordField password = new PasswordField("Password");
@@ -54,7 +61,30 @@ public class RegisterCompanyView extends VerticalLayout {
         );
 
         confirmButton.addClickListener(event -> {
+            boolean isRegistered;
             // function to register new account
+            // ToDO: password check necessary
+            // ToDo: Input Fields not empty checks
+
+            User user = new User();
+            user.setUsername(username.getValue().trim());
+            user.setPassword(password.getValue().trim());
+            user.setEmail(email.getValue().trim());
+            user.setRole("company");
+
+            Company company = new Company();
+            company.setName(companyName.getValue().trim());
+
+            try {
+                isRegistered = registrationControl.registerCompany(user, company);
+            } catch (DatabaseUserException e) {
+                throw new RuntimeException(e);
+            }
+            if(isRegistered) {
+                navigateToLoginPage();
+            } else {
+                System.out.println("A Failure occurred while trying to save user and company data in the database");
+            }
         });
 
         loginButton.addClickListener(event -> {
