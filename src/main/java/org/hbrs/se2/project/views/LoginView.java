@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.views;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.login.LoginForm;
@@ -28,6 +29,8 @@ public class LoginView extends VerticalLayout {
     public LoginView() {
         setSizeFull();
         LoginForm component = new LoginForm();
+        Button buttonStudent = new Button("Register as a Student");
+        Button buttonCompany = new Button("Register as a Company");
 
         component.addLoginListener(e -> {
             boolean isAuthenticated = false;
@@ -47,7 +50,17 @@ public class LoginView extends VerticalLayout {
                 component.setError(true);
             }
         });
+        buttonStudent.addClickListener(event -> {
+           // Call a function to navigate to the register as a student view
+            navigateToRegisterStudentPage();
+        });
+        buttonCompany.addClickListener(event -> {
+            // Call a function to navigate to the register as a company view
+            navigateToRegisterCompanyPage();
+        });
         add(component);
+        add(buttonStudent);
+        add(buttonCompany);
         this.setAlignItems(Alignment.CENTER);
     }
 
@@ -58,5 +71,13 @@ public class LoginView extends VerticalLayout {
 
     private void navigateToMainPage() {
         UI.getCurrent().navigate(Globals.Pages.MAIN_VIEW);
+    }
+
+    private void navigateToRegisterCompanyPage() {
+        UI.getCurrent().navigate(Globals.Pages.REGISTER_COMPANY_VIEW);
+    }
+
+    private void navigateToRegisterStudentPage() {
+        UI.getCurrent().navigate(Globals.Pages.REGISTER_STUDENT_VIEW);
     }
 }
