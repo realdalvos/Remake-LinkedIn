@@ -9,6 +9,7 @@ import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -32,7 +33,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
     private Tabs menu;
     private H1 viewTitle;
-    private H1 helloUser;
+    private H4 helloUser;
     private AuthorizationControl authorizationControl;
 
     public AppView() {
@@ -88,7 +89,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         topRightPanel.setAlignItems( FlexComponent.Alignment.CENTER );
 
         // Der Name des Users wird später reingesetzt, falls die Navigation stattfindet
-        helloUser = new H1();
+        helloUser = new H4();
         topRightPanel.add(helloUser);
 
         // Logout-Button am rechts-oberen Rand.
@@ -196,7 +197,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         viewTitle.setText(getCurrentPageTitle());
 
         // Setzen des Vornamens von dem aktuell eingeloggten Benutzer
-        helloUser.setText("Hello my dear old friend!! "  + this.getCurrentNameOfUser() );
+        helloUser.setText("Hello "  + this.getCurrentNameOfUser() );
     }
 
     private Optional<Tab> getTabForComponent(Component component) {

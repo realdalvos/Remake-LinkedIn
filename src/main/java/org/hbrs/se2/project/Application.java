@@ -7,7 +7,9 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 /**
  * The entry point of the Spring Boot application.
  */
-@SpringBootApplication
+@SpringBootApplication(
+        scanBasePackages = {"org.hbrs.se2.project.*"}
+)
 public class Application extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
