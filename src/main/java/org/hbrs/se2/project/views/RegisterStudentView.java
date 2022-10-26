@@ -6,6 +6,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -18,6 +19,7 @@ import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.entities.Student;
 import org.hbrs.se2.project.entities.User;
 import org.hbrs.se2.project.util.Globals;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -27,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @PageTitle("Register as a Student")
 public class RegisterStudentView extends VerticalLayout {
 
-    // register controller
     @Autowired
     private RegistrationControl registrationControl;
 
@@ -35,6 +36,7 @@ public class RegisterStudentView extends VerticalLayout {
 
     public RegisterStudentView() {
         setSizeFull();
+        registerText.setText("Register here");
         // text fields
         TextField firstname = new TextField("First name");
         TextField lastname = new TextField("Last name");
@@ -56,8 +58,7 @@ public class RegisterStudentView extends VerticalLayout {
         Button confirmButton = new Button("Register now as a student");
         Button loginButton = new Button("I already have an account - Log In");
 
-        registerText.setText("Register here");
-
+        // register form for student
         FormLayout formLayout = new FormLayout();
         formLayout.add(
                 firstname, lastname, matrikelNumber,
@@ -65,34 +66,48 @@ public class RegisterStudentView extends VerticalLayout {
                 password, confirmPassword
         );
         formLayout.setResponsiveSteps(
-                // Use two columns by default
+                // Use one column
                 new FormLayout.ResponsiveStep("0", 1)
         );
 
         confirmButton.addClickListener(event -> {
             boolean isRegistered;
-            // ToDO: password check necessary
-            // ToDo: Input Fields not empty checks
-            // function to register new account
+
+            // create new User entity with passed in values from register form
             User user = new User();
             user.setUsername(username.getValue().trim());
             user.setPassword(password.getValue().trim());
             user.setEmail(email.getValue().trim());
             user.setRole("student");
 
+            // create new Student entity with passed in values from register form
             Student student = new Student();
             student.setFirstname(firstname.getValue().trim());
             student.setLastname(lastname.getValue().trim());
-            student.setUniversity("");
-            student.setStudyMajor("");
-            student.setMatrikelnumber(Integer.parseInt(matrikelNumber.getValue().trim()));
+            try {
+                student.setMatrikelnumber(Integer.parseInt(matrikelNumber.getValue().trim()));
+            } catch (NumberFormatException e) {
+                throw new NumberFormatException("Something went wrong with the passed matrikelnumber from the register form");
+            }
+
+            // checks if all input fields were filled out correctly
+            if(!registrationControl.checkFormInputStudent(user.getUsername(), user.getPassword(), user.getEmail(),
+                    student.getFirstname(), student.getLastname(), confirmPassword.getValue().trim())) {
+                throw new Error("The input from the register form was not filled out correctly");
+            }
 
             // call function to save user and student data in db
             try {
+                // function to register new student
                 isRegistered = registrationControl.registerStudent(user, student);
-            } catch (DatabaseUserException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                try {
+                    throw new DatabaseUserException("Something went wrong with registering student");
+                } catch (DatabaseUserException ex) {
+                    throw new RuntimeException("Something went wrong with registering student");
+                }
             }
+
             if(isRegistered) {
                 navigateToLoginPage();
             } else {
@@ -104,6 +119,7 @@ public class RegisterStudentView extends VerticalLayout {
            navigateToLoginPage();
         });
 
+        // add all elements/components to View
         add(registerText);
         add(formLayout);
         add(confirmButton);
