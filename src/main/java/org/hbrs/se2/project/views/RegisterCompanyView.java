@@ -16,6 +16,7 @@ import org.hbrs.se2.project.entities.Company;
 import org.hbrs.se2.project.entities.User;
 import org.hbrs.se2.project.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Route(value = "register-company")
 @PageTitle("Register as a Company")
@@ -24,6 +25,8 @@ public class RegisterCompanyView extends VerticalLayout {
     // register controller
     @Autowired
     private RegistrationControl registrationControl;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private H4 registerText = new H4();
 
@@ -68,7 +71,7 @@ public class RegisterCompanyView extends VerticalLayout {
 
             User user = new User();
             user.setUsername(username.getValue().trim());
-            user.setPassword(password.getValue().trim());
+            user.setPassword(passwordEncoder.encode(password.getValue().trim()));
             user.setEmail(email.getValue().trim());
             user.setRole("company");
 

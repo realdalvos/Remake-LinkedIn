@@ -32,7 +32,7 @@ public class RegistrationControl {
     public boolean registerStudent(User user, Student student) throws DatabaseUserException {
         this.createAccount(user);
         // get User id from new saved user in db
-        UserDTO userDTO1 = userRepository.findUserByUsernameAndPassword(user.getUsername(), user.getPassword());
+        UserDTO userDTO1 = userRepository.findUserByUsername(user.getUsername());
         student.setUserid(userDTO1.getUserid());
 
         System.out.println(userDTO1.getUserid() + " " + userDTO1.getUsername());
@@ -49,7 +49,7 @@ public class RegistrationControl {
 
     public boolean registerCompany(User user, Company company) throws DatabaseUserException {
         this.createAccount(user);
-        UserDTO userDTO2 = userRepository.findUserByUsernameAndPassword(user.getUsername(), user.getPassword());
+        UserDTO userDTO2 = userRepository.findUserByUsername(user.getUsername());
         company.setUserid(userDTO2.getUserid());
 
         System.out.println(userDTO2.getUserid() + " " + userDTO2.getUsername());

@@ -3,8 +3,6 @@ package org.hbrs.se2.project.views;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -14,11 +12,11 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.RegistrationControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.entities.Student;
 import org.hbrs.se2.project.entities.User;
 import org.hbrs.se2.project.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * Register View - Form to register as a student
@@ -30,6 +28,8 @@ public class RegisterStudentView extends VerticalLayout {
     // register controller
     @Autowired
     private RegistrationControl registrationControl;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private H4 registerText = new H4();
 
@@ -76,7 +76,7 @@ public class RegisterStudentView extends VerticalLayout {
             // function to register new account
             User user = new User();
             user.setUsername(username.getValue().trim());
-            user.setPassword(password.getValue().trim());
+            user.setPassword(passwordEncoder.encode(password.getValue().trim()));
             user.setEmail(email.getValue().trim());
             user.setRole("student");
 
