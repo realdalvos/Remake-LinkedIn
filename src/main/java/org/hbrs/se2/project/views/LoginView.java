@@ -35,6 +35,7 @@ public class LoginView extends VerticalLayout {
         component.addLoginListener(e -> {
             boolean isAuthenticated = false;
             try {
+                // authenticate user
                 isAuthenticated = loginControl.authenticate(e.getUsername(), e.getPassword());
             } catch (DatabaseUserException ex) {
                 Dialog dialog = new Dialog();
@@ -44,6 +45,7 @@ public class LoginView extends VerticalLayout {
                 dialog.open();
             }
             if(isAuthenticated) {
+                // create session for user
                 grabAndSetUserIntoSession();
                 navigateToMainPage();
             } else {
@@ -51,13 +53,12 @@ public class LoginView extends VerticalLayout {
             }
         });
         buttonStudent.addClickListener(event -> {
-           // Call a function to navigate to the register as a student view
             navigateToRegisterStudentPage();
         });
         buttonCompany.addClickListener(event -> {
-            // Call a function to navigate to the register as a company view
             navigateToRegisterCompanyPage();
         });
+        // add components to View
         add(component);
         add(buttonStudent);
         add(buttonCompany);

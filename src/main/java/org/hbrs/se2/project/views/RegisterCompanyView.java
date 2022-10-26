@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @PageTitle("Register as a Company")
 public class RegisterCompanyView extends VerticalLayout {
 
-    // register controller
     @Autowired
     private RegistrationControl registrationControl;
 
@@ -29,6 +28,7 @@ public class RegisterCompanyView extends VerticalLayout {
 
     public RegisterCompanyView() {
         setSizeFull();
+        registerText.setText("Register here");
         // text fields
         TextField companyName = new TextField("Company Name");
         TextField username = new TextField("Username");
@@ -37,7 +37,7 @@ public class RegisterCompanyView extends VerticalLayout {
         EmailField email = new EmailField("Email address");
         email.getElement().setAttribute("name", "email");
         email.setPlaceholder("username@example.com");
-        //email.setErrorMessage("Please enter a valid example.com email address");
+        email.setErrorMessage("Please enter a valid example.com email address");
         email.setClearButtonVisible(true);
         email.setPattern("^(.+)@(\\S+)$");
 
@@ -48,8 +48,7 @@ public class RegisterCompanyView extends VerticalLayout {
         Button confirmButton = new Button("Register now as a company");
         Button loginButton = new Button("I already have an account - Log In");
 
-        registerText.setText("Register here");
-
+        // register form for company
         FormLayout formLayout = new FormLayout();
         formLayout.add(
                 companyName, username, email,
@@ -62,24 +61,36 @@ public class RegisterCompanyView extends VerticalLayout {
 
         confirmButton.addClickListener(event -> {
             boolean isRegistered;
-            // function to register new account
-            // ToDO: password check necessary
-            // ToDo: Input Fields not empty checks
-
+            // create new User entity with passed in values from register form
             User user = new User();
             user.setUsername(username.getValue().trim());
             user.setPassword(password.getValue().trim());
             user.setEmail(email.getValue().trim());
             user.setRole("company");
 
+            // create new Company entity with passed in values from register form
             Company company = new Company();
             company.setName(companyName.getValue().trim());
 
+            // checks if all input fields were filled out correctly
+            if(!registrationControl.checkFormInputCompany(user.getUsername(), user.getPassword(),
+                    user.getEmail(), company.getName(), confirmPassword.getValue().trim())) {
+                throw new Error("The input from the register form was not filled out correctly");
+            }
+
+            // call function to save user and company data in db
             try {
+                // function to register new company
                 isRegistered = registrationControl.registerCompany(user, company);
             } catch (DatabaseUserException e) {
-                throw new RuntimeException(e);
+                try {
+                    throw new DatabaseUserException("Something went wron registering a new company");
+                } catch (DatabaseUserException ex) {
+                    throw new RuntimeException("Something went wrong with registration");
+                }
             }
+
+
             if(isRegistered) {
                 navigateToLoginPage();
             } else {
@@ -91,6 +102,7 @@ public class RegisterCompanyView extends VerticalLayout {
             navigateToLoginPage();
         });
 
+        // add all elements/components to View
         add(registerText);
         add(formLayout);
         add(confirmButton);
@@ -102,4 +114,5 @@ public class RegisterCompanyView extends VerticalLayout {
     private void navigateToLoginPage() {
         UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
     }
+
 }
