@@ -35,18 +35,18 @@ public class RegistrationControl {
         UserDTO userDTO1 = userRepository.findUserByUsernameAndPassword(user.getUsername(), user.getPassword());
         student.setUserid(userDTO1.getUserid());
 
+        // create student profile
         try {
             try {
                 this.createStudentProfile(student);
             } catch (DatabaseUserException e) {
-                throw new DatabaseUserException("Student Profile could not be created");
+                throw new DatabaseUserException("Student Profile could not be created at createStudentProfile");
             }
         } catch (RuntimeException ex) {
             // Delete user table data because student data could not be saved
-            // for database tables consistency
             System.out.println("Student profile could not be saved why user data was deleted.");
             userRepository.deleteById(userDTO1.getUserid());
-            throw new RuntimeException("Student Profile could not be created");
+            throw new RuntimeException("Matrikelnumber already exists.");
         }
         return true;
     };
@@ -57,18 +57,18 @@ public class RegistrationControl {
         UserDTO userDTO2 = userRepository.findUserByUsernameAndPassword(user.getUsername(), user.getPassword());
         company.setUserid(userDTO2.getUserid());
 
+        // create company profile
         try {
             try {
                 this.createCompanyProfile(company);
             } catch (DatabaseUserException e) {
-                throw new DatabaseUserException("Company Profile could not be created");
+                throw new DatabaseUserException("Company Profile could not be created at registerCompany");
             }
         } catch (RuntimeException ex) {
             // Delete user table data because company data could not be saved
-            // for database tables consistency
             System.out.println("Company profile could not be saved why user data was deleted.");
             userRepository.deleteById(userDTO2.getUserid());
-            throw new RuntimeException("Company Profile could not be created");
+            throw new RuntimeException("Company Profile could not be created at registerCompany");
         }
         return true;
     }
@@ -79,7 +79,7 @@ public class RegistrationControl {
         try {
             this.userRepository.save(user);
         } catch (org.springframework.dao.DataAccessResourceFailureException e) {
-            throw new DatabaseUserException("A Failure occurred while saving a user account in the database");
+            throw new DatabaseUserException("A Failure occurred while saving a user account in the database at createAccount");
         }
     }
 
@@ -87,7 +87,7 @@ public class RegistrationControl {
         try {
             this.studentRepository.save(student);
         } catch(org.springframework.dao.DataAccessResourceFailureException e) {
-            throw new DatabaseUserException("A Failure occurred while saving a Student Profile into the database");
+            throw new DatabaseUserException("A Failure occurred while saving a Student Profile into the database at createStudentProfile");
         }
     }
 
@@ -95,33 +95,23 @@ public class RegistrationControl {
         try {
             this.companyRepository.save(company);
         } catch(org.springframework.dao.DataAccessResourceFailureException e) {
-            throw new DatabaseUserException("A Failure occurred while saving a Company Profile into the database");
+            throw new DatabaseUserException("A Failure occurred while saving a Company Profile into the database at createCompanyProfile");
         }
     }
 
-    // calls two methods to check several conditions to be met for student input
+    // makes array and calls function to check if input is null or emtpy ""
     public boolean checkFormInputStudent(
             String username, String password, String email,
-            String firstname, String lastname, String confirmPassword
+            String firstname, String lastname
     ) {
         String[] array = {username, password, email, firstname, lastname};
-        if(!checkRegisterInput(array)) {
-            return false;
-        } else if(!checkPasswordConfirmation(password, confirmPassword)) {
-            return false;
-        }
-        return true;
+        return checkRegisterInput(array);
     }
 
-    // calls two methods to check several conditions to be met for company input
-    public boolean checkFormInputCompany(String username, String password, String email, String name, String confirmPassword) {
+    // makes array and calls function to check if input is null or emtpy ""
+    public boolean checkFormInputCompany(String username, String password, String email, String name) {
         String[] array = {username, password, email, name};
-        if(!checkRegisterInput(array)) {
-            return false;
-        } else if (!checkPasswordConfirmation(password, confirmPassword)) {
-            return false;
-        }
-        return true;
+        return checkRegisterInput(array);
     }
 
     // Checks if field input is null or empty
@@ -138,7 +128,7 @@ public class RegistrationControl {
     };
 
     // Checks if password and confirmPassword are equal
-    private boolean checkPasswordConfirmation(String passw1, String passw2) {
+    public boolean checkPasswordConfirmation(String passw1, String passw2) {
         return passw1.trim().equals(passw2.trim());
     }
 }
