@@ -20,7 +20,7 @@ public class LoginControl {
     public boolean authenticate(String username, String password) throws DatabaseUserException {
         UserDTO tmpUser = this.getUserWithJPA(username);
 
-        if(tmpUser == null || !passwordEncoder.matches(password, tmpUser.getPassword())) {
+        if(tmpUser == null || !passwordEncoder.matches(password, tmpUser.getPassword().trim())) {
             return false;
         }
         this.userDTO = tmpUser;
