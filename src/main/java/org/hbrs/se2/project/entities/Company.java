@@ -1,7 +1,13 @@
 package org.hbrs.se2.project.entities;
 
 import javax.persistence.*;
-
+/**
+ * This entity reflects the exact same database table "company"
+ * so JPA Repository 'understands' how to save or read data from/to this table
+ *
+ * This is why you for instance pass a company entity 'company' to the method
+ * repository.save(company)
+ */
 @Entity
 @Table(name="company", schema = "mid9db")
 public class Company {

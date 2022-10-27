@@ -40,25 +40,41 @@ public class RegistrationControl {
         UserDTO userDTO1 = userRepository.findUserByUsername(user.getUsername());
         student.setUserid(userDTO1.getUserid());
 
-        System.out.println(userDTO1.getUserid() + " " + userDTO1.getUsername());
-        System.out.println(student.getUserid());
-        System.out.println(student.getFirstname());
-        System.out.println(student.getLastname());
-        System.out.println(student.getUniversity());
-        System.out.println(student.getStudyMajor());
-        System.out.println(student.getMatrikelnumber());
-
-        this.createStudentProfile(student);
+        try {
+            try {
+                this.createStudentProfile(student);
+            } catch (DatabaseUserException e) {
+                throw new DatabaseUserException("Student Profile could not be created");
+            }
+        } catch (RuntimeException ex) {
+            // Delete user table data because student data could not be saved
+            // for database tables consistency
+            System.out.println("Student profile could not be saved why user data was deleted.");
+            userRepository.deleteById(userDTO1.getUserid());
+            throw new RuntimeException("Student Profile could not be created");
+        }
         return true;
     };
 
     public boolean registerCompany(User user, Company company) throws DatabaseUserException {
         this.createAccount(user);
+        // get User id from new saved user in db
         UserDTO userDTO2 = userRepository.findUserByUsername(user.getUsername());
         company.setUserid(userDTO2.getUserid());
 
-        System.out.println(userDTO2.getUserid() + " " + userDTO2.getUsername());
-        this.createCompanyProfile(company);
+        try {
+            try {
+                this.createCompanyProfile(company);
+            } catch (DatabaseUserException e) {
+                throw new DatabaseUserException("Company Profile could not be created");
+            }
+        } catch (RuntimeException ex) {
+            // Delete user table data because company data could not be saved
+            // for database tables consistency
+            System.out.println("Company profile could not be saved why user data was deleted.");
+            userRepository.deleteById(userDTO2.getUserid());
+            throw new RuntimeException("Company Profile could not be created");
+        }
         return true;
     }
 
@@ -89,6 +105,49 @@ public class RegistrationControl {
         } catch(org.springframework.dao.DataAccessResourceFailureException e) {
             throw new DatabaseUserException("A Failure occurred while saving a Company Profile into the database");
         }
+    }
+
+    // calls two methods to check several conditions to be met for student input
+    public boolean checkFormInputStudent(
+            String username, String password, String email,
+            String firstname, String lastname, String confirmPassword
+    ) {
+        String[] array = {username, password, email, firstname, lastname};
+        if(!checkRegisterInput(array)) {
+            return false;
+        } else if(!checkPasswordConfirmation(password, confirmPassword)) {
+            return false;
+        }
+        return true;
+    }
+
+    // calls two methods to check several conditions to be met for company input
+    public boolean checkFormInputCompany(String username, String password, String email, String name, String confirmPassword) {
+        String[] array = {username, password, email, name};
+        if(!checkRegisterInput(array)) {
+            return false;
+        } else if (!checkPasswordConfirmation(password, confirmPassword)) {
+            return false;
+        }
+        return true;
+    }
+
+    // Checks if field input is null or empty
+    private boolean checkRegisterInput(String[] array) {
+        boolean isCorrect = true;
+        // checks all input to not be empty string or null
+        for (String s : array) {
+            if (s == null || s.equals("")) {
+                isCorrect = false;
+                break;
+            }
+        }
+        return isCorrect;
+    };
+
+    // Checks if password and confirmPassword are equal
+    private boolean checkPasswordConfirmation(String passw1, String passw2) {
+        return passw1.trim().equals(passw2.trim());
     }
 }
 
