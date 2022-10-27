@@ -25,8 +25,6 @@ public class RegisterCompanyView extends VerticalLayout {
     // register controller
     @Autowired
     private RegistrationControl registrationControl;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     private H4 registerText = new H4();
 
@@ -71,7 +69,7 @@ public class RegisterCompanyView extends VerticalLayout {
 
             User user = new User();
             user.setUsername(username.getValue().trim());
-            user.setPassword(passwordEncoder.encode(password.getValue().trim()));
+            user.setPassword(password.getValue().trim());
             user.setEmail(email.getValue().trim());
             user.setRole("company");
 
