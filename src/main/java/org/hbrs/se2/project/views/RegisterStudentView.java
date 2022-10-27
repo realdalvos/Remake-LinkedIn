@@ -124,7 +124,7 @@ public class RegisterStudentView extends VerticalLayout {
         add(formLayout);
         add(confirmButton);
         add(loginButton);
-        this.setWidth("30%");
+        this.setWidth("70%");
         this.setAlignItems(Alignment.CENTER);
     }
 

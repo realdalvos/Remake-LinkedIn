@@ -25,5 +25,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     StudentDTO findStudentByMatrikelnumber(int number);
 
+
+
 }
 
