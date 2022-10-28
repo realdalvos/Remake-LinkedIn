@@ -1,0 +1,371 @@
+@startuml
+class org.hbrs.se2.project.util.Globals {
++ {static} String CURRENT_USER
+}
+class org.hbrs.se2.project.util.Globals.Pages {
++ {static} String MAIN_VIEW
++ {static} String LOGIN_VIEW
++ {static} String JOBS_VIEW
++ {static} String MYADS_VIEW
++ {static} String REGISTER_COMPANY_VIEW
++ {static} String REGISTER_STUDENT_VIEW
++ {static} String NEW_ADD_VIEW
+}
+class org.hbrs.se2.project.util.Globals.Roles {
++ {static} String student
++ {static} String company
+}
+class org.hbrs.se2.project.util.Globals.Errors {
++ {static} String NOUSERFOUND
++ {static} String SQLERROR
++ {static} String DATABASE
+}
+package Model <<Rectangle>> {
+class Student {
+- int studentid
+- int userid
+- String firstname
+- String lastname
+- int matrikelnumber
+- String studyMajor
+- String university
++ <<Create>> Student()
++ int getStudentid()
++ void setStudentid(int)
++ int getUserid()
++ void setUserid(int)
++ String getFirstname()
++ void setFirstname(String)
++ String getLastname()
++ void setLastname(String)
++ int getMatrikelnumber()
++ void setMatrikelnumber(int)
++ String getStudyMajor()
++ void setStudyMajor(String)
++ String getUniversity()
++ void setUniversity(String)
+}
+class Job {
+- int jobid
+- int companyid
+- String title
+- String description
+- String salary
++ <<Create>> Job()
++ int getJobid()
++ void setJobid(int)
++ int getCompanyid()
++ void setCompanyid(int)
++ String getTitle()
++ void setTitle(String)
++ String getDescription()
++ void setDescription(String)
++ String getSalary()
++ void setSalary(String)
+}
+class Company {
+- int companyid
+- int userid
+- String name
+- String industry
+- boolean banned
++ <<Create>> Company()
++ int getCompanyid()
++ void setCompanyid(int)
++ int getUserid()
++ void setUserid(int)
++ String getName()
++ void setName(String)
++ String getIndustry()
++ void setIndustry(String)
++ boolean isBanned()
++ void setBanned(boolean)
+}
+class User {
+- int userid
+- String username
+- String password
+- String email
+- String role
++ <<Create>> User()
++ int getUserid()
++ void setUserid(int)
++ String getUsername()
++ void setUsername(String)
++ String getPassword()
++ void setPassword(String)
++ String getEmail()
++ void setEmail(String)
++ String getRole()
++ void setRole(String)
+}
+}
+package View <<Rectangle>> {
+class AppView {
+- Tabs menu
+- H1 viewTitle
+- H4 helloUser
+- AuthorizationControl authorizationControl
++ <<Create>> AppView()
++ void setUpUI()
+- boolean checkIfUserIsLoggedIn()
+- Component createHeaderContent()
+- void logoutUser()
+- Component createDrawerContent(Tabs)
+- Tabs createMenu()
+- Component[] createMenuItems()
+- {static} Tab createTab(String,Class<? extends Component>)
+# void afterNavigation()
+- Optional<Tab> getTabForComponent(Component)
+- String getCurrentPageTitle()
+- String getCurrentNameOfUser()
+- UserDTO getCurrentUser()
++ void beforeEnter(BeforeEnterEvent)
+- void navigateToNewJob()
+}
+class LoginView {
+- LoginControl loginControl
++ <<Create>> LoginView()
+- void grabAndSetUserIntoSession()
+- void navigateToMainPage()
+- void navigateToRegisterCompanyPage()
+- void navigateToRegisterStudentPage()
+}
+class NewJobAdView {
+- JobControl jobControl
+- H3 newAdText
++ <<Create>> NewJobAdView()
+- UserDTO getCurrentUser()
+- void navigateToMyAdsView()
+}
+class RegisterStudentView {
+- RegistrationControl registrationControl
+- H4 registerText
++ <<Create>> RegisterStudentView()
+- void navigateToLoginPage()
+}
+class JobsView {
+}
+class MyAdsView {
+}
+class RegisterCompanyView {
+- RegistrationControl registrationControl
+- H4 registerText
++ <<Create>> RegisterCompanyView()
+- void navigateToLoginPage()
+}
+}
+package Controller <<Rectangle>> {
+class RegistrationControl {
+- UserRepository userRepository
+- StudentRepository studentRepository
+- CompanyRepository companyRepository
+- PasswordEncoder passwordEncoder
+- UserDTO userDTO
+- StudentDTO student
+- CompanyDTO company
++ boolean registerStudent(User,Student)
++ boolean registerCompany(User,Company)
++ UserDTO getCurrentUser()
+- void createAccount(User)
+- void createStudentProfile(Student)
+- void createCompanyProfile(Company)
++ boolean checkFormInputStudent(String,String,String,String,String)
++ boolean checkFormInputCompany(String,String,String,String)
++ boolean checkPasswordConfirmation(String,String)
+}
+class LoginControl {
+- UserRepository repository
+- PasswordEncoder passwordEncoder
+- UserDTO userDTO
++ boolean authenticate(String,String)
++ UserDTO getCurrentUser()
+- UserDTO getUserWithJPA(String)
+}
+class JobControl {
+- CompanyRepository companyRepository
+- JobRepository jobRepository
++ CompanyDTO getCompanyByUserid(int)
++ void createNewJobPost(Job)
++ boolean checkFormJobInput(String,String,String)
+}
+class AuthorizationControl {
++ boolean hasUserRole(UserDTO,String)
+}
+}
+package DataTransferObject <<Rectangle>> {
+interface JobDTO {
++ int getJobid()
++ int getCompanyid()
++ String getTitle()
++ String getDescription()
++ String getSalary()
+}
+class StudentDTOImpl {
+- int studentid
+- int userid
+- String firstname
+- String lastname
+- int matrikelnumber
+- String studyMajor
+- String university
++ void setStudentId(int)
++ void setUserid(int)
++ void setFirstname(String)
++ void setLastname(String)
++ void setMatrikelnumber(int)
++ void setStudyMajor(String)
++ void setUniversity(String)
++ int getStudentid()
++ int getUserid()
++ String getFirstname()
++ String getLastname()
++ int getMatrikelnumber()
++ String getStudyMajor()
++ String getUniversity()
+}
+interface CompanyDTO {
++ int getCompanyid()
++ int getUserid()
++ String getName()
++ String getIndustry()
++ boolean getBanned()
+}
+class JobDTOImpl {
+- int jobid
+- int companyid
+- String title
+- String description
+- String salary
++ void setJobid(int)
++ void setCompanyid(int)
++ void setTitle(String)
++ void setDescription(String)
++ void setSalary(String)
++ int getJobid()
++ int getCompanyid()
++ String getTitle()
++ String getDescription()
++ String getSalary()
+}
+class UserDTOImpl {
+- int userid
+- String username
+- String password
+- String email
+- String role
++ void setUserid(int)
++ void setUsername(String)
++ void setPassword(String)
++ void setEmail(String)
++ void setRole(String)
++ int getUserid()
++ String getUsername()
++ String getPassword()
++ String getEmail()
++ String getRole()
++ String toString()
+}
+interface UserDTO {
++ int getUserid()
++ String getUsername()
++ String getPassword()
++ String getEmail()
++ String getRole()
+}
+interface StudentDTO {
++ int getStudentid()
++ int getUserid()
++ String getFirstname()
++ String getLastname()
++ int getMatrikelnumber()
++ String getStudyMajor()
++ String getUniversity()
+}
+class CompanyDTOImpl {
+- int companyid
+- int userid
+- String name
+- String industry
+- boolean banned
++ void setCompanyid(int)
++ void setUserid(int)
++ void setName(String)
++ void setIndustry(String)
++ void setBanned(boolean)
++ int getCompanyid()
++ int getUserid()
++ String getName()
++ String getIndustry()
++ boolean getBanned()
+}
+}
+class org.hbrs.se2.project.util.Utils {
++ {static} T[] append(T[],T)
++ {static} boolean checkIfInputEmpty(String[])
++ {static} String getRootCause(Exception)
+}
+package Repository <<Rectangle>> {
+interface CompanyRepository {
+~ CompanyDTO findCompanyByUserid(int)
+}
+interface JobRepository {
+~ JobDTO findJobByCompanyid(int)
+~ JobDTO findJobByJobid(int)
+}
+interface UserRepository {
+~ UserDTO findUserByUseridAndPassword(int,String)
+~ UserDTO findUserByUsernameAndPassword(String,String)
+~ UserDTO findUserByUsername(String)
+}
+interface StudentRepository {
+~ StudentDTO findStudentByUserid(int)
+~ StudentDTO findStudentByMatrikelnumber(int)
+}
+}
+class org.hbrs.se2.project.helper.cryptoHandler {
++ PasswordEncoder encoder()
+}
+
+class org.hbrs.se2.project.Application {
++ {static} void main(String[])
+}
+
+
+class org.hbrs.se2.project.control.exception.DatabaseUserException {
+- String reason
++ <<Create>> DatabaseUserException(String)
++ String getReason()
++ void setReason(String)
+}
+
+
+
+
+org.hbrs.se2.project.util.Globals +.. org.hbrs.se2.project.util.Globals.Pages
+org.hbrs.se2.project.util.Globals +.. org.hbrs.se2.project.util.Globals.Roles
+org.hbrs.se2.project.util.Globals +.. org.hbrs.se2.project.util.Globals.Errors
+org.hbrs.se2.project.views.BeforeEnterObserver <|.. AppView
+com.vaadin.flow.component.applayout.AppLayout <|-- AppView
+StudentDTO <|.. StudentDTOImpl
+org.springframework.data.jpa.repository.JpaRepository <|-- CompanyRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- JobRepository
+com.vaadin.flow.component.orderedlayout.VerticalLayout <|-- LoginView
+com.vaadin.flow.component.html.Div <|-- NewJobAdView
+JobDTO <|.. JobDTOImpl
+com.vaadin.flow.component.orderedlayout.VerticalLayout <|-- RegisterStudentView
+org.springframework.data.jpa.repository.JpaRepository <|-- UserRepository
+UserDTO <|.. UserDTOImpl
+com.vaadin.flow.component.html.Div <|-- JobsView
+org.springframework.boot.web.servlet.support.SpringBootServletInitializer <|-- org.hbrs.se2.project.Application
+org.springframework.data.jpa.repository.JpaRepository <|-- StudentRepository
+CompanyDTO <|.. CompanyDTOImpl
+com.vaadin.flow.component.orderedlayout.VerticalLayout <|-- RegisterCompanyView
+org.hbrs.se2.project.control.exception.Exception <|-- org.hbrs.se2.project.control.exception.DatabaseUserException
+com.vaadin.flow.component.html.Div <|-- MyAdsView
+Controller --> Model : creates
+View --> Controller : initiates
+Controller --> DataTransferObject : uses
+View --> DataTransferObject : uses
+Controller --> Repository : reads
+@enduml
