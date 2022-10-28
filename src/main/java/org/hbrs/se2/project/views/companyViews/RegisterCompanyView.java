@@ -1,9 +1,7 @@
 package org.hbrs.se2.project.views.companyViews;
 
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -13,13 +11,11 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.RegistrationControl;
-import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.entities.Company;
 import org.hbrs.se2.project.entities.User;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Route(value = "register-company")
 @PageTitle("Register as a Company")
@@ -82,30 +78,14 @@ public class RegisterCompanyView extends VerticalLayout {
             if(!registrationControl.checkFormInputCompany(user.getUsername(), user.getPassword(),
                     user.getEmail(), company.getName())) {
                 // error dialog
-                Dialog dialog = new Dialog();
-                dialog.add(new Text("Please fill out all text fields."));
-                // close button
-                Button closeb = new Button("Close");
-                closeb.addClickListener(e3 -> dialog.close());
-                dialog.add(closeb);
-                dialog.setWidth("400px");
-                dialog.setHeight("150px");
-                dialog.open();
+                Utils.makeDialog("Please fill out all text fields.");
                 throw new Error("Not all input field were filled out.");
             }
 
-            // checksif both passwords are equal
+            // checks if both passwords are equal
             if(!registrationControl.checkPasswordConfirmation(confirmPassword.getValue(), password.getValue())) {
                 // error dialog
-                Dialog dialog = new Dialog();
-                dialog.add(new Text("Both passwords are not the same"));
-                // close button
-                Button closeb = new Button("Close");
-                closeb.addClickListener(e2 -> dialog.close());
-                dialog.add(closeb);
-                dialog.setWidth("400px");
-                dialog.setHeight("150px");
-                dialog.open();
+                Utils.makeDialog("Both passwords are not the same");
                 throw new Error("The given two passwords are not equal");
             }
 
@@ -116,17 +96,9 @@ public class RegisterCompanyView extends VerticalLayout {
             } catch (Exception e) {
                 // get the root cause of an exception
                 String message = Utils.getRootCause(e);
-                Dialog dialog = new Dialog();
-                dialog.add(new Text(message));
-                // close button
-                Button closeb = new Button("Close");
-                closeb.addClickListener(e1 -> dialog.close());
-                dialog.add(closeb);
-                dialog.setWidth("400px");
-                dialog.setHeight("150px");
-                dialog.open();
+                // Error dialog
+                Utils.makeDialog(message);
             }
-
 
             if(isRegistered) {
                 navigateToLoginPage();

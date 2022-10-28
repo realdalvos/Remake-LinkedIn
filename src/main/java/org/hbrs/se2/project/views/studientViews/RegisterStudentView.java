@@ -1,12 +1,9 @@
 package org.hbrs.se2.project.views.studientViews;
 
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -14,12 +11,10 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.RegistrationControl;
-import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.entities.Student;
 import org.hbrs.se2.project.entities.User;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -93,15 +88,7 @@ public class RegisterStudentView extends VerticalLayout {
                 student.setMatrikelnumber(Integer.parseInt(matrikelNumber.getValue().trim()));
             } catch (NumberFormatException e) {
                 // Error dialog
-                Dialog dialog = new Dialog();
-                dialog.add(new Text("Please fill out all text fields."));
-                // close button
-                Button closeb = new Button("Close");
-                closeb.addClickListener(e4 -> dialog.close());
-                dialog.add(closeb);
-                dialog.setWidth("400px");
-                dialog.setHeight("150px");
-                dialog.open();
+                Utils.makeDialog("Please fill out the matrikelnumber field");
                 throw new Error("Something is wrong with your filled in matrikel number");
             }
 
@@ -109,30 +96,14 @@ public class RegisterStudentView extends VerticalLayout {
             if(!registrationControl.checkFormInputStudent(user.getUsername(), user.getPassword(), user.getEmail(),
                     student.getFirstname(), student.getLastname())) {
                 // Error dialog
-                Dialog dialog = new Dialog();
-                dialog.add(new Text("Please fill out all text fields."));
-                // close button
-                Button closeb = new Button("Close");
-                closeb.addClickListener(e -> dialog.close());
-                dialog.add(closeb);
-                dialog.setWidth("400px");
-                dialog.setHeight("150px");
-                dialog.open();
+                Utils.makeDialog("Please fill out all text fields.");
                 throw new Error("Not all input field were filled out.");
             }
 
             // checks if both passwords are equal
             if(!registrationControl.checkPasswordConfirmation(confirmPassword.getValue(), password.getValue())) {
                 // error dialog
-                Dialog dialog = new Dialog();
-                dialog.add(new Text("Both passwords are not the same"));
-                // close button
-                Button closeb = new Button("Close");
-                closeb.addClickListener(e1 -> dialog.close());
-                dialog.add(closeb);
-                dialog.setWidth("400px");
-                dialog.setHeight("150px");
-                dialog.open();
+                Utils.makeDialog("Both passwords are not the same");
                 throw new Error("The given two passwords are not equal.");
             }
 
@@ -143,15 +114,7 @@ public class RegisterStudentView extends VerticalLayout {
             } catch (Exception e) {
                 // get the message of the root cause of the exception
                 String message = Utils.getRootCause(e);
-                Dialog dialog = new Dialog();
-                dialog.add(new Text(message));
-                // close button
-                Button closeb = new Button("Close");
-                closeb.addClickListener(e2 -> dialog.close());
-                dialog.add(closeb);
-                dialog.setWidth("400px");
-                dialog.setHeight("150px");
-                dialog.open();
+                Utils.makeDialog(message);
             }
 
             if(isRegistered) {

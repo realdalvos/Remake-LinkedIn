@@ -1,9 +1,7 @@
 package org.hbrs.se2.project.views.companyViews;
 
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
@@ -17,6 +15,7 @@ import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.entities.Job;
 import org.hbrs.se2.project.util.Globals;
+import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -82,21 +81,12 @@ public class NewJobAdView extends Div {
             // check if all input fields were filled out
             if(!jobControl.checkFormJobInput(job.getTitle(), job.getDescription(), job.getSalary())) {
                 // error dialog
-                Dialog dialog = new Dialog();
-                dialog.add(new Text("Please fill out all text fields."));
-                // close button
-                Button closeb = new Button("Close");
-                closeb.addClickListener(e -> dialog.close());
-                dialog.add(closeb);
-                dialog.setWidth("400px");
-                dialog.setHeight("150px");
-                dialog.open();
+                Utils.makeDialog("Please fill out all text fields.");
                 throw new Error("Not all input field were filled out.");
             }
 
             // call job control to save new job post entity
             jobControl.createNewJobPost(job);
-
             this.navigateToMyAdsView();
         });
 

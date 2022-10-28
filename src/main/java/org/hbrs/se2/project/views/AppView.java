@@ -44,19 +44,19 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     }
 
     public void setUpUI() {
-        // Anzeige des Toggles über den Drawer
+        // show toggles above the drawer
         setPrimarySection(Section.DRAWER);
 
-        // Erstellung der horizontalen Statusleiste (Header)
+        // create a horizontal status bar (header)
         addToNavbar(true, createHeaderContent());
 
-        // Erstellung der vertikalen Navigationsleiste (Drawer)
+        // create a vertical navigation bar (drawer)
         menu = createMenu();
         addToDrawer(createDrawerContent(menu));
     }
 
     private boolean checkIfUserIsLoggedIn() {
-        // Falls der Benutzer nicht eingeloggt ist, dann wird er auf die Startseite gelenkt
+        // if user is not logged in navigate to login view
         UserDTO userDTO = this.getCurrentUser();
         if (userDTO == null) {
             UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
@@ -67,7 +67,8 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
     private Component createHeaderContent() {
         authorizationControl = new AuthorizationControl();
-        // Ein paar Grund-Einstellungen. Alles wird in ein horizontales Layout gesteckt.
+        // a few basic settings
+        // everything is set into the horizontal layout
         HorizontalLayout layout = new HorizontalLayout();
         layout.setId("header");
         layout.getThemeList().set("dark", true);
@@ -76,32 +77,32 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
         layout.setJustifyContentMode( FlexComponent.JustifyContentMode.EVENLY );
 
-        // Hinzufügen des Toogle ('Big Mac') zum Ein- und Ausschalten des Drawers
+        // add toggle (big mac) to on and off drawer
         layout.add(new DrawerToggle());
         viewTitle = new H1();
         viewTitle.setWidthFull();
         layout.add( viewTitle );
 
-        // Interner Layout
+        // intern layout
         HorizontalLayout topRightPanel = new HorizontalLayout();
         topRightPanel.setWidthFull();
         topRightPanel.setJustifyContentMode( FlexComponent.JustifyContentMode.END );
         topRightPanel.setAlignItems( FlexComponent.Alignment.CENTER );
 
-        // Der Name des Users wird später reingesetzt, falls die Navigation stattfindet
+        // name of user will be placed in if navigation succeeds
         helloUser = new H4();
         topRightPanel.add(helloUser);
 
-        // Logout-Button am rechts-oberen Rand.
+        // log out button in the right upper corner
         MenuBar bar = new MenuBar();
 
 
-        // Only if role is company
+        // Only if role is equal to company
         if(this.authorizationControl.hasUserRole(this.getCurrentUser(), Globals.Roles.company)) {
             MenuItem item1 = bar.addItem("Create new Job Ad", e -> navigateToNewJob());
-        } // else if for student case
+        }
 
-        // for all roles
+        // for all roles add following bar items
         MenuItem item2 = bar.addItem("Logout" , e -> logoutUser());
         topRightPanel.add(bar);
 
@@ -116,11 +117,9 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     }
 
     /**
-     * Hinzufügen der vertikalen Leiste (Drawer)
-     * Diese besteht aus dem Logo ganz oben links sowie den Menu-Einträgen (menu items).
-     * Die Menu Items sind zudem verlinkt zu den internen Tab-Components.
-     * @param menu
-     * @return
+     * add vertical bar (drawer)
+     * it contains the menu entries
+     * menu items are linked to intern tab components
      */
     private Component createDrawerContent(Tabs menu) {
         VerticalLayout layout = new VerticalLayout();
@@ -132,12 +131,12 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
         HorizontalLayout logoLayout = new HorizontalLayout();
 
-        // Hinzufügen des Logos
+        // add logo
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
         logoLayout.add(new H1("HBRS Collab"));
 
-        // Hinzufügen des Menus inklusive der Tabs
+        // add menu with tabs
         layout.add(logoLayout, menu);
         return layout;
     }
@@ -145,17 +144,18 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     /**
      * Erzeugung des Menu auf der vertikalen Leiste (Drawer)
      * @return
+     *
+     * create menu on vertical bar (drawer)
      */
     private Tabs createMenu() {
 
-        // Anlegen der Grundstruktur
+        // create basic structure
         final Tabs tabs = new Tabs();
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         tabs.addThemeVariants(TabsVariant.LUMO_MINIMAL);
         tabs.setId("tabs");
 
-        // Anlegen der einzelnen Menuitems
-
+        // add menu items
         tabs.add(createMenuItems());
         return tabs;
     }
@@ -164,12 +164,12 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     private Component[] createMenuItems() {
         // get authentication control
         authorizationControl = new AuthorizationControl();
+        // tabs for vertical bar (drawer)
         Tab[] tabs = new Tab[]{};
 
-        // has the user the role "student" he has the tab "Jobs"
+        // if the user has the role "student" he has the tab "Jobs"
         if(this.authorizationControl.hasUserRole(this.getCurrentUser(), Globals.Roles.student)) {
             System.out.println("User is student");
-            //Tab[] studentTabs = new Tab[]{createTab("Jobs", JobsView.class)};
             // ToDo für die Teams: Weitere Tabs aus ihrem Projekt hier einfügen!
             // with Utils.append method
             tabs = Utils.append(tabs, createTab("Jobs", JobsView.class));
@@ -177,7 +177,6 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             // has the user the role "company" they have the tab "My Ads"
             if(this.authorizationControl.hasUserRole(this.getCurrentUser(), Globals.Roles.company)) {
                 System.out.println("User is company");
-                //Tab[] companyTabs = new Tab[]{createTab("My Ads", MyAdsView.class)};
                 tabs = Utils.append(tabs, createTab("My Ads", MyAdsView.class));
             }
         return tabs;
@@ -195,16 +194,16 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     protected void afterNavigation() {
         super.afterNavigation();
 
-        // Falls der Benutzer nicht eingeloggt ist, dann wird er auf die Startseite gelenkt
+        // if user is not logged in navigate to login view
         if ( !checkIfUserIsLoggedIn() ) return;
 
-        // Der aktuell-selektierte Tab wird gehighlighted.
+        // selected tab is highlighted
         getTabForComponent(getContent()).ifPresent(menu::setSelectedTab);
 
-        // Setzen des aktuellen Names des Tabs
+        // set name of current tab
         viewTitle.setText(getCurrentPageTitle());
 
-        // Setzen des Vornamens von dem aktuell eingeloggten Benutzer
+        // set firstname of the current user
         helloUser.setText("Hello "  + this.getCurrentNameOfUser() );
     }
 
@@ -228,13 +227,10 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
     @Override
     /**
-     * Methode wird vor der eigentlichen Darstellung der UI-Components aufgerufen.
-     * Hier kann man die finale Darstellung noch abbrechen, wenn z.B. der Nutzer nicht eingeloggt ist
-     * Dann erfolgt hier ein ReDirect auf die Login-Seite. Eine Navigation (Methode navigate)
-     * ist hier nicht möglich, da die finale Navigation noch nicht stattgefunden hat.
-     * Diese Methode in der AppLayout sichert auch den un-authorisierten Zugriff auf die innerliegenden
-     * Views (hier: ShowCarsView und EnterCarView) ab.
-     *
+     * method is called before component call
+     * final view can be canceled if user is not logged in
+     * redirect to login view
+     * secures unauthorized access to intern views
      */
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         if (getCurrentUser() == null){

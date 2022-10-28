@@ -1,5 +1,9 @@
 package org.hbrs.se2.project.util;
 
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
+
 import java.util.Arrays;
 
 public class Utils {
@@ -31,7 +35,7 @@ public class Utils {
         return isCorrect;
     }
 
-    // axception handling
+    // exception handling
     // takes an exception as an input
     // returns the root cause message of an exception
     public static String getRootCause(Exception e) {
@@ -42,6 +46,20 @@ public class Utils {
         // Split string message so we only get the last bit after key keyword
         String[] messArr = rootCause.getMessage().split("Key");
         return messArr[messArr.length - 1];
+    }
+
+    // Error Dialog
+    // takes the message String as an input
+    public static void makeDialog(String message) {
+        Dialog dialog = new Dialog();
+        dialog.add(new Text(message));
+        // close button
+        Button closeb = new Button("Close");
+        closeb.addClickListener(event -> dialog.close());
+        dialog.add(closeb);
+        dialog.setWidth("400px");
+        dialog.setHeight("150px");
+        dialog.open();
     }
 }
 
