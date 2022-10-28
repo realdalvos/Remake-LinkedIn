@@ -1,11 +1,5 @@
 package org.hbrs.se2.project.util;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-@SpringBootApplication
 public class Globals {
     public static String CURRENT_USER = "current_User";
 
@@ -28,10 +22,5 @@ public class Globals {
         public static final String NOUSERFOUND = "nouser";
         public static final String SQLERROR = "sql";
         public static final String DATABASE = "database";
-    }
-
-    @Bean
-    public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
     }
 }
