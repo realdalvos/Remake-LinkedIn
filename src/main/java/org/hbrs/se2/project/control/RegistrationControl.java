@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.control;
 
-import com.helger.commons.base64.Base64;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.StudentDTO;
@@ -11,6 +10,7 @@ import org.hbrs.se2.project.entities.User;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.StudentRepository;
 import org.hbrs.se2.project.repository.UserRepository;
+import org.hbrs.se2.project.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -113,27 +113,14 @@ public class RegistrationControl {
             String firstname, String lastname
     ) {
         String[] array = {username, password, email, firstname, lastname};
-        return checkRegisterInput(array);
+        return Utils.checkIfInputEmpty(array);
     }
 
     // makes array and calls function to check if input is null or emtpy ""
     public boolean checkFormInputCompany(String username, String password, String email, String name) {
         String[] array = {username, password, email, name};
-        return checkRegisterInput(array);
+        return Utils.checkIfInputEmpty(array);
     }
-
-    // Checks if field input is null or empty
-    private boolean checkRegisterInput(String[] array) {
-        boolean isCorrect = true;
-        // checks all input to not be empty string or null
-        for (String s : array) {
-            if (s == null || s.equals("")) {
-                isCorrect = false;
-                break;
-            }
-        }
-        return isCorrect;
-    };
 
     // Checks if password and confirmPassword are equal
     public boolean checkPasswordConfirmation(String passw1, String passw2) {

@@ -17,4 +17,31 @@ public class Utils {
         return arr;
 
     }
+
+    // Checks if field input is null or empty
+    public static boolean checkIfInputEmpty(String[] array) {
+        boolean isCorrect = true;
+        // checks all input to not be empty string or null
+        for (String s : array) {
+            if (s == null || s.equals("")) {
+                isCorrect = false;
+                break;
+            }
+        }
+        return isCorrect;
+    }
+
+    // axception handling
+    // takes an exception as an input
+    // returns the root cause message of an exception
+    public static String getRootCause(Exception e) {
+        Throwable rootCause = e;
+        while(rootCause.getCause() != null && rootCause.getCause() != rootCause) {
+            rootCause = rootCause.getCause();
+        }
+        // Split string message so we only get the last bit after key keyword
+        String[] messArr = rootCause.getMessage().split("Key");
+        return messArr[messArr.length - 1];
+    }
 }
+

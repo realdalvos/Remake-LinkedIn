@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.views;
+package org.hbrs.se2.project.views.studientViews;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
@@ -18,6 +18,7 @@ import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.entities.Student;
 import org.hbrs.se2.project.entities.User;
 import org.hbrs.se2.project.util.Globals;
+import org.hbrs.se2.project.util.Utils;
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -91,7 +92,17 @@ public class RegisterStudentView extends VerticalLayout {
             try {
                 student.setMatrikelnumber(Integer.parseInt(matrikelNumber.getValue().trim()));
             } catch (NumberFormatException e) {
-                throw new NumberFormatException("Something went wrong with the passed matrikelnumber from the register form");
+                // Error dialog
+                Dialog dialog = new Dialog();
+                dialog.add(new Text("Please fill out all text fields."));
+                // close button
+                Button closeb = new Button("Close");
+                closeb.addClickListener(e4 -> dialog.close());
+                dialog.add(closeb);
+                dialog.setWidth("400px");
+                dialog.setHeight("150px");
+                dialog.open();
+                throw new Error("Something is wrong with your filled in matrikel number");
             }
 
             // checks if all input fields were filled out
@@ -100,6 +111,10 @@ public class RegisterStudentView extends VerticalLayout {
                 // Error dialog
                 Dialog dialog = new Dialog();
                 dialog.add(new Text("Please fill out all text fields."));
+                // close button
+                Button closeb = new Button("Close");
+                closeb.addClickListener(e -> dialog.close());
+                dialog.add(closeb);
                 dialog.setWidth("400px");
                 dialog.setHeight("150px");
                 dialog.open();
@@ -111,6 +126,10 @@ public class RegisterStudentView extends VerticalLayout {
                 // error dialog
                 Dialog dialog = new Dialog();
                 dialog.add(new Text("Both passwords are not the same"));
+                // close button
+                Button closeb = new Button("Close");
+                closeb.addClickListener(e1 -> dialog.close());
+                dialog.add(closeb);
                 dialog.setWidth("400px");
                 dialog.setHeight("150px");
                 dialog.open();
@@ -123,16 +142,13 @@ public class RegisterStudentView extends VerticalLayout {
                 isRegistered = registrationControl.registerStudent(user, student);
             } catch (Exception e) {
                 // get the message of the root cause of the exception
-                Throwable rootCause = e;
-                while(rootCause.getCause() != null && rootCause.getCause() != rootCause) {
-                    rootCause = rootCause.getCause();
-                }
-                // error dialog
-                String message = rootCause.getMessage();
-                String[] messArr = message.split("Key");
-                message = messArr[messArr.length - 1];
+                String message = Utils.getRootCause(e);
                 Dialog dialog = new Dialog();
                 dialog.add(new Text(message));
+                // close button
+                Button closeb = new Button("Close");
+                closeb.addClickListener(e2 -> dialog.close());
+                dialog.add(closeb);
                 dialog.setWidth("400px");
                 dialog.setHeight("150px");
                 dialog.open();
