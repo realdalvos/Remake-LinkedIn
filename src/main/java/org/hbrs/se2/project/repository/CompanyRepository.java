@@ -7,17 +7,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 /**
- * JPA-Repository für die Abfrage von registrierten User. Die Bezeichnung einer Methode
- * bestimmt dabei die Selektionsbedingung (den WHERE-Teil). Der Rückgabewert einer
- * Methode bestimmt den Projectionsbedingung (den SELECT-Teil).
- * Mehr Information über die Entwicklung von Queries in JPA:
  * https://www.baeldung.com/spring-data-jpa-projections
  * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods
  *
  * Additional links from gwolni2s
  * https://www.geeksforgeeks.org/spring-boot-difference-between-crudrepository-and-jparepository/#:~:text=JpaRepository%20is%20a%20JPA%20(Java,API%20for%20pagination%20and%20sorting.
  * https://spring.io/guides/gs/accessing-data-mysql/
- *
  */
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
         CompanyDTO findCompanyByUserid(int id);

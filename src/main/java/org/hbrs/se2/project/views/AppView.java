@@ -42,7 +42,6 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             setUpUI();
         }
     }
-
     public void setUpUI() {
         // show toggles above the drawer
         setPrimarySection(Section.DRAWER);
@@ -54,7 +53,6 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         menu = createMenu();
         addToDrawer(createDrawerContent(menu));
     }
-
     private boolean checkIfUserIsLoggedIn() {
         // if user is not logged in navigate to login view
         UserDTO userDTO = this.getCurrentUser();
@@ -64,7 +62,6 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         }
         return true;
     }
-
     private Component createHeaderContent() {
         authorizationControl = new AuthorizationControl();
         // a few basic settings
@@ -167,14 +164,12 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // tabs for vertical bar (drawer)
         Tab[] tabs = new Tab[]{};
 
-        // if the user has the role "student" he has the tab "Jobs"
+        // if the user has the role "student" he has the tabs "Jobs"
         if(this.authorizationControl.hasUserRole(this.getCurrentUser(), Globals.Roles.student)) {
             System.out.println("User is student");
-            // ToDo für die Teams: Weitere Tabs aus ihrem Projekt hier einfügen!
-            // with Utils.append method
             tabs = Utils.append(tabs, createTab("Jobs", JobsView.class));
         } else
-            // has the user the role "company" they have the tab "My Ads"
+            // has the user the role "company" they have the tabs "My Ads"
             if(this.authorizationControl.hasUserRole(this.getCurrentUser(), Globals.Roles.company)) {
                 System.out.println("User is company");
                 tabs = Utils.append(tabs, createTab("My Ads", MyAdsView.class));
@@ -229,7 +224,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     /**
      * method is called before component call
      * final view can be canceled if user is not logged in
-     * redirect to login view
+     * redirect to log in view
      * secures unauthorized access to intern views
      */
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {

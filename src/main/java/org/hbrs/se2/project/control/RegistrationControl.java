@@ -34,12 +34,14 @@ public class RegistrationControl {
     private StudentDTO student = null;
     private CompanyDTO company = null;
 
+    // register new student by creating an account and a student profile
+    // and save account data in user table and student data in student table
     public boolean registerStudent(User user, Student student) throws DatabaseUserException {
         this.createAccount(user);
         // get User id from new saved user in db
+        // so we can assign the userid to the data in student table
         UserDTO userDTO1 = userRepository.findUserByUsername(user.getUsername());
         student.setUserid(userDTO1.getUserid());
-
         // create student profile
         try {
             try {
@@ -49,6 +51,8 @@ public class RegistrationControl {
             }
         } catch (RuntimeException ex) {
             // Delete user table data because student data could not be saved
+            // so there does nat exist user data without student data
+            // both has to exist
             System.out.println("Student profile could not be saved why user data was deleted.");
             userRepository.deleteById(userDTO1.getUserid());
             throw new RuntimeException("Matrikelnumber already exists.");
@@ -56,6 +60,8 @@ public class RegistrationControl {
         return true;
     };
 
+    // register new company by creating an account and a company profile
+    // and save account data in user table and company data in student table
     public boolean registerCompany(User user, Company company) throws DatabaseUserException {
         this.createAccount(user);
         // get User id from new saved user in db
@@ -71,6 +77,8 @@ public class RegistrationControl {
             }
         } catch (RuntimeException ex) {
             // Delete user table data because company data could not be saved
+            // so there does nat exist user data without company data
+            // both has to exist
             System.out.println("Company profile could not be saved why user data was deleted.");
             userRepository.deleteById(userDTO2.getUserid());
             throw new RuntimeException("Company Profile could not be created at registerCompany");
@@ -84,7 +92,7 @@ public class RegistrationControl {
         try {
             //Hashing password
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            //Saving password in db
+            //Saving user with hashed password in db
             this.userRepository.save(user);
         } catch (org.springframework.dao.DataAccessResourceFailureException e) {
             throw new DatabaseUserException("A Failure occurred while saving a user account in the database at createAccount");
@@ -107,7 +115,7 @@ public class RegistrationControl {
         }
     }
 
-    // makes array and calls function to check if input is null or emtpy ""
+    // makes an array and calls function to check if input is null or empty "" for student
     public boolean checkFormInputStudent(
             String username, String password, String email,
             String firstname, String lastname
@@ -116,7 +124,7 @@ public class RegistrationControl {
         return Utils.checkIfInputEmpty(array);
     }
 
-    // makes array and calls function to check if input is null or emtpy ""
+    // makes array and calls function to check if input is null or emtpy "" for company
     public boolean checkFormInputCompany(String username, String password, String email, String name) {
         String[] array = {username, password, email, name};
         return Utils.checkIfInputEmpty(array);

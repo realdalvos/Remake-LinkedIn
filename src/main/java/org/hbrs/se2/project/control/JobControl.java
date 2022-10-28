@@ -25,6 +25,7 @@ public class JobControl {
         this.jobRepository.save(job);
     }
 
+    // check if input data from job post form is empty or not
     public boolean checkFormJobInput(String title, String description, String salary) {
         String[] array = {title, description, salary};
         return Utils.checkIfInputEmpty(array);

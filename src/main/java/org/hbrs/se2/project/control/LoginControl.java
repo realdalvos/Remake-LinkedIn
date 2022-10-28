@@ -17,6 +17,7 @@ public class LoginControl {
 
     private UserDTO userDTO = null;
 
+    // autheticate the user that wants to login in with his cedentials
     public boolean authenticate(String username, String password) throws DatabaseUserException {
         UserDTO tmpUser = this.getUserWithJPA(username);
 
@@ -31,6 +32,7 @@ public class LoginControl {
         return this.userDTO;
     }
 
+    // get User Object with jpa api from database
     private UserDTO getUserWithJPA(String username) throws DatabaseUserException {
         UserDTO userTmp;
         try {
