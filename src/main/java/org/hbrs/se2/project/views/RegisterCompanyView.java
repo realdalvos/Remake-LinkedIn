@@ -18,6 +18,7 @@ import org.hbrs.se2.project.entities.Company;
 import org.hbrs.se2.project.entities.User;
 import org.hbrs.se2.project.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Route(value = "register-company")
 @PageTitle("Register as a Company")

@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.control;
 
+import com.helger.commons.base64.Base64;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.StudentDTO;
@@ -12,6 +13,7 @@ import org.hbrs.se2.project.repository.StudentRepository;
 import org.hbrs.se2.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Component
 public class RegistrationControl {
@@ -25,6 +27,9 @@ public class RegistrationControl {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private UserDTO userDTO = null;
     private StudentDTO student = null;
     private CompanyDTO company = null;
@@ -32,7 +37,7 @@ public class RegistrationControl {
     public boolean registerStudent(User user, Student student) throws DatabaseUserException {
         this.createAccount(user);
         // get User id from new saved user in db
-        UserDTO userDTO1 = userRepository.findUserByUsernameAndPassword(user.getUsername(), user.getPassword());
+        UserDTO userDTO1 = userRepository.findUserByUsername(user.getUsername());
         student.setUserid(userDTO1.getUserid());
 
         // create student profile
@@ -54,7 +59,7 @@ public class RegistrationControl {
     public boolean registerCompany(User user, Company company) throws DatabaseUserException {
         this.createAccount(user);
         // get User id from new saved user in db
-        UserDTO userDTO2 = userRepository.findUserByUsernameAndPassword(user.getUsername(), user.getPassword());
+        UserDTO userDTO2 = userRepository.findUserByUsername(user.getUsername());
         company.setUserid(userDTO2.getUserid());
 
         // create company profile
@@ -77,6 +82,9 @@ public class RegistrationControl {
 
     private void createAccount(User user) throws DatabaseUserException {
         try {
+            //Hashing password
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            //Saving password in db
             this.userRepository.save(user);
         } catch (org.springframework.dao.DataAccessResourceFailureException e) {
             throw new DatabaseUserException("A Failure occurred while saving a user account in the database at createAccount");
