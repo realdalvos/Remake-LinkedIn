@@ -1,7 +1,9 @@
 package org.hbrs.se2.project.views;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.login.LoginI18n;
@@ -52,6 +54,7 @@ public class RegisterStudentView extends VerticalLayout {
         PasswordField password = new PasswordField("Password");
         PasswordField confirmPassword = new PasswordField("Confirm password");
 
+        // Buttons
         Button confirmButton = new Button("Register now as a student");
         Button loginButton = new Button("I already have an account - Log In");
 
@@ -67,8 +70,10 @@ public class RegisterStudentView extends VerticalLayout {
                 new FormLayout.ResponsiveStep("0", 1)
         );
 
+        // is executed when confirm button is clicked
         confirmButton.addClickListener(event -> {
-            boolean isRegistered;
+            boolean isRegistered = false;
+
 
             // create new User entity with passed in values from register form
             User user = new User();
@@ -81,16 +86,35 @@ public class RegisterStudentView extends VerticalLayout {
             Student student = new Student();
             student.setFirstname(firstname.getValue().trim());
             student.setLastname(lastname.getValue().trim());
+
+            // get and set matrikelnumber of student
             try {
                 student.setMatrikelnumber(Integer.parseInt(matrikelNumber.getValue().trim()));
             } catch (NumberFormatException e) {
                 throw new NumberFormatException("Something went wrong with the passed matrikelnumber from the register form");
             }
 
-            // checks if all input fields were filled out correctly
+            // checks if all input fields were filled out
             if(!registrationControl.checkFormInputStudent(user.getUsername(), user.getPassword(), user.getEmail(),
-                    student.getFirstname(), student.getLastname(), confirmPassword.getValue().trim())) {
-                throw new Error("The input from the register form was not filled out correctly");
+                    student.getFirstname(), student.getLastname())) {
+                // Error dialog
+                Dialog dialog = new Dialog();
+                dialog.add(new Text("Please fill out all text fields."));
+                dialog.setWidth("400px");
+                dialog.setHeight("150px");
+                dialog.open();
+                throw new Error("Not all input field were filled out.");
+            }
+
+            // checks if both passwords are equal
+            if(!registrationControl.checkPasswordConfirmation(confirmPassword.getValue(), password.getValue())) {
+                // error dialog
+                Dialog dialog = new Dialog();
+                dialog.add(new Text("Both passwords are not the same"));
+                dialog.setWidth("400px");
+                dialog.setHeight("150px");
+                dialog.open();
+                throw new Error("The given two passwords are not equal.");
             }
 
             // call function to save user and student data in db
@@ -98,17 +122,26 @@ public class RegisterStudentView extends VerticalLayout {
                 // function to register new student
                 isRegistered = registrationControl.registerStudent(user, student);
             } catch (Exception e) {
-                try {
-                    throw new DatabaseUserException("Something went wrong with registering student");
-                } catch (DatabaseUserException ex) {
-                    throw new RuntimeException("Something went wrong with registering student");
+                // get the message of the root cause of the exception
+                Throwable rootCause = e;
+                while(rootCause.getCause() != null && rootCause.getCause() != rootCause) {
+                    rootCause = rootCause.getCause();
                 }
+                // error dialog
+                String message = rootCause.getMessage();
+                String[] messArr = message.split("Key");
+                message = messArr[messArr.length - 1];
+                Dialog dialog = new Dialog();
+                dialog.add(new Text(message));
+                dialog.setWidth("400px");
+                dialog.setHeight("150px");
+                dialog.open();
             }
 
             if(isRegistered) {
                 navigateToLoginPage();
             } else {
-                System.out.println("Something went wrong with the registration process");
+                System.out.println("Student is not registered.");
             }
         });
 

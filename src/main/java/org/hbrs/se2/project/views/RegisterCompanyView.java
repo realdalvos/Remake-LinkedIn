@@ -1,7 +1,9 @@
 package org.hbrs.se2.project.views;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -46,6 +48,7 @@ public class RegisterCompanyView extends VerticalLayout {
         PasswordField password = new PasswordField("Password");
         PasswordField confirmPassword = new PasswordField("Confirm password");
 
+        // buttons
         Button confirmButton = new Button("Register now as a company");
         Button loginButton = new Button("I already have an account - Log In");
 
@@ -60,8 +63,9 @@ public class RegisterCompanyView extends VerticalLayout {
                 new FormLayout.ResponsiveStep("0", 1)
         );
 
+        // executed when button is clicked
         confirmButton.addClickListener(event -> {
-            boolean isRegistered;
+            boolean isRegistered = false;
             // create new User entity with passed in values from register form
             User user = new User();
             user.setUsername(username.getValue().trim());
@@ -75,20 +79,46 @@ public class RegisterCompanyView extends VerticalLayout {
 
             // checks if all input fields were filled out correctly
             if(!registrationControl.checkFormInputCompany(user.getUsername(), user.getPassword(),
-                    user.getEmail(), company.getName(), confirmPassword.getValue().trim())) {
-                throw new Error("The input from the register form was not filled out correctly");
+                    user.getEmail(), company.getName())) {
+                // error dialog
+                Dialog dialog = new Dialog();
+                dialog.add(new Text("Please fill out all text fields."));
+                dialog.setWidth("400px");
+                dialog.setHeight("150px");
+                dialog.open();
+                throw new Error("Not all input field were filled out.");
+            }
+
+            // checksif both passwords are equal
+            if(!registrationControl.checkPasswordConfirmation(confirmPassword.getValue(), password.getValue())) {
+                // error dialog
+                Dialog dialog = new Dialog();
+                dialog.add(new Text("Both passwords are not the same"));
+                dialog.setWidth("400px");
+                dialog.setHeight("150px");
+                dialog.open();
+                throw new Error("The given two passwords are not equal");
             }
 
             // call function to save user and company data in db
             try {
                 // function to register new company
                 isRegistered = registrationControl.registerCompany(user, company);
-            } catch (DatabaseUserException e) {
-                try {
-                    throw new DatabaseUserException("Something went wron registering a new company");
-                } catch (DatabaseUserException ex) {
-                    throw new RuntimeException("Something went wrong with registration");
+            } catch (Exception e) {
+                // get the root cause of an exception
+                Throwable rootCause = e;
+                while(rootCause.getCause() != null && rootCause.getCause() != rootCause) {
+                    rootCause = rootCause.getCause();
                 }
+                // error dialog
+                String message = rootCause.getMessage();
+                String[] messArr = message.split("Key");
+                message = messArr[messArr.length - 1];
+                Dialog dialog = new Dialog();
+                dialog.add(new Text(message));
+                dialog.setWidth("400px");
+                dialog.setHeight("150px");
+                dialog.open();
             }
 
 
