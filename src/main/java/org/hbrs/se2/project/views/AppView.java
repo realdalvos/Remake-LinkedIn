@@ -6,11 +6,8 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.contextmenu.MenuItem;
-import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -24,6 +21,8 @@ import org.hbrs.se2.project.control.AuthorizationControl;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
+import org.hbrs.se2.project.views.companyViews.MyAdsView;
+import org.hbrs.se2.project.views.studientViews.JobsView;
 
 import java.util.Optional;
 
@@ -67,6 +66,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     }
 
     private Component createHeaderContent() {
+        authorizationControl = new AuthorizationControl();
         // Ein paar Grund-Einstellungen. Alles wird in ein horizontales Layout gesteckt.
         HorizontalLayout layout = new HorizontalLayout();
         layout.setId("header");
@@ -94,7 +94,15 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
         // Logout-Button am rechts-oberen Rand.
         MenuBar bar = new MenuBar();
-        MenuItem item = bar.addItem("Logout" , e -> logoutUser());
+
+
+        // Only if role is company
+        if(this.authorizationControl.hasUserRole(this.getCurrentUser(), Globals.Roles.company)) {
+            MenuItem item1 = bar.addItem("Create new Job Ad", e -> navigateToNewJob());
+        } // else if for student case
+
+        // for all roles
+        MenuItem item2 = bar.addItem("Logout" , e -> logoutUser());
         topRightPanel.add(bar);
 
         layout.add( topRightPanel );
@@ -232,5 +240,9 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         if (getCurrentUser() == null){
             beforeEnterEvent.rerouteTo(Globals.Pages.LOGIN_VIEW);
         }
+    }
+
+    private void navigateToNewJob() {
+        UI.getCurrent().navigate(Globals.Pages.NEW_ADD_VIEW);
     }
 }

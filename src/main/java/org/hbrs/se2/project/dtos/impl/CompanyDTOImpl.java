@@ -3,10 +3,15 @@ package org.hbrs.se2.project.dtos.impl;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 
 public class CompanyDTOImpl implements CompanyDTO {
+    private int companyid;
     private int userid;
     private String name;
     private String industry;
     private boolean banned;
+
+    public void setCompanyid(int id) {
+        this.companyid = id;
+    }
 
     public void setUserid(int userid) {
         this.userid = userid;
@@ -24,6 +29,8 @@ public class CompanyDTOImpl implements CompanyDTO {
         this.banned = banned;
     }
 
+    @Override
+    public int getCompanyid() {return companyid;}
     @Override
     public int getUserid() {
         return userid;

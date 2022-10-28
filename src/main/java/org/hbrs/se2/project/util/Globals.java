@@ -10,6 +10,7 @@ public class Globals {
         public static final String MYADS_VIEW = "myads";
         public static final String REGISTER_COMPANY_VIEW = "register-company";
         public static final String REGISTER_STUDENT_VIEW = "register-student";
+        public static final String NEW_ADD_VIEW = "new-job-ad";
     }
 
     public static class Roles {

@@ -28,6 +28,7 @@ public class Company {
     public int getCompanyid() {return companyid;}
 
     public void setCompanyid(int id) {this.companyid = id;}
+    @Basic
     @Column(name="userid")
     public int getUserid() {return userid;}
 
