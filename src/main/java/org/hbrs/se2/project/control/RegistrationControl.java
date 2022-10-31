@@ -58,7 +58,7 @@ public class RegistrationControl {
             throw new RuntimeException("Matrikelnumber already exists.");
         }
         return true;
-    };
+    }
 
     // register new company by creating an account and a company profile
     // and save account data in user table and company data in student table
