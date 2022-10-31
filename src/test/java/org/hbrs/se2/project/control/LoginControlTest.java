@@ -75,4 +75,12 @@ class LoginControlTest {
         //should fail since there exists the user "JUnitTest" but the password is wrong
         assertFalse(loginControl.authenticate("JUnitTest","FalschesPasswort"));
     }
+
+    @Test
+    void getCurrentUser() throws DatabaseUserException {
+        loginControl.authenticate("JUnitTest","SicheresPasswort");
+        //should return UserDTO of user JUnitTest
+        assertNotNull(loginControl.getCurrentUser());
+        assertEquals("JUnitTest", loginControl.getCurrentUser().getUsername());
+    }
 }
