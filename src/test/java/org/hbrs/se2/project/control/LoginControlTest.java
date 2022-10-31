@@ -3,10 +3,8 @@ package org.hbrs.se2.project.control;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.entities.Company;
-import org.hbrs.se2.project.entities.Student;
 import org.hbrs.se2.project.entities.User;
 import org.hbrs.se2.project.repository.UserRepository;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,14 +20,12 @@ class LoginControlTest {
     @Autowired
     UserRepository userRepository;
 
-    @BeforeClass
-    @DisplayName("Making sure that a user called \"JUnitTest\" exists, if not then create a new User.")
+    @BeforeEach
+    @DisplayName("Creating a user called \"JUnitTest\" exists.")
     void init(){
-        UserDTO user = userRepository.findUserByUsername("JUnitTest");
-        if(user != null) {
-            userRepository.deleteById(user.getUserid());
-        }
+        deleteTestUser();
 
+        //Create a new User called "JUnitTest"
         User testUser = new User();
         testUser.setUsername("JUnitTest");
         testUser.setPassword("SicheresPasswort");
@@ -40,6 +36,7 @@ class LoginControlTest {
         Company company = new Company();
         company.setName("JUnitTest");
 
+        //Save User to database
         try {
             registrationControl.registerCompany(testUser, company);
         } catch (DatabaseUserException e) {
@@ -47,42 +44,35 @@ class LoginControlTest {
         }
     }
 
-    /*
-    @BeforeEach
-    @DisplayName("Making sure that a user called \"JUnitTest\" exists, if not then create a new User.")
-    void createTestUser(){
-        if(userRepository.findUserByUsername("JUnitTest") == null) {
-            User testUser = new User();
-            testUser.setUsername("JUnitTest");
-            testUser.setPassword("SicheresPasswort");
-            testUser.setEmail("testUser@JUnitTest.de");
-            testUser.setRole("student");
+    @AfterEach
+    void after(){
+       deleteTestUser();
+    }
 
-            //Decided to create a company, because when making a student the MatrikelNr might already be taken
-            Company company = new Company();
-            company.setName("JUnitTest");
-
-            try {
-                registrationControl.registerCompany(testUser, company);
-            } catch (DatabaseUserException e) {
-                throw new RuntimeException(e);
-            }
+    private void deleteTestUser(){
+        //If there exists a User called "JUnitTest" than delete this user.
+        UserDTO user = userRepository.findUserByUsername("JUnitTest");
+        if(user != null) {
+            userRepository.deleteById(user.getUserid());
         }
     }
 
-     */
+    @Test
+    void testAuthenticateWhenNoSuchUser() throws DatabaseUserException {
+        deleteTestUser();
+        //Should fail since there is no such user
+        assertFalse(loginControl.authenticate("JUnitTest","SicheresPasswort"));
+    }
 
     @Test
     void testAuthenticateShouldWork() throws DatabaseUserException {
+        //should work since there exists the user "JUnitTest" with given password
         assertTrue(loginControl.authenticate("JUnitTest","SicheresPasswort"));
     }
 
     @Test
     void testAuthenticateShouldFail() throws DatabaseUserException {
+        //should fail since there exists the user "JUnitTest" but the password is wrong
         assertFalse(loginControl.authenticate("JUnitTest","FalschesPasswort"));
-    }
-
-    @Test
-    void testGetCurrentUser() {
     }
 }
