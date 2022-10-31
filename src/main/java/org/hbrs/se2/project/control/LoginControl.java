@@ -34,6 +34,9 @@ public class LoginControl {
         return true;
     }
 
+    /**
+     * @return last successfully authenticated user as UserDTO
+     * */
     public UserDTO getCurrentUser() {
         return this.userDTO;
     }
