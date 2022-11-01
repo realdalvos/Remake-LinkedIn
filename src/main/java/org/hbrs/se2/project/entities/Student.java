@@ -15,7 +15,7 @@ public class Student {
     private int userid;
     private String firstname;
     private String lastname;
-    private int matrikelnumber;
+    private String matrikelnumber;
     private String studyMajor;
     private String university;
 
@@ -44,8 +44,8 @@ public class Student {
 
     @Basic
     @Column(name="matrikelnumber")
-    public int getMatrikelnumber() {return matrikelnumber;}
-    public void setMatrikelnumber(int number) {this.matrikelnumber = number;}
+    public String getMatrikelnumber() {return matrikelnumber;}
+    public void setMatrikelnumber(String number) {this.matrikelnumber = number;}
 
     @Basic
     @Column(name="studymajor")

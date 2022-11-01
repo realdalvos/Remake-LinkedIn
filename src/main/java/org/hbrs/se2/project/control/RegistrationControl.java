@@ -14,7 +14,6 @@ import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.StudentRepository;
 import org.hbrs.se2.project.repository.UserRepository;
 import org.hbrs.se2.project.util.Globals;
-import org.hbrs.se2.project.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,9 +32,8 @@ public class RegistrationControl {
     // register new student by creating an account and a student profile
     // and save account data in user table and student data in student table
     public boolean registerStudent(UserDTO user, StudentDTO student) throws DatabaseUserException {
-        String role = Globals.Roles.student;
         // create new user of role "student"
-        this.createAccount(user, role);
+        this.createAccount(user, Globals.Roles.student);
         // get User id from new saved user in db so we can assign the userid to the data in student table
         UserDTO newSavedUser = userRepository.findUserByUsername(user.getUsername());
         // create student profile
@@ -59,9 +57,8 @@ public class RegistrationControl {
     // register new company by creating an account and a company profile
     // and save account data in user table and company data in student table
     public boolean registerCompany(UserDTO user, CompanyDTO company) throws DatabaseUserException {
-        String role = Globals.Roles.company;
         // create new user of role "company"
-        this.createAccount(user, role);
+        this.createAccount(user, Globals.Roles.company);
         // get User id from new saved user in db
         UserDTO newSavedUser = userRepository.findUserByUsername(user.getUsername());
         // create company profile
@@ -84,9 +81,8 @@ public class RegistrationControl {
 
     private void createAccount(UserDTO userDTO, String role) throws DatabaseUserException {
         try {
-            User userEntity = UserFactory.createUser(userDTO, role);
             //Saving user in db
-            this.userRepository.save(userEntity);
+            this.userRepository.save(UserFactory.createUser(userDTO, role));
         } catch (org.springframework.dao.DataAccessResourceFailureException e) {
             throw new DatabaseUserException("A Failure occurred while saving a user account in the database at createAccount");
         }
@@ -94,8 +90,7 @@ public class RegistrationControl {
 
     private void createStudentProfile(StudentDTO studentDTO, UserDTO userDTO) throws DatabaseUserException {
         try {
-            Student student = StudentFactory.createStudent(studentDTO, userDTO);
-            this.studentRepository.save(student);
+            this.studentRepository.save(StudentFactory.createStudent(studentDTO, userDTO));
         } catch(org.springframework.dao.DataAccessResourceFailureException e) {
             throw new DatabaseUserException("A Failure occurred while saving a Student Profile into the database at createStudentProfile");
         }
@@ -103,28 +98,10 @@ public class RegistrationControl {
 
     private void createCompanyProfile(CompanyDTO companyDTO, UserDTO userDTO) throws DatabaseUserException {
         try {
-            Company company = CompanyFactory.createCompany(companyDTO, userDTO);
-            this.companyRepository.save(company);
+            this.companyRepository.save(CompanyFactory.createCompany(companyDTO, userDTO));
         } catch(org.springframework.dao.DataAccessResourceFailureException e) {
             throw new DatabaseUserException("A Failure occurred while saving a Company Profile into the database at createCompanyProfile");
         }
-    }
-
-    // makes an array and calls function to check if input is null or empty "" for student
-    public boolean checkFormInputStudent(UserDTO userDTO, StudentDTO studentDTO) {
-        String[] array = {userDTO.getUsername(), userDTO.getPassword(), userDTO.getEmail(), studentDTO.getFirstname(), studentDTO.getLastname()};
-        return Utils.checkIfInputEmpty(array);
-    }
-
-    // makes array and calls function to check if input is null or emtpy "" for company
-    public boolean checkFormInputCompany(UserDTO userDTO, CompanyDTO companyDTO) {
-        String[] array = {userDTO.getUsername(), userDTO.getPassword(), userDTO.getEmail(), companyDTO.getName()};
-        return Utils.checkIfInputEmpty(array);
-    }
-
-    // Checks if password and confirmPassword are equal
-    public boolean checkPasswordConfirmation(String passw1, String passw2) {
-        return passw1.trim().equals(passw2.trim());
     }
 }
 

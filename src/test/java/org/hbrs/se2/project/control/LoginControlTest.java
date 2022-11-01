@@ -2,6 +2,8 @@ package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
+import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
+import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.entities.Company;
 import org.hbrs.se2.project.entities.User;
 import org.hbrs.se2.project.repository.UserRepository;
@@ -26,14 +28,14 @@ class LoginControlTest {
         deleteTestUser();
 
         //Create a new User called "JUnitTest"
-        User testUser = new User();
+        UserDTOImpl testUser = new UserDTOImpl();
         testUser.setUsername("JUnitTest");
         testUser.setPassword("SicheresPasswort");
         testUser.setEmail("testUser@JUnitTest.de");
         testUser.setRole("student");
 
         //Decided to create a company, because when making a student the MatrikelNr might already be taken
-        Company company = new Company();
+        CompanyDTOImpl company = new CompanyDTOImpl();
         company.setName("JUnitTest");
 
         //Save User to database
