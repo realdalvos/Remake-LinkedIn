@@ -6,6 +6,7 @@ import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.server.VaadinService;
 import org.hbrs.se2.project.control.LoginControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
@@ -43,6 +44,8 @@ public class LoginView extends VerticalLayout {
                 Utils.makeDialog(ex.getReason());
             }
             if(isAuthenticated) {
+                //Generate new sessionid to prevent session fixation
+                VaadinService.reinitializeSession(VaadinService.getCurrentRequest());
                 // create session for user
                 grabAndSetUserIntoSession();
                 navigateToMainPage();
