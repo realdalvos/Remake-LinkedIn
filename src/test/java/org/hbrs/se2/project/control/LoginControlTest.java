@@ -2,9 +2,12 @@ package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
+import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
+import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.entities.Company;
 import org.hbrs.se2.project.entities.User;
 import org.hbrs.se2.project.repository.UserRepository;
+import org.hbrs.se2.project.util.Globals;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,14 +29,14 @@ class LoginControlTest {
         deleteTestUser();
 
         //Create a new User called "JUnitTest"
-        User testUser = new User();
+        UserDTOImpl testUser = new UserDTOImpl();
         testUser.setUsername("JUnitTest");
         testUser.setPassword("SicheresPasswort");
         testUser.setEmail("testUser@JUnitTest.de");
-        testUser.setRole("student");
+        testUser.setRole(Globals.Roles.company);
 
         //Decided to create a company, because when making a student the MatrikelNr might already be taken
-        Company company = new Company();
+        CompanyDTOImpl company = new CompanyDTOImpl();
         company.setName("JUnitTest");
 
         //Save User to database
@@ -45,12 +48,14 @@ class LoginControlTest {
     }
 
     @AfterEach
+    @DisplayName("Deleting user \"JUnitTest\".")
     void after(){
-       deleteTestUser();
+        deleteTestUser();
     }
 
+    /**
+     * Delete user "JUnitTest".*/
     private void deleteTestUser(){
-        //If there exists a User called "JUnitTest" than delete this user.
         UserDTO user = userRepository.findUserByUsername("JUnitTest");
         if(user != null) {
             userRepository.deleteById(user.getUserid());
@@ -58,29 +63,33 @@ class LoginControlTest {
     }
 
     @Test
+    @DisplayName("LoginControl should return false since there is no user \"JUnitTest\".")
     void testAuthenticateWhenNoSuchUser() throws DatabaseUserException {
         deleteTestUser();
-        //Should fail since there is no such user
+
         assertFalse(loginControl.authenticate("JUnitTest","SicheresPasswort"));
     }
 
     @Test
-    void testAuthenticateShouldWork() throws DatabaseUserException {
-        //should work since there exists the user "JUnitTest" with given password
-        assertTrue(loginControl.authenticate("JUnitTest","SicheresPasswort"));
-    }
-
-    @Test
+    @DisplayName("LoginControl should return false since the password is not correct for user \"JUnitTest\".")
     void testAuthenticateShouldFail() throws DatabaseUserException {
-        //should fail since there exists the user "JUnitTest" but the password is wrong
         assertFalse(loginControl.authenticate("JUnitTest","FalschesPasswort"));
     }
 
     @Test
+    @DisplayName("LoginControl should return true since the password is correct for user \"JUnitTest\".")
+    void testAuthenticateShouldWork() throws DatabaseUserException {
+        assertTrue(loginControl.authenticate("JUnitTest","SicheresPasswort"));
+    }
+
+    @Test
+    @DisplayName("GetCurrentUser Method should return the last registered user, in this case user \"JUnitTest\".")
     void getCurrentUser() throws DatabaseUserException {
         loginControl.authenticate("JUnitTest","SicheresPasswort");
+
         //should return UserDTO of user JUnitTest
-        assertNotNull(loginControl.getCurrentUser());
-        assertEquals("JUnitTest", loginControl.getCurrentUser().getUsername());
+        UserDTO currentUser = loginControl.getCurrentUser();
+        assertNotNull(currentUser);
+        assertEquals("JUnitTest", currentUser.getUsername());
     }
 }
