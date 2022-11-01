@@ -1,101 +1,68 @@
 package org.hbrs.se2.project.views.studientViews;
 
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.EmailField;
-import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.hbrs.se2.project.control.RegistrationControl;
-import org.hbrs.se2.project.entities.Student;
-import org.hbrs.se2.project.entities.User;
-import org.hbrs.se2.project.util.Globals;
+import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
+import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.util.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hbrs.se2.project.views.RegisterView;
 
 /**
  * Register View - Form to register as a student
  */
 @Route(value = "register-student")
 @PageTitle("Register as a Student")
-public class RegisterStudentView extends VerticalLayout {
-
-    @Autowired
-    private RegistrationControl registrationControl;
+public class RegisterStudentView extends RegisterView {
 
     private H4 registerText = new H4();
+
+    // text fields
+    private TextField firstname = new TextField("First name");
+    private TextField lastname = new TextField("Last name");
+
+    private IntegerField matrikelnumber = new IntegerField("Matrikel number");
+
+    Binder<StudentDTOImpl> concreteUserBinder = new Binder(StudentDTOImpl.class);
 
     public RegisterStudentView() {
         setSizeFull();
         registerText.setText("Register here");
-        // text fields
-        TextField firstname = new TextField("First name");
-        TextField lastname = new TextField("Last name");
-        TextField username = new TextField("Username");
-        TextField matrikelNumber = new TextField("Matrikel number");
 
-        // email field
-        EmailField email = new EmailField("Email address");
-        email.getElement().setAttribute("name", "email");
-        email.setPlaceholder("username@example.com");
-        email.setErrorMessage("Please enter a valid example.com email address");
-        email.setClearButtonVisible(true);
-        email.setPattern("^(.+)@(\\S+)$");
+        Button confirmButton = new Button("Register now as a user");
 
-        // password fields
-        PasswordField password = new PasswordField("Password");
-        PasswordField confirmPassword = new PasswordField("Confirm password");
+        userBinder.setBean(new UserDTOImpl());
+        concreteUserBinder.setBean(new StudentDTOImpl());
 
-        // Buttons
-        Button confirmButton = new Button("Register now as a student");
-        Button loginButton = new Button("I already have an account - Log In");
+        // add all elements/components to View
+        add(registerText);
+        add(createFormLayout());
+        add(confirmButton);
+        add(loginButton());
+        this.setWidth("30%");
+        this.setAlignItems(Alignment.CENTER);
 
-        // register form for student
-        FormLayout formLayout = new FormLayout();
-        formLayout.add(
-                firstname, lastname, matrikelNumber,
-                username, email,
-                password, confirmPassword
-        );
-        formLayout.setResponsiveSteps(
-                // Use one column
-                new FormLayout.ResponsiveStep("0", 1)
-        );
+        // WIP! - mapping of attributes and the names of this View based on variable names not working
+        userBinder.forField(username).bind(UserDTOImpl::getUsername, UserDTOImpl::setUsername);
+        userBinder.forField(password).bind(UserDTOImpl::getPassword, UserDTOImpl::setPassword);
+        userBinder.forField(email).bind(UserDTOImpl::getEmail, UserDTOImpl::setEmail);
 
-        // is executed when confirm button is clicked
+        concreteUserBinder.forField(firstname).bind(StudentDTOImpl::getFirstname, StudentDTOImpl::setFirstname);
+        concreteUserBinder.forField(lastname).bind(StudentDTOImpl::getLastname, StudentDTOImpl::setLastname);
+        concreteUserBinder.forField(matrikelnumber).bind(StudentDTOImpl::getMatrikelnumber, StudentDTOImpl::setMatrikelnumber);
+
         confirmButton.addClickListener(event -> {
             boolean isRegistered = false;
 
-
-            // create new User entity with passed in values from register form
-            User user = new User();
-            user.setUsername(username.getValue().trim());
-            user.setPassword(password.getValue().trim());
-            user.setEmail(email.getValue().trim());
-            user.setRole(Globals.Roles.student);
-
-            // create new Student entity with passed in values from register form
-            Student student = new Student();
-            student.setFirstname(firstname.getValue().trim());
-            student.setLastname(lastname.getValue().trim());
-
-            // get and set matrikelnumber of student
-            try {
-                student.setMatrikelnumber(Integer.parseInt(matrikelNumber.getValue().trim()));
-            } catch (NumberFormatException e) {
-                // Error dialog
-                Utils.makeDialog("Please fill out the matrikelnumber field");
-                throw new Error("Something is wrong with your filled in matrikel number");
-            }
-
-            // checks if all input fields were filled out
-            if(!registrationControl.checkFormInputStudent(user.getUsername(), user.getPassword(), user.getEmail(),
-                    student.getFirstname(), student.getLastname())) {
-                // Error dialog
+            // checks if all input fields were filled out correctly
+            if(!registrationControl.checkFormInputStudent(userBinder.getBean(), concreteUserBinder.getBean())) {
+                // error dialog
                 Utils.makeDialog("Please fill out all text fields.");
                 throw new Error("Not all input field were filled out.");
             }
@@ -104,41 +71,43 @@ public class RegisterStudentView extends VerticalLayout {
             if(!registrationControl.checkPasswordConfirmation(confirmPassword.getValue(), password.getValue())) {
                 // error dialog
                 Utils.makeDialog("Both passwords are not the same");
-                throw new Error("The given two passwords are not equal.");
+                throw new Error("The given two passwords are not equal");
             }
 
-            // call function to save user and student data in db
+            // register new Company with passed in values from register form
             try {
-                // function to register new student
-                isRegistered = registrationControl.registerStudent(user, student);
+                // function to register new company
+                isRegistered = registrationControl.registerStudent(userBinder.getBean(), concreteUserBinder.getBean());
             } catch (Exception e) {
-                // get the message of the root cause of the exception
+                // get the root cause of an exception
                 String message = Utils.getRootCause(e);
+                // Error dialog
                 Utils.makeDialog(message);
             }
 
             if(isRegistered) {
                 navigateToLoginPage();
             } else {
-                System.out.println("Student is not registered.");
+                System.out.println("A Failure occurred while trying to save data in the database");
             }
         });
 
-        loginButton.addClickListener(event -> {
-           navigateToLoginPage();
-        });
-
-        // add all elements/components to View
-        add(registerText);
-        add(formLayout);
-        add(confirmButton);
-        add(loginButton);
-        this.setWidth("30%");
-        this.setAlignItems(Alignment.CENTER);
     }
 
-    private void navigateToLoginPage() {
-        UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
+    @Override
+    protected Component createFormLayout() {
+        FormLayout formLayout = new FormLayout();
+        formLayout.add(
+                firstname, lastname, matrikelnumber,
+                username, email,
+                password, confirmPassword
+        );
+        formLayout.setResponsiveSteps(
+                // Use one column
+                new FormLayout.ResponsiveStep("0", 1)
+        );
+        return formLayout;
     }
+
 }
 
