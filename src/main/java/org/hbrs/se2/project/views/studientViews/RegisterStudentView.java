@@ -76,7 +76,7 @@ public class RegisterStudentView extends VerticalLayout {
             user.setUsername(username.getValue().trim());
             user.setPassword(password.getValue().trim());
             user.setEmail(email.getValue().trim());
-            user.setRole("student");
+            user.setRole(Globals.Roles.student);
 
             // create new Student entity with passed in values from register form
             Student student = new Student();

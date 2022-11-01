@@ -68,7 +68,7 @@ public class RegisterCompanyView extends VerticalLayout {
             user.setUsername(username.getValue().trim());
             user.setPassword(password.getValue().trim());
             user.setEmail(email.getValue().trim());
-            user.setRole("company");
+            user.setRole(Globals.Roles.company);
 
             // create new Company entity with passed in values from register form
             Company company = new Company();
