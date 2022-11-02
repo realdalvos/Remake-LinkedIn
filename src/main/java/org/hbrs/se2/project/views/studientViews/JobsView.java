@@ -35,6 +35,9 @@ public class JobsView extends Div {
         Grid<JobDTOImpl> grid = new Grid<>();
         grid.addColumn(JobDTOImpl::getTitle).setHeader("Title");
         grid.addColumn(JobDTOImpl::getSalary).setHeader("Salary");
+        grid.addItemClickListener(event -> {
+           System.out.println(event.getItem());
+        });
 
         button.addClickListener(event -> {
             String keyword = textField.getValue();

@@ -50,9 +50,9 @@ public class JobControl {
     private List<JobDTOImpl> getFilteredJobs(List<JobDTOImpl> jobs, String keyword) {
         List<JobDTOImpl> matchingJobs = new ArrayList<>();
         for(JobDTOImpl job : jobs) {
-            if(job.getTitle().contains(keyword)) {
+            if(job.getTitle().toLowerCase().contains(keyword.toLowerCase())) {
                 matchingJobs.add(job);
-            } else if(job.getDescription().contains(keyword)) {
+            } else if(job.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                 matchingJobs.add(job);
             }
         }
