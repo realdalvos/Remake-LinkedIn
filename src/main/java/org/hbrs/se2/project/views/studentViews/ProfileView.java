@@ -6,6 +6,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.awt.*;
 
@@ -13,6 +14,14 @@ import java.awt.*;
 @PageTitle("Profile")
 public class ProfileView extends Div {
 
-    Button buttonStudent = new Button("Register as a Student");
+    @Autowired
+    private ProfileView(){
+        setSizeFull();
+
+        //buttons
+        Button buttonStudent = new Button("Register as a Student");
+
+    }
+
 
 }
