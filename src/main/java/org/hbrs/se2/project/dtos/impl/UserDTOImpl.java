@@ -8,6 +8,13 @@ public class UserDTOImpl implements UserDTO {
     private String password;
     private String email;
     private String role;
+    public UserDTOImpl(){}
+    public UserDTOImpl(String username, String password, String email, String role){
+        this.username=username;
+        this.password=password;
+        this.email=email;
+        this.role=role;
+    }
     public void setUserid(int id) {this.userid = id;}
     public void setUsername(String name) {this.username = name;}
     public void setPassword(String password) {this.password = password;}
