@@ -21,8 +21,8 @@ public class ProfileView extends Div {
         LoginForm component = new LoginForm();
 
         //buttons
-        Button buttonStudent = new Button("Change Username");
-        Button buttonStudent = new Button("Change Password");
+        Button buttonUsername = new Button("Change Username");
+        Button buttonPassword = new Button("Change Password");
     }
 
 
