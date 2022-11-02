@@ -7,12 +7,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserFactory {
 
-    public static User createUser (UserDTO userDTO, String role) {
+    public static User createUser (UserDTO userDTO) {
 
         User user = new User();
 
         user.setUsername(userDTO.getUsername());
-        user.setRole(role);
+        user.setRole(userDTO.getRole());
         user.setEmail(userDTO.getEmail());
         //Hashing password
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

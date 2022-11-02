@@ -43,7 +43,7 @@ public class RegistrationControl {
         }
 
         // create new user of role "student"
-        this.createAccount(user, Globals.Roles.student);
+        this.createAccount(user);
         // get User id from new saved user in db, so we can assign the userid to the data in student table
         UserDTO newSavedUser = userRepository.findUserByUsername(user.getUsername());
         // create student profile
@@ -65,7 +65,7 @@ public class RegistrationControl {
         }
 
         // create new user of role "company"
-        this.createAccount(user, Globals.Roles.company);
+        this.createAccount(user);
         // get User id from new saved user in db
         UserDTO newSavedUser = userRepository.findUserByUsername(user.getUsername());
         // create company profile
@@ -73,10 +73,10 @@ public class RegistrationControl {
         return true;
     }
 
-    private void createAccount(UserDTO userDTO, String role) throws DatabaseUserException {
+    private void createAccount(UserDTO userDTO) throws DatabaseUserException {
         try {
             //Saving user in db
-            this.userRepository.save(UserFactory.createUser(userDTO, role));
+            this.userRepository.save(UserFactory.createUser(userDTO));
         } catch (org.springframework.dao.DataAccessResourceFailureException e) {
             throw new DatabaseUserException("A Failure occurred while saving a user account in the database at createAccount");
         }
