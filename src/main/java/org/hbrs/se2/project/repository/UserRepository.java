@@ -16,5 +16,7 @@ import org.hbrs.se2.project.entities.User;
  */
 public interface UserRepository extends JpaRepository<User, Integer> {
     UserDTO findUserByUsername(String username);
+
+    UserDTO findUserByEmail(String email);
 }
 

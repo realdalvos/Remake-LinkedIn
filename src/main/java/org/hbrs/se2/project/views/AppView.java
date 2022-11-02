@@ -27,7 +27,7 @@ import org.hbrs.se2.project.views.studientViews.JobsView;
 
 import java.util.Optional;
 
-@Route(value="main")
+@Route(value=Globals.Pages.MAIN_VIEW)
 @PWA(name="HBRS Collab", shortName = "HBRScollab", enableInstallPrompt = false)
 public class AppView extends AppLayout implements BeforeEnterObserver {
 

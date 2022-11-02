@@ -11,10 +11,11 @@ import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.helper.navigateHandler;
+import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.RegisterView;
 
-@Route(value = "register-company")
+@Route(value = Globals.Pages.REGISTER_COMPANY_VIEW)
 @PageTitle("Register as a Company")
 public class RegisterCompanyView extends RegisterView {
 
@@ -102,5 +103,4 @@ public class RegisterCompanyView extends RegisterView {
         );
         return formLayout;
     }
-
 }

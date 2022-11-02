@@ -9,7 +9,7 @@ public class StudentFactory {
     public static Student createStudent(StudentDTO studentDTO, UserDTO userDTO) {
 
         Student student = new Student();
-
+        // pass parameters from studentDTO to student
         student.setFirstname(studentDTO.getFirstname());
         student.setLastname(studentDTO.getLastname());
         student.setMatrikelnumber(studentDTO.getMatrikelnumber());

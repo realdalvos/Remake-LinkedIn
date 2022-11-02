@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  */
 @Route(value="")
-@RouteAlias(value="login")
+@RouteAlias(value=Globals.Pages.LOGIN_VIEW)
 public class LoginView extends VerticalLayout {
 
     @Autowired

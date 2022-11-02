@@ -13,6 +13,7 @@ import org.hbrs.se2.project.control.JobControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
+import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.entities.Job;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
@@ -70,15 +71,13 @@ public class NewJobAdView extends Div {
             CompanyDTO comp = jobControl.getCompanyByUserid(currentUser.getUserid());
             int companyid = comp.getCompanyid();
 
-            // create new job entity
-            Job job = new Job();
-            job.setCompanyid(companyid);
-            job.setTitle(title.getValue());
-            job.setDescription(description.getValue());
-            job.setSalary(salary.getValue());
+            // create new jobDTOImpl
+            JobDTOImpl job = new JobDTOImpl(
+                    companyid, title.getValue(), description.getValue(), salary.getValue());
 
             // check if all input fields were filled out
-            if(!Utils.checkIfInputEmpty(new String[]{job.getTitle(), job.getDescription(), job.getSalary()})) {
+            if(!Utils.checkIfInputEmpty(
+                    new String[]{job.getTitle(), job.getDescription(), job.getSalary()})) {
                 // error dialog
                 Utils.makeDialog("Please fill out all text fields.");
                 throw new Error("Not all input field were filled out.");

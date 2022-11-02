@@ -9,6 +9,17 @@ public class JobDTOImpl implements JobDTO {
     private String description;
     private String salary;
 
+    public JobDTOImpl() {
+
+    }
+
+    public JobDTOImpl(int companyid, String title, String description, String salary) {
+        this.companyid = companyid;
+        this.title = title;
+        this.description = description;
+        this.salary = salary;
+    }
+
     public void setJobid(int jobid) {
         this.jobid = jobid;
     }

@@ -11,13 +11,14 @@ import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.helper.navigateHandler;
+import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.RegisterView;
 
 /**
  * Register View - Form to register as a student
  */
-@Route(value = "register-student")
+@Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
 @PageTitle("Register as a Student")
 public class RegisterStudentView extends RegisterView {
 
