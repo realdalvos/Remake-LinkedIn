@@ -177,8 +177,6 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             if(this.authorizationControl.hasUserRole(this.getCurrentUser(), Globals.Roles.company)) {
                 System.out.println("User is company");
                 tabs = Utils.append(tabs, createTab("My Ads", MyAdsView.class));
-                tabs = Utils.append(tabs, createTab("Profile", ProfileView.class));
-
             }
         return tabs;
     }
