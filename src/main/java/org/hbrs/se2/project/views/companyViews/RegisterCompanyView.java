@@ -3,13 +3,11 @@ package org.hbrs.se2.project.views.companyViews;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
-import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
@@ -38,12 +36,9 @@ public class RegisterCompanyView extends RegisterView {
         this.setWidth("30%");
         this.setAlignItems(Alignment.CENTER);
 
-        // WIP! - mapping of attributes and the names of this View based on variable names not working
-        userBinder.forField(username).bind(UserDTOImpl::getUsername, UserDTOImpl::setUsername);
-        userBinder.forField(password).bind(UserDTOImpl::getPassword, UserDTOImpl::setPassword);
-        userBinder.forField(email).bind(UserDTOImpl::getEmail, UserDTOImpl::setEmail);
-
-        concreteUserBinder.forField(name).bind(CompanyDTOImpl::getName, CompanyDTOImpl::setName);
+        // Map input field values to DTO variables based on chosen names
+        userBinder.bindInstanceFields(this);
+        concreteUserBinder.bindInstanceFields(this);
 
         confirmButton.addClickListener(event -> {
             boolean isRegistered = false;
