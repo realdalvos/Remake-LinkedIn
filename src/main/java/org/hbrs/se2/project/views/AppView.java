@@ -5,7 +5,6 @@ import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -23,7 +22,7 @@ import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.companyViews.MyAdsView;
-import org.hbrs.se2.project.views.studientViews.JobsView;
+import org.hbrs.se2.project.views.studentViews.JobsView;
 
 import java.util.Optional;
 

@@ -2,12 +2,13 @@ package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.control.factories.JobFactory;
 import org.hbrs.se2.project.dtos.CompanyDTO;
-import org.hbrs.se2.project.dtos.JobDTO;
+import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.entities.Job;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;
-import org.hbrs.se2.project.util.Utils;
+import org.hbrs.se2.project.repository.UserRepository;
+import org.hbrs.se2.project.views.studentViews.JobsView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,9 @@ import java.util.List;
 
 @Component
 public class JobControl {
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private CompanyRepository companyRepository;
@@ -57,6 +61,18 @@ public class JobControl {
             }
         }
         return matchingJobs;
+    }
+
+    public List<JobsView.JobDetail> getAllJobsData(List<JobDTOImpl> jobs) {
+        List<JobsView.JobDetail> jobsData = new ArrayList<>();
+        CompanyDTO companyDTO;
+        UserDTO userDTO;
+        for(JobDTOImpl job : jobs) {
+            companyDTO = companyRepository.findCompanyByCompanyid(job.getCompanyid());
+            userDTO = userRepository.findUserByUserid(companyDTO.getUserid());
+            jobsData.add(new JobsView.JobDetail(job.getTitle(), job.getSalary(), job.getDescription(), companyDTO.getName(), userDTO.getEmail()));
+        }
+        return jobsData;
     }
 }
 

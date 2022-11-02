@@ -74,7 +74,7 @@ public class JobDTOImpl implements JobDTO {
     }
     @Override
     public String toString() {
-        return "UserDTOImpl{" +
+        return "JobDTOImpl{" +
                 "jobid= " + jobid +
                 ", companyid= '" + companyid + '\'' +
                 ", title= '" + title + '\'' +
