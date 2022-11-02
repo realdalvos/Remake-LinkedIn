@@ -3,11 +3,11 @@ package org.hbrs.se2.project.repository;
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.entities.Job;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Component
+@Repository
 /**
  * https://www.baeldung.com/spring-data-jpa-projections
  * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods

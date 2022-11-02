@@ -2,12 +2,12 @@ package org.hbrs.se2.project.control;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.repository.UserRepository;
+import org.springframework.stereotype.Controller;
 
-@Component
+@Controller
 public class LoginControl {
 
     @Autowired
