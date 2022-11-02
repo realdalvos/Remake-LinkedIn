@@ -15,7 +15,5 @@ import org.springframework.stereotype.Component;
  * https://spring.io/guides/gs/accessing-data-mysql/
  */
 public interface JobRepository extends JpaRepository<Job, Integer> {
-    JobDTO findJobByCompanyid(int id);
 
-    JobDTO findJobByJobid(int id);
 }

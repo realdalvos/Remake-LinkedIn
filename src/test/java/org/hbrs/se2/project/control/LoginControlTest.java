@@ -42,7 +42,7 @@ class LoginControlTest {
         //Save User to database
         try {
             registrationControl.registerCompany(testUser, company);
-        } catch (DatabaseUserException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

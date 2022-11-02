@@ -9,7 +9,7 @@ public class CompanyFactory {
     public static Company createCompany(CompanyDTO companyDTO, UserDTO userDTO) {
 
         Company company = new Company();
-
+        // pass parameters from companyDTO to company
         company.setName(companyDTO.getName());
         company.setUserid(userDTO.getUserid());
 

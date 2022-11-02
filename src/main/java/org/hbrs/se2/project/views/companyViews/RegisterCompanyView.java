@@ -10,18 +10,18 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
+import org.hbrs.se2.project.helper.navigateHandler;
+import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.RegisterView;
 
-@Route(value = "register-company")
+@Route(value = Globals.Pages.REGISTER_COMPANY_VIEW)
 @PageTitle("Register as a Company")
 public class RegisterCompanyView extends RegisterView {
 
     private H4 registerText = new H4();
-
     // text fields
     private TextField name = new TextField("Company Name");
-
     Binder<CompanyDTOImpl> concreteUserBinder = new Binder(CompanyDTOImpl.class);
 
     public RegisterCompanyView() {
@@ -51,14 +51,20 @@ public class RegisterCompanyView extends RegisterView {
             boolean isRegistered = false;
 
             // checks if all input fields were filled out correctly
-            if(!registrationControl.checkFormInputCompany(userBinder.getBean(), concreteUserBinder.getBean())) {
+            if(!Utils.checkIfInputEmpty(
+                    new String[]{
+                            userBinder.getBean().getUsername(),
+                            userBinder.getBean().getPassword(),
+                            userBinder.getBean().getEmail(),
+                            concreteUserBinder.getBean().getName()
+                    })) {
                 // error dialog
                 Utils.makeDialog("Please fill out all text fields.");
                 throw new Error("Not all input field were filled out.");
             }
 
             // checks if both passwords are equal
-            if(!registrationControl.checkPasswordConfirmation(confirmPassword.getValue(), password.getValue())) {
+            if(!confirmPassword.getValue().equals(password.getValue())) {
                 // error dialog
                 Utils.makeDialog("Both passwords are not the same");
                 throw new Error("The given two passwords are not equal");
@@ -76,7 +82,7 @@ public class RegisterCompanyView extends RegisterView {
             }
 
             if(isRegistered) {
-                navigateToLoginPage();
+                navigateHandler.navigateToLoginPage();
             } else {
                 System.out.println("A Failure occurred while trying to save data in the database");
             }
@@ -97,5 +103,4 @@ public class RegisterCompanyView extends RegisterView {
         );
         return formLayout;
     }
-
 }

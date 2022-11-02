@@ -1,6 +1,8 @@
 package org.hbrs.se2.project.control;
 
+import org.hbrs.se2.project.control.factories.JobFactory;
 import org.hbrs.se2.project.dtos.CompanyDTO;
+import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.entities.Job;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;
@@ -21,14 +23,8 @@ public class JobControl {
         return companyRepository.findCompanyByUserid(id);
     }
 
-    public void createNewJobPost(Job job) {
-        this.jobRepository.save(job);
-    }
-
-    // check if input data from job post form is empty or not
-    public boolean checkFormJobInput(String title, String description, String salary) {
-        String[] array = {title, description, salary};
-        return Utils.checkIfInputEmpty(array);
+    public void createNewJobPost(JobDTOImpl job) {
+        this.jobRepository.save(JobFactory.createJob(job));
     }
 }
 

@@ -15,8 +15,7 @@ import org.springframework.stereotype.Component;
  * https://spring.io/guides/gs/accessing-data-mysql/
  */
 public interface StudentRepository extends JpaRepository<Student, Integer> {
-    StudentDTO findStudentByUserid(int id);
-
-    StudentDTO findStudentByMatrikelnumber(int number);
+    StudentDTO findStudentByMatrikelnumber(String matrikelnumber);
 }
+
 

@@ -4,31 +4,29 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
+import org.hbrs.se2.project.helper.navigateHandler;
+import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.RegisterView;
 
 /**
  * Register View - Form to register as a student
  */
-@Route(value = "register-student")
+@Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
 @PageTitle("Register as a Student")
 public class RegisterStudentView extends RegisterView {
 
     private H4 registerText = new H4();
-
     // text fields
     private TextField firstname = new TextField("First name");
     private TextField lastname = new TextField("Last name");
-
-    private IntegerField matrikelnumber = new IntegerField("Matrikel number");
-
+    private TextField matrikelnumber = new TextField("Matrikel number");
     Binder<StudentDTOImpl> concreteUserBinder = new Binder(StudentDTOImpl.class);
 
     public RegisterStudentView() {
@@ -61,14 +59,21 @@ public class RegisterStudentView extends RegisterView {
             boolean isRegistered = false;
 
             // checks if all input fields were filled out correctly
-            if(!registrationControl.checkFormInputStudent(userBinder.getBean(), concreteUserBinder.getBean())) {
+            if(!Utils.checkIfInputEmpty(
+                    new String[]{
+                            userBinder.getBean().getUsername(),
+                            userBinder.getBean().getEmail(),
+                            userBinder.getBean().getPassword(),
+                            concreteUserBinder.getBean().getFirstname(),
+                            concreteUserBinder.getBean().getLastname()
+                    })) {
                 // error dialog
                 Utils.makeDialog("Please fill out all text fields.");
                 throw new Error("Not all input field were filled out.");
             }
 
             // checks if both passwords are equal
-            if(!registrationControl.checkPasswordConfirmation(confirmPassword.getValue(), password.getValue())) {
+            if(!confirmPassword.getValue().equals(password.getValue())) {
                 // error dialog
                 Utils.makeDialog("Both passwords are not the same");
                 throw new Error("The given two passwords are not equal");
@@ -86,12 +91,11 @@ public class RegisterStudentView extends RegisterView {
             }
 
             if(isRegistered) {
-                navigateToLoginPage();
+                navigateHandler.navigateToLoginPage();
             } else {
                 System.out.println("A Failure occurred while trying to save data in the database");
             }
         });
-
     }
 
     @Override
@@ -108,6 +112,6 @@ public class RegisterStudentView extends RegisterView {
         );
         return formLayout;
     }
-
 }
+
 

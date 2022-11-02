@@ -9,7 +9,7 @@ public interface StudentDTO {
 
     public String getLastname();
 
-    public int getMatrikelnumber();
+    public String getMatrikelnumber();
 
     public String getStudyMajor();
 
