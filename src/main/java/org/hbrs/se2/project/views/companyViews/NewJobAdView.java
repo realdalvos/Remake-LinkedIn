@@ -14,7 +14,6 @@ import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
-import org.hbrs.se2.project.entities.Job;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;

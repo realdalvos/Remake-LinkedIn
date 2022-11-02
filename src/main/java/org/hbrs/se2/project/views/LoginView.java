@@ -49,7 +49,14 @@ public class LoginView extends VerticalLayout {
                 VaadinService.reinitializeSession(VaadinService.getCurrentRequest());
                 // create session for user
                 grabAndSetUserIntoSession();
-                navigateHandler.navigateToMainPage();
+
+                if(loginControl.getCurrentUser().getRole().equals(Globals.Roles.student)) {
+                    // navigate to jobs view for student
+                    navigateHandler.navigateToJobsView();
+                } else if(loginControl.getCurrentUser().getRole().equals(Globals.Roles.company)) {
+                    // navigate to my ads view for companies
+                    navigateHandler.navigateToMyAdsView();
+                }
             } else {
                 component.setError(true);
             }

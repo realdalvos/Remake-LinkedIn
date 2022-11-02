@@ -5,6 +5,8 @@ import org.hbrs.se2.project.entities.Job;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 /**
  * https://www.baeldung.com/spring-data-jpa-projections

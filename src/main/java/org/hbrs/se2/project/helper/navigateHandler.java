@@ -26,4 +26,8 @@ public class navigateHandler {
     public static void navigateToMyAdsView() {
         UI.getCurrent().navigate(Globals.Pages.MYADS_VIEW);
     }
+
+    public static void navigateToJobsView() {
+        UI.getCurrent().navigate(Globals.Pages.JOBS_VIEW);
+    }
 }

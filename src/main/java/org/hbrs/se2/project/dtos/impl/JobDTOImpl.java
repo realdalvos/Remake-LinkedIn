@@ -20,6 +20,14 @@ public class JobDTOImpl implements JobDTO {
         this.salary = salary;
     }
 
+    public JobDTOImpl(int jobid, int companyid, String title, String description, String salary) {
+        this.jobid = jobid;
+        this.companyid = companyid;
+        this.title = title;
+        this.description = description;
+        this.salary = salary;
+    }
+
     public void setJobid(int jobid) {
         this.jobid = jobid;
     }
@@ -63,5 +71,15 @@ public class JobDTOImpl implements JobDTO {
     @Override
     public String getSalary() {
         return salary;
+    }
+    @Override
+    public String toString() {
+        return "UserDTOImpl{" +
+                "jobid= " + jobid +
+                ", companyid= '" + companyid + '\'' +
+                ", title= '" + title + '\'' +
+                ", description= '" + description + '\'' +
+                ", salary= " + salary +
+                '}';
     }
 }
