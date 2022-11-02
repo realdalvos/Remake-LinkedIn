@@ -21,8 +21,6 @@ import org.hbrs.se2.project.views.RegisterView;
 @Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
 @PageTitle("Register as a Student")
 public class RegisterStudentView extends RegisterView {
-
-    private H4 registerText = new H4();
     // text fields
     private TextField firstname = new TextField("First name");
     private TextField lastname = new TextField("Last name");
@@ -35,7 +33,7 @@ public class RegisterStudentView extends RegisterView {
 
         Button confirmButton = new Button("Register now as a user");
 
-        userBinder.setBean(new UserDTOImpl());
+        userBinder.setBean(setUserDTO(Globals.Roles.student));
         concreteUserBinder.setBean(new StudentDTOImpl());
 
         // add all elements/components to View

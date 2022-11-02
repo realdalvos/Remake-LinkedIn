@@ -18,8 +18,6 @@ import org.hbrs.se2.project.views.RegisterView;
 @Route(value = Globals.Pages.REGISTER_COMPANY_VIEW)
 @PageTitle("Register as a Company")
 public class RegisterCompanyView extends RegisterView {
-
-    private H4 registerText = new H4();
     // text fields
     private TextField name = new TextField("Company Name");
     Binder<CompanyDTOImpl> concreteUserBinder = new Binder(CompanyDTOImpl.class);
@@ -30,7 +28,7 @@ public class RegisterCompanyView extends RegisterView {
 
         Button confirmButton = new Button("Register now as a company");
 
-        userBinder.setBean(new UserDTOImpl());
+        userBinder.setBean(setUserDTO(Globals.Roles.company));
         concreteUserBinder.setBean(new CompanyDTOImpl());
 
         add(registerText);

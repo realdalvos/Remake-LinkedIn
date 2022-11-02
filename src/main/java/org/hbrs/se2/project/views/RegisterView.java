@@ -2,6 +2,7 @@ package org.hbrs.se2.project.views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class RegisterView extends VerticalLayout {
 
+    protected H4 registerText = new H4();
     @Autowired
     protected RegistrationControl registrationControl;
     protected PasswordField password = new PasswordField("Password");
@@ -41,5 +43,11 @@ public abstract class RegisterView extends VerticalLayout {
         email.setClearButtonVisible(true);
         email.setPattern("^(.+)@(\\S+)$");
         return email;
+    }
+
+    protected UserDTOImpl setUserDTO(String role) {
+        UserDTOImpl bean = new UserDTOImpl();
+        bean.setRole(role);
+        return bean;
     }
 }
