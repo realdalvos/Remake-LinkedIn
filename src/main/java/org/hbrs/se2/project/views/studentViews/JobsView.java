@@ -50,7 +50,7 @@ public class JobsView extends Div {
             // gather all important data !!!!!!!
             // user email, company name, job description
             List<JobDetail> jobDetails = jobControl.getAllJobsData(jobs);
-
+            // pass relevant job list with detail information to grid
             grid.setItems(jobDetails);
         });
 
