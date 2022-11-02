@@ -2,6 +2,7 @@ package org.hbrs.se2.project.views;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -33,7 +34,11 @@ public class LoginView extends VerticalLayout {
 
         // buttons
         Button buttonStudent = new Button("Register as a Student");
+        buttonStudent.addThemeVariants(ButtonVariant.LUMO_LARGE);           // changing size for better usability
+        buttonStudent.addThemeVariants(ButtonVariant.LUMO_SUCCESS);         // Different colour to seperate Log In and Register
         Button buttonCompany = new Button("Register as a Company");
+        buttonCompany.addThemeVariants(ButtonVariant.LUMO_LARGE);           // changing size for better usability
+        buttonCompany.addThemeVariants(ButtonVariant.LUMO_SUCCESS);         // Different colour to seperate Log In and Register
 
         component.addLoginListener(e -> {
             boolean isAuthenticated = false;
