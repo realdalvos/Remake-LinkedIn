@@ -1,17 +1,14 @@
-package org.hbrs.se2.project.entities;
+package org.hbrs.se2.project.wrapper;
 
-import org.hbrs.se2.project.wrapper.StudentHasTopicKey;
+import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 
-import javax.persistence.*;
-@Entity @IdClass(StudentHasTopicKey.class)
-@Table(name = "student_has_topic", schema = "mid9db")
-public class StudentHasTopic {
-
+@MappedSuperclass
+public class StudentHasTopicKey implements Serializable {
     private int studentid;
+
     private int topicid;
 
-    @Id
-    @Column(name = "studentid")
     public int getStudentid() {
         return studentid;
     }
@@ -20,8 +17,6 @@ public class StudentHasTopic {
         this.studentid = studentid;
     }
 
-    @Id
-    @Column(name = "topicid")
     public int getTopicid() {
         return topicid;
     }
@@ -29,6 +24,5 @@ public class StudentHasTopic {
     public void setTopicid(int topicid) {
         this.topicid = topicid;
     }
-
 
 }

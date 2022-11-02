@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.dtos.StudentDTO;
+import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.entities.Student;
 import org.hbrs.se2.project.entities.StudentHasSkill;
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProfileControl {
-
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private StudentRepository studentRepository;
 
@@ -27,17 +29,19 @@ public class ProfileControl {
     @Autowired
     private StudentHasTopicRepository studentHasTopicRepository;
 
-    public void updateStudyMajor(String major, int studentid){
-        StudentDTO studentDTO = studentRepository.findStudentByUserid(studentid);
+    public void updateStudyMajor(String major, int userid){
+        StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
+        if(studentDTO == null) {
+            System.out.println("Is null");
+        }
         Student student = new Student();
         student.setUserid(studentDTO.getUserid());
         student.setStudentid(studentDTO.getStudentid());
         student.setFirstname(studentDTO.getFirstname());
         student.setLastname(studentDTO.getLastname());
-        student.setStudyMajor(studentDTO.getStudyMajor());
         student.setUniversity(studentDTO.getUniversity());
         student.setMatrikelnumber(studentDTO.getMatrikelnumber());
-
+        student.setStudyMajor(major);
         studentRepository.save(student);
     }
 }

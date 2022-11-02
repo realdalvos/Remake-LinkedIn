@@ -57,7 +57,7 @@ public class ProfileView extends Div {
 
         save.addClickListener   (buttonClickEvent -> {
             if (major.getValue() != null && !major.getValue().equals("")) {
-                profileControl.updateStudyMajor(major.getValue(), this.getCurrentUser().getStudentid());
+                profileControl.updateStudyMajor(major.getValue(), this.getCurrentUser().getUserid());
             }
             if (university.getValue() != null && !university.getValue().equals("")) {
                 System.out.println(university.getValue());
@@ -71,7 +71,9 @@ public class ProfileView extends Div {
         });
 
     }
-    public StudentDTO getCurrentUser() {
-        return (StudentDTO)UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+    public UserDTO getCurrentUser() {
+        UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+        System.out.println(userDTO.getUserid());
+        return userDTO;
     }
 }
