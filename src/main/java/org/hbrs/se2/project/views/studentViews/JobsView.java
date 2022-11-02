@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.views.studientViews;
+package org.hbrs.se2.project.views.studentViews;
 
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.PageTitle;

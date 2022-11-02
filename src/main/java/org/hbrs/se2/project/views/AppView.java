@@ -22,14 +22,15 @@ import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.companyViews.MyAdsView;
-import org.hbrs.se2.project.views.studientViews.JobsView;
+import org.hbrs.se2.project.views.studentViews.JobsView;
+import org.hbrs.se2.project.views.studentViews.ProfileView;
 
 import java.util.Optional;
 
 @Route(value="main")
 @PWA(name="HBRS Collab", shortName = "HBRScollab", enableInstallPrompt = false)
 public class AppView extends AppLayout implements BeforeEnterObserver {
-
+//EditProfile branch123
     private Tabs menu;
     private H1 viewTitle;
     private H4 helloUser;
@@ -168,11 +169,16 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         if(this.authorizationControl.hasUserRole(this.getCurrentUser(), Globals.Roles.student)) {
             System.out.println("User is student");
             tabs = Utils.append(tabs, createTab("Jobs", JobsView.class));
+            tabs = Utils.append(tabs, createTab("Profile", ProfileView.class));
+
+
         } else
             // has the user the role "company" they have the tabs "My Ads"
             if(this.authorizationControl.hasUserRole(this.getCurrentUser(), Globals.Roles.company)) {
                 System.out.println("User is company");
                 tabs = Utils.append(tabs, createTab("My Ads", MyAdsView.class));
+                tabs = Utils.append(tabs, createTab("Profile", ProfileView.class));
+
             }
         return tabs;
     }
