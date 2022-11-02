@@ -3,9 +3,9 @@ package org.hbrs.se2.project.repository;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.entities.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 /**
  * https://www.baeldung.com/spring-data-jpa-projections
  * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods
