@@ -50,25 +50,10 @@ public class RegisterStudentView extends RegisterView {
             boolean isRegistered = false;
 
             // checks if all input fields were filled out correctly
-            if(!Utils.checkIfInputEmpty(
-                    new String[]{
-                            userBinder.getBean().getUsername(),
-                            userBinder.getBean().getEmail(),
-                            userBinder.getBean().getPassword(),
-                            concreteUserBinder.getBean().getFirstname(),
-                            concreteUserBinder.getBean().getLastname()
-                    })) {
-                // error dialog
-                Utils.makeDialog("Please fill out all text fields.");
-                throw new Error("Not all input field were filled out.");
-            }
+            checkInput();
 
             // checks if both passwords are equal
-            if(!confirmPassword.getValue().equals(password.getValue())) {
-                // error dialog
-                Utils.makeDialog("Both passwords are not the same");
-                throw new Error("The given two passwords are not equal");
-            }
+            checkPassword();
 
             // register new Company with passed in values from register form
             try {
@@ -102,6 +87,22 @@ public class RegisterStudentView extends RegisterView {
                 new FormLayout.ResponsiveStep("0", 1)
         );
         return formLayout;
+    }
+
+    @Override
+    protected void checkInput() {
+        if(!Utils.checkIfInputEmpty(
+                new String[]{
+                        userBinder.getBean().getUsername(),
+                        userBinder.getBean().getEmail(),
+                        userBinder.getBean().getPassword(),
+                        concreteUserBinder.getBean().getFirstname(),
+                        concreteUserBinder.getBean().getLastname()
+                })) {
+            // error dialog
+            Utils.makeDialog("Please fill out all text fields.");
+            throw new Error("Not all input field were filled out.");
+        }
     }
 }
 

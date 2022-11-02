@@ -44,24 +44,10 @@ public class RegisterCompanyView extends RegisterView {
             boolean isRegistered = false;
 
             // checks if all input fields were filled out correctly
-            if(!Utils.checkIfInputEmpty(
-                    new String[]{
-                            userBinder.getBean().getUsername(),
-                            userBinder.getBean().getPassword(),
-                            userBinder.getBean().getEmail(),
-                            concreteUserBinder.getBean().getName()
-                    })) {
-                // error dialog
-                Utils.makeDialog("Please fill out all text fields.");
-                throw new Error("Not all input field were filled out.");
-            }
+            checkInput();
 
             // checks if both passwords are equal
-            if(!confirmPassword.getValue().equals(password.getValue())) {
-                // error dialog
-                Utils.makeDialog("Both passwords are not the same");
-                throw new Error("The given two passwords are not equal");
-            }
+            checkPassword();
 
             // register new Company with passed in values from register form
             try {
@@ -95,5 +81,20 @@ public class RegisterCompanyView extends RegisterView {
                 new FormLayout.ResponsiveStep("0", 1)
         );
         return formLayout;
+    }
+
+    @Override
+    protected void checkInput() {
+        if(!Utils.checkIfInputEmpty(
+                new String[]{
+                        userBinder.getBean().getUsername(),
+                        userBinder.getBean().getPassword(),
+                        userBinder.getBean().getEmail(),
+                        concreteUserBinder.getBean().getName()
+                })) {
+            // error dialog
+            Utils.makeDialog("Please fill out all text fields.");
+            throw new Error("Not all input field were filled out.");
+        }
     }
 }
