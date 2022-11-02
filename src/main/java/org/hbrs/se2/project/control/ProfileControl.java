@@ -44,4 +44,20 @@ public class ProfileControl {
         student.setStudyMajor(major);
         studentRepository.save(student);
     }
+
+    public void updateUniversity(String university, int userid){
+        StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
+        if(studentDTO == null) {
+            System.out.println("Is null");
+        }
+        Student student = new Student();
+        student.setUserid(studentDTO.getUserid());
+        student.setStudentid(studentDTO.getStudentid());
+        student.setFirstname(studentDTO.getFirstname());
+        student.setLastname(studentDTO.getLastname());
+        student.setUniversity(studentDTO.getUniversity());
+        student.setMatrikelnumber(studentDTO.getMatrikelnumber());
+        student.setUniversity(university);
+        studentRepository.save(student);
+    }
 }

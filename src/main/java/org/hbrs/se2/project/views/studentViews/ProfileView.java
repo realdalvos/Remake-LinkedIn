@@ -60,7 +60,7 @@ public class ProfileView extends Div {
                 profileControl.updateStudyMajor(major.getValue(), this.getCurrentUser().getUserid());
             }
             if (university.getValue() != null && !university.getValue().equals("")) {
-                System.out.println(university.getValue());
+                profileControl.updateUniversity(university.getValue(), this.getCurrentUser().getUserid());
             }
             if (topics.getValue() != null && !topics.getValue().equals("")) {
                 System.out.println(topics.getValue());
