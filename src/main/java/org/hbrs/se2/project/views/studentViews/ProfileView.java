@@ -2,6 +2,7 @@ package org.hbrs.se2.project.views.studentViews;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.util.Globals;
@@ -17,10 +18,11 @@ public class ProfileView extends Div {
     @Autowired
     private ProfileView(){
         setSizeFull();
+        LoginForm component = new LoginForm();
 
         //buttons
-        Button buttonStudent = new Button("Register as a Student");
-
+        Button buttonStudent = new Button("Change Username");
+        Button buttonStudent = new Button("Change Password");
     }
 
 
