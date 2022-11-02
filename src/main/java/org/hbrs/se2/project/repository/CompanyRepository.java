@@ -16,4 +16,6 @@ import org.springframework.stereotype.Component;
  */
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
         CompanyDTO findCompanyByUserid(int id);
+
+        CompanyDTO findCompanyByCompanyid(int id);
 }
