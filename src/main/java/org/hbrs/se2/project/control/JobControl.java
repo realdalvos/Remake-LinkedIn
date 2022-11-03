@@ -10,12 +10,12 @@ import org.hbrs.se2.project.repository.JobRepository;
 import org.hbrs.se2.project.repository.UserRepository;
 import org.hbrs.se2.project.views.studentViews.JobsView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Controller
 public class JobControl {
 
     @Autowired
