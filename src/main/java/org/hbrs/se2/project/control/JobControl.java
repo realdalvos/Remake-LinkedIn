@@ -2,6 +2,7 @@ package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.control.factories.JobFactory;
 import org.hbrs.se2.project.dtos.CompanyDTO;
+import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.entities.Job;
@@ -33,7 +34,7 @@ public class JobControl {
 
     /**
      * Saving a new job to the database.*/
-    public void createNewJobPost(JobDTOImpl job) {
+    public void createNewJobPost(JobDTO job) {
         this.jobRepository.save(JobFactory.createJob(job));
     }
 
