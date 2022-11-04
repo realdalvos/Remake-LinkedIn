@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.views.studentViews.services;
+package org.hbrs.se2.project.services;
 
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.StudentDTO;

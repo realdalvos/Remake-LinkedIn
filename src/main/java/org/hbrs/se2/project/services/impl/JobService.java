@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.views.studentViews.services.impl;
+package org.hbrs.se2.project.services.impl;
 
 import org.hbrs.se2.project.control.factories.JobFactory;
 import org.hbrs.se2.project.dtos.CompanyDTO;
@@ -10,7 +10,7 @@ import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;
 import org.hbrs.se2.project.repository.UserRepository;
 import org.hbrs.se2.project.views.studentViews.JobsView;
-import org.hbrs.se2.project.views.studentViews.services.JobServiceInterface;
+import org.hbrs.se2.project.services.JobServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

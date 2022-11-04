@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.views.studentViews.services.impl;
+package org.hbrs.se2.project.services.impl;
 
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.control.factories.CompanyFactory;
@@ -10,7 +10,7 @@ import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.StudentRepository;
 import org.hbrs.se2.project.repository.UserRepository;
-import org.hbrs.se2.project.views.studentViews.services.RegistrationServiceInterface;
+import org.hbrs.se2.project.services.RegistrationServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

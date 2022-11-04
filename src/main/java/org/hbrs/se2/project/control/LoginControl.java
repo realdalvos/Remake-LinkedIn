@@ -1,6 +1,6 @@
 package org.hbrs.se2.project.control;
 
-import org.hbrs.se2.project.views.studentViews.services.impl.LoginService;
+import org.hbrs.se2.project.services.impl.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;

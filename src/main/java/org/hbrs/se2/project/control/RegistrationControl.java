@@ -3,7 +3,7 @@ package org.hbrs.se2.project.control;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.StudentDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
-import org.hbrs.se2.project.views.studentViews.services.impl.RegistrationService;
+import org.hbrs.se2.project.services.impl.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
