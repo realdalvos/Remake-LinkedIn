@@ -12,7 +12,9 @@ import org.hbrs.se2.project.repository.StudentRepository;
 import org.hbrs.se2.project.repository.UserRepository;
 import org.hbrs.se2.project.views.studentViews.services.RegistrationServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class RegistrationService implements RegistrationServiceInterface {
 
     @Autowired
