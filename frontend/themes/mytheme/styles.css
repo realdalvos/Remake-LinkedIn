@@ -3,8 +3,40 @@
 /* Here I worked with adobe Color to find fitting colours */
 
 html {
-    --lumo-primary-color: hsl(202, 74%, 63%);
-    --lumo-button-color: hsl(349, 75%, 80%);
-    --lumo-primary-text-color: hsl(245, 97%, 66%);
+    --lumo-border-radius: calc(var(--lumo-size-m) / 2);
+}
 
+[theme~="dark"] {
+    --lumo-shade-5pct: rgba(247, 247, 247, 0.05);
+    --lumo-shade-10pct: rgba(247, 247, 247, 0.1);
+    --lumo-shade-20pct: rgba(247, 247, 247, 0.2);
+    --lumo-shade-30pct: rgba(247, 247, 247, 0.3);
+    --lumo-shade-40pct: rgba(247, 247, 247, 0.4);
+    --lumo-shade-50pct: rgba(247, 247, 247, 0.5);
+    --lumo-shade-60pct: rgba(247, 247, 247, 0.6);
+    --lumo-shade-70pct: rgba(247, 247, 247, 0.7);
+    --lumo-shade-80pct: rgba(247, 247, 247, 0.8);
+    --lumo-shade-90pct: rgba(247, 247, 247, 0.9);
+    --lumo-shade: hsla(194, 0%, 97%, 0.92);
+    --lumo-base-color: hsl(213, 63%, 20%);
+    --lumo-tint-5pct: rgba(245, 249, 255, 0.05);
+    --lumo-tint-10pct: rgba(245, 249, 255, 0.1);
+    --lumo-tint-20pct: rgba(245, 249, 255, 0.2);
+    --lumo-tint-30pct: rgba(245, 249, 255, 0.3);
+    --lumo-tint-40pct: rgba(245, 249, 255, 0.4);
+    --lumo-tint-50pct: rgba(245, 249, 255, 0.5);
+    --lumo-tint-60pct: rgba(245, 249, 255, 0.6);
+    --lumo-tint-70pct: rgba(245, 249, 255, 0.7);
+    --lumo-tint-80pct: rgba(245, 249, 255, 0.8);
+    --lumo-tint-90pct: rgba(245, 249, 255, 0.9);
+    --lumo-tint: hsla(214, 100%, 98%, 1);
+    --lumo-primary-text-color: rgb(242, 166, 180);
+    --lumo-primary-color-50pct: rgba(242, 166, 180, 0.5);
+    --lumo-primary-color-10pct: rgba(242, 166, 180, 0.1);
+    --lumo-primary-color: hsl(349, 75%, 80%);
+    --lumo-primary-contrast-color: #fcfcfc;
+    --lumo-error-text-color: rgb(199, 59, 51);
+    --lumo-error-color-50pct: rgba(199, 59, 51, 0.5);
+    --lumo-error-color-10pct: rgba(199, 59, 51, 0.1);
+    --lumo-error-color: hsl(3, 59%, 49%);
 }

@@ -14,6 +14,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.control.LoginControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
@@ -30,8 +31,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @Route(value="")
 @RouteAlias(value=Globals.Pages.LOGIN_VIEW)
-//@SpringBootApplication
-@Theme(themeFolder = "mytheme")
+@Theme(themeFolder = "mytheme", variant = Lumo.DARK)
+
 
 public class LoginView extends VerticalLayout {
 
