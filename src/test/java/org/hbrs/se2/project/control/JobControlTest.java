@@ -140,7 +140,7 @@ public class JobControlTest {
     private boolean containsJob(List<JobDTOImpl> list, JobDTO relevantJob){
         boolean foundTestJob = false;
         /*
-        since only the jobid generated in the database is unique, there could be 2 jobs in theorie with matching companyid, title, description and salary, lets call those 2 jobs jobA and jobB.
+        since only the jobid generated in the database is unique, in theorie there could be 2 jobs with matching companyid, title, description and salary, lets call those 2 jobs jobA and jobB.
         If we want to test that jobB gets returned we have te following problem(?): You cant be sure if the returned job is jobA or jobB since you dont know the jobID before putting these jobs in the database.
         Not sure right now if that will become a problem later on, just wanted to point it out.
          */
