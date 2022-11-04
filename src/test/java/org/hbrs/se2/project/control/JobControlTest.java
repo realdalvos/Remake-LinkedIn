@@ -10,6 +10,7 @@ import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;
 import org.hbrs.se2.project.repository.UserRepository;
+import org.hbrs.se2.project.views.studentViews.JobsView;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,8 +20,7 @@ import java.util.List;
 
 import static org.hbrs.se2.project.control.factories.CompanyFactory.createCompany;
 import static org.hbrs.se2.project.control.factories.UserFactory.createUser;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class JobControlTest {
@@ -37,12 +37,12 @@ public class JobControlTest {
     @BeforeEach
     void setUp() {
         //Creating and saving test user
-        UserDTOImpl testUserDTOImpl = new UserDTOImpl("Test","Test","Test","Test");
+        UserDTOImpl testUserDTOImpl = new UserDTOImpl("Test","Test","Test@mail.com","Test");
         testUserRepository.save(createUser(testUserDTOImpl));
         UserDTO testUserDTO =testUserRepository.findUserByUsername("Test");
 
         //creating and saving test company
-        CompanyDTOImpl testCompanyDTOImpl = new CompanyDTOImpl(testUserDTO.getUserid(),"Test","Test",false);
+        CompanyDTOImpl testCompanyDTOImpl = new CompanyDTOImpl(testUserDTO.getUserid(),"TestCompany","Test",false);
         testCompanyRepository.save(createCompany(testCompanyDTOImpl,testUserDTO));
         CompanyDTO testCompanyDTO = testCompanyRepository.findCompanyByUserid(testCompanyDTOImpl.getUserid());
 
@@ -71,8 +71,8 @@ public class JobControlTest {
         JobDTO jobFromRepo = testJobRepository.findJobByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle());
         Assertions.assertNotNull(jobFromRepo);
 
-        Assertions.assertEquals("Testbeschreibung. assembly programmer.", jobFromRepo.getDescription());
-        Assertions.assertEquals("20 Euro", jobFromRepo.getSalary());
+        assertEquals("Testbeschreibung. assembly programmer.", jobFromRepo.getDescription());
+        assertEquals("20 Euro", jobFromRepo.getSalary());
     }
 
     @Test
@@ -104,9 +104,13 @@ public class JobControlTest {
         List<JobDTOImpl> tmp = new ArrayList<JobDTOImpl>();
         tmp.add(testJob);
 
-        jobControl.getAllJobsData(tmp);
+        JobsView.JobDetail jobDetail = jobControl.getAllJobsData(tmp).get(0);
 
-
+        assertEquals("Testbeschreibung. assembly programmer.", jobDetail.getDescription());
+        assertEquals("Test title", jobDetail.getTitle());
+        assertEquals("20 Euro", jobDetail.getSalary());
+        assertEquals("Test@mail.com", jobDetail.getEmail());
+        assertEquals("TestCompany", jobDetail.getName());
     }
 
     private boolean containsTestJob(List<JobDTOImpl> list){
