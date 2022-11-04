@@ -12,7 +12,7 @@ public class LoginControl {
     @Autowired
     LoginService loginService;
     /**
-     * Autheticate the user that wants to login in with his cedentials.
+     * Authenticate the user that wants to login in with his credentials.
      * @param username the username of the user
      * @param password the password of the user
      * @return true if authentication was successfull, false if not.
@@ -23,6 +23,7 @@ public class LoginControl {
     }
 
     /**
+     * Get current authenticated user
      * @return last successfully authenticated user as UserDTO
      * */
     public UserDTO getCurrentUser() {
