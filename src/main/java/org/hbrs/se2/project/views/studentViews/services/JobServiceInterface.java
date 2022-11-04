@@ -7,6 +7,7 @@ import org.hbrs.se2.project.views.studentViews.JobsView;
 import java.util.List;
 
 public interface JobServiceInterface {
+
     /**
      * Get the Company of a User
      * @param id id of User
