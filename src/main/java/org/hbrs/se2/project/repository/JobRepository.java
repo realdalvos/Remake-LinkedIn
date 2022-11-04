@@ -17,5 +17,6 @@ import java.util.List;
  * https://spring.io/guides/gs/accessing-data-mysql/
  */
 public interface JobRepository extends JpaRepository<Job, Integer> {
-
+        JobDTO findJobByJobid(int id);
+        JobDTO findJobByCompanyidAndTitle(int id, String title);
 }
