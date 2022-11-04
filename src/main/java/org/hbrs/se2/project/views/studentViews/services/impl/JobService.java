@@ -41,12 +41,12 @@ public class JobService implements JobServiceInterface {
 
     @Override
     public List<JobDTO> getJobsMatchingKeyword(String keyword) {
-        // empty list jobDTOImpls
+        // empty list jobDTOs
         List<JobDTO> jobDTOs = new ArrayList<>();
         // get all jobs
         List<Job> jobs = jobRepository.findAll();
         // transform all job entities into jobDTOs
-        JobDTOImpl jobDTO;
+        JobDTO jobDTO;
         for(Job job : jobs) {
             jobDTO = new JobDTOImpl(
                     job.getJobid(), job.getCompanyid(), job.getTitle(), job.getDescription(), job.getSalary()
