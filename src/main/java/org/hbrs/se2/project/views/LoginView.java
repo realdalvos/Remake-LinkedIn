@@ -21,6 +21,7 @@ import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 /**
@@ -29,10 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Route(value="")
 @RouteAlias(value=Globals.Pages.LOGIN_VIEW)
-// @CssImport("./stylesheet.css")
-@CssImport(value="button.css", themeFor="vaadin-button")
-//@CssImport(value = vaadin-text-fields.css)
-@Theme("mytheme")
+//@SpringBootApplication
+@Theme(themeFolder = "mytheme")
 
 public class LoginView extends VerticalLayout {
 
@@ -47,14 +46,13 @@ public class LoginView extends VerticalLayout {
         // buttons
         Button buttonStudent = new Button("Register as a Student");
         buttonStudent.addThemeVariants(ButtonVariant.LUMO_LARGE);           // changing size for better usability
-        buttonStudent.addThemeVariants(ButtonVariant.LUMO_SUCCESS);         // Different colour to seperate Log In and Register
-
+        buttonStudent.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
         Icon studentIcon = new Icon(VaadinIcon.NOTEBOOK);
         buttonStudent.getElement().appendChild(studentIcon.getElement());
 
         Button buttonCompany = new Button("Register as a Company");
         buttonCompany.addThemeVariants(ButtonVariant.LUMO_LARGE);           // changing size for better usability
-        buttonCompany.addThemeVariants(ButtonVariant.LUMO_SUCCESS);         // Different colour to seperate Log In and Register
+        buttonCompany.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
 
         Icon companyIcon = new Icon(VaadinIcon.HOME_O);
         buttonCompany.getElement().appendChild(companyIcon.getElement());

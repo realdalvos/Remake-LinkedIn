@@ -1,7 +1,0 @@
-html {
-    --lumo-primary-color: hsla(264, 60%, 50%, 0.76);
-}
-
-#button {
-    background: var(--lumo-primary-color);
-}

@@ -1,0 +1,10 @@
+/* Import your application global css files here or add the styles directly to this file */
+
+/* Here I worked with adobe Color to find fitting colours */
+
+html {
+    --lumo-primary-color: hsl(202, 74%, 63%);
+    --lumo-button-color: hsl(349, 75%, 80%);
+    --lumo-primary-text-color: hsl(245, 97%, 66%);
+
+}
