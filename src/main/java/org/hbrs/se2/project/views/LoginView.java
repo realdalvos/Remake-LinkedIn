@@ -4,6 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.login.LoginForm;
@@ -12,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.theme.Theme;
 import org.hbrs.se2.project.control.LoginControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
@@ -27,6 +29,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Route(value="")
 @RouteAlias(value=Globals.Pages.LOGIN_VIEW)
+// @CssImport("./stylesheet.css")
+@CssImport(value="button.css", themeFor="vaadin-button")
+//@CssImport(value = vaadin-text-fields.css)
+@Theme("mytheme")
+
 public class LoginView extends VerticalLayout {
 
     @Autowired
