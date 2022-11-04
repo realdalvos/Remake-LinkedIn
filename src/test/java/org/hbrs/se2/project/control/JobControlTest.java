@@ -14,8 +14,13 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hbrs.se2.project.control.factories.CompanyFactory.createCompany;
 import static org.hbrs.se2.project.control.factories.UserFactory.createUser;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class JobControlTest {
@@ -26,28 +31,91 @@ public class JobControlTest {
     @Autowired
     JobRepository testJobRepository;
     @Autowired
-    JobControl testJobControl = new JobControl();
-    @Test
-    public void testIfJobIsCreatedInDB(){
+    JobControl jobControl = new JobControl();
+    JobDTOImpl testJob;
+
+    @BeforeEach
+    void setUp() {
+        //Creating and saving test user
         UserDTOImpl testUserDTOImpl = new UserDTOImpl("Test","Test","Test","Test");
         testUserRepository.save(createUser(testUserDTOImpl));
         UserDTO testUserDTO =testUserRepository.findUserByUsername("Test");
-        testUserDTOImpl.setUserid(testUserDTO.getUserid());
 
-        CompanyDTOImpl testCompanyDTOImpl = new CompanyDTOImpl(testUserDTOImpl.getUserid(),"Test","Test",false);
-        testCompanyRepository.save(createCompany(testCompanyDTOImpl,testUserDTOImpl));
+        //creating and saving test company
+        CompanyDTOImpl testCompanyDTOImpl = new CompanyDTOImpl(testUserDTO.getUserid(),"Test","Test",false);
+        testCompanyRepository.save(createCompany(testCompanyDTOImpl,testUserDTO));
         CompanyDTO testCompanyDTO = testCompanyRepository.findCompanyByUserid(testCompanyDTOImpl.getUserid());
-        testCompanyDTOImpl.setCompanyid(testCompanyDTO.getCompanyid());
 
-        JobDTOImpl testJobDTOImpl = new JobDTOImpl(testCompanyDTOImpl.getCompanyid(),"99999","Test","Test");
-        testJobControl.createNewJobPost(testJobDTOImpl);
+        /*
+        //creating and saving new job
+        JobDTO testJobDTO = new JobDTOImpl(
+                testCompanyDTO.getCompanyid(),"99999","Test","Test");
+        jobControl.createNewJobPost(testJobDTO);
+        */
 
-        Assertions.assertNotNull(testJobRepository.findJobByCompanyidAndTitle(testJobDTOImpl.getCompanyid(),testJobDTOImpl.getTitle()));
-        if(testJobRepository.findJobByCompanyidAndTitle(testJobDTOImpl.getCompanyid(),testJobDTOImpl.getTitle()) != null) {
-            JobDTO testJobDTO = testJobRepository.findJobByCompanyidAndTitle(testJobDTOImpl.getCompanyid(), testJobDTOImpl.getTitle());
-            Assertions.assertEquals("Test",testJobDTO.getDescription());
-            Assertions.assertEquals("Test",testJobDTO.getSalary());
+        // create and saving another new job
+        testJob = new JobDTOImpl(
+                testCompanyDTO.getCompanyid(), "Test title", "Testbeschreibung. assembly programmer.", "20 Euro");
+        jobControl.createNewJobPost(testJob);
+    }
+
+    @AfterEach
+    void tearDown() {
+        //remove job
+        //remove User
+    }
+
+    @Test
+    public void testIfJobIsCreatedInDB(){
+        //Checking if there is a job with companyid of the testCompany and title of the testJob
+        JobDTO jobFromRepo = testJobRepository.findJobByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle());
+        Assertions.assertNotNull(jobFromRepo);
+
+        Assertions.assertEquals("Testbeschreibung. assembly programmer.", jobFromRepo.getDescription());
+        Assertions.assertEquals("20 Euro", jobFromRepo.getSalary());
+    }
+
+    @Test
+    @DisplayName("Tests if the getJobsMatchingKeyword Method works as expected.")
+    void getJobsMatchingKeyword() {
+        List<JobDTOImpl> list = jobControl.getJobsMatchingKeyword("Test");
+        assertTrue(containsTestJob(list));
+
+        //search for keyword in title
+        list = jobControl.getJobsMatchingKeyword("title");
+        assertTrue(containsTestJob(list), "Test Job should be one of the results.");
+        //search for keyword in title in Uppercase
+        list = jobControl.getJobsMatchingKeyword("Title");
+        assertTrue(containsTestJob(list), "Test Job should be one of the results.");
+        //search for keyword in description
+        list = jobControl.getJobsMatchingKeyword("assembly");
+        assertTrue(containsTestJob(list), "Test Job should be one of the results.");
+        //search for keyword in description with a following "."
+        list = jobControl.getJobsMatchingKeyword("programmer");
+        assertTrue(containsTestJob(list), "Test Job should be one of the results.");
+        //search for missing keyword
+        list = jobControl.getJobsMatchingKeyword("java");
+        assertFalse(containsTestJob(list), "Test Job should NOT be one of the results.");
+    }
+
+    @Test
+    @DisplayName("")
+    void getAllJobsData() {
+        List<JobDTOImpl> tmp = new ArrayList<JobDTOImpl>();
+        tmp.add(testJob);
+
+        jobControl.getAllJobsData(tmp);
+
+
+    }
+
+    private boolean containsTestJob(List<JobDTOImpl> list){
+        boolean foundTestJob = false;
+        for(JobDTOImpl job : list){
+            if(job.getTitle().equals(testJob.getTitle())){
+                foundTestJob = true;
+            }
         }
-        testUserRepository.deleteById(testUserDTOImpl.getUserid());
+        return foundTestJob;
     }
 }
