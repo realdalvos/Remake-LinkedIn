@@ -1,9 +1,13 @@
 /* Import your application global css files here or add the styles directly to this file */
 
-/* Here I worked with adobe Color to find fitting colours */
+/*
+Here I worked with adobe Color to find fitting colours
+With the Lumo Theme editor I compared ideas
+*/
+
 
 html {
-    --lumo-border-radius: calc(var(--lumo-size-m) / 2);
+    --lumo-border-radius: calc(var(--lumo-size-m) / 2); /* this shows an error but leads to round corners as wanted */
 }
 
 [theme~="dark"] {
