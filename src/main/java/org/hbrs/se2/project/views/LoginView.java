@@ -1,9 +1,11 @@
 package org.hbrs.se2.project.views;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.login.LoginForm;
+import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
@@ -30,6 +32,7 @@ public class LoginView extends VerticalLayout {
 
     public LoginView() {
         setSizeFull();
+        Avatar avatarBasic = new Avatar();
         LoginForm component = new LoginForm();
 
         // buttons
@@ -74,10 +77,12 @@ public class LoginView extends VerticalLayout {
             navigateHandler.navigateToRegisterCompanyPage();
         });
         // add components to View
+        add(avatarBasic);
         add(component);
         add(buttonStudent);
         add(buttonCompany);
         this.setAlignItems(Alignment.CENTER);
+
     }
 
     private void grabAndSetUserIntoSession() {
