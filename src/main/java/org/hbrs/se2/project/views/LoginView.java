@@ -4,6 +4,8 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -39,9 +41,18 @@ public class LoginView extends VerticalLayout {
         Button buttonStudent = new Button("Register as a Student");
         buttonStudent.addThemeVariants(ButtonVariant.LUMO_LARGE);           // changing size for better usability
         buttonStudent.addThemeVariants(ButtonVariant.LUMO_SUCCESS);         // Different colour to seperate Log In and Register
+
+        Icon studentIcon = new Icon(VaadinIcon.NOTEBOOK);
+        buttonStudent.getElement().appendChild(studentIcon.getElement());
+
         Button buttonCompany = new Button("Register as a Company");
         buttonCompany.addThemeVariants(ButtonVariant.LUMO_LARGE);           // changing size for better usability
         buttonCompany.addThemeVariants(ButtonVariant.LUMO_SUCCESS);         // Different colour to seperate Log In and Register
+
+        Icon companyIcon = new Icon(VaadinIcon.HOME_O);
+        buttonCompany.getElement().appendChild(companyIcon.getElement());
+
+
 
         component.addLoginListener(e -> {
             boolean isAuthenticated = false;
@@ -76,6 +87,7 @@ public class LoginView extends VerticalLayout {
         buttonCompany.addClickListener(event -> {
             navigateHandler.navigateToRegisterCompanyPage();
         });
+
         // add components to View
         add(avatarBasic);
         add(component);
