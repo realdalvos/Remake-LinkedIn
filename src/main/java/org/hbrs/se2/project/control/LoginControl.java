@@ -11,6 +11,7 @@ public class LoginControl {
 
     @Autowired
     LoginService loginService;
+
     /**
      * Authenticate the user that wants to login in with his credentials.
      * @param username the username of the user
