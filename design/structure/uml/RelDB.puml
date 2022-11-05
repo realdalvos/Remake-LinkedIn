@@ -1,80 +1,68 @@
 @startuml
-entity user{
-userid (integer)
-username (varchar 32)
-password (varchar 100)
-email (varchar 32)
-role (varchar 32)
---
-PK: userid
-Unique: username, email
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class company {
+   userid: integer
+   name: varchar(32)
+   industry: varchar(32)
+   banned: boolean
+   contactdetails: varchar(64)
+   companyid: integer
 }
-entity student{
-studentid (integer)
-userid (integer)
-firstname (varchar 32)
-lastname (varchar 32)
-studymajor (varchar 32)
-university (varchar 32)
-matrikelnummer (varchar 32)
---
-PK: studentid
-FK: userid
-Unique: matrikelnummer
+class job {
+   companyid: integer
+   title: varchar(100)
+   description: varchar(1024)
+   salary: varchar(32)
+   location: varchar(64)
+   jobid: integer
 }
-entity company{
-companyid (integer)
-userid (integer)
-name (varchar 32)
-industry  (varchar 32)
-banned (boolean)
---
-PK: companyid
-FK: userid
+class reports {
+   companyid: integer
+   report: varchar(256)
 }
-entity job{
-jobid (integer)
-companyid (varchar 32)
-title  (varchar 100)
-description (varchar 1024)
-salary (varchar 32)
---
-PK: jobrid
-FK: companyid
+class skill {
+   skill: varchar(32)
+   skillid: integer
 }
-entity skill{
-skillid (integer)
-skill (varchar 32)
---
-PK: skillid
-Unique: skill
+class student {
+   userid: integer
+   firstname: varchar(32)
+   studymajor: varchar(32)
+   university: varchar(32)
+   matrikelnumber: varchar(32)
+   lastname: varchar(32)
+   studentid: integer
 }
-entity student_has_skill{
-studentid (integer)
-skillid (integer)
---
-PK: studentid, skillid
-FK: studentid, skillid
+class node2 as "student_has_skill  /* table between student and skill */" {
+   studentid: integer
+   skillid: integer
 }
-entity student_has_topic{
-studentid (integer)
-topicid (integer)
---
-PK: studentid, topicid
-FK: studentid, topicid
+class node4 as "student_has_topic  /* table between student and topic */" {
+   studentid: integer
+   topicid: integer
 }
-entity topic{
-topicid (integer)
-topic (varchar 32)
---
-PK: topicid
-Unique: topic
+class topic {
+   topic: varchar(32)
+   topicid: integer
 }
-job -up-> company
-student -up-> user
-company -up-> user
-student_has_skill -up-> student
-skill -up-> student_has_skill
-student_has_topic -up-> student
-topic -up-> student_has_topic
+class user {
+   username: varchar(32)
+   password: varchar(100)
+   email: varchar(32)
+   role: varchar(32)
+   userid: integer
+}
+
+company  -[#595959,plain]-^  user    : "userid"
+job      -[#595959,plain]-^  company : "companyid"
+reports  -[#595959,plain]-^  company : "companyid"
+student  -[#595959,plain]-^  user    : "userid"
+node2    -[#595959,plain]-^  skill   : "skillid"
+node2    -[#595959,plain]-^  student : "studentid"
+node4    -[#595959,plain]-^  student : "studentid"
+node4    -[#595959,plain]-^  topic   : "topicid"
 @enduml
