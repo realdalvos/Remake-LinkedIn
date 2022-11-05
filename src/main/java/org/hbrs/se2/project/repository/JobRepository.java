@@ -18,5 +18,7 @@ import java.util.List;
  */
 public interface JobRepository extends JpaRepository<Job, Integer> {
         JobDTO findJobByJobid(int id);
+
+        //could return multiple datasets, careful
         JobDTO findJobByCompanyidAndTitle(int id, String title);
 }
