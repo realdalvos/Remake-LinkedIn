@@ -35,7 +35,7 @@ public class JobControl {
     /**
      * Sort for Jobs with a specific keyword
      * @param keyword The keyword to search for
-     * @return A List of all matching Jobs
+     * @return List of jobs that contain the keyword in either the job title or the job description
      */
     public List<JobDTO> getJobsMatchingKeyword(String keyword) {
         return jobService.getJobsMatchingKeyword(keyword);

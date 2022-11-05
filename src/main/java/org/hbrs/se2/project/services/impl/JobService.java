@@ -70,7 +70,7 @@ public class JobService implements JobServiceInterface {
     }
 
     /**
-     * Filter list of jobs with a keyword
+     * Search for the given keyword in either the job title or the job description
      * @param jobs List of Jobs to filter
      * @param keyword Keyword to filter the List with
      * @return  Filtered List of Jobs
