@@ -21,6 +21,6 @@ public interface CompanyDTO {
 
     public void setBanned(boolean banned);
     public String getContactdetails();
-    public String setContactdetails(String contactdetails);
+    public void setContactdetails(String contactdetails);
 }
 
