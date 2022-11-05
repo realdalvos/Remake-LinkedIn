@@ -10,5 +10,6 @@ public interface CompanyDTO {
     public String getIndustry();
 
     public boolean getBanned();
+    public String getContactdetails();
 }
 

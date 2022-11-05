@@ -12,7 +12,7 @@ public class CompanyFactory {
         // pass parameters from companyDTO to company
         company.setName(companyDTO.getName());
         company.setUserid(userDTO.getUserid());
-
+        company.setContactdetails(userDTO.getEmail());
         return company;
 
     }

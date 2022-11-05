@@ -13,6 +13,7 @@ public class JobFactory {
         job.setTitle(jobDTO.getTitle());
         job.setDescription(jobDTO.getDescription());
         job.setSalary(jobDTO.getSalary());
+        job.setLocation(jobDTO.getLocation());
         return job;
     }
 }

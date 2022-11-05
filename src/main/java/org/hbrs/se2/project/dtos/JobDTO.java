@@ -11,4 +11,5 @@ public interface JobDTO {
     public String getDescription();
 
     public String getSalary();
+    public String getLocation();
 }
