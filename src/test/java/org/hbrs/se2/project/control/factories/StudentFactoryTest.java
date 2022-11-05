@@ -45,7 +45,7 @@ class StudentFactoryTest {
         Student studentFromFactory = StudentFactory.createStudent(testStudent, testUser);
         assertNotNull(studentFromFactory, "createStudent Method should return a Instance of Student and not null.");
 
-        assertEquals(testStudent.getMatrikelnumber(), studentFromFactory.getMatrikelnumber(), "should match.");
+        assertEquals(testStudent.getMatrikelnumber(), studentFromFactory.getMatrikelnumber(), "Matrikelnumber should match.");
         assertEquals(testStudent.getFirstname(), studentFromFactory.getFirstname(), "First name should match.");
         assertEquals(testStudent.getLastname(), studentFromFactory.getLastname(), "Last name should match.");
         assertEquals(testStudent.getStudentid(), studentFromFactory.getStudentid(), "StudentID should match.");
