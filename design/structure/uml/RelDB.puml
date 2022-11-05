@@ -42,7 +42,39 @@ salary (varchar 32)
 PK: jobrid
 FK: companyid
 }
+entity skill{
+skillid (integer)
+skill (varchar 32)
+--
+PK: skillid
+Unique: skill
+}
+entity student_has_skill{
+studentid (integer)
+skillid (integer)
+--
+PK: studentid, skillid
+FK: studentid, skillid
+}
+entity student_has_topic{
+studentid (integer)
+topicid (integer)
+--
+PK: studentid, topicid
+FK: studentid, topicid
+}
+entity topic{
+topicid (integer)
+topic (varchar 32)
+--
+PK: topicid
+Unique: topic
+}
 job -up-> company
 student -up-> user
 company -up-> user
+student_has_skill -up-> student
+skill -up-> student_has_skill
+student_has_topic -up-> student
+topic -up-> student_has_topic
 @enduml
