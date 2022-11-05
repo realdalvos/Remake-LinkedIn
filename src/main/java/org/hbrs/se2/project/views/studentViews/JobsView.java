@@ -10,7 +10,7 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
-import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
+import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class JobsView extends Div {
 
         button.addClickListener(event -> {
             String keyword = textField.getValue();
-            List<JobDTOImpl> jobs = jobControl.getJobsMatchingKeyword(keyword);
+            List<JobDTO> jobs = jobControl.getJobsMatchingKeyword(keyword);
 
             // gather all important data !!!!!!!
             // user email, company name, job description

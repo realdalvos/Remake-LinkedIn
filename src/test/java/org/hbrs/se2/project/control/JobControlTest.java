@@ -86,7 +86,7 @@ public class JobControlTest {
     @Test
     @DisplayName("Tests if the getJobsMatchingKeyword Method works as expected.")
     void getJobsMatchingKeyword() {
-        List<JobDTOImpl> list = jobControl.getJobsMatchingKeyword("Test");
+        List<JobDTO> list = jobControl.getJobsMatchingKeyword("Test");
         assertTrue(containsTestJob(list));
 
         //search for exact keyword in title
@@ -124,9 +124,9 @@ public class JobControlTest {
 
     /**
      * Checks if the job testJob is contained in the list.*/
-    private boolean containsTestJob(List<JobDTOImpl> list){
+    private boolean containsTestJob(List<JobDTO> list){
         boolean foundTestJob = false;
-        for(JobDTOImpl job : list){
+        for(JobDTO job : list){
             //If jobid matches than its definitely the testjob
             if(job.getJobid() == testJob.getJobid()){
                 foundTestJob = true;
@@ -137,14 +137,14 @@ public class JobControlTest {
 
     /**
      * Checks if any given job is contained in the list.*/
-    private boolean containsJob(List<JobDTOImpl> list, JobDTO relevantJob){
+    private boolean containsJob(List<JobDTO> list, JobDTO relevantJob){
         boolean foundTestJob = false;
         /*
         since only the jobid generated in the database is unique, in theorie there could be 2 jobs with matching companyid, title, description and salary, lets call those 2 jobs jobA and jobB.
         If we want to test that jobB gets returned we have te following problem(?): You cant be sure if the returned job is jobA or jobB since you dont know the jobID before putting these jobs in the database.
         Not sure right now if that will become a problem later on, just wanted to point it out.
          */
-        for(JobDTOImpl job : list){
+        for(JobDTO job : list){
             if(relevantJob.getCompanyid() == job.getCompanyid() && relevantJob.getTitle().equals(job.getTitle()) && relevantJob.getDescription().equals(job.getDescription()) && relevantJob.getSalary().equals(job.getSalary())){
                 foundTestJob = true;
             }
@@ -155,10 +155,10 @@ public class JobControlTest {
     @Test
     @DisplayName("Tests if getAllJobsData produces correct results.")
     void getAllJobsData() {
-        JobDTOImpl testJobImpl = new JobDTOImpl(
+        JobDTO testJobImpl = new JobDTOImpl(
                 testCompanyDTO.getCompanyid(), "Test title", "Testbeschreibung. assembly programmer.", "20 Euro");
 
-        List<JobDTOImpl> tmp = new ArrayList<>();
+        List<JobDTO> tmp = new ArrayList<>();
         tmp.add(testJobImpl);
 
         JobsView.JobDetail jobDetail = jobControl.getAllJobsData(tmp).get(0);
