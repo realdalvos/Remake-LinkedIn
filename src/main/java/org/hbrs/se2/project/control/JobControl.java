@@ -57,7 +57,7 @@ public class JobControl {
      * @return List of all Jobs
      */
     public List<JobDTO> getAllCompanyJobs(int compId){
-        return null;
+        return jobService.getAllCompanyJobs(compId);
     }
 }
 
