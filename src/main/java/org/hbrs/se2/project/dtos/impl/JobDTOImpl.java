@@ -80,6 +80,11 @@ public class JobDTOImpl implements JobDTO {
     public String getLocation() { return location; }
 
     @Override
+    public void setLocation(String location) {
+        this.location=location;
+    }
+
+    @Override
     public String toString() {
         return "JobDTOImpl{" +
                 "jobid= " + jobid +
