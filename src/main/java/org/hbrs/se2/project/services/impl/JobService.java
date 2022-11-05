@@ -69,6 +69,11 @@ public class JobService implements JobServiceInterface {
         return jobsData;
     }
 
+    @Override
+    public List<JobDTO> getAllCompanyJobs(int compId) {
+        return jobRepository.findJobByCompanyid(compId);
+    }
+
     /**
      * Search for the given keyword in either the job title or the job description
      * @param jobs List of Jobs to filter
