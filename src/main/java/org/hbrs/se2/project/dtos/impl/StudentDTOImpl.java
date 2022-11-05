@@ -7,7 +7,7 @@ public class StudentDTOImpl implements StudentDTO {
     private int userid;
     private String firstname;
     private String lastname;
-    private int matrikelnumber;
+    private String matrikelnumber;
     private String studyMajor;
     private String university;
 
@@ -25,7 +25,7 @@ public class StudentDTOImpl implements StudentDTO {
         this.lastname = lastname;
     }
 
-    public void setMatrikelnumber(int matrikelnumber) {
+    public void setMatrikelnumber(String matrikelnumber) {
         this.matrikelnumber = matrikelnumber;
     }
 
@@ -55,7 +55,7 @@ public class StudentDTOImpl implements StudentDTO {
     }
 
     @Override
-    public int getMatrikelnumber() {
+    public String getMatrikelnumber() {
         return matrikelnumber;
     }
 

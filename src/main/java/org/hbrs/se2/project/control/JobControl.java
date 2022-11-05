@@ -1,34 +1,54 @@
 package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.dtos.CompanyDTO;
-import org.hbrs.se2.project.entities.Job;
-import org.hbrs.se2.project.repository.CompanyRepository;
-import org.hbrs.se2.project.repository.JobRepository;
-import org.hbrs.se2.project.util.Utils;
+import org.hbrs.se2.project.dtos.JobDTO;
+import org.hbrs.se2.project.views.studentViews.JobsView;
+import org.hbrs.se2.project.services.impl.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
-@Component
+import java.util.List;
+
+@Controller
 public class JobControl {
 
     @Autowired
-    private CompanyRepository companyRepository;
+    JobService jobService;
 
-    @Autowired
-    private JobRepository jobRepository;
-
+    /**
+     * Get the Company of a User
+     * @param id id of User
+     * @return Company of the User
+     */
     public CompanyDTO getCompanyByUserid(int id) {
-        return companyRepository.findCompanyByUserid(id);
+        return jobService.getCompanyByUserid(id);
     }
 
-    public void createNewJobPost(Job job) {
-        this.jobRepository.save(job);
+    /**
+     * Creates a new Job and saves it in the database
+     * @param job Job object with new Job
+     */
+    public void createNewJobPost(JobDTO job) {
+        jobService.createNewJobPost(job);
     }
 
-    // check if input data from job post form is empty or not
-    public boolean checkFormJobInput(String title, String description, String salary) {
-        String[] array = {title, description, salary};
-        return Utils.checkIfInputEmpty(array);
+    /**
+     * Sort for Jobs with a specific keyword
+     * @param keyword The keyword to search for
+     * @return A List of all matching Jobs
+     */
+    public List<JobDTO> getJobsMatchingKeyword(String keyword) {
+        return jobService.getJobsMatchingKeyword(keyword);
+    }
+
+
+    /**
+     * Get all the Data of a List of Jobs
+     * @param jobs List of Job Objects
+     * @return List of Jobs with all their Details
+     */
+    public List<JobsView.JobDetail> getAllJobsData(List<JobDTO> jobs) {
+        return jobService.getAllJobsData(jobs);
     }
 }
 

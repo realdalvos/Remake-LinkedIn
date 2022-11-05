@@ -9,6 +9,13 @@ public class CompanyDTOImpl implements CompanyDTO {
     private String industry;
     private boolean banned;
 
+    public CompanyDTOImpl(){}
+    public CompanyDTOImpl(int userid,String name, String industy, boolean banned){
+        this.userid=userid;
+        this.name=name;
+        this.industry=industy;
+        this.banned=banned;
+    }
     public void setCompanyid(int id) {
         this.companyid = id;
     }

@@ -6,9 +6,11 @@ import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.server.VaadinService;
 import org.hbrs.se2.project.control.LoginControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
+import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  */
 @Route(value="")
-@RouteAlias(value="login")
+@RouteAlias(value=Globals.Pages.LOGIN_VIEW)
 public class LoginView extends VerticalLayout {
 
     @Autowired
@@ -43,19 +45,28 @@ public class LoginView extends VerticalLayout {
                 Utils.makeDialog(ex.getReason());
             }
             if(isAuthenticated) {
+                //Generate new sessionid to prevent session fixation
+                VaadinService.reinitializeSession(VaadinService.getCurrentRequest());
                 // create session for user
                 grabAndSetUserIntoSession();
-                navigateToMainPage();
+
+                if(loginControl.getCurrentUser().getRole().equals(Globals.Roles.student)) {
+                    // navigate to jobs view for student
+                    navigateHandler.navigateToJobsView();
+                } else if(loginControl.getCurrentUser().getRole().equals(Globals.Roles.company)) {
+                    // navigate to my ads view for companies
+                    navigateHandler.navigateToMyAdsView();
+                }
             } else {
                 component.setError(true);
             }
         });
         // navigate to student or company register page
         buttonStudent.addClickListener(event -> {
-            navigateToRegisterStudentPage();
+            navigateHandler.navigateToRegisterStudentPage();
         });
         buttonCompany.addClickListener(event -> {
-            navigateToRegisterCompanyPage();
+            navigateHandler.navigateToRegisterCompanyPage();
         });
         // add components to View
         add(component);
@@ -68,16 +79,5 @@ public class LoginView extends VerticalLayout {
         UserDTO userDTO = loginControl.getCurrentUser();
         UI.getCurrent().getSession().setAttribute(Globals.CURRENT_USER, userDTO);
     }
-
-    private void navigateToMainPage() {
-        UI.getCurrent().navigate(Globals.Pages.MAIN_VIEW);
-    }
-
-    private void navigateToRegisterCompanyPage() {
-        UI.getCurrent().navigate(Globals.Pages.REGISTER_COMPANY_VIEW);
-    }
-
-    private void navigateToRegisterStudentPage() {
-        UI.getCurrent().navigate(Globals.Pages.REGISTER_STUDENT_VIEW);
-    }
 }
+

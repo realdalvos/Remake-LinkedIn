@@ -3,9 +3,11 @@ package org.hbrs.se2.project.repository;
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.entities.Job;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
+import java.util.List;
+
+@Repository
 /**
  * https://www.baeldung.com/spring-data-jpa-projections
  * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods
@@ -15,7 +17,6 @@ import org.springframework.stereotype.Component;
  * https://spring.io/guides/gs/accessing-data-mysql/
  */
 public interface JobRepository extends JpaRepository<Job, Integer> {
-    JobDTO findJobByCompanyid(int id);
-
-    JobDTO findJobByJobid(int id);
+        JobDTO findJobByJobid(int id);
+        JobDTO findJobByCompanyidAndTitle(int id, String title);
 }

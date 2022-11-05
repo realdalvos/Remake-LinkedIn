@@ -1,46 +1,36 @@
 package org.hbrs.se2.project.control;
 
+import org.hbrs.se2.project.services.impl.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
-import org.hbrs.se2.project.repository.UserRepository;
+import org.springframework.stereotype.Controller;
 
-@Component
+@Controller
 public class LoginControl {
 
     @Autowired
-    private UserRepository repository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    LoginService loginService;
 
-    private UserDTO userDTO = null;
-
-    // autheticate the user that wants to login in with his cedentials
+    /**
+     * Authenticate the user that wants to login in with his credentials.
+     * @param username the username of the user
+     * @param password the password of the user
+     * @return true if authentication was successfull, false if not.
+     * @throws DatabaseUserException Something went wrong with the Database
+     * */
     public boolean authenticate(String username, String password) throws DatabaseUserException {
-        UserDTO tmpUser = this.getUserWithJPA(username);
-
-        if(tmpUser == null || !passwordEncoder.matches(password, tmpUser.getPassword().trim())) {
-            return false;
-        }
-        this.userDTO = tmpUser;
-        return true;
+        return loginService.authenticate(username, password);
     }
 
+    /**
+     * Get current authenticated user
+     * @return last successfully authenticated user as UserDTO
+     * */
     public UserDTO getCurrentUser() {
-        return this.userDTO;
+        return loginService.getCurrentUser();
     }
 
-    // get User Object with jpa api from database
-    private UserDTO getUserWithJPA(String username) throws DatabaseUserException {
-        UserDTO userTmp;
-        try {
-            userTmp = repository.findUserByUsername(username);
-        } catch (org.springframework.dao.DataAccessResourceFailureException e) {
-            throw new DatabaseUserException("A Failure occured while trying to connect to database with JPA");
-        }
-        return userTmp;
-    }
+
 }
 

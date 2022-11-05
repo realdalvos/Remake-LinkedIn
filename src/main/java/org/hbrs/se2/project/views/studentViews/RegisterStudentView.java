@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.views.companyViews;
+package org.hbrs.se2.project.views.studentViews;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -7,28 +7,34 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
+import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.RegisterView;
 
-@Route(value = Globals.Pages.REGISTER_COMPANY_VIEW)
-@PageTitle("Register as a Company")
-public class RegisterCompanyView extends RegisterView {
+/**
+ * Register View - Form to register as a student
+ */
+@Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
+@PageTitle("Register as a Student")
+public class RegisterStudentView extends RegisterView {
     // text fields
-    private TextField name = new TextField("Company Name");
-    Binder<CompanyDTOImpl> concreteUserBinder = new Binder(CompanyDTOImpl.class);
+    private TextField firstname = new TextField("First name");
+    private TextField lastname = new TextField("Last name");
+    private TextField matrikelnumber = new TextField("Matrikel number");
+    Binder<StudentDTOImpl> concreteUserBinder = new Binder(StudentDTOImpl.class);
 
-    public RegisterCompanyView() {
+    public RegisterStudentView() {
         setSizeFull();
         registerText.setText("Register here");
 
-        Button confirmButton = new Button("Register now as a company");
+        Button confirmButton = new Button("Register now as a user");
 
-        userBinder.setBean(setUserDTO(Globals.Roles.company));
-        concreteUserBinder.setBean(new CompanyDTOImpl());
+        userBinder.setBean(setUserDTO(Globals.Roles.student));
+        concreteUserBinder.setBean(new StudentDTOImpl());
 
+        // add all elements/components to View
         add(registerText);
         add(createFormLayout());
         add(confirmButton);
@@ -52,7 +58,7 @@ public class RegisterCompanyView extends RegisterView {
             // register new Company with passed in values from register form
             try {
                 // function to register new company
-                isRegistered = registrationControl.registerCompany(userBinder.getBean(), concreteUserBinder.getBean());
+                isRegistered = registrationControl.registerStudent(userBinder.getBean(), concreteUserBinder.getBean());
             } catch (Exception e) {
                 // get the root cause of an exception
                 String message = Utils.getRootCause(e);
@@ -66,18 +72,18 @@ public class RegisterCompanyView extends RegisterView {
                 System.out.println("A Failure occurred while trying to save data in the database");
             }
         });
-
     }
 
     @Override
     protected Component createFormLayout() {
         FormLayout formLayout = new FormLayout();
         formLayout.add(
-                name, username, email,
+                firstname, lastname, matrikelnumber,
+                username, email,
                 password, confirmPassword
         );
         formLayout.setResponsiveSteps(
-                // Use two columns by default
+                // Use one column
                 new FormLayout.ResponsiveStep("0", 1)
         );
         return formLayout;
@@ -88,9 +94,10 @@ public class RegisterCompanyView extends RegisterView {
         if(!Utils.checkIfInputEmpty(
                 new String[]{
                         userBinder.getBean().getUsername(),
-                        userBinder.getBean().getPassword(),
                         userBinder.getBean().getEmail(),
-                        concreteUserBinder.getBean().getName()
+                        userBinder.getBean().getPassword(),
+                        concreteUserBinder.getBean().getFirstname(),
+                        concreteUserBinder.getBean().getLastname()
                 })) {
             // error dialog
             Utils.makeDialog("Please fill out all text fields.");
@@ -98,3 +105,5 @@ public class RegisterCompanyView extends RegisterView {
         }
     }
 }
+
+

@@ -5,7 +5,6 @@ import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -19,14 +18,15 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.PWA;
 import org.hbrs.se2.project.control.AuthorizationControl;
 import org.hbrs.se2.project.dtos.UserDTO;
+import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.companyViews.MyAdsView;
-import org.hbrs.se2.project.views.studientViews.JobsView;
+import org.hbrs.se2.project.views.studentViews.JobsView;
 
 import java.util.Optional;
 
-@Route(value="main")
+@Route(value=Globals.Pages.MAIN_VIEW)
 @PWA(name="HBRS Collab", shortName = "HBRScollab", enableInstallPrompt = false)
 public class AppView extends AppLayout implements BeforeEnterObserver {
 
@@ -57,7 +57,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // if user is not logged in navigate to login view
         UserDTO userDTO = this.getCurrentUser();
         if (userDTO == null) {
-            UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
+            navigateHandler.navigateToLoginPage();
             return false;
         }
         return true;
@@ -96,11 +96,11 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
         // Only if role is equal to company
         if(this.authorizationControl.hasUserRole(this.getCurrentUser(), Globals.Roles.company)) {
-            MenuItem item1 = bar.addItem("Create new Job Ad", e -> navigateToNewJob());
+            bar.addItem("Create new Job Ad", e -> navigateHandler.navigateToNewJob());
         }
 
         // for all roles add following bar items
-        MenuItem item2 = bar.addItem("Logout" , e -> logoutUser());
+        bar.addItem("Logout" , e -> logoutUser());
         topRightPanel.add(bar);
 
         layout.add( topRightPanel );
@@ -231,9 +231,5 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         if (getCurrentUser() == null){
             beforeEnterEvent.rerouteTo(Globals.Pages.LOGIN_VIEW);
         }
-    }
-
-    private void navigateToNewJob() {
-        UI.getCurrent().navigate(Globals.Pages.NEW_ADD_VIEW);
     }
 }
