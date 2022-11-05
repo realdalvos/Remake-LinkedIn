@@ -1,0 +1,48 @@
+@startuml
+entity user{
+userid (integer)
+username (varchar 32)
+password (varchar 100)
+email (varchar 32)
+role (varchar 32)
+--
+PK: userid
+Unique: username, email
+}
+entity student{
+studentid (integer)
+userid (integer)
+firstname (varchar 32)
+lastname (varchar 32)
+studymajor (varchar 32)
+university (varchar 32)
+matrikelnummer (varchar 32)
+--
+PK: studentid
+FK: userid
+Unique: matrikelnummer
+}
+entity company{
+companyid (integer)
+userid (integer)
+name (varchar 32)
+industry  (varchar 32)
+banned (boolean)
+--
+PK: companyid
+FK: userid
+}
+entity job{
+jobid (integer)
+companyid (varchar 32)
+title  (varchar 100)
+description (varchar 1024)
+salary (varchar 32)
+--
+PK: jobrid
+FK: companyid
+}
+job -up-> company
+student -up-> user
+company -up-> user
+@enduml
