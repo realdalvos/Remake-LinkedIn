@@ -25,13 +25,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class JobControlTest {
     @Autowired
+            //To save user, get userDTO and delete user from database
     UserRepository userRepository;
     @Autowired
+            //To save company and get companyDTO
     CompanyRepository companyRepository;
     @Autowired
+            //To get jobDTO
     JobRepository jobRepository;
     @Autowired
     JobControl jobControl = new JobControl();
+    //Test job
     JobDTO testJob;
     CompanyDTO testCompanyDTO;
 
