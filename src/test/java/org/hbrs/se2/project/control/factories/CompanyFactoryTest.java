@@ -48,5 +48,7 @@ class CompanyFactoryTest {
         assertEquals(testCompany.getUserid(), companyFromFactory.getUserid(), "UserId should match.");
         assertEquals(testCompany.getName(), companyFromFactory.getName(), "Name should match.");
         assertEquals(testCompany.getIndustry(), companyFromFactory.getIndustry(), "Industry should match.");
+        assertEquals(testCompany.getCompanyid(), companyFromFactory.getCompanyid(), "CompanyID should match.");
+        assertEquals(testCompany.getBanned(), companyFromFactory.isBanned(), "Banned boolean should match.");
     }
 }
