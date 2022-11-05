@@ -81,7 +81,7 @@ public class RegistrationService implements RegistrationServiceInterface {
     private void createAccount(UserDTO userDTO) throws DatabaseUserException {
         try {
             //Saving user in db
-            this.userRepository.save(UserFactory.createUser(userDTO));
+            this.userRepository.save(UserFactory.createUserWithoutHashedPassword(userDTO));
         } catch (org.springframework.dao.DataAccessResourceFailureException e) {
             throw new DatabaseUserException("A Failure occurred while saving a user account in the database at createAccount");
         }
