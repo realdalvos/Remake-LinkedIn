@@ -50,5 +50,14 @@ public class JobControl {
     public List<JobsView.JobDetail> getAllJobsData(List<JobDTO> jobs) {
         return jobService.getAllJobsData(jobs);
     }
+
+    /**
+     * Get all Jobs of a Company
+     * @param compId Company ID
+     * @return List of all Jobs
+     */
+    public List<JobDTO> getAllCompanyJobs(int compId){
+        return null;
+    }
 }
 
