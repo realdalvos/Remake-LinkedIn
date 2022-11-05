@@ -1,8 +1,8 @@
 package org.hbrs.se2.project.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.entities.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     UserDTO findUserByUserid(int id);
+
     UserDTO findUserByUsername(String username);
 
     UserDTO findUserByEmail(String email);

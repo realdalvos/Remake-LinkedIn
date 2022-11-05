@@ -15,7 +15,9 @@ import org.springframework.stereotype.Repository;
  * https://spring.io/guides/gs/accessing-data-mysql/
  */
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
-        CompanyDTO findCompanyByUserid(int id);
+    CompanyDTO findCompanyByUserid(int id);
 
-        CompanyDTO findCompanyByCompanyid(int id);
+    CompanyDTO findCompanyByCompanyid(int id);
+
+    CompanyDTO findCompanyByName(String name);
 }

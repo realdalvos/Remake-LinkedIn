@@ -42,7 +42,7 @@ public class LoginView extends VerticalLayout {
                 isAuthenticated = loginControl.authenticate(e.getUsername(), e.getPassword());
             } catch (DatabaseUserException ex) {
                 // Error dialog
-                Utils.makeDialog(ex.getReason());
+                Utils.makeDialog(ex.getMessage());
             }
             if(isAuthenticated) {
                 //Generate new sessionid to prevent session fixation
@@ -62,12 +62,8 @@ public class LoginView extends VerticalLayout {
             }
         });
         // navigate to student or company register page
-        buttonStudent.addClickListener(event -> {
-            navigateHandler.navigateToRegisterStudentPage();
-        });
-        buttonCompany.addClickListener(event -> {
-            navigateHandler.navigateToRegisterCompanyPage();
-        });
+        buttonStudent.addClickListener(event -> navigateHandler.navigateToRegisterStudentPage());
+        buttonCompany.addClickListener(event -> navigateHandler.navigateToRegisterCompanyPage());
         // add components to View
         add(component);
         add(buttonStudent);
