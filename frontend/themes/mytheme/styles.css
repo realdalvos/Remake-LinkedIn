@@ -7,7 +7,7 @@ With the Lumo Theme editor I compared ideas
 
 
 html {
-    --lumo-border-radius: calc(var(--lumo-size-m) / 2); /* this shows an error but leads to round corners as wanted */
+    --lumo-border-radius: calc(var(--lumo-size-m) / 2);
 }
 
 [theme~="dark"] {
@@ -43,4 +43,5 @@ html {
     --lumo-error-color-50pct: rgba(199, 59, 51, 0.5);
     --lumo-error-color-10pct: rgba(199, 59, 51, 0.1);
     --lumo-error-color: hsl(3, 59%, 49%);
+    --lumo-font-family: "Georgia";
 }
