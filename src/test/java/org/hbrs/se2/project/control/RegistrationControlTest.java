@@ -71,8 +71,7 @@ class RegistrationControlTest {
     @DisplayName("Successful Registration for company")
     void registerCompanySuccess() {
         userDTO.setRole(Globals.Roles.company);
-        Boolean result = assertDoesNotThrow(() -> registrationControl.registerCompany(userDTO, companyDTO));
-        assertTrue(result, "Return value is false");
+        assertDoesNotThrow(() -> registrationControl.registerCompany(userDTO, companyDTO));
         assertNotNull(userRepository.findUserByUsername(testString), "Can not find user in database after registration");
         assertNotNull(companyRepository.findCompanyByUserid(userRepository.findUserByUsername(testString).getUserid()), "Can not find company in database after registration");
     }

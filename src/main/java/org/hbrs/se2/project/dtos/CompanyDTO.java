@@ -1,26 +1,26 @@
 package org.hbrs.se2.project.dtos;
 
 public interface CompanyDTO {
-    public int getCompanyid();
+    int getCompanyid();
 
-    public void setCompanyid(int id);
+    void setCompanyid(int id);
 
-    public int getUserid();
+    int getUserid();
 
-    public void setUserid(int userid);
+    void setUserid(int userid);
 
-    public String getName();
+    String getName();
 
-    public void setName(String name);
+    void setName(String name);
 
-    public String getIndustry();
+    String getIndustry();
 
-    public void setIndustry(String industry);
+    void setIndustry(String industry);
 
-    public boolean getBanned();
+    boolean getBanned();
 
-    public void setBanned(boolean banned);
-    public String getContactdetails();
-    public void setContactdetails(String contactdetails);
+    void setBanned(boolean banned);
+    String getContactdetails();
+    void setContactdetails(String contactdetails);
 }
 
