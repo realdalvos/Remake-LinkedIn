@@ -41,7 +41,7 @@ public class RegisterCompanyView extends RegisterView {
         concreteUserBinder.bindInstanceFields(this);
 
         confirmButton.addClickListener(event -> {
-            boolean isRegistered = false;
+            boolean success = true;
 
             // checks if all input fields were filled out correctly
             checkInput();
@@ -52,15 +52,16 @@ public class RegisterCompanyView extends RegisterView {
             // register new Company with passed in values from register form
             try {
                 // function to register new company
-                isRegistered = registrationControl.registerCompany(userBinder.getBean(), concreteUserBinder.getBean());
+                registrationControl.registerCompany(userBinder.getBean(), concreteUserBinder.getBean());
             } catch (Exception e) {
                 // get the root cause of an exception
                 String message = Utils.getRootCause(e);
                 // Error dialog
                 Utils.makeDialog(message);
+                success = false;
             }
 
-            if(isRegistered) {
+            if(success) {
                 navigateHandler.navigateToLoginPage();
             } else {
                 System.out.println("A Failure occurred while trying to save data in the database");
@@ -85,7 +86,7 @@ public class RegisterCompanyView extends RegisterView {
 
     @Override
     protected void checkInput() {
-        if(!Utils.checkIfInputEmpty(
+        if(Utils.checkIfInputEmpty(
                 new String[]{
                         userBinder.getBean().getUsername(),
                         userBinder.getBean().getPassword(),

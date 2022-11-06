@@ -2,7 +2,6 @@ package org.hbrs.se2.project.control.factories;
 
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
-import org.hbrs.se2.project.entities.Company;
 import org.hbrs.se2.project.entities.Job;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

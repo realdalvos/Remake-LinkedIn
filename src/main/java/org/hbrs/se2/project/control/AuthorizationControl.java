@@ -2,8 +2,6 @@ package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.dtos.UserDTO;
 
-import java.util.Objects;
-
 public class AuthorizationControl {
 
     /**

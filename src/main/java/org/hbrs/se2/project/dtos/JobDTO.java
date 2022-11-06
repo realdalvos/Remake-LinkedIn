@@ -1,23 +1,23 @@
 package org.hbrs.se2.project.dtos;
 
 public interface JobDTO {
-    public int getJobid();
+    int getJobid();
 
-    public void setJobid(int jobid);
+    void setJobid(int jobid);
 
-    public int getCompanyid();
+    int getCompanyid();
 
-    public void setCompanyid(int companyid);
+    void setCompanyid(int companyid);
 
-    public String getTitle();
+    String getTitle();
 
-    public void setTitle(String title);
+    void setTitle(String title);
 
-    public String getDescription();
+    String getDescription();
 
-    public void setDescription(String description);
+    void setDescription(String description);
 
-    public String getSalary();
+    String getSalary();
 
-    public void setSalary(String salary);
+    void setSalary(String salary);
 }

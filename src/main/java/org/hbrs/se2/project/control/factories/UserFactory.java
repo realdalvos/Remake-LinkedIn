@@ -1,7 +1,6 @@
 package org.hbrs.se2.project.control.factories;
 
 import org.hbrs.se2.project.dtos.UserDTO;
-import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.entities.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
