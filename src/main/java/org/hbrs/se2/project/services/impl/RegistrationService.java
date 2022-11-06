@@ -12,6 +12,7 @@ import org.hbrs.se2.project.repository.StudentRepository;
 import org.hbrs.se2.project.repository.UserRepository;
 import org.hbrs.se2.project.services.RegistrationServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +26,9 @@ public class RegistrationService implements RegistrationServiceInterface {
 
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public boolean registerStudent(UserDTO user, StudentDTO student) throws Exception {
@@ -79,9 +83,10 @@ public class RegistrationService implements RegistrationServiceInterface {
      * @throws DatabaseUserException Something went wrong in the database
      */
     private void createAccount(UserDTO userDTO) throws DatabaseUserException {
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         try {
             //Saving user in db
-            this.userRepository.save(UserFactory.createUserWithoutHashedPassword(userDTO));
+            this.userRepository.save(UserFactory.createUser(userDTO));
         } catch (org.springframework.dao.DataAccessResourceFailureException e) {
             throw new DatabaseUserException("A Failure occurred while saving a user account in the database at createAccount");
         }
