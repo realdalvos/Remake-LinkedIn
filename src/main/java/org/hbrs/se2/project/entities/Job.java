@@ -17,6 +17,7 @@ public class Job {
     private String title;
     private String description;
     private String salary;
+    private String location;
 
     public Job() {
 
@@ -54,5 +55,9 @@ public class Job {
     public String getSalary() {return salary;}
 
     public void setSalary(String salary) {this.salary = salary;}
+    @Basic
+    @Column(name = "location")
+    public String getLocation(){return location;}
+    public void setLocation(String location){this.location = location;}
 }
 

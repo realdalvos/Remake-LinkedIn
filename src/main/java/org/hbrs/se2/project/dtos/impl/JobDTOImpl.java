@@ -8,24 +8,27 @@ public class JobDTOImpl implements JobDTO {
     private String title;
     private String description;
     private String salary;
+    private String location;
 
     public JobDTOImpl() {
 
     }
 
-    public JobDTOImpl(int companyid, String title, String description, String salary) {
+    public JobDTOImpl(int companyid, String title, String description, String salary, String location) {
         this.companyid = companyid;
         this.title = title;
         this.description = description;
         this.salary = salary;
+        this.location =location;
     }
 
-    public JobDTOImpl(int jobid, int companyid, String title, String description, String salary) {
+    public JobDTOImpl(int jobid, int companyid, String title, String description, String salary, String location) {
         this.jobid = jobid;
         this.companyid = companyid;
         this.title = title;
         this.description = description;
         this.salary = salary;
+        this.location = location;
     }
 
     public void setJobid(int jobid) {
@@ -72,6 +75,15 @@ public class JobDTOImpl implements JobDTO {
     public String getSalary() {
         return salary;
     }
+
+    @Override
+    public String getLocation() { return location; }
+
+    @Override
+    public void setLocation(String location) {
+        this.location=location;
+    }
+
     @Override
     public String toString() {
         return "JobDTOImpl{" +
@@ -79,7 +91,8 @@ public class JobDTOImpl implements JobDTO {
                 ", companyid= '" + companyid + '\'' +
                 ", title= '" + title + '\'' +
                 ", description= '" + description + '\'' +
-                ", salary= " + salary +
+                ", salary= " + salary + '\'' +
+                ", location= " + location +
                 '}';
     }
 }

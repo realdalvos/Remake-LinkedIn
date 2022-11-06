@@ -14,6 +14,7 @@ public class JobFactory {
         job.setDescription(jobDTO.getDescription());
         job.setSalary(jobDTO.getSalary());
         job.setJobid(jobDTO.getJobid());
+        job.setLocation(jobDTO.getLocation());
         return job;
     }
 }
