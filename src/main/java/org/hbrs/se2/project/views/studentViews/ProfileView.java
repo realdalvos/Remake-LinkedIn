@@ -30,9 +30,8 @@ import com.vaadin.ui.TextField;
 @PageTitle("Profile")
 public class ProfileView extends Div {
 
-    @Autowired
-    private ProfileControl profileControl;
-    public ProfileView(){
+    private final ProfileControl profileControl;
+    public ProfileView(ProfileControl profileControl){
         setSizeFull();
 
 
@@ -43,9 +42,9 @@ public class ProfileView extends Div {
         major.setPlaceholder("Major");
 
         TextField university = new TextField("University");
-        // String uni = profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid());
-        // System.out.println(uni);
-        university.setValue("unitest");
+        String uni = profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid());
+        System.out.println(uni);
+        university.setValue(uni);
 
         TextField topics = new TextField("Topics");
         topics.setPlaceholder("Topics");
@@ -74,6 +73,7 @@ public class ProfileView extends Div {
             }
         });
 
+        this.profileControl = profileControl;
     }
     public UserDTO getCurrentUser() {
         UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
