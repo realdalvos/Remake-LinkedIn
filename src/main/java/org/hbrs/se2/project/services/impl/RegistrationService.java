@@ -31,7 +31,7 @@ public class RegistrationService implements RegistrationServiceInterface {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public boolean registerStudent(UserDTO user, StudentDTO student) throws Exception {
+    public void registerStudent(UserDTO user, StudentDTO student) throws Exception {
         // check if username, email, matrikelnumber already exists
         UserDTO userDTO = userRepository.findUserByUsername(user.getUsername());
         UserDTO userDTO1 = userRepository.findUserByEmail(user.getEmail());
@@ -51,11 +51,10 @@ public class RegistrationService implements RegistrationServiceInterface {
         UserDTO newSavedUser = userRepository.findUserByUsername(user.getUsername());
         // create student profile
         this.createStudentProfile(student, newSavedUser);
-        return true;
     }
 
     @Override
-    public boolean registerCompany(UserDTO user, CompanyDTO company) throws Exception {
+    public void registerCompany(UserDTO user, CompanyDTO company) throws Exception {
         // check if username or email already exists
         UserDTO userDTO = userRepository.findUserByUsername(user.getUsername());
         UserDTO userDTO1 = userRepository.findUserByEmail(user.getEmail());
@@ -72,7 +71,6 @@ public class RegistrationService implements RegistrationServiceInterface {
         UserDTO newSavedUser = userRepository.findUserByUsername(user.getUsername());
         // create company profile
         this.createCompanyProfile(company, newSavedUser);
-        return true;
     }
 
 

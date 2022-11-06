@@ -220,13 +220,15 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
     }
 
-    @Override
+
     /**
      * method is called before component call
      * final view can be canceled if user is not logged in
      * redirect to log in view
      * secures unauthorized access to intern views
+     * @param beforeEnterEvent Takes an BeforeEnterEvent object
      */
+    @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         if (getCurrentUser() == null){
             beforeEnterEvent.rerouteTo(Globals.Pages.LOGIN_VIEW);

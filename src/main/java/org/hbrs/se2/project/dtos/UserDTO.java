@@ -1,23 +1,23 @@
 package org.hbrs.se2.project.dtos;
 
 public interface UserDTO {
-    public int getUserid();
+    int getUserid();
 
-    public void setUserid(int id);
+    void setUserid(int id);
 
-    public String getUsername();
+    String getUsername();
 
-    public void setUsername(String name);
+    void setUsername(String name);
 
-    public String getPassword();
+    String getPassword();
 
-    public void setPassword(String password);
+    void setPassword(String password);
 
-    public String getEmail();
+    String getEmail();
 
-    public void setEmail(String email);
+    void setEmail(String email);
 
-    public String getRole();
+    String getRole();
 
-    public void setRole(String role);
+    void setRole(String role);
 }

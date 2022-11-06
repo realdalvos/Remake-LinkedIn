@@ -9,10 +9,12 @@ import java.util.Arrays;
 public class Utils {
 
     /**
-     * Nützliche Methdode zur Erweiterung eines bestehendes Arrays
-     * Oma hätte gesagt, so eine Methode 'fällt nicht durch' ;-)
+     * Adding a generic element to an array of the same type
      *
-     * https://stackoverflow.com/questions/2843366/how-to-add-new-elements-to-an-array
+     * @param arr A generic array
+     * @param element An generic element
+     * @return The modified generic array
+     * @see <a href="https://stackoverflow.com/questions/2843366/how-to-add-new-elements-to-an-array">https://stackoverflow.com/questions/2843366/how-to-add-new-elements-to-an-array</a>
      */
     public static <T> T[] append(T[] arr, T element) {
         final int N = arr.length;
@@ -22,34 +24,45 @@ public class Utils {
 
     }
 
-    // Checks if field input is null or empty
+    /**
+     * Checks if a field in an array is empty
+     *
+     * @param array Takes a String array
+     * @return True, if an empty field is found, otherwise false
+     */
     public static boolean checkIfInputEmpty(String[] array) {
-        boolean isCorrect = true;
+        boolean empty = false;
         // checks all input to not be empty string or null
         for (String s : array) {
             if (s == null || s.equals("")) {
-                isCorrect = false;
+                empty = true;
                 break;
             }
         }
-        return isCorrect;
+        return empty;
     }
 
-    // exception handling
-    // takes an exception as an input
-    // returns the root cause message of an exception
+    /**
+     * Exception handling
+     *
+     * @param e Takes an exception as an input
+     * @return The root cause message of an exception
+     */
     public static String getRootCause(Exception e) {
         Throwable rootCause = e;
         while(rootCause.getCause() != null && rootCause.getCause() != rootCause) {
             rootCause = rootCause.getCause();
         }
-        // Split string message so we only get the last bit after key keyword
+        // Split string message, so we only get the last bit after key keyword
         String[] messArr = rootCause.getMessage().split("Key");
         return messArr[messArr.length - 1];
     }
 
-    // Error Dialog
-    // takes the message String as an input
+    /**
+     * Creates an Error Dialog
+     *
+     * @param message Takes the message String as an input
+     */
     public static void makeDialog(String message) {
         Dialog dialog = new Dialog();
         dialog.add(new Text(message));
