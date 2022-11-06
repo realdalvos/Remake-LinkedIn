@@ -48,13 +48,14 @@ public class NewJobAdView extends Div {
 
         // Salary text field
         TextField salary = new TextField("Approximate salary");
-
+        // Location text field
+        TextField location = new TextField("Location");
         // post new job button
         Button postButton = new Button("Post new Job Ad");
 
         // new job ad form
         FormLayout formLayout = new FormLayout();
-        formLayout.add(title, description, salary, postButton);
+        formLayout.add(title, description, salary, location, postButton);
         formLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("0", 1)
         );
@@ -67,11 +68,11 @@ public class NewJobAdView extends Div {
 
             // create new jobDTOImpl
             JobDTOImpl job = new JobDTOImpl(
-                    companyid, title.getValue(), description.getValue(), salary.getValue());
+                    companyid, title.getValue(), description.getValue(), salary.getValue(), location.getValue());
 
             // check if all input fields were filled out
             if(Utils.checkIfInputEmpty(
-                    new String[]{job.getTitle(), job.getDescription(), job.getSalary()})) {
+                    new String[]{job.getTitle(), job.getDescription(), job.getSalary(), job.getLocation()})) {
                 // error dialog
                 Utils.makeDialog("Please fill out all text fields.");
                 throw new Error("Not all input field were filled out.");

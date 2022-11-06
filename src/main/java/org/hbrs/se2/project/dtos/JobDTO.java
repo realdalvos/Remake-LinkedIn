@@ -20,4 +20,6 @@ public interface JobDTO {
     String getSalary();
 
     void setSalary(String salary);
+    String getLocation();
+    void setLocation(String location);
 }
