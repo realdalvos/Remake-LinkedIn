@@ -11,7 +11,5 @@ public interface StudentDTO {
 
     public int getMatrikelnumber();
 
-    public String getStudyMajor();
-
     public String getUniversity();
 }
