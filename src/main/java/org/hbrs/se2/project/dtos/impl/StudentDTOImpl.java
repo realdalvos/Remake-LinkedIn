@@ -11,7 +11,7 @@ public class StudentDTOImpl implements StudentDTO {
     private String firstname;
     @NotEmpty
     private String lastname;
-    @Digits(integer = 32, fraction = 32, message = "Geben Sie bitte eine gültige Matrikelnummer ein")
+    @Digits(integer = 7, fraction = 7, message = "Geben Sie bitte eine gültige Matrikelnummer ein")
     @NotEmpty
     private String matrikelnumber;
     private String university;
