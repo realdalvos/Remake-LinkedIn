@@ -1,12 +1,18 @@
 package org.hbrs.se2.project.dtos.impl;
 
 import org.hbrs.se2.project.dtos.StudentDTO;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotEmpty;
 
 public class StudentDTOImpl implements StudentDTO {
     private int studentid;
     private int userid;
+    @NotEmpty
     private String firstname;
+    @NotEmpty
     private String lastname;
+    @Digits(integer = 32, fraction = 32, message = "Geben Sie bitte eine gültige Matrikelnummer ein")
+    @NotEmpty
     private String matrikelnumber;
     private String university;
 
