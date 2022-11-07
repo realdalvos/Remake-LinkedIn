@@ -12,10 +12,10 @@ public interface LoginServiceInterface {
      * @return true if authentication was successfull, false if not.
      * @throws DatabaseUserException Something went wrong with the Database
      * */
-    public boolean authenticate(String username, String password) throws DatabaseUserException;
+    boolean authenticate(String username, String password) throws DatabaseUserException;
 
     /**
      * @return last successfully authenticated user as UserDTO
      * */
-    public UserDTO getCurrentUser();
+    UserDTO getCurrentUser();
 }

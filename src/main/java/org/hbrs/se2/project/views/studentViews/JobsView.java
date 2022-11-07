@@ -68,11 +68,13 @@ public class JobsView extends Div {
 
         // Grid Detail View Components
         private final TextField companyName = new TextField("Company");
-        private final TextField companyEmail = new TextField("Email");
+
+        private final TextField jobLocation = new TextField("Location");
+        private final TextField companyContactDetails = new TextField("Contact Details");
         private final TextArea jobDescription = new TextArea("Job Description");
 
         public JobDetailsFormLayout() {
-            Stream.of(companyName, companyEmail, jobDescription).forEach(
+            Stream.of(companyName, jobLocation, companyContactDetails, jobDescription).forEach(
                     field -> {
                         field.setReadOnly(true);
                         add(field);
@@ -80,13 +82,15 @@ public class JobsView extends Div {
             );
 
             setResponsiveSteps(new ResponsiveStep("0", 2));
+            setColspan(companyContactDetails, 2);
             setColspan(jobDescription, 2);
         }
 
         public void setJobDetails(JobDetail details) {
             // set all field with job details
             companyName.setValue(details.getName());
-            companyEmail.setValue(details.getEmail());
+            jobLocation.setValue(details.getLocation());
+            companyContactDetails.setValue(details.getContactdetails());
             jobDescription.setValue(details.getDescription());
         }
     }
@@ -95,15 +99,17 @@ public class JobsView extends Div {
         private String title;
         private String salary;
         private String description;
+        private String location;
         private String name;
-        private String email;
+        private String contactdetails;
 
-        public JobDetail(String title, String salary, String description, String name, String email) {
+        public JobDetail(String title, String salary, String description, String location, String name, String contactdetails) {
             this.title = title;
             this.salary = salary;
             this.description = description;
+            this.location = location;
             this.name = name;
-            this.email = email;
+            this.contactdetails = contactdetails;
         }
 
         public String getTitle() {
@@ -117,13 +123,14 @@ public class JobsView extends Div {
         public String getDescription() {
             return description;
         }
+        public String getLocation() { return location; }
 
         public String getName() {
             return name;
         }
 
-        public String getEmail() {
-            return email;
+        public String getContactdetails() {
+            return contactdetails;
         }
     }
 }

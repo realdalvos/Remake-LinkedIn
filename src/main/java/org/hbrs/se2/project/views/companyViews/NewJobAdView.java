@@ -10,7 +10,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
-import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
@@ -29,37 +28,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class NewJobAdView extends Div {
     @Autowired
     private JobControl jobControl;
-    private H3 newAdText = new H3();
 
-    public NewJobAdView() throws DatabaseUserException {
+    public NewJobAdView() {
         setSizeFull();
+        H3 newAdText = new H3();
         newAdText.setText("Create a new Job Ad");
 
         // Job title text area
         TextArea title = new TextArea("Job Title");
         int charLimitTitle = 100;
         title.setMaxLength(charLimitTitle);
-        title.addValueChangeListener(e -> {
-            e.getSource().setHelperText(e.getValue().length() + "/" + charLimitTitle);
-        });
+        title.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitTitle));
 
         // Job Description text area
         TextArea description = new TextArea("Job Description");
         int charLimitDescr = 1024;
         description.setMaxLength(charLimitDescr);
-        description.addValueChangeListener(e -> {
-            e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr);
-        });
+        description.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
 
         // Salary text field
         TextField salary = new TextField("Approximate salary");
-
+        // Location text field
+        TextField location = new TextField("Location");
         // post new job button
         Button postButton = new Button("Post new Job Ad");
 
         // new job ad form
         FormLayout formLayout = new FormLayout();
-        formLayout.add(title, description, salary, postButton);
+        formLayout.add(title, description, salary, location, postButton);
         formLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("0", 1)
         );
@@ -72,11 +68,11 @@ public class NewJobAdView extends Div {
 
             // create new jobDTOImpl
             JobDTOImpl job = new JobDTOImpl(
-                    companyid, title.getValue(), description.getValue(), salary.getValue());
+                    companyid, title.getValue(), description.getValue(), salary.getValue(), location.getValue());
 
             // check if all input fields were filled out
-            if(!Utils.checkIfInputEmpty(
-                    new String[]{job.getTitle(), job.getDescription(), job.getSalary()})) {
+            if(Utils.checkIfInputEmpty(
+                    new String[]{job.getTitle(), job.getDescription(), job.getSalary(), job.getLocation()})) {
                 // error dialog
                 Utils.makeDialog("Please fill out all text fields.");
                 throw new Error("Not all input field were filled out.");

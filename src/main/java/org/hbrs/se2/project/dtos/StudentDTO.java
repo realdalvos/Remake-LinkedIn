@@ -2,16 +2,16 @@ package org.hbrs.se2.project.dtos;
 
 public interface StudentDTO {
 
-    public int getStudentid();
-    public int getUserid();
+    int getStudentid();
+    int getUserid();
 
-    public String getFirstname();
+    String getFirstname();
 
-    public String getLastname();
+    String getLastname();
 
-    public String getMatrikelnumber();
+    String getMatrikelnumber();
 
-    public String getStudyMajor();
+    String getStudyMajor();
 
-    public String getUniversity();
+    String getUniversity();
 }
