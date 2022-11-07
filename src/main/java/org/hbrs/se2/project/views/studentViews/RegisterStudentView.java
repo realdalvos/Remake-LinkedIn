@@ -24,7 +24,7 @@ public class RegisterStudentView extends RegisterView {
     private TextField firstname = new TextField("First name");
     private TextField lastname = new TextField("Last name");
     private TextField matrikelnumber = new TextField("Matrikel number");
-    Binder<StudentDTOImpl> concreteUserBinder = new BeanValidationBinder<>(StudentDTOImpl.class);
+    private Binder<StudentDTOImpl> concreteUserBinder = new BeanValidationBinder<>(StudentDTOImpl.class);
 
     public RegisterStudentView() {
         setSizeFull();

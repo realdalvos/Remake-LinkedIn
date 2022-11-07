@@ -19,7 +19,7 @@ import org.hbrs.se2.project.views.RegisterView;
 public class RegisterCompanyView extends RegisterView {
     // text fields
     private TextField name = new TextField("Company Name");
-    Binder<CompanyDTOImpl> concreteUserBinder = new BeanValidationBinder<>(CompanyDTOImpl.class);
+    private Binder<CompanyDTOImpl> concreteUserBinder = new BeanValidationBinder<>(CompanyDTOImpl.class);
 
     public RegisterCompanyView() {
         setSizeFull();

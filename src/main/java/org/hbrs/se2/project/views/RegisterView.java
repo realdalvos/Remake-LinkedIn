@@ -26,7 +26,6 @@ public abstract class RegisterView extends VerticalLayout {
     protected TextField username = new TextField("Username");
     protected EmailField email = createEmailField();
     protected Binder<UserDTOImpl> userBinder = new BeanValidationBinder<>(UserDTOImpl.class);
-    protected Binder<Object> concreteUserBinder;
 
     protected Button loginButton() {
         Button loginButton = new Button("I already have an account - Log In");
