@@ -57,8 +57,13 @@ public class RegisterCompanyView extends RegisterView {
 
             // register new Company with passed in values from register form
             try {
-                // function to register new company
-                registrationControl.registerCompany(userBinder.getBean(), concreteUserBinder.getBean());
+                if (userBinder.isValid() && concreteUserBinder.isValid()) {
+                    // function to register new company
+                    registrationControl.registerCompany(userBinder.getBean(), concreteUserBinder.getBean());
+                } else {
+                    Utils.makeDialog("Please fill out all text fields.");
+                    throw new Error("Not all input field were filled out.");
+                }
             } catch (Exception e) {
                 // get the root cause of an exception
                 String message = Utils.getRootCause(e);
