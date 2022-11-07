@@ -19,4 +19,6 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
 
         //could return multiple datasets, careful
         JobDTO findJobByCompanyidAndTitle(int id, String title);
+
+        List<JobDTO> findJobByCompanyid(int id);
 }
