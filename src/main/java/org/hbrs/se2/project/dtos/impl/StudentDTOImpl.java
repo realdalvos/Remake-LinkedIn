@@ -8,16 +8,14 @@ public class StudentDTOImpl implements StudentDTO {
     private String firstname;
     private String lastname;
     private String matrikelnumber;
-    private String studyMajor;
     private String university;
 
     public StudentDTOImpl(){}
-    public StudentDTOImpl(int userid, String firstname, String lastname, String matrikelnumber, String studyMajor, String university){
+    public StudentDTOImpl(int userid, String firstname, String lastname, String matrikelnumber, String university){
         this.userid=userid;
         this.firstname=firstname;
         this.lastname=lastname;
         this.matrikelnumber=matrikelnumber;
-        this.studyMajor=studyMajor;
         this.university=university;
     }
 
@@ -39,9 +37,6 @@ public class StudentDTOImpl implements StudentDTO {
         this.matrikelnumber = matrikelnumber;
     }
 
-    public void setStudyMajor(String studyMajor) {
-        this.studyMajor = studyMajor;
-    }
 
     public void setUniversity(String university) {
         this.university = university;
@@ -67,11 +62,6 @@ public class StudentDTOImpl implements StudentDTO {
     @Override
     public String getMatrikelnumber() {
         return matrikelnumber;
-    }
-
-    @Override
-    public String getStudyMajor() {
-        return studyMajor;
     }
 
     @Override

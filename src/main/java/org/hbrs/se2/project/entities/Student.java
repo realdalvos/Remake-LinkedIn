@@ -49,11 +49,6 @@ public class Student {
     public void setMatrikelnumber(String number) {this.matrikelnumber = number;}
 
     @Basic
-    @Column(name="studymajor")
-    public String getStudyMajor() {return studyMajor;}
-    public void setStudyMajor(String major) {this.studyMajor = major;}
-
-    @Basic
     @Column(name="university")
     public String getUniversity() {return university;}
     public void setUniversity(String uni) {this.university = uni;}

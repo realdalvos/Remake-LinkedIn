@@ -41,7 +41,7 @@ class RegistrationControlTest {
     void setUp() {
         tearDown();
         userDTO = new UserDTOImpl(testString, testString, testString, Globals.Roles.company);
-        studentDTO = new StudentDTOImpl(userDTO.getUserid(), testString, testString, "123654", testString, testString);
+        studentDTO = new StudentDTOImpl(userDTO.getUserid(), testString, testString, "123654", testString);
         companyDTO = new CompanyDTOImpl(userDTO.getUserid(), testString, testString, false, testString);
 
         companyDTO.setName(testString);
