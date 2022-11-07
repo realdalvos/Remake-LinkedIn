@@ -13,7 +13,6 @@ public class ProfileControl {
     private UserRepository userRepository;
     @Autowired
     private StudentRepository studentRepository;
-
     @Autowired
     private StudentHasMajorRepository studentHasMajorRepository;
     @Autowired

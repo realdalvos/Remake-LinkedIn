@@ -1,7 +1,5 @@
 package org.hbrs.se2.project.entities;
 
-import sun.jvm.hotspot.gc.shared.Generation;
-
 import javax.persistence.*;
 @Entity
 @Table(name = "skill", schema = "mid9db")
