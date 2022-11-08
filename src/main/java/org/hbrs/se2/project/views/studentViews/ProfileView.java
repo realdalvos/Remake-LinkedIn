@@ -34,11 +34,10 @@ public class ProfileView extends Div {
     public ProfileView(ProfileControl profileControl){
         setSizeFull();
 
-
-
         Button save = new Button("save");
 
         TextField major = new TextField("Major");
+        // can be removed for now
         //major.setPlaceholder(profileControl.getMajorOfStudent(this.getCurrentUser().getUserid()));
 
         TextField university = new TextField("University");
@@ -56,21 +55,26 @@ public class ProfileView extends Div {
         add(formLayout);
         add(save);
 
-        save.addClickListener   (buttonClickEvent -> {
+        save.addClickListener(buttonClickEvent -> {
             if (major.getValue() != null && !major.getValue().equals("")) {
                 profileControl.updateStudyMajor(major.getValue(), this.getCurrentUser().getUserid());
             }
             if (university.getValue() != null && !university.getValue().equals("")) {
                 profileControl.updateUniversity(university.getValue(), this.getCurrentUser().getUserid());
             }
+            // topic input is just being printed out in the console
+            // there is no call of the function profileControl.updateTopics to update topics in the database
             if (topics.getValue() != null && !topics.getValue().equals("")) {
                 System.out.println(topics.getValue());
             }
+            // skills input is just being printed out in the console
+            // there is no call of the function profileControl.updateSkills to update skills in the database
             if (skills.getValue() != null && !skills.getValue().equals("")) {
                 System.out.println(skills.getValue());
             }
         });
-
+        // initialization of the profileControl should be done
+        // at the beginning of the ProfileView constructor
         this.profileControl = profileControl;
     }
     public UserDTO getCurrentUser() {

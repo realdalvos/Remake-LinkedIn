@@ -18,12 +18,6 @@ public class Student {
     private int matrikelnumber;
     private String university;
 
-    private String major;
-
-    private String topic;
-
-    private String skill;
-
     public Student() {
 
     }
@@ -53,23 +47,8 @@ public class Student {
     public void setMatrikelnumber(int number) {this.matrikelnumber = number;}
 
     @Basic
-    @Column(name="major")
-    public String getMajor() {return major;}
-    public void setMajor(String maj) {this.major = maj;}
-
-    @Basic
     @Column(name="university")
     public String getUniversity() {return university;}
     public void setUniversity(String uni) {this.university = uni;}
-
-    @Basic
-    @Column(name="topic")
-    public String getTopic() {return topic;}
-    public void setTopic(String top) {this.topic = top;}
-
-    @Basic
-    @Column(name="skill")
-    public String getSkills() {return skill;}
-    public void setSkill(String ski) {this.skill = ski;}
-
 }
+
