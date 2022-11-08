@@ -86,10 +86,10 @@ public class ProfileControl {
             skillRepository.save(skillEntity);
             skillDTO = skillRepository.findBySkill(skill);
         }
-        // there are steps missing see methods updateTopics or updateStudyMajor
-        // after saving a skill when it does not exist, we have to create the
-        // studentHasSkill table with the skillid from skillDTO and the studentid from studentDTO
-        // and save it in the studentHasSkill database table
+        StudentHasSkill studentHasSkill = new StudentHasSkill();
+        studentHasSkill.setSkillid(skillDTO.getSkillid());
+        studentHasSkill.setStudentid(studentDTO.getStudentid());
+        studentHasSkillRepository.save(studentHasSkill);
     }
 
     public void updateUniversity(String university, int userid){

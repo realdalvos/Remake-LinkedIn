@@ -32,6 +32,7 @@ public class ProfileView extends Div {
 
     private final ProfileControl profileControl;
     public ProfileView(ProfileControl profileControl){
+        this.profileControl = profileControl;
         setSizeFull();
 
         Button save = new Button("save");
@@ -65,17 +66,16 @@ public class ProfileView extends Div {
             // topic input is just being printed out in the console
             // there is no call of the function profileControl.updateTopics to update topics in the database
             if (topics.getValue() != null && !topics.getValue().equals("")) {
-                System.out.println(topics.getValue());
+                profileControl.updateTopics(topics.getValue(), this.getCurrentUser().getUserid());
             }
             // skills input is just being printed out in the console
             // there is no call of the function profileControl.updateSkills to update skills in the database
             if (skills.getValue() != null && !skills.getValue().equals("")) {
-                System.out.println(skills.getValue());
-            }
+                profileControl.updateSkills(skills.getValue(), this.getCurrentUser().getUserid());            }
         });
         // initialization of the profileControl should be done
         // at the beginning of the ProfileView constructor
-        this.profileControl = profileControl;
+
     }
     public UserDTO getCurrentUser() {
         UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
