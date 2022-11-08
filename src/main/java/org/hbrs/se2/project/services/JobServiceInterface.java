@@ -34,4 +34,11 @@ public interface JobServiceInterface {
      * @return List of Jobs with all their Details
      */
     List<JobsView.JobDetail> getAllJobsData(List<JobDTO> jobs);
+
+    /**
+     * Get all Jobs of a Company
+     * @param compId Company ID
+     * @return List of all Jobs
+     */
+    List<JobDTO> getAllCompanyJobs(int compId);
 }

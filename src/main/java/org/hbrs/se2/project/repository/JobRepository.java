@@ -5,6 +5,8 @@ import org.hbrs.se2.project.entities.Job;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * https://www.baeldung.com/spring-data-jpa-projections
  * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods
@@ -19,4 +21,6 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
 
         //could return multiple datasets, careful
         JobDTO findJobByCompanyidAndTitle(int id, String title);
+
+        List<JobDTO> findJobByCompanyid(int id);
 }

@@ -19,7 +19,6 @@ public class StudentFactory {
         student.setMatrikelnumber(studentDTO.getMatrikelnumber());
         student.setUserid(userDTO.getUserid());
         student.setStudentid(studentDTO.getStudentid());
-        student.setStudyMajor(studentDTO.getStudyMajor());
         student.setUniversity(studentDTO.getUniversity());
 
         return student;

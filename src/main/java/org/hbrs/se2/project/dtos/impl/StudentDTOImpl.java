@@ -8,24 +8,21 @@ public class StudentDTOImpl implements StudentDTO {
     private String firstname;
     private String lastname;
     private String matrikelnumber;
-    private String studyMajor;
     private String university;
 
     public StudentDTOImpl(){}
-    public StudentDTOImpl(int userid, String firstname, String lastname, String matrikelnumber, String studyMajor, String university){
+
+    public StudentDTOImpl(int userid, String firstname, String lastname, String matrikelnumber, String university){
         this.userid=userid;
         this.firstname=firstname;
         this.lastname=lastname;
         this.matrikelnumber=matrikelnumber;
-        this.studyMajor=studyMajor;
         this.university=university;
     }
 
     public void setStudentId(int id) {this.studentid = id;}
 
-    public void setUserid(int userid) {
-        this.userid = userid;
-    }
+    public void setUserid(int userid) { this.userid = userid; }
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;
@@ -39,42 +36,26 @@ public class StudentDTOImpl implements StudentDTO {
         this.matrikelnumber = matrikelnumber;
     }
 
-    public void setStudyMajor(String studyMajor) {
-        this.studyMajor = studyMajor;
-    }
-
     public void setUniversity(String university) {
         this.university = university;
     }
 
-    @Override
     public int getStudentid() {return studentid;}
-    @Override
-    public int getUserid() {
-        return userid;
-    }
 
-    @Override
+    public int getUserid() { return userid; }
+
     public String getFirstname() {
         return firstname;
     }
 
-    @Override
     public String getLastname() {
         return lastname;
     }
 
-    @Override
     public String getMatrikelnumber() {
         return matrikelnumber;
     }
 
-    @Override
-    public String getStudyMajor() {
-        return studyMajor;
-    }
-
-    @Override
     public String getUniversity() {
         return university;
     }

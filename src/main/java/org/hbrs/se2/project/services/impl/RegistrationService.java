@@ -38,11 +38,11 @@ public class RegistrationService implements RegistrationServiceInterface {
         StudentDTO studentDTO = studentRepository.findStudentByMatrikelnumber(student.getMatrikelnumber());
 
         if (userDTO != null) {
-            throw new DatabaseUserException("Username already exists.");
+            throw new DatabaseUserException("Username already exists");
         } else if (userDTO1 != null) {
             throw new DatabaseUserException("Email already exists");
         } else if (studentDTO != null) {
-            throw new DatabaseUserException("Matrikelnumber already exists.");
+            throw new DatabaseUserException("Matrikelnumber already exists");
         }
 
         // create new user of role "student"

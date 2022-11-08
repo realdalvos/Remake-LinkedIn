@@ -34,7 +34,6 @@ class StudentFactoryTest {
         testStudentImpl.setMatrikelnumber("1234");
         testStudentImpl.setUniversity("HRBS");
         testStudentImpl.setUserid(testUser.getUserid());
-        testStudentImpl.setStudyMajor("Software Engineering");
 
         testStudent = testStudentImpl;
     }
@@ -51,6 +50,5 @@ class StudentFactoryTest {
         assertEquals(testStudent.getStudentid(), studentFromFactory.getStudentid(), "StudentID should match.");
         assertEquals(testStudent.getUserid(), studentFromFactory.getUserid(), "UserID should match.");
         assertEquals(testStudent.getUniversity(), studentFromFactory.getUniversity(), "University should match.");
-        assertEquals(testStudent.getStudyMajor(), studentFromFactory.getStudyMajor(), "Study Major should match.");
     }
 }

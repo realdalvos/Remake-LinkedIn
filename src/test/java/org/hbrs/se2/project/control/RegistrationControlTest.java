@@ -42,7 +42,7 @@ class RegistrationControlTest {
     void setUp() {
         tearDown();
         userDTO = new UserDTOImpl(testString, testString, testString, Globals.Roles.company);
-        studentDTO = new StudentDTOImpl(userDTO.getUserid(), testString, testString, matrikelNr, testString, testString);
+        studentDTO = new StudentDTOImpl(userDTO.getUserid(), testString, testString, matrikelNr, testString);
         companyDTO = new CompanyDTOImpl(userDTO.getUserid(), testString, testString, false, testString);
 
         companyDTO.setName(testString);
@@ -98,8 +98,7 @@ class RegistrationControlTest {
     @DisplayName("Successful Registration for student")
     void registerStudentSuccess() {
         userDTO.setRole(Globals.Roles.student);
-        Boolean result = assertDoesNotThrow(() -> registrationControl.registerStudent(userDTO, studentDTO));
-        assertTrue(result, "Return value is false");
+        assertDoesNotThrow(() -> registrationControl.registerStudent(userDTO, studentDTO));
         assertNotNull(userRepository.findUserByUsername(testString), "Can not find user in database after registration");
         assertNotNull(studentRepository.findStudentByUserid(userRepository.findUserByUsername(testString).getUserid()), "Can not find company in database after registration");
     }
@@ -114,7 +113,7 @@ class RegistrationControlTest {
 
         userDTOTmp.setUsername(testString);
         DatabaseUserException thrown = assertThrows(DatabaseUserException.class, () -> registrationControl.registerStudent(userDTO, studentDTOTmp));
-        assertEquals("Username already exists.", thrown.getMessage());
+        assertEquals("Username already exists", thrown.getMessage());
 
         userDTOTmp.setUsername("");
         userDTOTmp.setEmail(testString);
@@ -124,6 +123,6 @@ class RegistrationControlTest {
         userDTOTmp.setEmail("");
         studentDTOTmp.setMatrikelnumber(matrikelNr);
         thrown = assertThrows(DatabaseUserException.class, () -> registrationControl.registerStudent(userDTOTmp, studentDTOTmp));
-        assertEquals("Matrikelnumber already exists.", thrown.getMessage());
+        assertEquals("Matrikelnumber already exists", thrown.getMessage());
     }
 }

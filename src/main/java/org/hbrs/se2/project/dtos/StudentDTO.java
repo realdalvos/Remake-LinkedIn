@@ -12,8 +12,6 @@ public interface StudentDTO {
 
     String getMatrikelnumber();
 
-    String getStudyMajor();
-
     String getUniversity();
 
     void setStudentId(int id);
@@ -25,8 +23,6 @@ public interface StudentDTO {
     void setLastname(String lastname);
 
     void setMatrikelnumber(String matrikelnumber);
-
-    void setStudyMajor(String studyMajor);
 
     void setUniversity(String university);
 }
