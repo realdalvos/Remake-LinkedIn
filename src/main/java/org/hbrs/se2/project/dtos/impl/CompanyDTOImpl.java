@@ -2,9 +2,12 @@ package org.hbrs.se2.project.dtos.impl;
 
 import org.hbrs.se2.project.dtos.CompanyDTO;
 
+import javax.validation.constraints.NotEmpty;
+
 public class CompanyDTOImpl implements CompanyDTO {
     private int companyid;
     private int userid;
+    @NotEmpty
     private String name;
     private String industry;
     private boolean banned;
