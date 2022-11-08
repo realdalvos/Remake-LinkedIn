@@ -9,6 +9,18 @@ public class StudentDTOImpl implements StudentDTO {
     private String lastname;
     private int matrikelnumber;
     private String university;
+    private String major;
+    private String topic;
+    private String skill;
+
+    @Override
+    public String getSkill() {
+        return skill;
+    }
+
+    public void setSkill(String skill) {
+        this.skill = skill;
+    }
 
     public void setStudentId(int id) {this.studentid = id;}
 
@@ -31,6 +43,12 @@ public class StudentDTOImpl implements StudentDTO {
     public void setUniversity(String university) {
         this.university = university;
     }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+    
+    public void setTopic(String topic){ this.topic = topic;}
 
     @Override
     public int getStudentid() {return studentid;}
@@ -58,4 +76,12 @@ public class StudentDTOImpl implements StudentDTO {
     public String getUniversity() {
         return university;
     }
+
+    @Override
+    public String getMajor() {
+        return major;
+    }
+
+    @Override
+    public String getTopic(){ return topic;}
 }

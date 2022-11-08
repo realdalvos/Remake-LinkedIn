@@ -39,12 +39,10 @@ public class ProfileView extends Div {
         Button save = new Button("save");
 
         TextField major = new TextField("Major");
-        major.setPlaceholder("Major");
+        //major.setPlaceholder(profileControl.getMajorOfStudent(this.getCurrentUser().getUserid()));
 
         TextField university = new TextField("University");
-        String uni = profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid());
-        System.out.println(uni);
-        university.setValue(uni);
+        university.setValue(profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid()));
 
         TextField topics = new TextField("Topics");
         topics.setPlaceholder("Topics");

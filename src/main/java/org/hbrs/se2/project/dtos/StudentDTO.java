@@ -12,4 +12,10 @@ public interface StudentDTO {
     public int getMatrikelnumber();
 
     public String getUniversity();
+
+    public String getMajor();
+
+    public String getTopic();
+
+    public String getSkill();
 }
