@@ -35,13 +35,14 @@ class RegistrationControlTest {
     StudentDTO studentDTO;
     CompanyDTO companyDTO;
     String testString = "JUnitTest";
+    String matrikelNr = "123654";
 
     @BeforeEach
     @DisplayName("Creating a user called \"JUnitTest\" exists.")
     void setUp() {
         tearDown();
         userDTO = new UserDTOImpl(testString, testString, testString, Globals.Roles.company);
-        studentDTO = new StudentDTOImpl(userDTO.getUserid(), testString, testString, "123654", testString);
+        studentDTO = new StudentDTOImpl(userDTO.getUserid(), testString, testString, matrikelNr, testString);
         companyDTO = new CompanyDTOImpl(userDTO.getUserid(), testString, testString, false, testString);
 
         companyDTO.setName(testString);
@@ -72,35 +73,56 @@ class RegistrationControlTest {
         userDTO.setRole(Globals.Roles.company);
         assertDoesNotThrow(() -> registrationControl.registerCompany(userDTO, companyDTO));
         assertNotNull(userRepository.findUserByUsername(testString), "Can not find user in database after registration");
-        assertNotNull(companyRepository.findCompanyByName(testString), "Can not find company in database after registration");
+        assertNotNull(companyRepository.findCompanyByUserid(userRepository.findUserByUsername(testString).getUserid()), "Can not find company in database after registration");
     }
 
     @Test
-    @DisplayName("Throw an error if a unique field in database already exists")
+    @DisplayName("Throw an error if an unique field in database already exists")
     void registerCompanyUnique() {
         userDTO.setRole(Globals.Roles.company);
         assertDoesNotThrow(() -> registrationControl.registerCompany(userDTO, companyDTO));
         UserDTO userDTOTmp = new UserDTOImpl();
+        CompanyDTO companyDTOTmp = new CompanyDTOImpl();
 
         userDTOTmp.setUsername(testString);
-        DatabaseUserException thrown = assertThrows(DatabaseUserException.class, () -> registrationControl.registerCompany(userDTO, companyDTO));
+        DatabaseUserException thrown = assertThrows(DatabaseUserException.class, () -> registrationControl.registerCompany(userDTO, companyDTOTmp));
         assertEquals("Username already exists", thrown.getMessage());
 
         userDTOTmp.setUsername("");
         userDTOTmp.setEmail(testString);
-        thrown = assertThrows(DatabaseUserException.class, () -> registrationControl.registerCompany(userDTOTmp, companyDTO));
+        thrown = assertThrows(DatabaseUserException.class, () -> registrationControl.registerCompany(userDTOTmp, companyDTOTmp));
         assertEquals("Email already exists", thrown.getMessage());
     }
 
     @Test
-    @DisplayName("TBD")
+    @DisplayName("Successful Registration for student")
     void registerStudentSuccess() {
-
+        userDTO.setRole(Globals.Roles.student);
+        assertDoesNotThrow(() -> registrationControl.registerStudent(userDTO, studentDTO));
+        assertNotNull(userRepository.findUserByUsername(testString), "Can not find user in database after registration");
+        assertNotNull(studentRepository.findStudentByUserid(userRepository.findUserByUsername(testString).getUserid()), "Can not find company in database after registration");
     }
 
     @Test
-    @DisplayName("TBD")
+    @DisplayName("Throw an error if an unique field in database already exists")
     void registerStudentUnique() {
+        userDTO.setRole(Globals.Roles.student);
+        assertDoesNotThrow(() -> registrationControl.registerStudent(userDTO, studentDTO));
+        UserDTO userDTOTmp = new UserDTOImpl();
+        StudentDTO studentDTOTmp = new StudentDTOImpl();
 
+        userDTOTmp.setUsername(testString);
+        DatabaseUserException thrown = assertThrows(DatabaseUserException.class, () -> registrationControl.registerStudent(userDTO, studentDTOTmp));
+        assertEquals("Username already exists", thrown.getMessage());
+
+        userDTOTmp.setUsername("");
+        userDTOTmp.setEmail(testString);
+        thrown = assertThrows(DatabaseUserException.class, () -> registrationControl.registerStudent(userDTOTmp, studentDTOTmp));
+        assertEquals("Email already exists", thrown.getMessage());
+
+        userDTOTmp.setEmail("");
+        studentDTOTmp.setMatrikelnumber(matrikelNr);
+        thrown = assertThrows(DatabaseUserException.class, () -> registrationControl.registerStudent(userDTOTmp, studentDTOTmp));
+        assertEquals("Matrikelnumber already exists", thrown.getMessage());
     }
 }

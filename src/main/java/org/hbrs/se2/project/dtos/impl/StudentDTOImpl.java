@@ -17,6 +17,7 @@ public class StudentDTOImpl implements StudentDTO {
     private String university;
 
     public StudentDTOImpl(){}
+
     public StudentDTOImpl(int userid, String firstname, String lastname, String matrikelnumber, String university){
         this.userid=userid;
         this.firstname=firstname;
@@ -27,9 +28,7 @@ public class StudentDTOImpl implements StudentDTO {
 
     public void setStudentId(int id) {this.studentid = id;}
 
-    public void setUserid(int userid) {
-        this.userid = userid;
-    }
+    public void setUserid(int userid) { this.userid = userid; }
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;
@@ -43,34 +42,26 @@ public class StudentDTOImpl implements StudentDTO {
         this.matrikelnumber = matrikelnumber;
     }
 
-
     public void setUniversity(String university) {
         this.university = university;
     }
 
-    @Override
     public int getStudentid() {return studentid;}
-    @Override
-    public int getUserid() {
-        return userid;
-    }
 
-    @Override
+    public int getUserid() { return userid; }
+
     public String getFirstname() {
         return firstname;
     }
 
-    @Override
     public String getLastname() {
         return lastname;
     }
 
-    @Override
     public String getMatrikelnumber() {
         return matrikelnumber;
     }
 
-    @Override
     public String getUniversity() {
         return university;
     }

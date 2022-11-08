@@ -17,7 +17,6 @@ public class Student {
     private String firstname;
     private String lastname;
     private String matrikelnumber;
-    private String studyMajor;
     private String university;
 
     public Student() {

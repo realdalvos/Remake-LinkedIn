@@ -17,17 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Route(value = Globals.Pages.MYADS_VIEW, layout = AppView.class)
 @PageTitle("My Ads")
 public class MyAdsView extends Div {
-    private final JobControl jobcontrol;
-    private final LoginControl logincontrol;
-
     @Autowired
     public MyAdsView(JobControl jobcontrol, LoginControl logincontrol){
-        this.jobcontrol = jobcontrol;
-        this.logincontrol = logincontrol;
 
         Grid<JobDTO> grid = new Grid<>();
 
-        grid.setItems(this.jobcontrol.getAllCompanyJobs(this.jobcontrol.getCompanyByUserid(this.logincontrol.getCurrentUser().getUserid()).getCompanyid()));
+        grid.setItems(jobcontrol.getAllCompanyJobs(jobcontrol.getCompanyByUserid(logincontrol.getCurrentUser().getUserid()).getCompanyid()));
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
 
