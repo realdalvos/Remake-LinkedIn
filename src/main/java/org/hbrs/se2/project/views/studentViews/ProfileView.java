@@ -9,15 +9,12 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.component.textfield.TextField;
 import org.hbrs.se2.project.control.ProfileControl;
-import org.hbrs.se2.project.dtos.StudentDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
-import org.hbrs.se2.project.entities.User;
 import org.hbrs.se2.project.util.Globals;
-import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.awt.*;
+import java.util.List;
 /*
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Table;
@@ -31,15 +28,26 @@ import com.vaadin.ui.TextField;
 public class ProfileView extends Div {
 
     private final ProfileControl profileControl;
-    public ProfileView(ProfileControl profileControl){
-        this.profileControl = profileControl;
+
+    @Autowired
+    public ProfileView(ProfileControl profileControl, ProfileControl profileControl1){
+        this.profileControl = profileControl1;
+
         setSizeFull();
 
         Button save = new Button("save");
 
         TextField major = new TextField("Major");
         // can be removed for now
-        major.setPlaceholder(profileControl.getMajorOfStudent(this.getCurrentUser().getUserid()));
+        // placeholder will not work because there can be multiple majors and
+        // placeholder would only work for one string
+        // major.setPlaceholder(profileControl.getMajorOfStudent(this.getCurrentUser().getUserid()));
+
+        // print out all majors of a student in console
+        List<String> majors = profileControl.getMajorOfStudent(this.getCurrentUser().getUserid());
+        for (Object o : majors) {
+            System.out.println(o);
+        }
 
         TextField university = new TextField("University");
         university.setValue(profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid()));

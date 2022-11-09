@@ -1,15 +1,13 @@
 package org.hbrs.se2.project.control;
 
-import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
-import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.entities.*;
 import org.hbrs.se2.project.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class ProfileControl {
@@ -29,7 +27,6 @@ public class ProfileControl {
     @Autowired
     private TopicRepository topicRepository;
 
-    // need this but has to be used in a method, see comments in following methods
     @Autowired
     private StudentHasSkillRepository studentHasSkillRepository;
 
@@ -120,19 +117,24 @@ public class ProfileControl {
         return studentDTO.getUniversity();
     }
 
-    public String getMajorOfStudent(int userid) {
+    public List<String> getMajorOfStudent(int userid) {
+        // temp major
+        MajorDTO majorDTO;
+        // list for majors
+        List<String> majors = new ArrayList<>();
+        // get student with matching user id
         StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
-        int studentId =  studentDTO.getStudentid();
-        Optional<StudentHasMajor> optionalStudentHasMajor= studentHasMajorRepository.findById(studentId);
-        if (optionalStudentHasMajor.isPresent()) {
-            int idOfMajor = optionalStudentHasMajor.get().getMajorid();
-            Optional<Major> optionalMajor = majorRepository.findById(idOfMajor);
-            if (optionalMajor.isPresent()) {
-                return optionalMajor.get().getMajor();
-            }
+        // get data from student_has_major table with matching student ids
+        List<StudentHasMajorDTO> studentHasMajors =
+                studentHasMajorRepository.findByStudentid(studentDTO.getStudentid());
+        // get matching majors from major table with major id from studentHasMajor list
+        for (StudentHasMajorDTO studentHasMajor : studentHasMajors) {
+            majorDTO = majorRepository.findByMajorid(studentHasMajor.getMajorid());
+            majors.add(majorDTO.getMajor());
         }
-        return "";
+        // return list of majors
+        return majors;
     }
-
 }
+
 
