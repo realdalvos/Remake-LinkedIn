@@ -7,6 +7,8 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
@@ -19,7 +21,6 @@ import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 /**
  * Company - Create new Job Post / Job Ad
  */
@@ -29,29 +30,25 @@ public class NewJobAdView extends Div {
     @Autowired
     private JobControl jobControl;
 
-    public NewJobAdView() {
+    // Job title text area
+    private TextArea title = createTitleArea();
+    // Job Description text area
+    private TextArea description = createDescriptionArea();
+    // Salary text field
+    private TextField salary = new TextField("Approximate salary");
+    // Location text field
+    private TextField location = new TextField("Location");
+    // post new job button
+    private Button postButton = new Button("Post new Job Ad");
+
+    private UserDTO currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+    private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
+
+    public NewJobAdView(JobControl jobControl) {
+        this.jobControl = jobControl;
         setSizeFull();
         H3 newAdText = new H3();
         newAdText.setText("Create a new Job Ad");
-
-        // Job title text area
-        TextArea title = new TextArea("Job Title");
-        int charLimitTitle = 100;
-        title.setMaxLength(charLimitTitle);
-        title.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitTitle));
-
-        // Job Description text area
-        TextArea description = new TextArea("Job Description");
-        int charLimitDescr = 1024;
-        description.setMaxLength(charLimitDescr);
-        description.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
-
-        // Salary text field
-        TextField salary = new TextField("Approximate salary");
-        // Location text field
-        TextField location = new TextField("Location");
-        // post new job button
-        Button postButton = new Button("Post new Job Ad");
 
         // new job ad form
         FormLayout formLayout = new FormLayout();
@@ -60,26 +57,19 @@ public class NewJobAdView extends Div {
                 new FormLayout.ResponsiveStep("0", 1)
         );
 
+        binder.setBean(new JobDTOImpl(getCompanyId()));
+        // map input field values to DTO variables based on chosen names
+        binder.bindInstanceFields(this);
+
         postButton.addClickListener(event -> {
-            // get companyid from current user
-            UserDTO currentUser = this.getCurrentUser();
-            CompanyDTO comp = jobControl.getCompanyByUserid(currentUser.getUserid());
-            int companyid = comp.getCompanyid();
 
-            // create new jobDTOImpl
-            JobDTOImpl job = new JobDTOImpl(
-                    companyid, title.getValue(), description.getValue(), salary.getValue(), location.getValue());
-
-            // check if all input fields were filled out
-            if(Utils.checkIfInputEmpty(
-                    new String[]{job.getTitle(), job.getDescription(), job.getSalary(), job.getLocation()})) {
-                // error dialog
+            if (binder.isValid()) {
+                // call job control to save new job post entity
+                jobControl.createNewJobPost(binder.getBean());
+            } else {
                 Utils.makeDialog("Please fill out all text fields.");
                 throw new Error("Not all input field were filled out.");
             }
-
-            // call job control to save new job post entity
-            jobControl.createNewJobPost(job);
             navigateHandler.navigateToMyAdsView();
         });
 
@@ -89,7 +79,26 @@ public class NewJobAdView extends Div {
         this.setWidth("30%");
     }
 
-    private UserDTO getCurrentUser() {
-        return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+    private TextArea createTitleArea() {
+        TextArea title = new TextArea("Job Title");
+        int charLimitTitle = 100;
+        title.setMaxLength(charLimitTitle);
+        title.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitTitle));
+        return title;
     }
+
+    private TextArea createDescriptionArea() {
+        TextArea description = new TextArea("Job Description");
+        int charLimitDescr = 1024;
+        description.setMaxLength(charLimitDescr);
+        description.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
+        return description;
+    }
+
+    private int getCompanyId() {
+        UserDTO currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+        CompanyDTO comp = jobControl.getCompanyByUserid(currentUser.getUserid());
+        return comp.getCompanyid();
+    }
+
 }

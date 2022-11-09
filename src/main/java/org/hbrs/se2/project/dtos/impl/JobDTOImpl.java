@@ -20,6 +20,8 @@ public class JobDTOImpl implements JobDTO {
 
     }
 
+    public JobDTOImpl (int companyid) { this.companyid = companyid; }
+
     public JobDTOImpl(int companyid, String title, String description, String salary, String location) {
         this.companyid = companyid;
         this.title = title;
