@@ -39,7 +39,7 @@ public class ProfileView extends Div {
 
         TextField major = new TextField("Major");
         // can be removed for now
-        //major.setPlaceholder(profileControl.getMajorOfStudent(this.getCurrentUser().getUserid()));
+        major.setPlaceholder(profileControl.getMajorOfStudent(this.getCurrentUser().getUserid()));
 
         TextField university = new TextField("University");
         university.setValue(profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid()));

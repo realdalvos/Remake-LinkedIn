@@ -8,6 +8,9 @@ import org.hbrs.se2.project.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Optional;
+
 @Component
 public class ProfileControl {
     // we might remove this if it will not be used
@@ -117,17 +120,19 @@ public class ProfileControl {
         return studentDTO.getUniversity();
     }
 
-    // is commented out because studentDTO does NOT have attribute major
-    // might also remove this
-    // usage is not clear
-/*
     public String getMajorOfStudent(int userid) {
         StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
-        if ( studentDTO.getMajor() == null ){
-            return "";
+        int studentId =  studentDTO.getStudentid();
+        Optional<StudentHasMajor> optionalStudentHasMajor= studentHasMajorRepository.findById(studentId);
+        if (optionalStudentHasMajor.isPresent()) {
+            int idOfMajor = optionalStudentHasMajor.get().getMajorid();
+            Optional<Major> optionalMajor = majorRepository.findById(idOfMajor);
+            if (optionalMajor.isPresent()) {
+                return optionalMajor.get().getMajor();
+            }
         }
-        return studentDTO.getMajor();
+        return "";
     }
- */
+
 }
 
