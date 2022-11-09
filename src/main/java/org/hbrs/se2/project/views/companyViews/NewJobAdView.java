@@ -5,8 +5,10 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
@@ -24,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Company - Create new Job Post / Job Ad
  */
 @Route(value = Globals.Pages.NEW_ADD_VIEW, layout = AppView.class)
-@PageTitle("New Job Ad")
+@PageTitle(" New Job Ad")
 public class NewJobAdView extends Div {
     @Autowired
     private JobControl jobControl;
@@ -35,10 +37,14 @@ public class NewJobAdView extends Div {
         newAdText.setText("Create a new Job Ad");
 
         // Job title text area
+        // Here I will add a character counter
         TextArea title = new TextArea("Job Title");
-        int charLimitTitle = 100;
+        title.setWidthFull();
+        int charLimitTitle = 150;
         title.setMaxLength(charLimitTitle);
+        title.setValueChangeMode(ValueChangeMode.EAGER);
         title.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitTitle));
+        // title.setValue(loremIpsum);
 
         // Job Description text area
         TextArea description = new TextArea("Job Description");
@@ -54,11 +60,11 @@ public class NewJobAdView extends Div {
         Button postButton = new Button("Post new Job Ad");
 
         // new job ad form
-        FormLayout formLayout = new FormLayout();
+        VerticalLayout formLayout = new VerticalLayout();
         formLayout.add(title, description, salary, location, postButton);
-        formLayout.setResponsiveSteps(
-                new FormLayout.ResponsiveStep("0", 1)
-        );
+        //formLayout.setResponsiveSteps(
+        //        new FormLayout.ResponsiveStep("0", 1)
+        //);
 
         postButton.addClickListener(event -> {
             // get companyid from current user
@@ -86,7 +92,7 @@ public class NewJobAdView extends Div {
         // add all components to View
         add(newAdText);
         add(formLayout);
-        this.setWidth("30%");
+        this.setWidth("50%");
     }
 
     private UserDTO getCurrentUser() {
