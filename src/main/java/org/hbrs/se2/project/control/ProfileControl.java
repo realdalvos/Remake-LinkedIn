@@ -135,6 +135,32 @@ public class ProfileControl {
         // return list of majors
         return majors;
     }
+
+    public List<String> getTopicOfStudent(int userid){
+        TopicDTO topicDTO;
+        List<String> topics = new ArrayList<>();
+        StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
+        List<StudentHasTopicDTO> studentHasTopics = studentHasTopicRepository.findByStudentid(studentDTO.getStudentid());
+        for(StudentHasTopicDTO studentHasTopic : studentHasTopics){
+            topicDTO = topicRepository.findByTopicid(studentHasTopic.getTopicid());
+            topics.add(topicDTO.getTopic());
+        }
+        return topics;
+    }
+
+    public List<String> getSkillOfStudent(int userid){
+        SkillDTO skillDTO;
+        List<String> skills = new ArrayList<>();
+        StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
+        List<StudentHasSkillDTO> studentHasSkills = studentHasSkillRepository.findByStudentid(studentDTO.getStudentid());
+        for(StudentHasSkillDTO studentHasSkill : studentHasSkills){
+            skillDTO = skillRepository.findBySkillid(studentHasSkill.getSkillid());
+            skills.add(skillDTO.getSkill());
+        }
+        return skills;
+    }
+
+
 }
 
 

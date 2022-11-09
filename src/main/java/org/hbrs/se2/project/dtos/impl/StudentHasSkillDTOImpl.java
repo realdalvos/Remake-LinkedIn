@@ -7,7 +7,7 @@ import javax.persistence.Id;
 
 public class StudentHasSkillDTOImpl implements StudentHasSkillDTO {
     private int studentid;
-    private int topicid;
+    private int skillid;
 
     public int getStudentid() {
         return studentid;
@@ -17,11 +17,11 @@ public class StudentHasSkillDTOImpl implements StudentHasSkillDTO {
         this.studentid = studentid;
     }
 
-    public int getTopicid() {
-        return topicid;
+    public int getSkillid() {
+        return skillid;
     }
 
-    public void setTopicid(int topicid) {
-        this.topicid = topicid;
+    public void setSkillid(int skillid) {
+        this.skillid= skillid;
     }
 }

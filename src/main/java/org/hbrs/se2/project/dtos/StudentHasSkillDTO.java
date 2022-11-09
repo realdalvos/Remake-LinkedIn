@@ -4,6 +4,7 @@ public interface StudentHasSkillDTO {
 
     public int getStudentid();
     public void setStudentid(int studentid);
-    public int getTopicid();
-    public void setTopicid(int topicid);
+    public int getSkillid();
+    public void setSkillid(int skillid);
+
 }

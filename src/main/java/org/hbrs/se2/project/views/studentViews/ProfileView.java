@@ -52,14 +52,20 @@ public class ProfileView extends Div {
         TextField university = new TextField("University");
         university.setValue(profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid()));
 
-        TextField topics = new TextField("Topics");
-        topics.setPlaceholder("Topics");
+        TextField topic = new TextField("Topics");
+        List<String> topics = profileControl.getTopicOfStudent(this.getCurrentUser().getUserid());
+        for (Object o : topics) {
+            System.out.println(o);
+        }
 
-        TextField skills = new TextField("Skills");
-        skills.setPlaceholder("Skills");
+        TextField skill = new TextField("Skills");
+        List<String> skills = profileControl.getSkillOfStudent(this.getCurrentUser().getUserid());
+        for (Object o : skills){
+            System.out.println(o);
+        }
 
         FormLayout formLayout =  new FormLayout();
-        formLayout.add(major,university,topics,skills);
+        formLayout.add(major,university,topic,skill);
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",1));
         add(formLayout);
         add(save);
@@ -73,13 +79,13 @@ public class ProfileView extends Div {
             }
             // topic input is just being printed out in the console
             // there is no call of the function profileControl.updateTopics to update topics in the database
-            if (topics.getValue() != null && !topics.getValue().equals("")) {
-                profileControl.updateTopics(topics.getValue(), this.getCurrentUser().getUserid());
+            if (topic.getValue() != null && !topic.getValue().equals("")) {
+                profileControl.updateTopics(topic.getValue(), this.getCurrentUser().getUserid());
             }
             // skills input is just being printed out in the console
             // there is no call of the function profileControl.updateSkills to update skills in the database
-            if (skills.getValue() != null && !skills.getValue().equals("")) {
-                profileControl.updateSkills(skills.getValue(), this.getCurrentUser().getUserid());            }
+            if (skill.getValue() != null && !skill.getValue().equals("")) {
+                profileControl.updateSkills(skill.getValue(), this.getCurrentUser().getUserid());            }
         });
         // initialization of the profileControl should be done
         // at the beginning of the ProfileView constructor

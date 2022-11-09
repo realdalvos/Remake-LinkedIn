@@ -9,4 +9,6 @@ import org.springframework.stereotype.Component;
 public interface TopicRepository extends JpaRepository<Topic, Integer> {
 
     TopicDTO findByTopic(String topic);
+
+    TopicDTO findByTopicid(int topicid);
 }
