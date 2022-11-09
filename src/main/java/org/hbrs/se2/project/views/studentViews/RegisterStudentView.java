@@ -29,13 +29,14 @@ public class RegisterStudentView extends RegisterView {
     public RegisterStudentView() {
         setSizeFull();
         registerText.setText("Register here");
-        userPassword.setRequired(true);
 
         Button confirmButton = new Button("Register now as a user");
 
         userBinder.setBean(new UserDTOImpl(Globals.Roles.student));
-        concreteUserBinder.setBean(new StudentDTOImpl());
+        //The Pattern matches from left to right: At least one letter, at least one digit, at lest one special character and at least 8 characters
+        userBinder.withValidator(validation -> userPassword.getValue().matches("^(?=.+[a-zA-Z])(?=.+[\\d])(?=.+[\\W]).{8,}$"),"Your password may not be secure enough. Please make sure to follow the pattern");
 
+        concreteUserBinder.setBean(new StudentDTOImpl());
         // add all elements/components to View
         add(registerText);
         add(createFormLayout(new Component[]{firstname,lastname,matrikelnumber,username,email,userPassword,confirmPassword}));
