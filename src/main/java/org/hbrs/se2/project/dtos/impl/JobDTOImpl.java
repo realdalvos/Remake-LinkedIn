@@ -2,12 +2,18 @@ package org.hbrs.se2.project.dtos.impl;
 
 import org.hbrs.se2.project.dtos.JobDTO;
 
+import javax.validation.constraints.NotEmpty;
+
 public class JobDTOImpl implements JobDTO {
     private int jobid;
     private int companyid;
+    @NotEmpty
     private String title;
+    @NotEmpty
     private String description;
+    @NotEmpty
     private String salary;
+    @NotEmpty
     private String location;
 
     public JobDTOImpl() {
