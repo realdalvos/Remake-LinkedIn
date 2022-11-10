@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Company - Create new Job Post / Job Ad
  */
 @Route(value = Globals.Pages.NEW_ADD_VIEW, layout = AppView.class)
-@PageTitle("Job erstellen")
+@PageTitle("Joberstellung ")
 public class NewJobAdView extends Div {
     @Autowired
     private JobControl jobControl;
@@ -39,7 +39,7 @@ public class NewJobAdView extends Div {
     // Location text field
     private TextField location = new TextField("Arbeitsort");
     // post new job button
-    private Button postButton = new Button("Job erstellen");
+    private Button postButton = new Button("erstellen");
 
     private UserDTO currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
     private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
@@ -48,7 +48,7 @@ public class NewJobAdView extends Div {
         this.jobControl = jobControl;
         setSizeFull();
         H3 newAdText = new H3();
-        newAdText.setText("Job Erstellung");
+        newAdText.setText("Wie soll der neue Job aussehen?");
 
         // new job ad form
         FormLayout formLayout = new FormLayout();
