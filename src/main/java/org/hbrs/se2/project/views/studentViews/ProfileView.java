@@ -4,16 +4,19 @@ package org.hbrs.se2.project.views.studentViews;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.component.textfield.TextField;
+import jdk.internal.icu.text.UnicodeSet;
 import org.hbrs.se2.project.control.ProfileControl;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.awt.*;
 import java.util.List;
 /*
 import com.vaadin.ui.UI;
@@ -36,6 +39,8 @@ public class ProfileView extends Div {
         setSizeFull();
 
         Button save = new Button("save");
+        Button delete = new Button("delete");
+        Button undo = new Button("undo");
 
         TextField major = new TextField("Major");
         // can be removed for now
@@ -45,9 +50,16 @@ public class ProfileView extends Div {
 
         // print out all majors of a student in console
         List<String> majors = profileControl.getMajorOfStudent(this.getCurrentUser().getUserid());
+
+        Grid<String> grid = new Grid<>();
+        grid.getColumns().forEach(stringColumn -> stringColumn.setAutoWidth(true));
+        grid.recalculateColumnWidths();
+        grid.setItems(majors);
         for (Object o : majors) {
+
             System.out.println(o);
         }
+        
 
         TextField university = new TextField("University");
         university.setValue(profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid()));
@@ -65,10 +77,22 @@ public class ProfileView extends Div {
         }
 
         FormLayout formLayout =  new FormLayout();
-        formLayout.add(major,university,topic,skill);
+        formLayout.add(major,university,delete,topic,skill);
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",1));
         add(formLayout);
         add(save);
+
+        delete.addClickListener((buttonClickEvent -> {
+            String universitySaved = profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid());
+            profileControl.updateUniversity("", this.getCurrentUser().getUserid());
+            university.setValue(profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid()));
+            add(undo);
+            undo.addClickListener(buttonClickEvent1 -> {
+                profileControl.updateUniversity(universitySaved, this.getCurrentUser().getUserid());
+                university.setValue(universitySaved);
+            });
+
+        }));
 
         save.addClickListener(buttonClickEvent -> {
             if (major.getValue() != null && !major.getValue().equals("")) {
