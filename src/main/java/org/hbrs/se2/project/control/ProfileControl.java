@@ -113,6 +113,7 @@ public class ProfileControl {
     public String getUniversityOfStudent(int userid) {
         StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
         if ( studentDTO.getUniversity() == null ){
+            return "";
         }
         return studentDTO.getUniversity();
     }
@@ -130,7 +131,12 @@ public class ProfileControl {
         // get matching majors from major table with major id from studentHasMajor list
         for (StudentHasMajorDTO studentHasMajor : studentHasMajors) {
             majorDTO = majorRepository.findByMajorid(studentHasMajor.getMajorid());
-            majors.add(majorDTO.getMajor());
+            // check if major is null
+            if(majorDTO.getMajor() == null) {
+                majors.add("");
+            } else {
+                majors.add(majorDTO.getMajor());
+            }
         }
         // return list of majors
         return majors;
@@ -143,7 +149,12 @@ public class ProfileControl {
         List<StudentHasTopicDTO> studentHasTopics = studentHasTopicRepository.findByStudentid(studentDTO.getStudentid());
         for(StudentHasTopicDTO studentHasTopic : studentHasTopics){
             topicDTO = topicRepository.findByTopicid(studentHasTopic.getTopicid());
-            topics.add(topicDTO.getTopic());
+            // check if topic is null
+            if(topicDTO.getTopic() == null) {
+                topics.add("");
+            } else {
+                topics.add(topicDTO.getTopic());
+            }
         }
         return topics;
     }
@@ -155,12 +166,16 @@ public class ProfileControl {
         List<StudentHasSkillDTO> studentHasSkills = studentHasSkillRepository.findByStudentid(studentDTO.getStudentid());
         for(StudentHasSkillDTO studentHasSkill : studentHasSkills){
             skillDTO = skillRepository.findBySkillid(studentHasSkill.getSkillid());
-            skills.add(skillDTO.getSkill());
+            // check if skill is null
+            if(skillDTO.getSkill() == null) {
+                skills.add("");
+            } else {
+                skills.add(skillDTO.getSkill());
+            }
         }
         return skills;
     }
-
-
 }
+
 
 

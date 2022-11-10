@@ -1,5 +1,4 @@
 package org.hbrs.se2.project.views.studentViews;
-//package com.vaadin.demo.component.textfield;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -9,22 +8,13 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.component.textfield.TextField;
-import jdk.internal.icu.text.UnicodeSet;
 import org.hbrs.se2.project.control.ProfileControl;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.awt.*;
 import java.util.List;
-/*
-import com.vaadin.ui.UI;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.TextField;
-*/
 
 @Route(value = Globals.Pages.PROFILE_VIEW, layout = AppView.class)
 @PageTitle("Profile")
@@ -32,7 +22,6 @@ public class ProfileView extends Div {
 
     private final ProfileControl profileControl;
 
-    @Autowired
     public ProfileView(ProfileControl profileControl, ProfileControl profileControl1){
         this.profileControl = profileControl1;
 
@@ -113,7 +102,6 @@ public class ProfileView extends Div {
         });
         // initialization of the profileControl should be done
         // at the beginning of the ProfileView constructor
-
     }
     public UserDTO getCurrentUser() {
         UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
