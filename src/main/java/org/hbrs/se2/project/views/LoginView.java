@@ -42,13 +42,13 @@ public class LoginView extends VerticalLayout {
         LoginForm component = new LoginForm();
 
         // buttons
-        Button buttonStudent = new Button("Register as a Student");
+        Button buttonStudent = new Button("Registriere als Student");
         buttonStudent.addThemeVariants(ButtonVariant.LUMO_LARGE);           // changing size for better usability
         buttonStudent.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
         Icon studentIcon = new Icon(VaadinIcon.NOTEBOOK);
         buttonStudent.getElement().appendChild(studentIcon.getElement());
 
-        Button buttonCompany = new Button("Register as a Company");
+        Button buttonCompany = new Button("Registriere als Unternehmen");
         buttonCompany.addThemeVariants(ButtonVariant.LUMO_LARGE);           // changing size for better usability
         buttonCompany.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
 

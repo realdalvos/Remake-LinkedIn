@@ -32,26 +32,26 @@ public class NewJobAdView extends Div {
     public NewJobAdView() {
         setSizeFull();
         H3 newAdText = new H3();
-        newAdText.setText("Create a new Job Ad");
+        newAdText.setText("Joberstellung");
 
         // Job title text area
-        TextArea title = new TextArea("Job Title");
+        TextArea title = new TextArea("Titel");
         int charLimitTitle = 100;
         title.setMaxLength(charLimitTitle);
         title.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitTitle));
 
         // Job Description text area
-        TextArea description = new TextArea("Job Description");
+        TextArea description = new TextArea("Beschreibung");
         int charLimitDescr = 1024;
         description.setMaxLength(charLimitDescr);
         description.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
 
         // Salary text field
-        TextField salary = new TextField("Approximate salary");
+        TextField salary = new TextField("Erwartete Bezahlung");
         // Location text field
-        TextField location = new TextField("Location");
+        TextField location = new TextField("Arbeitsort");
         // post new job button
-        Button postButton = new Button("Post new Job Ad");
+        Button postButton = new Button("Neuen Job erstellen");
 
         // new job ad form
         FormLayout formLayout = new FormLayout();
@@ -74,8 +74,8 @@ public class NewJobAdView extends Div {
             if(Utils.checkIfInputEmpty(
                     new String[]{job.getTitle(), job.getDescription(), job.getSalary(), job.getLocation()})) {
                 // error dialog
-                Utils.makeDialog("Please fill out all text fields.");
-                throw new Error("Not all input field were filled out.");
+                Utils.makeDialog("Fülle bitte alle Felder aus");
+                throw new Error("Nicht alle Felder wurden ausgefüllt");
             }
 
             // call job control to save new job post entity
