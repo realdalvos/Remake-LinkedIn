@@ -7,6 +7,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.login.LoginForm;
+import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
@@ -36,10 +37,34 @@ public class LoginView extends VerticalLayout {
     @Autowired
     private LoginControl loginControl;
 
+    private LoginI18n createLoginI18n(){
+        LoginI18n i18n = LoginI18n.createDefault();
+
+	    /*  not sure if needed
+	    i18n.setHeader(new LoginI18n.Header());
+	    i18n.setForm(new LoginI18n.Form());
+	    i18n.setErrorMessage(new LoginI18n.ErrorMessage());
+        i18n.getHeader().setTitle("HEADER");
+        i18n.getHeader().setDescription("HEADER DESCRIPTION");
+	     */
+        i18n.getForm().setUsername("Benutzername");
+        i18n.getForm().setTitle("Anmeldung");
+        i18n.getForm().setSubmit("Anmelden");
+        i18n.getForm().setPassword("Passwort");
+        i18n.getForm().setForgotPassword("Haben sie ihr Passwort vergessen?");
+        i18n.getErrorMessage().setTitle("Anmeldung fehlgeschlagen");
+        i18n.getErrorMessage()
+                .setMessage("Flascher Benutzername oder Passwort");
+        i18n.setAdditionalInformation("");
+        return i18n;
+    }
+
     public LoginView() {
         setSizeFull();
         Avatar avatarBasic = new Avatar();
         LoginForm component = new LoginForm();
+        component.setI18n(createLoginI18n());
+
 
         // buttons
         Button buttonStudent = new Button("Registriere als Student");
