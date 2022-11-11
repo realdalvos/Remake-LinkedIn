@@ -101,16 +101,33 @@ public class HelperForTests {
     /**
      * Deleting the test company from the database.*/
     public void deleteTestCompany() {
-        UserDTO user = userRepository.findUserByUsername(testUserForCompany.getUsername());
-        if(user != null) {
-            userRepository.deleteById(user.getUserid());
-        }
+        deleteUsersOccupyingUniques(getUserDTOForCompany());
     }
 
     /**
      * Deleting the test student from the database.*/
     public void deleteTestStudent() {
-        UserDTO user = userRepository.findUserByUsername(testUserForStudent.getUsername());
+        deleteUsersOccupyingUniques(getUserDTOForStudent());
+
+        //Deleting user that occupies MatrikelNr
+        StudentDTO student = studentRepository.findStudentByMatrikelnumber(getStudentDTO().getMatrikelnumber());
+        if(student != null) {
+            UserDTO user = userRepository.findUserByUserid(student.getUserid());
+            userRepository.deleteById(user.getUserid());
+        }
+    }
+
+    /**
+     * Since Username and Email might already be taken we have to delete those users to make space for our test user. */
+    private void deleteUsersOccupyingUniques(UserDTO u){
+        //Deleting user that occupies Username
+        UserDTO user = userRepository.findUserByUsername(u.getUsername());
+        if(user != null) {
+            userRepository.deleteById(user.getUserid());
+        }
+
+        //Deleting user that occupies Email
+        user = userRepository.findUserByEmail(u.getEmail());
         if(user != null) {
             userRepository.deleteById(user.getUserid());
         }
