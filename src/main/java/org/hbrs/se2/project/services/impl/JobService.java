@@ -9,7 +9,6 @@ import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;
 import org.hbrs.se2.project.views.studentViews.JobsView;
 import org.hbrs.se2.project.services.JobServiceInterface;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,11 +17,14 @@ import java.util.List;
 @Service
 public class JobService implements JobServiceInterface {
 
-    @Autowired
-    private CompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
 
-    @Autowired
-    private JobRepository jobRepository;
+    private final JobRepository jobRepository;
+
+    public JobService(CompanyRepository companyRepository, JobRepository jobRepository) {
+        this.companyRepository = companyRepository;
+        this.jobRepository = jobRepository;
+    }
 
     @Override
     public CompanyDTO getCompanyByUserid(int id) {
@@ -44,7 +46,7 @@ public class JobService implements JobServiceInterface {
         JobDTO jobDTO;
         for(Job job : jobs) {
             jobDTO = new JobDTOImpl(
-                    job.getJobid(), job.getCompanyid(), job.getTitle(), job.getDescription(), job.getSalary(), job.getLocation()
+                    job.getJobid(), job.getCompanyid(), job.getTitle(), job.getDescription(), job.getSalary(), job.getLocation(), job.getContactdetails()
             );
             jobDTOs.add(jobDTO);
         }
@@ -57,7 +59,7 @@ public class JobService implements JobServiceInterface {
         CompanyDTO companyDTO;
         for(JobDTO job : jobs) {
             companyDTO = companyRepository.findCompanyByCompanyid(job.getCompanyid());
-            jobsData.add(new JobsView.JobDetail(job.getTitle(), job.getSalary(), job.getDescription(), job.getLocation(), companyDTO.getName(), companyDTO.getContactdetails()));
+            jobsData.add(new JobsView.JobDetail(job.getTitle(), job.getSalary(), job.getDescription(), job.getLocation(), companyDTO.getName(), job.getContactdetails()));
         }
         return jobsData;
     }

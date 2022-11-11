@@ -15,7 +15,7 @@ class JobFactoryTest {
     @BeforeEach
     void setUp() {
         JobDTOImpl testJobImpl = new JobDTOImpl(
-                99999, "Test title", "Testbeschreibung. assembly programmer.", "20 Euro","Testlocation");
+                99999, "Test title", "Testbeschreibung. assembly programmer.", "20 Euro","Testlocation","Test contactdetails");
         testJobImpl.setJobid(1);
 
         testJob = testJobImpl;

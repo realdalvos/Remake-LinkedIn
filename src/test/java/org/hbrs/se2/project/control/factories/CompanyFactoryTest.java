@@ -29,7 +29,7 @@ class CompanyFactoryTest {
 
         testUser = testUserImpl;
 
-        CompanyDTOImpl testCompanyImpl = new CompanyDTOImpl(testUser.getUserid(), "JUnitTestCompany", "Test-Industry", false,"Testcontactdetails");
+        CompanyDTOImpl testCompanyImpl = new CompanyDTOImpl(testUser.getUserid(), "JUnitTestCompany", "Test-Industry", false);
         testCompanyImpl.setCompanyid(1);
 
         testCompany = testCompanyImpl;

@@ -19,7 +19,6 @@ import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Company - Create new Job Post / Job Ad
@@ -27,13 +26,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Route(value = Globals.Pages.NEW_ADD_VIEW, layout = AppView.class)
 @PageTitle("New Job Ad")
 public class NewJobAdView extends Div {
-    @Autowired
-    private JobControl jobControl;
+    private final JobControl jobControl;
 
     // Job title text area
     private TextArea title = createTitleArea();
     // Job Description text area
     private TextArea description = createDescriptionArea();
+    // Contact details
+    private TextField contactdetails = new TextField("E-Mail");
     // Salary text field
     private TextField salary = new TextField("Approximate salary");
     // Location text field
@@ -41,7 +41,6 @@ public class NewJobAdView extends Div {
     // post new job button
     private Button postButton = new Button("Post new Job Ad");
 
-    private UserDTO currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
     private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
 
     public NewJobAdView(JobControl jobControl) {
@@ -52,7 +51,7 @@ public class NewJobAdView extends Div {
 
         // new job ad form
         FormLayout formLayout = new FormLayout();
-        formLayout.add(title, description, salary, location, postButton);
+        formLayout.add(title, description, contactdetails, salary, location, postButton);
         formLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("0", 1)
         );
