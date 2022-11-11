@@ -10,6 +10,7 @@ import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;
 import org.hbrs.se2.project.repository.UserRepository;
+import org.hbrs.se2.project.util.HelperForTests;
 import org.hbrs.se2.project.views.studentViews.JobsView;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,23 +39,14 @@ public class JobControlTest {
     //Test job
     JobDTO testJob;
     CompanyDTO testCompanyDTO;
-
+    @Autowired
+    HelperForTests h;
 
     @BeforeEach
     void setUp() {
-        deleteTestUser();
+        testCompanyDTO = h.registerTestCompany();
 
-        //Creating and saving test user
-        UserDTOImpl testUserDTOImpl = new UserDTOImpl("JUnitTest","Test","Test@mail.com","Test");
-        userRepository.save(createUser(testUserDTOImpl));
-        UserDTO testUserDTO = userRepository.findUserByUsername("JUnitTest");
-
-        //creating and saving test company
-        CompanyDTOImpl testCompanyDTOImpl = new CompanyDTOImpl(testUserDTO.getUserid(),"TestCompany","Test",false, "Testdetails");
-        companyRepository.save(createCompany(testCompanyDTOImpl,testUserDTO));
-        testCompanyDTO = companyRepository.findCompanyByUserid(testCompanyDTOImpl.getUserid());
-
-        // create and save another new job
+        // create and save a new job
         testJob = new JobDTOImpl(
                 testCompanyDTO.getCompanyid(), "Test title", "Testbeschreibung. assembly programmer.", "20 Euro", "Test location");
         jobControl.createNewJobPost(testJob);
@@ -65,16 +57,7 @@ public class JobControlTest {
     @AfterEach
     @DisplayName("Deleting user \"JUnitTest\". By deleting a user all jobs issued by them get deleted as well.")
     void tearDown(){
-        deleteTestUser();
-    }
-
-    /**
-     * Delete user "JUnitTest".*/
-    private void deleteTestUser(){
-        UserDTO user = userRepository.findUserByUsername("JUnitTest");
-        if(user != null) {
-            userRepository.deleteById(user.getUserid());
-        }
+        h.deleteTestUsers();
     }
 
     @Test
@@ -111,7 +94,7 @@ public class JobControlTest {
 
 
         //Add another job
-        // create and save new job
+        // create and save another new job
         JobDTOImpl secondJob = new JobDTOImpl(
                 testCompanyDTO.getCompanyid(), "Not matching", "Some description. assembly programmer.", "20 Euro", "Test location");
         jobControl.createNewJobPost(secondJob);
@@ -170,7 +153,7 @@ public class JobControlTest {
         assertEquals("Testbeschreibung. assembly programmer.", jobDetail.getDescription());
         assertEquals("Test title", jobDetail.getTitle());
         assertEquals("20 Euro", jobDetail.getSalary());
-        assertEquals("Testdetails", jobDetail.getContactdetails());
+        assertEquals("testcontact@details.com", jobDetail.getContactdetails());
         assertEquals("TestCompany", jobDetail.getName());
     }
 }

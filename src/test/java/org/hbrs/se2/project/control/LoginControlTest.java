@@ -6,6 +6,7 @@ import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.repository.UserRepository;
 import org.hbrs.se2.project.util.Globals;
+import org.hbrs.se2.project.util.HelperForTests;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,79 +16,53 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class LoginControlTest {
     @Autowired
-    LoginControl loginControl = new LoginControl();
+    LoginControl loginControl;
     @Autowired
-    RegistrationControl registrationControl = new RegistrationControl();
-    @Autowired
-    UserRepository userRepository;
+    HelperForTests h;
+
+    UserDTO testUser;
 
     @BeforeEach
-    @DisplayName("Creating a user called \"JUnitTest\" exists.")
+    @DisplayName("Registering a test company in the database called \"JUnitTest\" exists.")
     void init(){
-        deleteTestUser();
-
-        //Create a new User called "JUnitTest"
-        UserDTOImpl testUser = new UserDTOImpl();
-        testUser.setUsername("JUnitTest");
-        testUser.setPassword("SicheresPasswort");
-        testUser.setEmail("testUser@JUnitTest.de");
-        testUser.setRole(Globals.Roles.company);
-
-        //Decided to create a company, because when making a student the MatrikelNr might already be taken
-        CompanyDTOImpl company = new CompanyDTOImpl();
-        company.setName("JUnitTest");
-
-        //Save User to database
-        try {
-            registrationControl.registerCompany(testUser, company);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        h.registerTestCompany();
+        testUser = h.getUserDTOForCompany();
     }
 
     @AfterEach
     @DisplayName("Deleting user \"JUnitTest\".")
     void after(){
-        deleteTestUser();
-    }
-
-    /**
-     * Delete user "JUnitTest".*/
-    private void deleteTestUser(){
-        UserDTO user = userRepository.findUserByUsername("JUnitTest");
-        if(user != null) {
-            userRepository.deleteById(user.getUserid());
-        }
+        h.deleteTestUsers();
     }
 
     @Test
-    @DisplayName("LoginControl should return false since there is no user \"JUnitTest\".")
+    @DisplayName("LoginControl should return false since there is no user with given username.")
     void testAuthenticateWhenNoSuchUser() throws DatabaseUserException {
-        deleteTestUser();
+        h.deleteTestUsers();
 
-        assertFalse(loginControl.authenticate("JUnitTest","SicheresPasswort"));
+        assertFalse(loginControl.authenticate(testUser.getUsername(), testUser.getPassword()));
     }
 
     @Test
-    @DisplayName("LoginControl should return false since the password is not correct for user \"JUnitTest\".")
+    @DisplayName("LoginControl should return false since the password is correct.")
     void testAuthenticateShouldFail() throws DatabaseUserException {
-        assertFalse(loginControl.authenticate("JUnitTest","FalschesPasswort"));
+        assertFalse(loginControl.authenticate(testUser.getUsername(),testUser.getPassword() + "Mehr Zeichen"));
     }
 
     @Test
     @DisplayName("LoginControl should return true since the password is correct for user \"JUnitTest\".")
     void testAuthenticateShouldWork() throws DatabaseUserException {
-        assertTrue(loginControl.authenticate("JUnitTest","SicheresPasswort"));
+        assertTrue(loginControl.authenticate(testUser.getUsername(), testUser.getPassword()));
     }
 
     @Test
     @DisplayName("GetCurrentUser Method should return the last registered user, in this case user \"JUnitTest\".")
     void getCurrentUser() throws DatabaseUserException {
-        loginControl.authenticate("JUnitTest","SicheresPasswort");
+        loginControl.authenticate(testUser.getUsername(),testUser.getPassword());
 
         //should return UserDTO of user JUnitTest
         UserDTO currentUser = loginControl.getCurrentUser();
         assertNotNull(currentUser);
-        assertEquals("JUnitTest", currentUser.getUsername());
+        assertEquals(testUser.getUsername(), currentUser.getUsername());
     }
 }
