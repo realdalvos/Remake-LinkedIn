@@ -49,7 +49,7 @@ public class MyAdsView extends Div {
 
             // Salary Field
             final TextField salaryField = new TextField("Gehalt");
-            salaryField.setValue(jobDTO.getSalary());
+            salaryField.setValue(jobDTO.getSalary().toString());
             salaryField.setReadOnly(true);
 
             // Location Field
