@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Company - My Ads List View
  */
 @Route(value = Globals.Pages.MYADS_VIEW, layout = AppView.class)
-@PageTitle("My Ads")
+@PageTitle("Meine Stellen")
 public class MyAdsView extends Div {
     @Autowired
     public MyAdsView(JobControl jobcontrol, LoginControl logincontrol){
@@ -26,9 +26,9 @@ public class MyAdsView extends Div {
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
 
-        grid.addColumn(JobDTO::getTitle).setHeader("Title").setSortable(true);
-        grid.addColumn(JobDTO::getDescription).setHeader("Description");
-        grid.addColumn(JobDTO::getSalary).setHeader("Salary").setSortable(true);
+        grid.addColumn(JobDTO::getTitle).setHeader("Titel").setSortable(true);
+        grid.addColumn(JobDTO::getDescription).setHeader("Beschreibung");
+        grid.addColumn(JobDTO::getSalary).setHeader("Bezahlung").setSortable(true);
 
 
         add(grid);
