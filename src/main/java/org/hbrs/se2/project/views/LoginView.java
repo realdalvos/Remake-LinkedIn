@@ -54,7 +54,7 @@ public class LoginView extends VerticalLayout {
         i18n.getForm().setForgotPassword("Haben sie ihr Passwort vergessen?");
         i18n.getErrorMessage().setTitle("Anmeldung fehlgeschlagen");
         i18n.getErrorMessage()
-                .setMessage("Flascher Benutzername oder Passwort");
+                .setMessage("Falscher Benutzername oder Passwort");
         i18n.setAdditionalInformation("");
         return i18n;
     }
@@ -67,13 +67,13 @@ public class LoginView extends VerticalLayout {
 
 
         // buttons
-        Button buttonStudent = new Button("Registriere als Student");
+        Button buttonStudent = new Button("Registrieren als Student");
         buttonStudent.addThemeVariants(ButtonVariant.LUMO_LARGE);           // changing size for better usability
         buttonStudent.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
         Icon studentIcon = new Icon(VaadinIcon.NOTEBOOK);
         buttonStudent.getElement().appendChild(studentIcon.getElement());
 
-        Button buttonCompany = new Button("Registriere als Unternehmen");
+        Button buttonCompany = new Button("Registrieren als Unternehmen");
         buttonCompany.addThemeVariants(ButtonVariant.LUMO_LARGE);           // changing size for better usability
         buttonCompany.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
 

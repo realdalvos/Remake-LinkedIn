@@ -35,11 +35,11 @@ public class NewJobAdView extends Div {
     // Job Description text area
     private TextArea description = createDescriptionArea();
     // Salary text field
-    private TextField salary = new TextField("Erwartete Bezahlung");
+    private TextField salary = new TextField("Jahresgehalt");
     // Location text field
     private TextField location = new TextField("Arbeitsort");
     // post new job button
-    private Button postButton = new Button("erstellen");
+    private Button postButton = new Button("Anzeige erstellen");
 
     private UserDTO currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
     private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);

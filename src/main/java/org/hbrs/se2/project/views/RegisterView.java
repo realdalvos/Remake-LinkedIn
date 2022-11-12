@@ -23,7 +23,7 @@ public abstract class RegisterView extends VerticalLayout {
     protected H4 registerText = new H4();
     protected PasswordField userPassword = createPasswordField();
     protected PasswordField confirmPassword = new PasswordField("Passwort bestätigen");
-    protected TextField username = new TextField("Nutzername");
+    protected TextField username = new TextField("Benutzername");
     protected EmailField email = createEmailField();
     protected Binder<UserDTOImpl> userBinder = new BeanValidationBinder<>(UserDTOImpl.class);
 
@@ -46,10 +46,10 @@ public abstract class RegisterView extends VerticalLayout {
     }
 
     protected EmailField createEmailField() {
-        EmailField email = new EmailField("Email Addresse");
-        email.getElement().setAttribute("name", "Email");
+        EmailField email = new EmailField("E-Mail");
+        email.getElement().setAttribute("name", "email");
         email.setPlaceholder("username@example.com");
-        email.setErrorMessage("Gib bitte eine vernünftige Email ein");
+        email.setErrorMessage("Bitte gib eine gültige E-Mail-Adresse ein");
         email.setClearButtonVisible(true);
         email.setPattern("^(.+)@(\\S+)$");
         return email;
