@@ -23,13 +23,11 @@ public class MyAdsView extends Div {
         Grid<JobDTO> grid = new Grid<>();
 
         grid.setItems(jobcontrol.getAllCompanyJobs(jobcontrol.getCompanyByUserid(logincontrol.getCurrentUser().getUserid()).getCompanyid()));
-        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        grid.setSelectionMode(Grid.SelectionMode.NONE);
 
-
-        grid.addColumn(JobDTO::getTitle).setHeader("Title").setSortable(true);
-        grid.addColumn(JobDTO::getDescription).setHeader("Description");
-        grid.addColumn(JobDTO::getSalary).setHeader("Salary").setSortable(true);
-
+        grid.addColumn(JobDTO::getTitle).setHeader("Titel").setSortable(true);
+        grid.addColumn(JobDTO::getDescription).setHeader("Beschreibung");
+        grid.addColumn(JobDTO::getSalary).setHeader("Gehalt").setSortable(true);
 
         add(grid);
     }
