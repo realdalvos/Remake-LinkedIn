@@ -56,7 +56,7 @@ public class JobControlTest {
 
         // create and save another new job
         testJob = new JobDTOImpl(
-                testCompanyDTO.getCompanyid(), "Test title", "Testbeschreibung. assembly programmer.", "20 Euro", "Test location");
+                testCompanyDTO.getCompanyid(), "Test title", "Testbeschreibung. assembly programmer.", 20, "Test location");
         jobControl.createNewJobPost(testJob);
 
         testJob = jobRepository.findJobByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle());
@@ -84,7 +84,7 @@ public class JobControlTest {
         Assertions.assertNotNull(jobFromRepo);
 
         assertEquals("Testbeschreibung. assembly programmer.", jobFromRepo.getDescription());
-        assertEquals("20 Euro", jobFromRepo.getSalary());
+        assertEquals(20, jobFromRepo.getSalary());
     }
 
     @Test
@@ -113,7 +113,7 @@ public class JobControlTest {
         //Add another job
         // create and save new job
         JobDTOImpl secondJob = new JobDTOImpl(
-                testCompanyDTO.getCompanyid(), "Not matching", "Some description. assembly programmer.", "20 Euro", "Test location");
+                testCompanyDTO.getCompanyid(), "Not matching", "Some description. assembly programmer.", 20, "Test location");
         jobControl.createNewJobPost(secondJob);
 
         //should return both jobs since both contain the keyword "assembly"
@@ -160,7 +160,7 @@ public class JobControlTest {
     @DisplayName("Tests if getAllJobsData produces correct results.")
     void getAllJobsData() {
         JobDTO testJobImpl = new JobDTOImpl(
-                testCompanyDTO.getCompanyid(), "Test title", "Testbeschreibung. assembly programmer.", "20 Euro", "Test location");
+                testCompanyDTO.getCompanyid(), "Test title", "Testbeschreibung. assembly programmer.", 20, "Test location");
 
         List<JobDTO> tmp = new ArrayList<>();
         tmp.add(testJobImpl);
@@ -169,7 +169,7 @@ public class JobControlTest {
 
         assertEquals("Testbeschreibung. assembly programmer.", jobDetail.getDescription());
         assertEquals("Test title", jobDetail.getTitle());
-        assertEquals("20 Euro", jobDetail.getSalary());
+        assertEquals(20, jobDetail.getSalary());
         assertEquals("Testdetails", jobDetail.getContactdetails());
         assertEquals("TestCompany", jobDetail.getName());
     }

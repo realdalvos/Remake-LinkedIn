@@ -97,13 +97,13 @@ public class JobsView extends Div {
 
     public static class JobDetail {
         private String title;
-        private String salary;
+        private Integer salary;
         private String description;
         private String location;
         private String name;
         private String contactdetails;
 
-        public JobDetail(String title, String salary, String description, String location, String name, String contactdetails) {
+        public JobDetail(String title, Integer salary, String description, String location, String name, String contactdetails) {
             this.title = title;
             this.salary = salary;
             this.description = description;
@@ -116,7 +116,7 @@ public class JobsView extends Div {
             return title;
         }
 
-        public String getSalary() {
+        public Integer getSalary() {
             return salary;
         }
 
