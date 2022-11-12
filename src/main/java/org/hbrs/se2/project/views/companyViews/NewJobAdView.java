@@ -5,6 +5,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -35,7 +36,7 @@ public class NewJobAdView extends Div {
     // Job Description text area
     private TextArea description = createDescriptionArea();
     // Salary text field
-    private TextField salary = new TextField("Jahresgehalt");
+    private IntegerField salary = createSalaryArea();
     // Location text field
     private TextField location = new TextField("Arbeitsort");
     // post new job button
@@ -95,10 +96,18 @@ public class NewJobAdView extends Div {
         return description;
     }
 
+    private IntegerField  createSalaryArea() {
+        IntegerField euroField = new IntegerField ();
+        euroField.setLabel("Jahresgehalt");
+        Div euroSuffix = new Div();
+        euroSuffix.setText("€");
+        euroField.setSuffixComponent(euroSuffix);
+        return euroField;
+    }
+
     private int getCompanyId() {
         UserDTO currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
         CompanyDTO comp = jobControl.getCompanyByUserid(currentUser.getUserid());
         return comp.getCompanyid();
     }
-
 }
