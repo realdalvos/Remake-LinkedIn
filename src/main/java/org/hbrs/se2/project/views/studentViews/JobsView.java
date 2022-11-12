@@ -32,14 +32,14 @@ public class JobsView extends Div {
         setSizeFull();
 
         // Grid components
-        TextField textField = new TextField("Search Jobs");
-        Button button = new Button("Search");
+        TextField textField = new TextField("Jobsuche");
+        Button button = new Button("Suchen");
 
         // Create a Grid bound to the list
         Grid<JobDetail> grid = new Grid<>();
         // Header
-        grid.addColumn(JobDetail::getTitle).setHeader("Title");
-        grid.addColumn(JobDetail::getSalary).setHeader("Salary");
+        grid.addColumn(JobDetail::getTitle).setHeader("Titel");
+        grid.addColumn(JobDetail::getSalary).setHeader("Bezahlung");
         // set items details renderer
         grid.setItemDetailsRenderer(createJobDetailsRenderer());
 
@@ -67,11 +67,11 @@ public class JobsView extends Div {
     private static class JobDetailsFormLayout extends FormLayout {
 
         // Grid Detail View Components
-        private final TextField companyName = new TextField("Company");
+        private final TextField companyName = new TextField("Unternehmen");
 
-        private final TextField jobLocation = new TextField("Location");
-        private final TextField companyContactDetails = new TextField("Contact Details");
-        private final TextArea jobDescription = new TextArea("Job Description");
+        private final TextField jobLocation = new TextField("Arbeitsort");
+        private final TextField companyContactDetails = new TextField("Kontaktdaten");
+        private final TextArea jobDescription = new TextArea("Beschreibung");
 
         public JobDetailsFormLayout() {
             Stream.of(companyName, jobLocation, companyContactDetails, jobDescription).forEach(
@@ -97,13 +97,13 @@ public class JobsView extends Div {
 
     public static class JobDetail {
         private String title;
-        private String salary;
+        private Integer salary;
         private String description;
         private String location;
         private String name;
         private String contactdetails;
 
-        public JobDetail(String title, String salary, String description, String location, String name, String contactdetails) {
+        public JobDetail(String title, Integer salary, String description, String location, String name, String contactdetails) {
             this.title = title;
             this.salary = salary;
             this.description = description;
@@ -116,7 +116,7 @@ public class JobsView extends Div {
             return title;
         }
 
-        public String getSalary() {
+        public Integer getSalary() {
             return salary;
         }
 

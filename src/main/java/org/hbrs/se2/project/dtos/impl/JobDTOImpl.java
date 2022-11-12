@@ -11,8 +11,7 @@ public class JobDTOImpl implements JobDTO {
     private String title;
     @NotEmpty
     private String description;
-    @NotEmpty
-    private String salary;
+    private Integer salary;
     @NotEmpty
     private String location;
 
@@ -22,7 +21,7 @@ public class JobDTOImpl implements JobDTO {
 
     public JobDTOImpl (int companyid) { this.companyid = companyid; }
 
-    public JobDTOImpl(int companyid, String title, String description, String salary, String location) {
+    public JobDTOImpl(int companyid, String title, String description, Integer salary, String location) {
         this.companyid = companyid;
         this.title = title;
         this.description = description;
@@ -30,7 +29,7 @@ public class JobDTOImpl implements JobDTO {
         this.location =location;
     }
 
-    public JobDTOImpl(int jobid, int companyid, String title, String description, String salary, String location) {
+    public JobDTOImpl(int jobid, int companyid, String title, String description, Integer salary, String location) {
         this.jobid = jobid;
         this.companyid = companyid;
         this.title = title;
@@ -55,7 +54,7 @@ public class JobDTOImpl implements JobDTO {
         this.description = description;
     }
 
-    public void setSalary(String salary) {
+    public void setSalary(Integer salary) {
         this.salary = salary;
     }
 
@@ -80,7 +79,7 @@ public class JobDTOImpl implements JobDTO {
     }
 
     @Override
-    public String getSalary() {
+    public Integer getSalary() {
         return salary;
     }
 
