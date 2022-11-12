@@ -11,7 +11,6 @@ public class JobDTOImpl implements JobDTO {
     private String title;
     @NotEmpty
     private String description;
-    @NotEmpty
     private Integer salary;
     @NotEmpty
     private String location;
