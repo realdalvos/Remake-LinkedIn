@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Company - Create new Job Post / Job Ad
  */
 @Route(value = Globals.Pages.NEW_ADD_VIEW, layout = AppView.class)
-@PageTitle("New Job Ad")
+@PageTitle("Joberstellung ")
 public class NewJobAdView extends Div {
     @Autowired
     private JobControl jobControl;
@@ -35,11 +35,11 @@ public class NewJobAdView extends Div {
     // Job Description text area
     private TextArea description = createDescriptionArea();
     // Salary text field
-    private TextField salary = new TextField("Approximate salary");
+    private TextField salary = new TextField("Jahresgehalt");
     // Location text field
-    private TextField location = new TextField("Location");
+    private TextField location = new TextField("Arbeitsort");
     // post new job button
-    private Button postButton = new Button("Post new Job Ad");
+    private Button postButton = new Button("Anzeige erstellen");
 
     private UserDTO currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
     private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
@@ -48,7 +48,7 @@ public class NewJobAdView extends Div {
         this.jobControl = jobControl;
         setSizeFull();
         H3 newAdText = new H3();
-        newAdText.setText("Create a new Job Ad");
+        newAdText.setText("Neue Jobanzeige erstellen");
 
         // new job ad form
         FormLayout formLayout = new FormLayout();
@@ -67,8 +67,8 @@ public class NewJobAdView extends Div {
                 // call job control to save new job post entity
                 jobControl.createNewJobPost(binder.getBean());
             } else {
-                Utils.makeDialog("Please fill out all text fields.");
-                throw new Error("Not all input field were filled out.");
+                Utils.makeDialog("Fülle bitte alle Felder aus");
+                throw new Error("Nicht alle Felder wurden ausgefüllt");
             }
             navigateHandler.navigateToMyAdsView();
         });
@@ -80,7 +80,7 @@ public class NewJobAdView extends Div {
     }
 
     private TextArea createTitleArea() {
-        TextArea title = new TextArea("Job Title");
+        TextArea title = new TextArea("Titel");
         int charLimitTitle = 100;
         title.setMaxLength(charLimitTitle);
         title.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitTitle));
@@ -88,7 +88,7 @@ public class NewJobAdView extends Div {
     }
 
     private TextArea createDescriptionArea() {
-        TextArea description = new TextArea("Job Description");
+        TextArea description = new TextArea("Beschreibung");
         int charLimitDescr = 1024;
         description.setMaxLength(charLimitDescr);
         description.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
