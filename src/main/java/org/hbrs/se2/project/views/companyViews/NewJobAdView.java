@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.views.companyViews;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
@@ -12,8 +11,6 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
-import org.hbrs.se2.project.dtos.CompanyDTO;
-import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
@@ -26,7 +23,6 @@ import org.hbrs.se2.project.views.AppView;
 @Route(value = Globals.Pages.NEW_ADD_VIEW, layout = AppView.class)
 @PageTitle("New Job Ad")
 public class NewJobAdView extends Div {
-    private final JobControl jobControl;
 
     // Job title text area
     private TextArea title = createTitleArea();
@@ -44,7 +40,6 @@ public class NewJobAdView extends Div {
     private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
 
     public NewJobAdView(JobControl jobControl) {
-        this.jobControl = jobControl;
         setSizeFull();
         H3 newAdText = new H3();
         newAdText.setText("Create a new Job Ad");
@@ -56,9 +51,11 @@ public class NewJobAdView extends Div {
                 new FormLayout.ResponsiveStep("0", 1)
         );
 
-        binder.setBean(new JobDTOImpl(getCompanyId()));
+        binder.setBean(new JobDTOImpl(jobControl.getCompanyByUserid(Utils.getCurrentUser().getUserid()).getCompanyid()));
         // map input field values to DTO variables based on chosen names
         binder.bindInstanceFields(this);
+
+        contactdetails.setValue(Utils.getCurrentUser().getEmail());
 
         postButton.addClickListener(event -> {
 
@@ -93,11 +90,4 @@ public class NewJobAdView extends Div {
         description.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
         return description;
     }
-
-    private int getCompanyId() {
-        UserDTO currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
-        CompanyDTO comp = jobControl.getCompanyByUserid(currentUser.getUserid());
-        return comp.getCompanyid();
-    }
-
 }
