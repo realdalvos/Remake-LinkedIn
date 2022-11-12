@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Company - My Ads List View
  */
 @Route(value = Globals.Pages.MYADS_VIEW, layout = AppView.class)
-@PageTitle("My Ads")
+@PageTitle("Meine Stellen")
 public class MyAdsView extends Div {
     @Autowired
     public MyAdsView(JobControl jobcontrol, LoginControl logincontrol){

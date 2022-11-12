@@ -22,34 +22,34 @@ public abstract class RegisterView extends VerticalLayout {
     protected RegistrationControl registrationControl;
     protected H4 registerText = new H4();
     protected PasswordField userPassword = createPasswordField();
-    protected PasswordField confirmPassword = new PasswordField("Confirm password");
-    protected TextField username = new TextField("Username");
+    protected PasswordField confirmPassword = new PasswordField("Passwort bestätigen");
+    protected TextField username = new TextField("Benutzername");
     protected EmailField email = createEmailField();
     protected Binder<UserDTOImpl> userBinder = new BeanValidationBinder<>(UserDTOImpl.class);
 
     protected Button loginButton() {
-        Button loginButton = new Button("I already have an account - Log In");
+        Button loginButton = new Button("Ich habe bereits einen Account - hier Einloggen");
         loginButton.addClickListener(event -> navigateHandler.navigateToLoginPage());
         return loginButton;
     }
 
     protected PasswordField createPasswordField(){
-        PasswordField userpassword = new PasswordField("Password");
+        PasswordField userpassword = new PasswordField("Passwort");
         userpassword.setRequired(true);
         userpassword.setMinLength(8);
         userpassword.setRevealButtonVisible(true);
-        userpassword.setHelperText("at least 8 chars, with letters, numbers and special characters");
+        userpassword.setHelperText("Mindestens 8 Zeichen bestehend aus Buchstaben, Zahlen und Sonderzeichen");
         //The Pattern matches with from left to right: At least one letter, at least one digit, at lest one special character and at least 8 characters
         userpassword.setPattern("^(?=.+[a-zA-Z])(?=.+[\\d])(?=.+[\\W]).{8,}$");
-        userpassword.setErrorMessage("Your password may not be secure enough. Please make sure to follow the pattern");
+        userpassword.setErrorMessage("Dein Passwort ist wahrscheinlich nicht sicher genug. Halte dich bitte an die Vorgaben");
         return userpassword;
     }
 
     protected EmailField createEmailField() {
-        EmailField email = new EmailField("Email address");
+        EmailField email = new EmailField("E-Mail");
         email.getElement().setAttribute("name", "email");
         email.setPlaceholder("username@example.com");
-        email.setErrorMessage("Please enter a valid example.com email address");
+        email.setErrorMessage("Bitte gib eine gültige E-Mail-Adresse ein");
         email.setClearButtonVisible(true);
         email.setPattern("^(.+)@(\\S+)$");
         return email;
