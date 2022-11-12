@@ -13,7 +13,6 @@ import org.hbrs.se2.project.control.JobControl;
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -25,10 +24,7 @@ import java.util.stream.Stream;
 @PageTitle("Jobs")
 public class JobsView extends Div {
 
-    @Autowired
-    private JobControl jobControl;
-
-    public JobsView() {
+    public JobsView(JobControl jobControl) {
         setSizeFull();
 
         // Grid components

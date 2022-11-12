@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.views.companyViews;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
@@ -13,14 +12,11 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
-import org.hbrs.se2.project.dtos.CompanyDTO;
-import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Company - Create new Job Post / Job Ad
@@ -28,13 +24,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Route(value = Globals.Pages.NEW_ADD_VIEW, layout = AppView.class)
 @PageTitle("Joberstellung ")
 public class NewJobAdView extends Div {
-    @Autowired
-    private JobControl jobControl;
 
     // Job title text area
     private TextArea title = createTitleArea();
     // Job Description text area
     private TextArea description = createDescriptionArea();
+    // Contact details
+    private TextField contactdetails = new TextField("E-Mail");
     // Salary text field
     private IntegerField salary = createSalaryArea();
     // Location text field
@@ -42,25 +38,25 @@ public class NewJobAdView extends Div {
     // post new job button
     private Button postButton = new Button("Anzeige erstellen");
 
-    private UserDTO currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
     private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
 
     public NewJobAdView(JobControl jobControl) {
-        this.jobControl = jobControl;
         setSizeFull();
         H3 newAdText = new H3();
         newAdText.setText("Neue Jobanzeige erstellen");
 
         // new job ad form
         FormLayout formLayout = new FormLayout();
-        formLayout.add(title, description, salary, location, postButton);
+        formLayout.add(title, description, contactdetails, salary, location, postButton);
         formLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("0", 1)
         );
 
-        binder.setBean(new JobDTOImpl(getCompanyId()));
+        binder.setBean(new JobDTOImpl(jobControl.getCompanyByUserid(Utils.getCurrentUser().getUserid()).getCompanyid()));
         // map input field values to DTO variables based on chosen names
         binder.bindInstanceFields(this);
+
+        contactdetails.setValue(Utils.getCurrentUser().getEmail());
 
         postButton.addClickListener(event -> {
 
@@ -103,11 +99,5 @@ public class NewJobAdView extends Div {
         euroSuffix.setText("€");
         euroField.setSuffixComponent(euroSuffix);
         return euroField;
-    }
-
-    private int getCompanyId() {
-        UserDTO currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
-        CompanyDTO comp = jobControl.getCompanyByUserid(currentUser.getUserid());
-        return comp.getCompanyid();
     }
 }

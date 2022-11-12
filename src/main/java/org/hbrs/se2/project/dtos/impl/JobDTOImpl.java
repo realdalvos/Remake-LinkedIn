@@ -11,31 +11,32 @@ public class JobDTOImpl implements JobDTO {
     private String title;
     @NotEmpty
     private String description;
+    @NotEmpty
     private Integer salary;
     @NotEmpty
     private String location;
-
-    public JobDTOImpl() {
-
-    }
+    @NotEmpty
+    private String contactdetails;
 
     public JobDTOImpl (int companyid) { this.companyid = companyid; }
 
-    public JobDTOImpl(int companyid, String title, String description, Integer salary, String location) {
+    public JobDTOImpl(int companyid, String title, String description, Integer salary, String location, String contactdetails) {
         this.companyid = companyid;
         this.title = title;
         this.description = description;
         this.salary = salary;
         this.location =location;
+        this.contactdetails = contactdetails;
     }
 
-    public JobDTOImpl(int jobid, int companyid, String title, String description, Integer salary, String location) {
+    public JobDTOImpl(int jobid, int companyid, String title, String description, Integer salary, String location, String contactdetails) {
         this.jobid = jobid;
         this.companyid = companyid;
         this.title = title;
         this.description = description;
         this.salary = salary;
         this.location = location;
+        this.contactdetails = contactdetails;
     }
 
     public void setJobid(int jobid) {
@@ -58,38 +59,35 @@ public class JobDTOImpl implements JobDTO {
         this.salary = salary;
     }
 
-    @Override
     public int getJobid() {
         return jobid;
     }
 
-    @Override
     public int getCompanyid() {
         return companyid;
     }
 
-    @Override
     public String getTitle() {
         return title;
     }
 
-    @Override
     public String getDescription() {
         return description;
     }
 
-    @Override
     public Integer getSalary() {
         return salary;
     }
 
-    @Override
     public String getLocation() { return location; }
 
-    @Override
     public void setLocation(String location) {
         this.location=location;
     }
+
+    public String getContactdetails() { return contactdetails; }
+
+    public void setContactdetails(String contactdetails) { this.contactdetails = contactdetails; }
 
     @Override
     public String toString() {
@@ -99,6 +97,7 @@ public class JobDTOImpl implements JobDTO {
                 ", title= '" + title + '\'' +
                 ", description= '" + description + '\'' +
                 ", salary= " + salary + '\'' +
+                ", contactdetails= " + contactdetails + '\'' +
                 ", location= " + location +
                 '}';
     }

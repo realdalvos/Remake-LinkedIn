@@ -48,7 +48,7 @@ public class JobControlTest {
 
         // create and save a new job
         testJob = new JobDTOImpl(
-                testCompanyDTO.getCompanyid(), "Test title", "Testbeschreibung. assembly programmer.", 20, "Test location");
+                testCompanyDTO.getCompanyid(), "Test title", "Testbeschreibung. assembly programmer.", 20, "Test location", "Test contactdetails");
         jobControl.createNewJobPost(testJob);
 
         testJob = jobRepository.findJobByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle());
@@ -96,7 +96,7 @@ public class JobControlTest {
         //Add another job
         // create and save another new job
         JobDTOImpl secondJob = new JobDTOImpl(
-                testCompanyDTO.getCompanyid(), "Not matching", "Some description. assembly programmer.", 20, "Test location");
+                testCompanyDTO.getCompanyid(), "Not matching", "Some description. assembly programmer.", 20, "Test location", "Test contactdetails");
         jobControl.createNewJobPost(secondJob);
 
         //should return both jobs since both contain the keyword "assembly"
@@ -143,7 +143,7 @@ public class JobControlTest {
     @DisplayName("Tests if getAllJobsData produces correct results.")
     void getAllJobsData() {
         JobDTO testJobImpl = new JobDTOImpl(
-                testCompanyDTO.getCompanyid(), "Test title", "Testbeschreibung. assembly programmer.", 20, "Test location");
+                testCompanyDTO.getCompanyid(), "Test title", "Testbeschreibung. assembly programmer.", 20, "Test location", "Test contactdetails");
 
         List<JobDTO> tmp = new ArrayList<>();
         tmp.add(testJobImpl);
@@ -153,7 +153,7 @@ public class JobControlTest {
         assertEquals("Testbeschreibung. assembly programmer.", jobDetail.getDescription());
         assertEquals("Test title", jobDetail.getTitle());
         assertEquals(20, jobDetail.getSalary());
-        assertEquals("Testdetails", jobDetail.getContactdetails());
+        assertEquals("Test contactdetails", jobDetail.getContactdetails());
         assertEquals("TestCompany", jobDetail.getName());
     }
 }

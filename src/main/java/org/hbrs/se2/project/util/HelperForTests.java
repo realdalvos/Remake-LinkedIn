@@ -7,7 +7,6 @@ import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
 import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
-import org.hbrs.se2.project.entities.User;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.StudentRepository;
 import org.hbrs.se2.project.repository.UserRepository;
@@ -26,7 +25,7 @@ public class HelperForTests {
     RegistrationControl registrationControl;
 
     private UserDTO testUserForCompany = new UserDTOImpl("TestUserCompany", "SicheresPasswort", "testUser@JUnitTest.de", Globals.Roles.company);
-    private CompanyDTOImpl testCompany = new CompanyDTOImpl(0, "TestCompany", "Testindustry", false, "Testdetails");
+    private CompanyDTOImpl testCompany = new CompanyDTOImpl(0, "TestCompany", "Testindustry", false);
     private UserDTO testUserForStudent = new UserDTOImpl("TestUserStudent", "SicheresPasswort", "testUser2@JUnitTest.de", Globals.Roles.student);
     private StudentDTO testStudent = new StudentDTOImpl(0, "Stan", "Student", "123456", "HBRS");
 
@@ -149,7 +148,7 @@ public class HelperForTests {
     /*
      * Same concerns as in the clone Method for users.*/
     private CompanyDTO clone(CompanyDTO c){
-        return new CompanyDTOImpl(c.getUserid(), c.getName(), c.getIndustry(), c.getBanned(), c.getContactdetails());
+        return new CompanyDTOImpl(c.getUserid(), c.getName(), c.getIndustry(), c.getBanned());
     }
 
     /*

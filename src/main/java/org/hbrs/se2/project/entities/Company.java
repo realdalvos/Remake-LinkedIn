@@ -18,7 +18,6 @@ public class Company {
     private String name;
     private String industry;
     private boolean banned;
-    private String contactdetails;
 
     public Company() {
 
@@ -30,6 +29,7 @@ public class Company {
     public int getCompanyid() {return companyid;}
 
     public void setCompanyid(int id) {this.companyid = id;}
+
     @Basic
     @Column(name="userid")
     public int getUserid() {return userid;}
@@ -53,8 +53,4 @@ public class Company {
     public boolean isBanned() {return banned;}
 
     public void setBanned(boolean b) {this.banned = b;}
-    @Basic
-    @Column(name = "contactdetails")
-    public String getContactdetails(){return contactdetails;}
-    public void setContactdetails(String contactdetails){this.contactdetails = contactdetails;}
 }
