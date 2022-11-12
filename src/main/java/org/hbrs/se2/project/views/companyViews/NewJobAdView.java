@@ -48,7 +48,7 @@ public class NewJobAdView extends Div {
         this.jobControl = jobControl;
         setSizeFull();
         H3 newAdText = new H3();
-        newAdText.setText("Wie soll der neue Job aussehen?");
+        newAdText.setText("Neue Jobanzeige erstellen");
 
         // new job ad form
         FormLayout formLayout = new FormLayout();
