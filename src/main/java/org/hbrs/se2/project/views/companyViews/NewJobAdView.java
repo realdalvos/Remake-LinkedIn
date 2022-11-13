@@ -17,6 +17,7 @@ import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
+import org.slf4j.Logger;
 
 /**
  * Company - Create new Job Post / Job Ad
@@ -24,6 +25,7 @@ import org.hbrs.se2.project.views.AppView;
 @Route(value = Globals.Pages.NEW_ADD_VIEW, layout = AppView.class)
 @PageTitle("Joberstellung ")
 public class NewJobAdView extends Div {
+    private final Logger logger = Utils.getLogger(this.getClass().getName());
 
     // Job title text area
     private TextArea title = createTitleArea();
@@ -65,7 +67,7 @@ public class NewJobAdView extends Div {
                 jobControl.createNewJobPost(binder.getBean());
             } else {
                 Utils.makeDialog("Fülle bitte alle Felder aus");
-                throw new Error("Nicht alle Felder wurden ausgefüllt");
+                logger.info("Not all fields have been filled in");
             }
             navigateHandler.navigateToMyAdsView();
         });
