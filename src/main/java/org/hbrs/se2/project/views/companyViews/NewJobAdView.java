@@ -87,7 +87,6 @@ public class NewJobAdView extends Div {
         newJob.getElement().getStyle().set("text-align","center"); // content centered instead of being stuck on the side
         Icon createJobAdIcon = new Icon(VaadinIcon.EDIT);
         newJob.getElement().appendChild(createJobAdIcon.getElement());
-        HorizontalLayout hl = new HorizontalLayout();
 
 
         /*
@@ -99,9 +98,6 @@ public class NewJobAdView extends Div {
          */
 
         verticalLayout.add(title, description, contactdetails, salary, location, postButton);
-        //horizontalLayout.setResponsiveSteps(
-        //        new FormLayout.ResponsiveStep("0", 1)
-        //);
 
         binder.setBean(new JobDTOImpl(jobControl.getCompanyByUserid(Utils.getCurrentUser().getUserid()).getCompanyid()));
         // map input field values to DTO variables based on chosen names
@@ -128,7 +124,7 @@ public class NewJobAdView extends Div {
 
     }
 
-    // Adding a character counter to textAreas and textFields
+    // Added character counts, placeholders and delete options
 
     private TextArea createTitleArea() {
         TextArea title = new TextArea("Titel");
