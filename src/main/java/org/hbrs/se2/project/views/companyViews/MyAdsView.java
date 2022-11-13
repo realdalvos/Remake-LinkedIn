@@ -13,7 +13,6 @@ import org.hbrs.se2.project.control.LoginControl;
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Company - My Ads List View
@@ -21,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Route(value = Globals.Pages.MYADS_VIEW, layout = AppView.class)
 @PageTitle("Meine Stellen")
 public class MyAdsView extends Div {
-    @Autowired
+
     public MyAdsView(JobControl jobcontrol, LoginControl logincontrol){
 
         Grid<JobDTO> grid = new Grid<>();

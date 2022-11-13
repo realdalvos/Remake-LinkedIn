@@ -3,10 +3,7 @@ package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.JobDTO;
-import org.hbrs.se2.project.dtos.UserDTO;
-import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
-import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;
 import org.hbrs.se2.project.repository.UserRepository;
@@ -19,25 +16,25 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hbrs.se2.project.control.factories.CompanyFactory.createCompany;
-import static org.hbrs.se2.project.control.factories.UserFactory.createUser;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class JobControlTest {
+    //To save user, get userDTO and delete user from database
     @Autowired
-            //To save user, get userDTO and delete user from database
     UserRepository userRepository;
+    //To save company and get companyDTO
     @Autowired
-            //To save company and get companyDTO
     CompanyRepository companyRepository;
+    //To get jobDTO
     @Autowired
-            //To get jobDTO
     JobRepository jobRepository;
     @Autowired
-    JobControl jobControl = new JobControl();
+    JobControl jobControl;
     //Test job
+    @Autowired
     JobDTO testJob;
+    @Autowired
     CompanyDTO testCompanyDTO;
     @Autowired
     HelperForTests h;

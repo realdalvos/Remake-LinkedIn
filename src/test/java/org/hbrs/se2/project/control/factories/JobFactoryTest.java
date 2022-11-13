@@ -9,17 +9,13 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class JobFactoryTest {
-
     JobDTO testJob;
 
     @BeforeEach
     void setUp() {
-        JobDTOImpl testJobImpl = new JobDTOImpl(
+        testJob = new JobDTOImpl(
                 99999, "Test title", "Testbeschreibung. assembly programmer.", 20,"Testlocation","Test contactdetails");
-        testJobImpl.setJobid(1);
-
-        testJob = testJobImpl;
-
+        testJob.setJobid(1);
     }
 
     @Test

@@ -1,7 +1,6 @@
 package org.hbrs.se2.project.views.studentViews;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
@@ -18,7 +17,7 @@ import org.hbrs.se2.project.views.RegisterView;
  * Register View - Form to register as a student
  */
 @Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
-@PageTitle("Register as a Student")
+@PageTitle("Als Student registrieren")
 public class RegisterStudentView extends RegisterView {
     // text fields
     private TextField firstname = new TextField("Vorname");
@@ -29,8 +28,6 @@ public class RegisterStudentView extends RegisterView {
     public RegisterStudentView() {
         setSizeFull();
         registerText.setText("Registrierung");
-
-        Button confirmButton = new Button("Registrierung als Student");
 
         userBinder.setBean(new UserDTOImpl(Globals.Roles.student));
         //The Pattern matches from left to right: At least one letter, at least one digit, at lest one special character and at least 8 characters
