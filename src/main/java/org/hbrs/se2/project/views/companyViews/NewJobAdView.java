@@ -37,9 +37,7 @@ import java.util.Locale;
 
 @Route(value = Globals.Pages.NEW_ADD_VIEW, layout = AppView.class)
 @PageTitle("Joberstellung ")
-
 public class NewJobAdView extends Div {
-
 
     /*
     entryDate is an option for now and will be implemented as a comment.
