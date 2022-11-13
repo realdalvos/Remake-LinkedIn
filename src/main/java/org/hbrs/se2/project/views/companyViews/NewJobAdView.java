@@ -26,13 +26,13 @@ import org.hbrs.se2.project.views.AppView;
 public class NewJobAdView extends Div {
 
     // Job title text area
-    private TextArea title = createTitleArea();
+    private TextField title = createTitleField();
     // Job Description text area
     private TextArea description = createDescriptionArea();
     // Contact details
-    private TextField contactdetails = new TextField("E-Mail");
+    private TextField contactdetails = createEmailField();
     // Salary text field
-    private IntegerField salary = createSalaryArea();
+    private IntegerField salary = createSalaryField();
     // Location text field
     private TextField location = new TextField("Arbeitsort");
     // post new job button
@@ -76,8 +76,9 @@ public class NewJobAdView extends Div {
         this.setWidth("30%");
     }
 
-    private TextArea createTitleArea() {
-        TextArea title = new TextArea("Titel");
+    private TextField createTitleField() {
+        TextField title = new TextField("Titel");
+        title.getElement().setAttribute("name", "title");
         int charLimitTitle = 100;
         title.setMaxLength(charLimitTitle);
         title.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitTitle));
@@ -86,18 +87,26 @@ public class NewJobAdView extends Div {
 
     private TextArea createDescriptionArea() {
         TextArea description = new TextArea("Beschreibung");
+        description.getElement().setAttribute("name", "description");
         int charLimitDescr = 1024;
         description.setMaxLength(charLimitDescr);
         description.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
         return description;
     }
 
-    private IntegerField  createSalaryArea() {
-        IntegerField euroField = new IntegerField ();
-        euroField.setLabel("Jahresgehalt");
+    private TextField  createEmailField() {
+        TextField email = new TextField("Kontaktdaten");
+        email.getElement().setAttribute("name", "email");
+        email.setPlaceholder("username@example.com");
+        return email;
+    }
+
+    private IntegerField  createSalaryField() {
+        IntegerField salary = new IntegerField("Jahresgehalt");
+        salary.getElement().setAttribute("name", "salary");
         Div euroSuffix = new Div();
         euroSuffix.setText("€");
-        euroField.setSuffixComponent(euroSuffix);
-        return euroField;
+        salary.setSuffixComponent(euroSuffix);
+        return salary;
     }
 }

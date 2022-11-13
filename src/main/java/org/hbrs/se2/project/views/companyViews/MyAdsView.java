@@ -57,11 +57,16 @@ public class MyAdsView extends Div {
             locationField.setValue(jobDTO.getLocation());
             locationField.setReadOnly(true);
 
+            final TextField contactdetailsField = new TextField("Kontaktdaten");
+            contactdetailsField.setValue(jobDTO.getContactdetails());
+            contactdetailsField.setReadOnly(true);
+
             //Add textFields to FormLayout
             layout.add(titleField);
             layout.add(descriptionField);
             layout.add(salaryField);
             layout.add(locationField);
+            layout.add(contactdetailsField);
 
             return layout;
         }));
