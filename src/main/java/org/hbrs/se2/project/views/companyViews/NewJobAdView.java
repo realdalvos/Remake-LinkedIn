@@ -1,15 +1,18 @@
 package org.hbrs.se2.project.views.companyViews;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
@@ -19,6 +22,8 @@ import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
 
+import java.util.Locale;
+
 /**
  * Company - Create new Job Post / Job Ad
  */
@@ -27,17 +32,34 @@ import org.hbrs.se2.project.views.AppView;
 @PageTitle("Joberstellung ")
 public class NewJobAdView extends Div {
 
+    /*
+    entryDate is an option for now and will be implemented as a comment.
+    In order to implement it uncomment all comments with "entryDate" on top.
+    In that case formLayout.add(title, description, contactdetails, salary, location, postButton); should be
+    removed too
+     */
+
     // Job title text area
     private TextArea title = createTitleArea();
     // Job Description text area
     private TextArea description = createDescriptionArea();
     // Contact details
-    private TextField contactdetails = new TextField("E-Mail");
+
+    // Changed TextField to EmailField to check email addresses
+    private EmailField contactdetails = new EmailField("E-Mail");
     // Salary text field
     private IntegerField salary = createSalaryArea();
     // Location text field
     private TextField location = createWorkLocation();
     // post new job button
+
+    /*
+    entryDate
+
+    private DatePicker entryDate = createEntryDate();
+
+     */
+
     private Button postButton = new Button("Anzeige erstellen");
 
     private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
@@ -47,8 +69,18 @@ public class NewJobAdView extends Div {
         H3 newAdText = new H3();
         newAdText.setText("Neue Jobanzeige erstellen");
 
+
         // new job ad form
         FormLayout formLayout = new FormLayout();
+
+        /*
+        entryData
+
+        formLayout.add(title, description, contactdetails, salary, location, entryDate, postButton);
+
+        (remove formLayout.add(title, description, contactdetails, salary, location, postButton);)
+         */
+
         formLayout.add(title, description, contactdetails, salary, location, postButton);
         formLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("0", 1)
@@ -78,11 +110,11 @@ public class NewJobAdView extends Div {
         this.setWidth("60%");
     }
 
-    // Adding a character counter
+    // Adding a character counter to textAreas and textFields
 
     private TextArea createTitleArea() {
         TextArea title = new TextArea("Titel");
-        int charLimitTitle = 25;    // smaller character Limit for title
+        int charLimitTitle = 75;    // smaller character Limit for title
         title.setWidthFull();
         title.setMaxLength(charLimitTitle);
         title.setValueChangeMode(ValueChangeMode.EAGER); // changing character counter while typing
@@ -119,5 +151,16 @@ public class NewJobAdView extends Div {
         return location;
     }
 
+    /*
+    entryData
+
+        private DatePicker createEntryDate() {
+        DatePicker entryDate = new DatePicker("frühstmöglicher Einstiegsbeginn");
+        Locale locale = new Locale("de", "DE");
+        entryDate.setLocale(locale);
+        return entryDate;
+    }
+
+     */
 
 }
