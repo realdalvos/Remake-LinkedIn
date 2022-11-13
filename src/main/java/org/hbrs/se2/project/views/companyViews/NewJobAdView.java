@@ -37,7 +37,9 @@ import java.util.Locale;
 
 @Route(value = Globals.Pages.NEW_ADD_VIEW, layout = AppView.class)
 @PageTitle("Joberstellung ")
+
 public class NewJobAdView extends Div {
+
 
     /*
     entryDate is an option for now and will be implemented as a comment.
@@ -72,12 +74,8 @@ public class NewJobAdView extends Div {
     private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
 
     public NewJobAdView(JobControl jobControl) {
-        this.setSizeFull();
 
-
-        // new job ad form
-        //FormLayout formLayout = new FormLayout();
-
+        setHeightFull();
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.setAlignSelf(FlexComponent.Alignment.CENTER);
         verticalLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
@@ -127,6 +125,7 @@ public class NewJobAdView extends Div {
         add(newAdText);
         add(verticalLayout);
         this.setWidth("60%");
+
     }
 
     // Adding a character counter to textAreas and textFields
@@ -138,6 +137,8 @@ public class NewJobAdView extends Div {
         title.setMaxLength(charLimitTitle);
         title.setValueChangeMode(ValueChangeMode.EAGER); // changing character counter while typing
         title.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitTitle));
+        title.setPlaceholder("Titel");
+        title.setClearButtonVisible(true);
         return title;
     }
 
@@ -148,6 +149,8 @@ public class NewJobAdView extends Div {
         description.setMaxLength(charLimitDescr);
         description.setValueChangeMode(ValueChangeMode.EAGER);
         description.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
+        description.setPlaceholder("Aufgabenbereiche, Anforderungen, zusätzliche Informationen");
+        description.setClearButtonVisible(true);
         return description;
     }
 
@@ -157,16 +160,19 @@ public class NewJobAdView extends Div {
         Div euroSuffix = new Div();
         euroSuffix.setText("€");
         euroField.setSuffixComponent(euroSuffix);
+        euroField.setClearButtonVisible(true);
         return euroField;
     }
 
     private TextField createWorkLocation() {
         TextField location = new TextField("Arbeitsort");
-        int charLimitDescr = 50;
+        int charLimitDescr = 100;
         location.setWidthFull();
         location.setMaxLength(charLimitDescr);
         location.setValueChangeMode(ValueChangeMode.EAGER);
         location.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
+        location.setPlaceholder("Straße, Ort, PLZ"); // added Placeholder for continuity in job offers
+        location.setClearButtonVisible(true);
         return location;
     }
 
