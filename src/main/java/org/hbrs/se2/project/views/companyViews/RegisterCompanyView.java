@@ -18,17 +18,19 @@ import org.hbrs.se2.project.views.RegisterView;
 @PageTitle("Register as a Company")
 public class RegisterCompanyView extends RegisterView {
     // text fields
-    private TextField name = new TextField("Company Name");
+    private TextField name = new TextField("Unternehmensname");
     private Binder<CompanyDTOImpl> concreteUserBinder = new BeanValidationBinder<>(CompanyDTOImpl.class);
 
     public RegisterCompanyView() {
         setSizeFull();
-        registerText.setText("Register here");
-        userPassword.setRequired(true);
+        registerText.setText("Registrierung");
 
-        Button confirmButton = new Button("Register now as a company");
+        Button confirmButton = new Button("Registrierung als Unternehmen");
 
         userBinder.setBean(new UserDTOImpl(Globals.Roles.company));
+        //The Pattern matches from left to right: At least one letter, at least one digit, at lest one special character and at least 8 characters
+        userBinder.withValidator(validation -> userPassword.getValue().matches("^(?=.+[a-zA-Z])(?=.+[\\d])(?=.+[\\W]).{8,}$"),"Dein Passwort ist wahrscheinlich nicht sicher genug. Halte dich bitte an die Vorgaben");
+
         concreteUserBinder.setBean(new CompanyDTOImpl());
 
         add(registerText);
@@ -61,8 +63,8 @@ public class RegisterCompanyView extends RegisterView {
                     // function to register new company
                     registrationControl.registerCompany(userBinder.getBean(), concreteUserBinder.getBean());
                 } else {
-                    Utils.makeDialog("Please fill out all text fields.");
-                    throw new Error("Not all input field were filled out.");
+                    Utils.makeDialog("Fülle bitte alle Felder aus");
+                    throw new Error("Nicht alle Felder wurden ausgefüllt");
                 }
             } catch (Exception e) {
                 // get the root cause of an exception
@@ -75,7 +77,7 @@ public class RegisterCompanyView extends RegisterView {
             if(success) {
                 navigateHandler.navigateToLoginPage();
             } else {
-                System.out.println("A Failure occurred while trying to save data in the database");
+                System.out.println("Ein Fehler ist bei der Speicherung in der Datenbank aufgetreten");
             }
         });
 

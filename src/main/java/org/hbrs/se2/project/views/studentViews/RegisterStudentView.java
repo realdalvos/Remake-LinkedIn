@@ -21,21 +21,22 @@ import org.hbrs.se2.project.views.RegisterView;
 @PageTitle("Register as a Student")
 public class RegisterStudentView extends RegisterView {
     // text fields
-    private TextField firstname = new TextField("First name");
-    private TextField lastname = new TextField("Last name");
-    private TextField matrikelnumber = new TextField("Matrikel number");
+    private TextField firstname = new TextField("Vorname");
+    private TextField lastname = new TextField("Nachname");
+    private TextField matrikelnumber = new TextField("Matrikelnummer");
     private Binder<StudentDTOImpl> concreteUserBinder = new BeanValidationBinder<>(StudentDTOImpl.class);
 
     public RegisterStudentView() {
         setSizeFull();
-        registerText.setText("Register here");
-        userPassword.setRequired(true);
+        registerText.setText("Registrierung");
 
-        Button confirmButton = new Button("Register now as a user");
+        Button confirmButton = new Button("Registrierung als Student");
 
         userBinder.setBean(new UserDTOImpl(Globals.Roles.student));
-        concreteUserBinder.setBean(new StudentDTOImpl());
+        //The Pattern matches from left to right: At least one letter, at least one digit, at lest one special character and at least 8 characters
+        userBinder.withValidator(validation -> userPassword.getValue().matches("^(?=.+[a-zA-Z])(?=.+[\\d])(?=.+[\\W]).{8,}$"),"Dein Passwort ist wahrscheinlich nicht sicher genug. Halte dich bitte an die Vorgaben");
 
+        concreteUserBinder.setBean(new StudentDTOImpl());
         // add all elements/components to View
         add(registerText);
         add(createFormLayout(new Component[]{firstname,lastname,matrikelnumber,username,email,userPassword,confirmPassword}));
@@ -67,8 +68,8 @@ public class RegisterStudentView extends RegisterView {
                     // function to register new company
                     registrationControl.registerStudent(userBinder.getBean(), concreteUserBinder.getBean());
                 } else {
-                    Utils.makeDialog("Please fill out all text fields.");
-                    throw new Error("Not all input field were filled out.");
+                    Utils.makeDialog("Fülle bitte alle Felder aus");
+                    throw new Error("Nicht alle Felder wurden ausgefüllt");
                 }
             } catch (Exception e) {
                 // get the root cause of an exception
@@ -81,7 +82,7 @@ public class RegisterStudentView extends RegisterView {
             if(success) {
                 navigateHandler.navigateToLoginPage();
             } else {
-                System.out.println("A Failure occurred while trying to save data in the database");
+                System.out.println("Ein Fehler ist bei der Speicherung in der Datenbank aufgetreten");
             }
         });
     }

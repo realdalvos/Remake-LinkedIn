@@ -16,8 +16,9 @@ public class Job {
     private int companyid;
     private String title;
     private String description;
-    private String salary;
+    private Integer salary;
     private String location;
+    private String contactdetails;
 
     public Job() {
 
@@ -52,12 +53,17 @@ public class Job {
 
     @Basic
     @Column(name = "salary")
-    public String getSalary() {return salary;}
+    public Integer getSalary() {return salary;}
 
-    public void setSalary(String salary) {this.salary = salary;}
+    public void setSalary(Integer salary) {this.salary = salary;}
     @Basic
     @Column(name = "location")
     public String getLocation(){return location;}
     public void setLocation(String location){this.location = location;}
+
+    @Basic
+    @Column(name = "contactdetails")
+    public String getContactdetails(){return contactdetails;}
+    public void setContactdetails(String contactdetails){this.contactdetails = contactdetails;}
 }
 

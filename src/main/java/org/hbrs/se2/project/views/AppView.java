@@ -96,11 +96,11 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
         // Only if role is equal to company
         if(this.authorizationControl.hasUserRole(this.getCurrentUser(), Globals.Roles.company)) {
-            bar.addItem("Create new Job Ad", e -> navigateHandler.navigateToNewJob());
+            bar.addItem("Neuen Job erstellen", e -> navigateHandler.navigateToNewJob());
         }
 
         // for all roles add following bar items
-        bar.addItem("Logout" , e -> logoutUser());
+        bar.addItem("Abmelden" , e -> logoutUser());
         topRightPanel.add(bar);
 
         layout.add( topRightPanel );
@@ -172,7 +172,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             // has the user the role "company" they have the tabs "My Ads"
             if(this.authorizationControl.hasUserRole(this.getCurrentUser(), Globals.Roles.company)) {
                 System.out.println("User is company");
-                tabs = Utils.append(tabs, createTab("My Ads", MyAdsView.class));
+                tabs = Utils.append(tabs, createTab("Meine Jobs", MyAdsView.class));
             }
         return tabs;
     }
@@ -199,7 +199,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         viewTitle.setText(getCurrentPageTitle());
 
         // set firstname of the current user
-        helloUser.setText("Hello "  + this.getCurrentNameOfUser() );
+        helloUser.setText("Hallo "  + this.getCurrentNameOfUser() );
     }
 
     private Optional<Tab> getTabForComponent(Component component) {

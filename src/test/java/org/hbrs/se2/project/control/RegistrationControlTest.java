@@ -11,6 +11,7 @@ import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.StudentRepository;
 import org.hbrs.se2.project.repository.UserRepository;
 import org.hbrs.se2.project.util.Globals;
+import org.hbrs.se2.project.util.HelperForTests;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,6 +31,8 @@ class RegistrationControlTest {
     PasswordEncoder passwordEncoder;
     @Autowired
     RegistrationControl registrationControl = new RegistrationControl();
+    @Autowired
+    HelperForTests h;
 
     UserDTO userDTO;
     StudentDTO studentDTO;
@@ -40,31 +43,24 @@ class RegistrationControlTest {
     @BeforeEach
     @DisplayName("Creating a user called \"JUnitTest\" exists.")
     void setUp() {
+        /*
         tearDown();
         userDTO = new UserDTOImpl(testString, testString, testString, Globals.Roles.company);
         studentDTO = new StudentDTOImpl(userDTO.getUserid(), testString, testString, matrikelNr, testString);
-        companyDTO = new CompanyDTOImpl(userDTO.getUserid(), testString, testString, false, testString);
+        companyDTO = new CompanyDTOImpl(userDTO.getUserid(), testString, testString, false);
 
         companyDTO.setName(testString);
+
+         */
+        userDTO = h.getUserDTOForCompany();
+        companyDTO = h.getCompanyDTO();
+        studentDTO = h.getStudentDTO();
     }
 
     @AfterEach
     @DisplayName("Deleting the user called \"JUnitTest\"")
     void tearDown() {
-        UserDTO user = userRepository.findUserByUsername(testString);
-        if(user != null) {
-            userRepository.deleteById(user.getUserid());
-
-            CompanyDTO comp = companyRepository.findCompanyByUserid(user.getUserid());
-            StudentDTO stud = studentRepository.findStudentByUserid(user.getUserid());
-
-            if (comp != null) {
-                companyRepository.deleteById(comp.getCompanyid());
-            }
-            if (stud != null) {
-                studentRepository.deleteById(stud.getStudentid());
-            }
-        }
+        h.deleteTestUsers();
     }
 
     @Test
@@ -72,8 +68,8 @@ class RegistrationControlTest {
     void registerCompanySuccess() {
         userDTO.setRole(Globals.Roles.company);
         assertDoesNotThrow(() -> registrationControl.registerCompany(userDTO, companyDTO));
-        assertNotNull(userRepository.findUserByUsername(testString), "Can not find user in database after registration");
-        assertNotNull(companyRepository.findCompanyByUserid(userRepository.findUserByUsername(testString).getUserid()), "Can not find company in database after registration");
+        assertNotNull(userRepository.findUserByUsername(userDTO.getUsername()), "Can not find user in database after registration");
+        assertNotNull(companyRepository.findCompanyByUserid(userRepository.findUserByUsername(userDTO.getUsername()).getUserid()), "Can not find company in database after registration");
     }
 
     @Test
@@ -84,12 +80,12 @@ class RegistrationControlTest {
         UserDTO userDTOTmp = new UserDTOImpl();
         CompanyDTO companyDTOTmp = new CompanyDTOImpl();
 
-        userDTOTmp.setUsername(testString);
+        userDTOTmp.setUsername(userDTO.getUsername());
         DatabaseUserException thrown = assertThrows(DatabaseUserException.class, () -> registrationControl.registerCompany(userDTO, companyDTOTmp));
         assertEquals("Username already exists", thrown.getMessage());
 
         userDTOTmp.setUsername("");
-        userDTOTmp.setEmail(testString);
+        userDTOTmp.setEmail(userDTO.getEmail());
         thrown = assertThrows(DatabaseUserException.class, () -> registrationControl.registerCompany(userDTOTmp, companyDTOTmp));
         assertEquals("Email already exists", thrown.getMessage());
     }
@@ -99,8 +95,8 @@ class RegistrationControlTest {
     void registerStudentSuccess() {
         userDTO.setRole(Globals.Roles.student);
         assertDoesNotThrow(() -> registrationControl.registerStudent(userDTO, studentDTO));
-        assertNotNull(userRepository.findUserByUsername(testString), "Can not find user in database after registration");
-        assertNotNull(studentRepository.findStudentByUserid(userRepository.findUserByUsername(testString).getUserid()), "Can not find company in database after registration");
+        assertNotNull(userRepository.findUserByUsername(userDTO.getUsername()), "Can not find user in database after registration");
+        assertNotNull(studentRepository.findStudentByUserid(userRepository.findUserByUsername(userDTO.getUsername()).getUserid()), "Can not find company in database after registration");
     }
 
     @Test
@@ -111,17 +107,17 @@ class RegistrationControlTest {
         UserDTO userDTOTmp = new UserDTOImpl();
         StudentDTO studentDTOTmp = new StudentDTOImpl();
 
-        userDTOTmp.setUsername(testString);
+        userDTOTmp.setUsername(userDTO.getUsername());
         DatabaseUserException thrown = assertThrows(DatabaseUserException.class, () -> registrationControl.registerStudent(userDTO, studentDTOTmp));
         assertEquals("Username already exists", thrown.getMessage());
 
         userDTOTmp.setUsername("");
-        userDTOTmp.setEmail(testString);
+        userDTOTmp.setEmail(userDTO.getEmail());
         thrown = assertThrows(DatabaseUserException.class, () -> registrationControl.registerStudent(userDTOTmp, studentDTOTmp));
         assertEquals("Email already exists", thrown.getMessage());
 
         userDTOTmp.setEmail("");
-        studentDTOTmp.setMatrikelnumber(matrikelNr);
+        studentDTOTmp.setMatrikelnumber(studentDTO.getMatrikelnumber());
         thrown = assertThrows(DatabaseUserException.class, () -> registrationControl.registerStudent(userDTOTmp, studentDTOTmp));
         assertEquals("Matrikelnumber already exists", thrown.getMessage());
     }

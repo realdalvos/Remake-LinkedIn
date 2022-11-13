@@ -17,9 +17,13 @@ public interface JobDTO {
 
     void setDescription(String description);
 
-    String getSalary();
+    Integer getSalary();
 
-    void setSalary(String salary);
+    void setSalary(Integer salary);
     String getLocation();
     void setLocation(String location);
+
+    String getContactdetails();
+
+    void setContactdetails(String contactdetails);
 }
