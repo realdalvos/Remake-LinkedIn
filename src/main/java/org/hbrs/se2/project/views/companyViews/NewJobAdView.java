@@ -86,7 +86,7 @@ public class NewJobAdView extends Div {
         newJob.getElement().getStyle().set("font-size","30px");
         newJob.getElement().getStyle().set("text-align","center"); // content centered instead of being stuck on the side
         Icon createJobAdIcon = new Icon(VaadinIcon.EDIT);
-        newJob.getElement().appendChild(createJobAdIcon.getElement());
+        newJob.getElement().appendChild(createJobAdIcon.getElement()); // Added Icon
 
 
         /*
@@ -134,7 +134,7 @@ public class NewJobAdView extends Div {
         title.setValueChangeMode(ValueChangeMode.EAGER); // changing character counter while typing
         title.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitTitle));
         title.setPlaceholder("Titel");
-        title.setClearButtonVisible(true);
+        title.setClearButtonVisible(true); // opens oportunity to delete text
         return title;
     }
 
