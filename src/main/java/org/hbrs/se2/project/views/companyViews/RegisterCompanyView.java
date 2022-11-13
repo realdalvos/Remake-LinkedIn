@@ -58,13 +58,12 @@ public class RegisterCompanyView extends RegisterView {
                 event -> confirmPasswordBinding.validate());
 
         confirmButton.addClickListener(event -> {
-            boolean success = true;
-
             // register new Company with passed in values from register form
             try {
                 if (userBinder.isValid() && concreteUserBinder.isValid()) {
                     // function to register new company
                     registrationControl.registerCompany(userBinder.getBean(), concreteUserBinder.getBean());
+                    navigateHandler.navigateToLoginPage();
                 } else {
                     Utils.makeDialog("Fülle bitte alle Felder aus");
                     logger.info("Not all fields have been filled in");
@@ -74,16 +73,8 @@ public class RegisterCompanyView extends RegisterView {
                 String message = Utils.getRootCause(e);
                 // Error dialog
                 Utils.makeDialog(message);
-                success = false;
-            }
-
-            if(success) {
-                navigateHandler.navigateToLoginPage();
-            } else {
-                logger.error("An error has occurred while saving to the database");
+                logger.error("An error has occurred while saving to the database", e);
             }
         });
-
     }
-
 }

@@ -65,11 +65,11 @@ public class NewJobAdView extends Div {
             if (binder.isValid()) {
                 // call job control to save new job post entity
                 jobControl.createNewJobPost(binder.getBean());
+                navigateHandler.navigateToMyAdsView();
             } else {
                 Utils.makeDialog("Fülle bitte alle Felder aus");
                 logger.info("Not all fields have been filled in");
             }
-            navigateHandler.navigateToMyAdsView();
         });
 
         // add all components to View
