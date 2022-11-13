@@ -60,5 +60,13 @@ public class JobControl {
     public List<JobDTO> getAllCompanyJobs(int compId){
         return jobService.getAllCompanyJobs(compId);
     }
+
+    /**
+     * Removes a job
+     * @param jobid Job ID
+     */
+    public void deleteJob(int jobid){
+        jobService.removeJob(jobid);
+    }
 }
 
