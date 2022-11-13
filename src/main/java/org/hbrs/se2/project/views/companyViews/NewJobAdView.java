@@ -8,6 +8,9 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -25,6 +28,7 @@ import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
 
+import javax.swing.*;
 import java.util.Locale;
 
 /**
@@ -68,7 +72,16 @@ public class NewJobAdView extends Div {
     private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
 
     public NewJobAdView(JobControl jobControl) {
-        setSizeFull();
+        this.setSizeFull();
+
+
+        // new job ad form
+        //FormLayout formLayout = new FormLayout();
+
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setAlignSelf(FlexComponent.Alignment.CENTER);
+        verticalLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+
         H3 newAdText = new H3();
         H3 newJob = newAdText;
         newJob.setText("Neue Jobanzeige erstellen            ");
@@ -76,10 +89,8 @@ public class NewJobAdView extends Div {
         newJob.getElement().getStyle().set("text-align","center"); // content centered instead of being stuck on the side
         Icon createJobAdIcon = new Icon(VaadinIcon.EDIT);
         newJob.getElement().appendChild(createJobAdIcon.getElement());
+        HorizontalLayout hl = new HorizontalLayout();
 
-
-        // new job ad form
-        FormLayout formLayout = new FormLayout();
 
         /*
         entryData
@@ -89,10 +100,10 @@ public class NewJobAdView extends Div {
         (remove formLayout.add(title, description, contactdetails, salary, location, postButton);)
          */
 
-        formLayout.add(title, description, contactdetails, salary, location, postButton);
-        formLayout.setResponsiveSteps(
-                new FormLayout.ResponsiveStep("0", 1)
-        );
+        verticalLayout.add(title, description, contactdetails, salary, location, postButton);
+        //horizontalLayout.setResponsiveSteps(
+        //        new FormLayout.ResponsiveStep("0", 1)
+        //);
 
         binder.setBean(new JobDTOImpl(jobControl.getCompanyByUserid(Utils.getCurrentUser().getUserid()).getCompanyid()));
         // map input field values to DTO variables based on chosen names
@@ -114,7 +125,7 @@ public class NewJobAdView extends Div {
 
         // add all components to View
         add(newAdText);
-        add(formLayout);
+        add(verticalLayout);
         this.setWidth("60%");
     }
 
