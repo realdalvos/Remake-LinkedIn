@@ -9,6 +9,7 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
@@ -21,6 +22,7 @@ import org.hbrs.se2.project.views.AppView;
 /**
  * Company - Create new Job Post / Job Ad
  */
+
 @Route(value = Globals.Pages.NEW_ADD_VIEW, layout = AppView.class)
 @PageTitle("Joberstellung ")
 public class NewJobAdView extends Div {
@@ -34,7 +36,7 @@ public class NewJobAdView extends Div {
     // Salary text field
     private IntegerField salary = createSalaryArea();
     // Location text field
-    private TextField location = new TextField("Arbeitsort");
+    private TextField location = createWorkLocation();
     // post new job button
     private Button postButton = new Button("Anzeige erstellen");
 
@@ -73,13 +75,17 @@ public class NewJobAdView extends Div {
         // add all components to View
         add(newAdText);
         add(formLayout);
-        this.setWidth("50%");
+        this.setWidth("60%");
     }
+
+    // Adding a character counter
 
     private TextArea createTitleArea() {
         TextArea title = new TextArea("Titel");
-        int charLimitTitle = 100;
+        int charLimitTitle = 25;    // smaller character Limit for title
+        title.setWidthFull();
         title.setMaxLength(charLimitTitle);
+        title.setValueChangeMode(ValueChangeMode.EAGER); // changing character counter while typing
         title.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitTitle));
         return title;
     }
@@ -87,7 +93,9 @@ public class NewJobAdView extends Div {
     private TextArea createDescriptionArea() {
         TextArea description = new TextArea("Beschreibung");
         int charLimitDescr = 1024;
+        description.setWidthFull();
         description.setMaxLength(charLimitDescr);
+        description.setValueChangeMode(ValueChangeMode.EAGER);
         description.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
         return description;
     }
@@ -100,4 +108,16 @@ public class NewJobAdView extends Div {
         euroField.setSuffixComponent(euroSuffix);
         return euroField;
     }
+
+    private TextField createWorkLocation() {
+        TextField location = new TextField("Arbeitsort");
+        int charLimitDescr = 50;
+        location.setWidthFull();
+        location.setMaxLength(charLimitDescr);
+        location.setValueChangeMode(ValueChangeMode.EAGER);
+        location.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
+        return location;
+    }
+
+
 }
