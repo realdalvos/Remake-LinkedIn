@@ -1,10 +1,8 @@
 package org.hbrs.se2.project.util;
 
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
-import org.hbrs.se2.project.dtos.UserDTO;
 
 import java.util.Arrays;
 
@@ -75,15 +73,6 @@ public class Utils {
         dialog.setWidth("400px");
         dialog.setHeight("150px");
         dialog.open();
-    }
-
-    /**
-     * Returns the current logged in User from Vaadin session
-     *
-     * @return The currently logged in user as UserDTO
-     */
-    public static UserDTO getCurrentUser() {
-        return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
     }
 }
 

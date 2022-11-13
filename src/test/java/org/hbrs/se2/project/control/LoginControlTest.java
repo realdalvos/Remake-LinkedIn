@@ -2,10 +2,6 @@ package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
-import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
-import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
-import org.hbrs.se2.project.repository.UserRepository;
-import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.HelperForTests;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +15,7 @@ class LoginControlTest {
     LoginControl loginControl;
     @Autowired
     HelperForTests h;
-
+    @Autowired
     UserDTO testUser;
 
     @BeforeEach

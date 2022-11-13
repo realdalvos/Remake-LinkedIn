@@ -12,6 +12,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
+import org.hbrs.se2.project.control.LoginControl;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
@@ -22,9 +23,8 @@ import org.hbrs.se2.project.views.AppView;
  * Company - Create new Job Post / Job Ad
  */
 @Route(value = Globals.Pages.NEW_ADD_VIEW, layout = AppView.class)
-@PageTitle("Joberstellung ")
+@PageTitle("Anzeige erstellen")
 public class NewJobAdView extends Div {
-
     // Job title text area
     private TextArea title = createTitleArea();
     // Job Description text area
@@ -40,7 +40,7 @@ public class NewJobAdView extends Div {
 
     private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
 
-    public NewJobAdView(JobControl jobControl) {
+    public NewJobAdView(JobControl jobControl, LoginControl loginControl) {
         setSizeFull();
         H3 newAdText = new H3();
         newAdText.setText("Neue Jobanzeige erstellen");
@@ -52,11 +52,11 @@ public class NewJobAdView extends Div {
                 new FormLayout.ResponsiveStep("0", 1)
         );
 
-        binder.setBean(new JobDTOImpl(jobControl.getCompanyByUserid(Utils.getCurrentUser().getUserid()).getCompanyid()));
+        binder.setBean(new JobDTOImpl(jobControl.getCompanyByUserid(loginControl.getCurrentUser().getUserid()).getCompanyid()));
         // map input field values to DTO variables based on chosen names
         binder.bindInstanceFields(this);
 
-        contactdetails.setValue(Utils.getCurrentUser().getEmail());
+        contactdetails.setValue(loginControl.getCurrentUser().getEmail());
 
         postButton.addClickListener(event -> {
 

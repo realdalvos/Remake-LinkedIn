@@ -30,28 +30,20 @@ class RegistrationControlTest {
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
-    RegistrationControl registrationControl = new RegistrationControl();
+    RegistrationControl registrationControl;
     @Autowired
     HelperForTests h;
 
+    @Autowired
     UserDTO userDTO;
+    @Autowired
     StudentDTO studentDTO;
+    @Autowired
     CompanyDTO companyDTO;
-    String testString = "JUnitTest";
-    String matrikelNr = "123654";
 
     @BeforeEach
     @DisplayName("Creating a user called \"JUnitTest\" exists.")
     void setUp() {
-        /*
-        tearDown();
-        userDTO = new UserDTOImpl(testString, testString, testString, Globals.Roles.company);
-        studentDTO = new StudentDTOImpl(userDTO.getUserid(), testString, testString, matrikelNr, testString);
-        companyDTO = new CompanyDTOImpl(userDTO.getUserid(), testString, testString, false);
-
-        companyDTO.setName(testString);
-
-         */
         userDTO = h.getUserDTOForCompany();
         companyDTO = h.getCompanyDTO();
         studentDTO = h.getStudentDTO();

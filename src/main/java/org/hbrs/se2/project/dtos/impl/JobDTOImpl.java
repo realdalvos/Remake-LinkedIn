@@ -1,9 +1,10 @@
 package org.hbrs.se2.project.dtos.impl;
 
 import org.hbrs.se2.project.dtos.JobDTO;
-
+import org.springframework.stereotype.Component;
 import javax.validation.constraints.NotEmpty;
 
+@Component
 public class JobDTOImpl implements JobDTO {
     private int jobid;
     private int companyid;
@@ -17,7 +18,9 @@ public class JobDTOImpl implements JobDTO {
     @NotEmpty
     private String contactdetails;
 
-    public JobDTOImpl (int companyid) { this.companyid = companyid; }
+    public JobDTOImpl(){}
+
+    public JobDTOImpl(int companyid) { this.companyid = companyid; }
 
     public JobDTOImpl(int companyid, String title, String description, Integer salary, String location, String contactdetails) {
         this.companyid = companyid;

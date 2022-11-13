@@ -13,11 +13,9 @@ import com.vaadin.flow.data.binder.Binder;
 import org.hbrs.se2.project.control.RegistrationControl;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.helper.navigateHandler;
-import org.hbrs.se2.project.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class RegisterView extends VerticalLayout {
-
     @Autowired
     protected RegistrationControl registrationControl;
     protected H4 registerText = new H4();
@@ -25,10 +23,11 @@ public abstract class RegisterView extends VerticalLayout {
     protected PasswordField confirmPassword = new PasswordField("Passwort bestätigen");
     protected TextField username = new TextField("Benutzername");
     protected EmailField email = createEmailField();
+    protected Button confirmButton = new Button("Registrieren");
     protected Binder<UserDTOImpl> userBinder = new BeanValidationBinder<>(UserDTOImpl.class);
 
     protected Button loginButton() {
-        Button loginButton = new Button("Ich habe bereits einen Account - hier Einloggen");
+        Button loginButton = new Button("Zum Login");
         loginButton.addClickListener(event -> navigateHandler.navigateToLoginPage());
         return loginButton;
     }
