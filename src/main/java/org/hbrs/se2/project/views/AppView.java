@@ -38,7 +38,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
     public AppView() {
         if(getCurrentUser() == null) {
-            logger.info("Not all fields have been filled in");
+            logger.info("In Constructor of App View - No User given");
         } else {
             setUpUI();
         }
