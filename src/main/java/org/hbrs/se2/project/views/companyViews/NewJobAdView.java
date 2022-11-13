@@ -83,7 +83,7 @@ public class NewJobAdView extends Div {
         H3 newAdText = new H3();
         H3 newJob = newAdText;
         newJob.setText("Neue Jobanzeige erstellen            ");
-        newJob.getElement().getStyle().set("font-size","25px");
+        newJob.getElement().getStyle().set("font-size","30px");
         newJob.getElement().getStyle().set("text-align","center"); // content centered instead of being stuck on the side
         Icon createJobAdIcon = new Icon(VaadinIcon.EDIT);
         newJob.getElement().appendChild(createJobAdIcon.getElement());
