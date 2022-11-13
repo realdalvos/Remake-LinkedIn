@@ -88,7 +88,7 @@ public class Utils {
     }
 
     /**
-     * Cretaes a logger with specified name
+     * Creates a logger with specified name
      *
      * @param s the logger identifier, for example class name
      * @return Returns a newly created logger
