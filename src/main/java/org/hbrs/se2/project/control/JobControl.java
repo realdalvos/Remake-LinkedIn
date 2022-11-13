@@ -4,16 +4,17 @@ import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.views.studentViews.JobsView;
 import org.hbrs.se2.project.services.impl.JobService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
 @Controller
 public class JobControl {
+    final JobService jobService;
 
-    @Autowired
-    JobService jobService;
+    public JobControl(JobService jobService) {
+        this.jobService = jobService;
+    }
 
     /**
      * Get the Company of a User
@@ -58,6 +59,14 @@ public class JobControl {
      */
     public List<JobDTO> getAllCompanyJobs(int compId){
         return jobService.getAllCompanyJobs(compId);
+    }
+
+    /**
+     * Removes a job
+     * @param jobid Job ID
+     */
+    public void deleteJob(int jobid){
+        jobService.removeJob(jobid);
     }
 }
 

@@ -86,4 +86,13 @@ public class JobService implements JobServiceInterface {
         }
         return matchingJobs;
     }
+
+    /**
+     * Removes a job entry in the Database identified by the Job ID
+     * @param jobid Job ID
+     */
+    @Override
+    public void removeJob(int jobid) {
+        this.jobRepository.deleteById(jobid);
+    }
 }

@@ -4,14 +4,15 @@ import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.StudentDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.services.impl.RegistrationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class RegistrationControl {
+    final RegistrationService registrationService;
 
-    @Autowired
-    RegistrationService registrationService;
+    public RegistrationControl(RegistrationService registrationService) {
+        this.registrationService = registrationService;
+    }
 
     /**
      * Create a new Student and save their profile to the database

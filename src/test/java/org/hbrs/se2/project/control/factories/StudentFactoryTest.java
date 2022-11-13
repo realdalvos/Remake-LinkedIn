@@ -18,24 +18,10 @@ class StudentFactoryTest {
 
     @BeforeEach
     void setUp() {
-        UserDTOImpl testUserImpl = new UserDTOImpl();
-        testUserImpl.setUsername("JUnitTest");
-        testUserImpl.setPassword("SicheresPasswort");
-        testUserImpl.setEmail("testUser@JUnitTest.de");
-        testUserImpl.setUserid(99999);
-        testUserImpl.setRole(Globals.Roles.company);
+        testUser = new UserDTOImpl("JUnitTest", "SicheresPasswort", "testUser@JUnitTest.de", Globals.Roles.student);
+        testUser.setUserid(99999);
 
-        testUser = testUserImpl;
-
-        StudentDTOImpl testStudentImpl = new StudentDTOImpl();
-        testStudentImpl.setStudentId(1);
-        testStudentImpl.setFirstname("Test");
-        testStudentImpl.setLastname("Student");
-        testStudentImpl.setMatrikelnumber("1234");
-        testStudentImpl.setUniversity("HRBS");
-        testStudentImpl.setUserid(testUser.getUserid());
-
-        testStudent = testStudentImpl;
+        testStudent = new StudentDTOImpl(testUser.getUserid(), "Test", "Student", "1234", "HRBS");
     }
 
     @Test

@@ -1,7 +1,6 @@
 package org.hbrs.se2.project.views.companyViews;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
@@ -16,7 +15,7 @@ import org.hbrs.se2.project.views.RegisterView;
 import org.slf4j.Logger;
 
 @Route(value = Globals.Pages.REGISTER_COMPANY_VIEW)
-@PageTitle("Register as a Company")
+@PageTitle("Als Unternehmen registrieren")
 public class RegisterCompanyView extends RegisterView {
     private final Logger logger = Utils.getLogger(this.getClass().getName());
 
@@ -27,8 +26,6 @@ public class RegisterCompanyView extends RegisterView {
     public RegisterCompanyView() {
         setSizeFull();
         registerText.setText("Registrierung");
-
-        Button confirmButton = new Button("Registrierung als Unternehmen");
 
         userBinder.setBean(new UserDTOImpl(Globals.Roles.company));
         //The Pattern matches from left to right: At least one letter, at least one digit, at lest one special character and at least 8 characters

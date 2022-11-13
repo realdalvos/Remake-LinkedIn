@@ -1,9 +1,11 @@
 package org.hbrs.se2.project.dtos.impl;
 
 import org.hbrs.se2.project.dtos.StudentDTO;
+import org.springframework.stereotype.Component;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 
+@Component
 public class StudentDTOImpl implements StudentDTO {
     private int studentid;
     private int userid;

@@ -9,6 +9,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.VaadinService;
@@ -20,22 +21,17 @@ import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
- * View zur Darstellung der Startseite. Diese zeigt dem Benutzer ein Login-Formular an.
- *
+ * Show Login View to user when not logged in
  */
 @Route(value="")
 @RouteAlias(value=Globals.Pages.LOGIN_VIEW)
 @Theme(themeFolder = "mytheme", variant = Lumo.DARK)
-
-
+@PageTitle("Login")
 public class LoginView extends VerticalLayout {
-
-    @Autowired
-    private LoginControl loginControl;
+    private final LoginControl loginControl;
 
     private LoginI18n createLoginI18n(){
         LoginI18n i18n = LoginI18n.createDefault();
@@ -59,7 +55,7 @@ public class LoginView extends VerticalLayout {
         return i18n;
     }
 
-    public LoginView() {
+    public LoginView(LoginControl loginControl) {
         setSizeFull();
         Avatar avatarBasic = new Avatar();
         LoginForm component = new LoginForm();
@@ -118,6 +114,7 @@ public class LoginView extends VerticalLayout {
         add(buttonCompany);
         this.setAlignItems(Alignment.CENTER);
 
+        this.loginControl = loginControl;
     }
 
     private void grabAndSetUserIntoSession() {
