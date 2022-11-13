@@ -1,10 +1,13 @@
 package org.hbrs.se2.project.views.companyViews;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -67,7 +70,12 @@ public class NewJobAdView extends Div {
     public NewJobAdView(JobControl jobControl) {
         setSizeFull();
         H3 newAdText = new H3();
-        newAdText.setText("Neue Jobanzeige erstellen");
+        H3 newJob = newAdText;
+        newJob.setText("Neue Jobanzeige erstellen            ");
+        newJob.getElement().getStyle().set("font-size","25px");
+        newJob.getElement().getStyle().set("text-align","center"); // content centered instead of being stuck on the side
+        Icon createJobAdIcon = new Icon(VaadinIcon.EDIT);
+        newJob.getElement().appendChild(createJobAdIcon.getElement());
 
 
         // new job ad form
