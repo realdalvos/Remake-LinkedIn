@@ -12,10 +12,13 @@ import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.RegisterView;
+import org.slf4j.Logger;
 
 @Route(value = Globals.Pages.REGISTER_COMPANY_VIEW)
 @PageTitle("Als Unternehmen registrieren")
 public class RegisterCompanyView extends RegisterView {
+    private final Logger logger = Utils.getLogger(this.getClass().getName());
+
     // text fields
     private TextField name = new TextField("Unternehmensname");
     private Binder<CompanyDTOImpl> concreteUserBinder = new BeanValidationBinder<>(CompanyDTOImpl.class);
@@ -52,32 +55,23 @@ public class RegisterCompanyView extends RegisterView {
                 event -> confirmPasswordBinding.validate());
 
         confirmButton.addClickListener(event -> {
-            boolean success = true;
-
             // register new Company with passed in values from register form
             try {
                 if (userBinder.isValid() && concreteUserBinder.isValid()) {
                     // function to register new company
                     registrationControl.registerCompany(userBinder.getBean(), concreteUserBinder.getBean());
+                    navigateHandler.navigateToLoginPage();
                 } else {
                     Utils.makeDialog("Fülle bitte alle Felder aus");
-                    throw new Error("Nicht alle Felder wurden ausgefüllt");
+                    logger.info("Not all fields have been filled in");
                 }
             } catch (Exception e) {
                 // get the root cause of an exception
                 String message = Utils.getRootCause(e);
                 // Error dialog
                 Utils.makeDialog(message);
-                success = false;
-            }
-
-            if(success) {
-                navigateHandler.navigateToLoginPage();
-            } else {
-                System.out.println("Ein Fehler ist bei der Speicherung in der Datenbank aufgetreten");
+                logger.error("An error has occurred while saving to the database", e);
             }
         });
-
     }
-
 }

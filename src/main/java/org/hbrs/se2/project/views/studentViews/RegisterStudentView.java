@@ -12,6 +12,7 @@ import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.RegisterView;
+import org.slf4j.Logger;
 
 /**
  * Register View - Form to register as a student
@@ -19,6 +20,8 @@ import org.hbrs.se2.project.views.RegisterView;
 @Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
 @PageTitle("Als Student registrieren")
 public class RegisterStudentView extends RegisterView {
+    private final Logger logger = Utils.getLogger(this.getClass().getName());
+
     // text fields
     private TextField firstname = new TextField("Vorname");
     private TextField lastname = new TextField("Nachname");
@@ -57,33 +60,23 @@ public class RegisterStudentView extends RegisterView {
                 event -> confirmPasswordBinding.validate());
 
         confirmButton.addClickListener(event -> {
-            boolean success = true;
-
             // register new Company with passed in values from register form
             try {
                 if (userBinder.isValid() && concreteUserBinder.isValid()) {
                     // function to register new company
                     registrationControl.registerStudent(userBinder.getBean(), concreteUserBinder.getBean());
+                    navigateHandler.navigateToLoginPage();
                 } else {
                     Utils.makeDialog("Fülle bitte alle Felder aus");
-                    throw new Error("Nicht alle Felder wurden ausgefüllt");
+                    logger.info("Not all fields have been filled in");
                 }
             } catch (Exception e) {
                 // get the root cause of an exception
                 String message = Utils.getRootCause(e);
                 // Error dialog
                 Utils.makeDialog(message);
-                success = false;
-            }
-
-            if(success) {
-                navigateHandler.navigateToLoginPage();
-            } else {
-                System.out.println("Ein Fehler ist bei der Speicherung in der Datenbank aufgetreten");
+                logger.error("An error has occurred while saving to the database", e);
             }
         });
     }
-
 }
-
-
