@@ -201,7 +201,7 @@ public class JobControlTest {
     }
 
     @Test
-    @DisplayName("Testing the getCompanByUserid Method")
+    @DisplayName("Testing the getCompanyByUserid Method")
     void test_getCompanyByUserid() {
         CompanyDTO companyByUserid = jobControl.getCompanyByUserid(testCompanyDTO.getUserid());
 
