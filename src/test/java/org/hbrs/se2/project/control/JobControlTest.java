@@ -4,9 +4,7 @@ package org.hbrs.se2.project.control;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
-import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;
-import org.hbrs.se2.project.repository.UserRepository;
 import org.hbrs.se2.project.util.HelperForTests;
 import org.hbrs.se2.project.views.studentViews.JobsView;
 import org.junit.jupiter.api.*;
@@ -20,13 +18,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class JobControlTest {
-    //To save user, get userDTO and delete user from database
-    @Autowired
-    UserRepository userRepository;
-    //To save company and get companyDTO
-    @Autowired
-    CompanyRepository companyRepository;
-    //To get jobDTO
     @Autowired
     JobRepository jobRepository;
     @Autowired
@@ -58,6 +49,7 @@ public class JobControlTest {
     }
 
     @Test
+    @DisplayName("Tests if the test Job was created in the database.")
     public void testIfJobIsCreatedInDB(){
         //Checking if there is a job with companyid of the testCompany and title of the testJob
         JobDTO jobFromRepo = jobRepository.findJobByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle());
@@ -109,14 +101,7 @@ public class JobControlTest {
     /**
      * Checks if the job testJob is contained in the list.*/
     private boolean containsTestJob(List<JobDTO> list){
-        boolean foundTestJob = false;
-        for(JobDTO job : list){
-            //If jobid matches than its definitely the testjob
-            if(job.getJobid() == testJob.getJobid()){
-                foundTestJob = true;
-            }
-        }
-        return foundTestJob;
+        return containsJob(list, testJob);
     }
 
     /**
@@ -138,12 +123,9 @@ public class JobControlTest {
 
     @Test
     @DisplayName("Tests if getAllJobsData produces correct results.")
-    void getAllJobsData() {
-        JobDTO testJobImpl = new JobDTOImpl(
-                testCompanyDTO.getCompanyid(), "Test title", "Testbeschreibung. assembly programmer.", 20, "Test location", "Test contactdetails");
-
+    void test_getAllJobsData() {
         List<JobDTO> tmp = new ArrayList<>();
-        tmp.add(testJobImpl);
+        tmp.add(testJob);
 
         JobsView.JobDetail jobDetail = jobControl.getAllJobsData(tmp).get(0);
 
@@ -152,5 +134,79 @@ public class JobControlTest {
         assertEquals(20, jobDetail.getSalary());
         assertEquals("Test contactdetails", jobDetail.getContactdetails());
         assertEquals("TestCompany", jobDetail.getName());
+    }
+
+    @Test
+    @DisplayName("Testing if getAllCompanyJobs works as expected.")
+    void test_getAllCompanyJobs(){
+        //2 companies are needed for testing
+        List<CompanyDTO> listOfCompanies = h.registerTestCompany(2);
+        testCompanyDTO = listOfCompanies.get(0);
+        CompanyDTO testCompanyDTO2 = listOfCompanies.get(1);
+
+        //Update companyid of testJob since a new company was created
+        testJob = new JobDTOImpl(
+                testCompanyDTO.getCompanyid(), "Test title", "Testbeschreibung. assembly programmer.", 20, "Test location", "Test contactdetails");
+        jobControl.createNewJobPost(testJob);
+
+        List<JobDTO> list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
+
+        //Should return list containing only test job
+        assertEquals(1, list.size(), "List should contain 1 element");
+        assertTrue(containsJob(list, testJob), "Should contain the test job");
+
+        JobDTO testJob2 = new JobDTOImpl(
+                testCompanyDTO.getCompanyid(), "Test title2", "Testbeschreibung2", 40, "Test location2", "Test contactdetails2");
+
+        jobControl.createNewJobPost(testJob2);
+        list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
+
+        //Should return list containing only testJob and testJob2
+        assertEquals(2, list.size(), "List should contain 2 elements.");
+        assertTrue(containsJob(list, testJob), "Should contain the testJob");
+        assertTrue(containsJob(list, testJob2), "Should contain testJob2");
+
+
+        JobDTO testJob3 = new JobDTOImpl(
+                testCompanyDTO2.getCompanyid(), "Test title3", "Testbeschreibung3", 40, "Test location3", "Test contactdetails3");
+
+        jobControl.createNewJobPost(testJob3);
+        list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
+
+        //Should return list containing only testJob and testJob2, NOT testJob3
+        assertEquals(2, list.size(), "List should contain 2 elements.");
+        assertTrue(containsJob(list, testJob), "Should contain the testJob");
+        assertTrue(containsJob(list, testJob2), "Should contain testJob2");
+        assertFalse(containsJob(list, testJob3), "Should NOT contain testJob3 since it the companyid differs");
+
+        list = jobControl.getAllCompanyJobs(testCompanyDTO2.getCompanyid());
+
+        //Should return list containing only testJob3, NOT testJob2 or testJob3
+        assertEquals(1, list.size(), "List should contain 1 element.");
+        assertFalse(containsJob(list, testJob), "Should NOT contain the testJob since it the companyid differs");
+        assertFalse(containsJob(list, testJob2), "Should NOT contain testJob2 since it the companyid differs");
+        assertTrue(containsJob(list, testJob3), "Should contain testJob3.");
+    }
+
+    @Test
+    @DisplayName("Testing the deleteJob Method")
+    void test_removeJob() {
+        List<JobDTO> list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
+        assertEquals(1, list.size(), "List should contain 1 element");
+
+        jobControl.deleteJob(testJob.getJobid());
+
+        list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
+        assertEquals(0, list.size(), "List should contain no element");
+    }
+
+    @Test
+    @DisplayName("Testing the getCompanyByUserid Method")
+    void test_getCompanyByUserid() {
+        CompanyDTO companyByUserid = jobControl.getCompanyByUserid(testCompanyDTO.getUserid());
+
+        assertNotNull(companyByUserid, "Should return the test company");
+
+        assertEquals(testCompanyDTO.getCompanyid(), companyByUserid.getCompanyid(), "Should have the same companyid since its the same company.");
     }
 }

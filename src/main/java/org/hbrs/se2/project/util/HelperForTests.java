@@ -12,6 +12,9 @@ import org.hbrs.se2.project.repository.StudentRepository;
 import org.hbrs.se2.project.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class HelperForTests {
     final UserRepository userRepository;
@@ -24,6 +27,8 @@ public class HelperForTests {
     private UserDTO testUserForStudent = new UserDTOImpl("TestUserStudent", "SicheresPasswort", "testUser2@JUnitTest.de", Globals.Roles.student);
     private StudentDTO testStudent = new StudentDTOImpl(0, "Stan", "Student", "123456", "HBRS");
 
+    private List<CompanyDTO> registeredCompanies = new ArrayList<>();
+
     public HelperForTests(UserRepository userRepository, CompanyRepository companyRepository, StudentRepository studentRepository, RegistrationControl registrationControl) {
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
@@ -35,10 +40,12 @@ public class HelperForTests {
      * Registering the test company and returning a CompanyDTO of the registered company.
      * If needed, you can get the raw CompanyDTO with getCompanyDTO() and the corresponding raw UserDTO with getUserDTOForCompany().
      * NOTE: Since the company was saved in the database the user id will be set (So if you want the corresponding user from the database u can find him by this user id).
+     * NOTE: Already registered test company created with registerTestCompany() will be deleted.
      * @return CompanyDTO of the test company.
      * </pre>*/
     public CompanyDTO registerTestCompany(){
-        deleteTestCompany();
+        //Make space for testUserForCompany
+        deleteUsersOccupyingUniques(testUserForCompany);
 
         //Save User to database
         try {
@@ -48,7 +55,49 @@ public class HelperForTests {
         }
 
         UserDTO u = userRepository.findUserByUsername(testUserForCompany.getUsername());
-        return companyRepository.findCompanyByUserid(u.getUserid());
+        CompanyDTO testCompany = companyRepository.findCompanyByUserid(u.getUserid());
+        //Add testCompany to list of registered companies
+        registeredCompanies.add(testCompany);
+        return testCompany;
+    }
+
+    /**
+     * A way to register multiple companies.
+     * NOTE: All already registered test companies created with registerTestCompany() or registerTestCompany(int) will be deleted.
+     * @param n number of companies.
+     * @return List of Companies.*/
+    public List<CompanyDTO> registerTestCompany(int n){
+        ArrayList<CompanyDTO> list = new ArrayList<>();
+        if(n < 1){
+            return list;
+        }
+
+        //first company to be registered is the default test company
+        list.add(registerTestCompany());
+
+        for(int i = 0; i < n-1; i++){
+            UserDTO tmp = getUserDTOForCompany();
+            UserDTOImpl testUser = new UserDTOImpl(tmp.getUsername() + (i+1), tmp.getPassword() + (i+1), tmp.getEmail() + (i+1), tmp.getRole());
+
+            CompanyDTO tmpC = getCompanyDTO();
+            CompanyDTOImpl testCompany = new CompanyDTOImpl(0, tmpC.getName() + (i+1), tmpC.getIndustry() + (i+1), false);
+
+            //make space for user
+            deleteUsersOccupyingUniques(testUser);
+
+            //Save User to database
+            try {
+                registrationControl.registerCompany(testUser, testCompany);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            //adding company to list of registered companies
+            list.add(companyRepository.findCompanyByUserid((userRepository.findUserByUsername(testUser.getUsername())).getUserid()));
+        }
+
+        this.registeredCompanies = list;
+        return list;
     }
 
     /**<pre>
@@ -58,7 +107,7 @@ public class HelperForTests {
      * @return StudentDTO of the test company.
      * </pre>*/
     public StudentDTO registerTestStudent(){
-        deleteTestStudent();
+        deleteRegisteredTestStudent();
 
         //Save User to database
         try {
@@ -100,14 +149,21 @@ public class HelperForTests {
     }
 
     /**
-     * Deleting the test company from the database.*/
-    public void deleteTestCompany() {
-        deleteUsersOccupyingUniques(getUserDTOForCompany());
+     * Deleting the registered test companies from the database.*/
+    public void deleteRegisteredTestCompanies() {
+        for(CompanyDTO c : registeredCompanies){
+            UserDTO tmp = userRepository.findUserByUserid(c.getUserid());
+            deleteUsersOccupyingUniques(tmp);
+        }
+        /*Has to be deleted explicitly.
+        * Some tests register this particular testUser themself and this method should delete this user.*/
+        deleteUsersOccupyingUniques(testUserForCompany);
+        registeredCompanies = new ArrayList<>();
     }
 
     /**
      * Deleting the test student from the database.*/
-    public void deleteTestStudent() {
+    public void deleteRegisteredTestStudent() {
         deleteUsersOccupyingUniques(getUserDTOForStudent());
 
         //Deleting user that occupies MatrikelNr
@@ -135,10 +191,10 @@ public class HelperForTests {
     }
 
     /**
-     * Deleting the test students and companies from the database.*/
+     * Deleting the registered test students and companies from the database.*/
     public void deleteTestUsers(){
-       deleteTestCompany();
-       deleteTestStudent();
+       deleteRegisteredTestCompanies();
+       deleteRegisteredTestStudent();
     }
 
     /*
