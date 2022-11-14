@@ -16,14 +16,8 @@ class UserFactoryTest {
 
     @BeforeEach
     void setUp() {
-        UserDTOImpl testUserImpl = new UserDTOImpl();
-        testUserImpl.setUsername("JUnitTest");
-        testUserImpl.setPassword("SicheresPasswort");
-        testUserImpl.setEmail("testUser@JUnitTest.de");
-        testUserImpl.setUserid(99999);
-        testUserImpl.setRole(Globals.Roles.company);
-
-        testUser = testUserImpl;
+        testUser = new UserDTOImpl("JUnitTest", "SicheresPasswort", "testUser@JUnitTest.de", Globals.Roles.company);
+        testUser.setUserid(99999);
     }
 
     @Test

@@ -41,4 +41,10 @@ public interface JobServiceInterface {
      * @return List of all Jobs
      */
     List<JobDTO> getAllCompanyJobs(int compId);
+
+    /**
+     * Removes a Job from the database
+     * @param jobid Job ID
+     */
+    void removeJob(int jobid);
 }

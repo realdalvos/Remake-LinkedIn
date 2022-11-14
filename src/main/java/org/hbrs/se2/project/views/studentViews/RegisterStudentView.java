@@ -1,7 +1,6 @@
 package org.hbrs.se2.project.views.studentViews;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
@@ -13,13 +12,16 @@ import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.RegisterView;
+import org.slf4j.Logger;
 
 /**
  * Register View - Form to register as a student
  */
 @Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
-@PageTitle("Register as a Student")
+@PageTitle("Als Student registrieren")
 public class RegisterStudentView extends RegisterView {
+    private final Logger logger = Utils.getLogger(this.getClass().getName());
+
     // text fields
     private TextField firstname = new TextField("Vorname");
     private TextField lastname = new TextField("Nachname");
@@ -29,8 +31,6 @@ public class RegisterStudentView extends RegisterView {
     public RegisterStudentView() {
         setSizeFull();
         registerText.setText("Registrierung");
-
-        Button confirmButton = new Button("Registrierung als Student");
 
         userBinder.setBean(new UserDTOImpl(Globals.Roles.student));
         //The Pattern matches from left to right: At least one letter, at least one digit, at lest one special character and at least 8 characters
@@ -60,33 +60,23 @@ public class RegisterStudentView extends RegisterView {
                 event -> confirmPasswordBinding.validate());
 
         confirmButton.addClickListener(event -> {
-            boolean success = true;
-
             // register new Company with passed in values from register form
             try {
                 if (userBinder.isValid() && concreteUserBinder.isValid()) {
                     // function to register new company
                     registrationControl.registerStudent(userBinder.getBean(), concreteUserBinder.getBean());
+                    navigateHandler.navigateToLoginPage();
                 } else {
                     Utils.makeDialog("Fülle bitte alle Felder aus");
-                    throw new Error("Nicht alle Felder wurden ausgefüllt");
+                    logger.info("Not all fields have been filled in");
                 }
             } catch (Exception e) {
                 // get the root cause of an exception
                 String message = Utils.getRootCause(e);
                 // Error dialog
                 Utils.makeDialog(message);
-                success = false;
-            }
-
-            if(success) {
-                navigateHandler.navigateToLoginPage();
-            } else {
-                System.out.println("Ein Fehler ist bei der Speicherung in der Datenbank aufgetreten");
+                logger.error("An error has occurred while saving to the database", e);
             }
         });
     }
-
 }
-
-

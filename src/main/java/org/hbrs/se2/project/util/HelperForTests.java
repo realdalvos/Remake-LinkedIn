@@ -10,24 +10,26 @@ import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.StudentRepository;
 import org.hbrs.se2.project.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class HelperForTests {
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    CompanyRepository companyRepository;
-    @Autowired
-    StudentRepository studentRepository;
-    @Autowired
-    RegistrationControl registrationControl;
+    final UserRepository userRepository;
+    final CompanyRepository companyRepository;
+    final StudentRepository studentRepository;
+    final RegistrationControl registrationControl;
 
     private UserDTO testUserForCompany = new UserDTOImpl("TestUserCompany", "SicheresPasswort", "testUser@JUnitTest.de", Globals.Roles.company);
     private CompanyDTOImpl testCompany = new CompanyDTOImpl(0, "TestCompany", "Testindustry", false);
     private UserDTO testUserForStudent = new UserDTOImpl("TestUserStudent", "SicheresPasswort", "testUser2@JUnitTest.de", Globals.Roles.student);
     private StudentDTO testStudent = new StudentDTOImpl(0, "Stan", "Student", "123456", "HBRS");
+
+    public HelperForTests(UserRepository userRepository, CompanyRepository companyRepository, StudentRepository studentRepository, RegistrationControl registrationControl) {
+        this.userRepository = userRepository;
+        this.companyRepository = companyRepository;
+        this.studentRepository = studentRepository;
+        this.registrationControl = registrationControl;
+    }
 
     /**<pre>
      * Registering the test company and returning a CompanyDTO of the registered company.

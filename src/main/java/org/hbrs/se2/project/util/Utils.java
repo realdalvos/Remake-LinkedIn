@@ -5,7 +5,8 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import org.hbrs.se2.project.dtos.UserDTO;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 
 public class Utils {
@@ -84,6 +85,16 @@ public class Utils {
      */
     public static UserDTO getCurrentUser() {
         return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+    }
+
+    /**
+     * Creates a logger with specified name
+     *
+     * @param s the logger identifier, for example class name
+     * @return Returns a newly created logger
+     */
+    public static Logger getLogger(String s) {
+        return LoggerFactory.getLogger(s);
     }
 }
 

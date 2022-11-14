@@ -14,25 +14,16 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CompanyFactoryTest {
-
     UserDTO testUser;
     CompanyDTO testCompany;
 
     @BeforeEach
     void setUp() {
-        UserDTOImpl testUserImpl = new UserDTOImpl();
-        testUserImpl.setUsername("JUnitTest");
-        testUserImpl.setPassword("SicheresPasswort");
-        testUserImpl.setEmail("testUser@JUnitTest.de");
-        testUserImpl.setUserid(99999);
-        testUserImpl.setRole(Globals.Roles.company);
+        testUser = new UserDTOImpl("JUnitTest", "SicheresPasswort", "testUser@JUnitTest.de", Globals.Roles.company);
+        testUser.setUserid(99999);
 
-        testUser = testUserImpl;
-
-        CompanyDTOImpl testCompanyImpl = new CompanyDTOImpl(testUser.getUserid(), "JUnitTestCompany", "Test-Industry", false);
-        testCompanyImpl.setCompanyid(1);
-
-        testCompany = testCompanyImpl;
+        testCompany = new CompanyDTOImpl(testUser.getUserid(), "JUnitTestCompany", "Test-Industry", false);
+        testCompany.setCompanyid(1);
     }
 
     @AfterEach

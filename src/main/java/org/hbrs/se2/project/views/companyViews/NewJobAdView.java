@@ -17,19 +17,22 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
+import org.hbrs.se2.project.control.LoginControl;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
+import org.slf4j.Logger;
 
 /**
  * Company - Create new Job Post / Job Ad
  */
 
 @Route(value = Globals.Pages.NEW_ADD_VIEW, layout = AppView.class)
-@PageTitle("Joberstellung ")
+@PageTitle("Anzeige erstellen")
 public class NewJobAdView extends Div {
+    private final Logger logger = Utils.getLogger(this.getClass().getName());
 
     /*
     entryDate is an option for now and will be implemented as a comment.
@@ -39,7 +42,7 @@ public class NewJobAdView extends Div {
      */
 
     // Job title text area
-    private TextArea title = createTitleArea();
+    private TextField title = createTitleField();
     // Job Description text area
     private TextArea description = createDescriptionArea();
     // Contact details
@@ -47,7 +50,7 @@ public class NewJobAdView extends Div {
     // Changed TextField to EmailField to check email addresses
     private EmailField contactdetails = new EmailField("E-Mail");
     // Salary text field
-    private IntegerField salary = createSalaryArea();
+    private IntegerField salary = createSalaryField();
     // Location text field
     private TextField location = createWorkLocation();
     // post new job button
@@ -89,22 +92,22 @@ public class NewJobAdView extends Div {
 
         verticalLayout.add(title, description, contactdetails, salary, location, postButton);
 
-        binder.setBean(new JobDTOImpl(jobControl.getCompanyByUserid(Utils.getCurrentUser().getUserid()).getCompanyid()));
+        binder.setBean(new JobDTOImpl(jobControl.getCompanyByUserid(loginControl.getCurrentUser().getUserid()).getCompanyid()));
         // map input field values to DTO variables based on chosen names
         binder.bindInstanceFields(this);
 
-        contactdetails.setValue(Utils.getCurrentUser().getEmail());
+        contactdetails.setValue(loginControl.getCurrentUser().getEmail());
 
         postButton.addClickListener(event -> {
 
             if (binder.isValid()) {
                 // call job control to save new job post entity
                 jobControl.createNewJobPost(binder.getBean());
+                navigateHandler.navigateToMyAdsView();
             } else {
                 Utils.makeDialog("Fülle bitte alle Felder aus");
-                throw new Error("Nicht alle Felder wurden ausgefüllt");
+                logger.info("Not all fields have been filled in");
             }
-            navigateHandler.navigateToMyAdsView();
         });
 
         // add all components to View
@@ -130,6 +133,7 @@ public class NewJobAdView extends Div {
 
     private TextArea createDescriptionArea() {
         TextArea description = new TextArea("Beschreibung");
+        description.getElement().setAttribute("name", "description");
         int charLimitDescr = 1024;
         description.setWidthFull();
         description.setMaxLength(charLimitDescr);
@@ -140,9 +144,16 @@ public class NewJobAdView extends Div {
         return description;
     }
 
-    private IntegerField  createSalaryArea() {
-        IntegerField euroField = new IntegerField ();
-        euroField.setLabel("Jahresgehalt");
+    private TextField  createEmailField() {
+        TextField email = new TextField("Kontaktdaten");
+        email.getElement().setAttribute("name", "email");
+        email.setPlaceholder("username@example.com");
+        return email;
+    }
+
+    private IntegerField  createSalaryField() {
+        IntegerField salary = new IntegerField("Jahresgehalt");
+        salary.getElement().setAttribute("name", "salary");
         Div euroSuffix = new Div();
         euroSuffix.setText("€");
         euroField.setSuffixComponent(euroSuffix);

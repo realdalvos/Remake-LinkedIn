@@ -1,16 +1,17 @@
 package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.services.impl.LoginService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class LoginControl {
+    final LoginService loginService;
 
-    @Autowired
-    LoginService loginService;
+    public LoginControl(LoginService loginService) {
+        this.loginService = loginService;
+    }
 
     /**
      * Authenticate the user that wants to login in with his credentials.
