@@ -42,13 +42,13 @@ public class NewJobAdView extends Div {
      */
 
     // Job title text area
-    private TextField title = createTitleField();
+    private TextArea title = createTitleArea();
     // Job Description text area
     private TextArea description = createDescriptionArea();
     // Contact details
 
     // Changed TextField to EmailField to check email addresses
-    private EmailField contactdetails = new EmailField("E-Mail");
+    private EmailField contactdetails = createEmailField();
     // Salary text field
     private IntegerField salary = createSalaryField();
     // Location text field
@@ -66,7 +66,7 @@ public class NewJobAdView extends Div {
 
     private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
 
-    public NewJobAdView(JobControl jobControl) {
+    public NewJobAdView(JobControl jobControl, LoginControl loginControl) {
 
         setHeightFull();
         VerticalLayout verticalLayout = new VerticalLayout();
@@ -144,16 +144,16 @@ public class NewJobAdView extends Div {
         return description;
     }
 
-    private TextField  createEmailField() {
-        TextField email = new TextField("Kontaktdaten");
+    private EmailField  createEmailField() {
+        EmailField email = new EmailField("Kontaktdaten");
         email.getElement().setAttribute("name", "email");
         email.setPlaceholder("username@example.com");
         return email;
     }
 
     private IntegerField  createSalaryField() {
-        IntegerField salary = new IntegerField("Jahresgehalt");
-        salary.getElement().setAttribute("name", "salary");
+        IntegerField euroField = new IntegerField("Jahresgehalt");
+        euroField.getElement().setAttribute("name", "salary");
         Div euroSuffix = new Div();
         euroSuffix.setText("€");
         euroField.setSuffixComponent(euroSuffix);
