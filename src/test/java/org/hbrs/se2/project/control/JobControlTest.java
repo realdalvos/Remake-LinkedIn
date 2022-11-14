@@ -3,6 +3,7 @@ package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.JobDTO;
+import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;
@@ -188,5 +189,27 @@ public class JobControlTest {
         assertFalse(containsJob(list, testJob), "Should NOT contain the testJob since it the companyid differs");
         assertFalse(containsJob(list, testJob2), "Should NOT contain testJob2 since it the companyid differs");
         assertTrue(containsJob(list, testJob3), "Should contain testJob3.");
+    }
+
+    @Test
+    @DisplayName("Testing the deleteJob Method")
+    void test_removeJob() {
+        List<JobDTO> list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
+        assertEquals(1, list.size(), "List should contain 1 element");
+
+        jobControl.deleteJob(testJob.getJobid());
+
+        list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
+        assertEquals(0, list.size(), "List should contain no element");
+    }
+
+    @Test
+    @DisplayName("Testing the getCompanByUserid Method")
+    void test_getCompanyByUserid() {
+        CompanyDTO companyByUserid = jobControl.getCompanyByUserid(testCompanyDTO.getUserid());
+
+        assertNotNull(companyByUserid, "Should return the test company");
+
+        assertEquals(testCompanyDTO.getCompanyid(), companyByUserid.getCompanyid(), "Should have the same companyid since its the same company.");
     }
 }
