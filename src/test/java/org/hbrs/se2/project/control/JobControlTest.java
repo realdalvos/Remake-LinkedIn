@@ -6,14 +6,10 @@ import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.repository.JobRepository;
 import org.hbrs.se2.project.util.HelperForTests;
-import org.hbrs.se2.project.views.studentViews.JobsView;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -122,18 +118,9 @@ public class JobControlTest {
     }
 
     @Test
-    @DisplayName("Tests if getAllJobsData produces correct results.")
-    void test_getAllJobsData() {
-        List<JobDTO> tmp = new ArrayList<>();
-        tmp.add(testJob);
-
-        JobsView.JobDetail jobDetail = jobControl.getAllJobsData(tmp).get(0);
-
-        assertEquals("Testbeschreibung. assembly programmer.", jobDetail.getDescription());
-        assertEquals("Test title", jobDetail.getTitle());
-        assertEquals(20, jobDetail.getSalary());
-        assertEquals("Test contactdetails", jobDetail.getContactdetails());
-        assertEquals("TestCompany", jobDetail.getName());
+    @DisplayName("Tests if getCompanyOfJob returns the correct result")
+    void test_getCompanyOfJob() {
+        assertEquals(testCompanyDTO.getName(), jobControl.getCompanyOfJob(testJob), "Company name does not match");
     }
 
     @Test
