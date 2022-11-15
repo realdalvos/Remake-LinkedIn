@@ -7,7 +7,6 @@ import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.entities.Job;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;
-import org.hbrs.se2.project.views.studentViews.JobsView;
 import org.hbrs.se2.project.services.JobServiceInterface;
 import org.springframework.stereotype.Service;
 
