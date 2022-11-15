@@ -24,18 +24,22 @@ import java.util.stream.Stream;
 @PageTitle("Jobs")
 public class JobsView extends Div {
 
+    private JobControl jobControl;
+
+    // Grid components
+    private TextField textField = new TextField("Jobsuche");
+    private Button button = new Button("Suchen");
+
+    // Create a Grid bound to the list
+    private Grid<JobDTO> grid = new Grid<>();
+
     public JobsView(JobControl jobControl) {
+        this.jobControl = jobControl;
         setSizeFull();
 
-        // Grid components
-        TextField textField = new TextField("Jobsuche");
-        Button button = new Button("Suchen");
-
-        // Create a Grid bound to the list
-        Grid<JobDetail> grid = new Grid<>();
         // Header
-        grid.addColumn(JobDetail::getTitle).setHeader("Titel");
-        grid.addColumn(JobDetail::getSalary).setHeader("Bezahlung");
+        grid.addColumn(JobDTO::getTitle).setHeader("Titel");
+        grid.addColumn(JobDTO::getSalary).setHeader("Bezahlung");
         // set items details renderer
         grid.setItemDetailsRenderer(createJobDetailsRenderer());
 
@@ -43,11 +47,8 @@ public class JobsView extends Div {
             String keyword = textField.getValue();
             List<JobDTO> jobs = jobControl.getJobsMatchingKeyword(keyword);
 
-            // gather all important data !!!!!!!
-            // user email, company name, job description
-            List<JobDetail> jobDetails = jobControl.getAllJobsData(jobs);
             // pass relevant job list with detail information to grid
-            grid.setItems(jobDetails);
+            grid.setItems(jobs);
         });
 
         add(textField);
@@ -55,16 +56,15 @@ public class JobsView extends Div {
         add(grid);
     }
 
-    private static ComponentRenderer<JobDetailsFormLayout, JobDetail> createJobDetailsRenderer() {
+    private ComponentRenderer<JobDetailsFormLayout, JobDTO> createJobDetailsRenderer() {
         return new ComponentRenderer<>(
                 JobDetailsFormLayout::new, JobDetailsFormLayout::setJobDetails);
     }
 
-    private static class JobDetailsFormLayout extends FormLayout {
+    private class JobDetailsFormLayout extends FormLayout {
 
         // Grid Detail View Components
         private final TextField companyName = new TextField("Unternehmen");
-
         private final TextField jobLocation = new TextField("Arbeitsort");
         private final TextField companyContactDetails = new TextField("Kontaktdaten");
         private final TextArea jobDescription = new TextArea("Beschreibung");
@@ -82,51 +82,13 @@ public class JobsView extends Div {
             setColspan(jobDescription, 2);
         }
 
-        public void setJobDetails(JobDetail details) {
+        public void setJobDetails(JobDTO job) {
             // set all field with job details
-            companyName.setValue(details.getName());
-            jobLocation.setValue(details.getLocation());
-            companyContactDetails.setValue(details.getContactdetails());
-            jobDescription.setValue(details.getDescription());
+            companyName.setValue(jobControl.getCompanyOfJob(job));
+            jobLocation.setValue(job.getLocation());
+            companyContactDetails.setValue(job.getContactdetails());
+            jobDescription.setValue(job.getDescription());
         }
     }
 
-    public static class JobDetail {
-        private String title;
-        private Integer salary;
-        private String description;
-        private String location;
-        private String name;
-        private String contactdetails;
-
-        public JobDetail(String title, Integer salary, String description, String location, String name, String contactdetails) {
-            this.title = title;
-            this.salary = salary;
-            this.description = description;
-            this.location = location;
-            this.name = name;
-            this.contactdetails = contactdetails;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public Integer getSalary() {
-            return salary;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-        public String getLocation() { return location; }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getContactdetails() {
-            return contactdetails;
-        }
-    }
 }
