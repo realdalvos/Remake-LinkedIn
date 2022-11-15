@@ -15,7 +15,6 @@ import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -26,11 +25,11 @@ import java.util.stream.Stream;
 public class JobsView extends Div {
 
     // interactive search field
-    private TextField searchField = new TextField("Jobsuche");
-    private Button searchButton = new Button("Suchen");
+    private final TextField searchField = new TextField("Jobsuche");
+    private final Button searchButton = new Button("Suchen");
 
     // Create a Grid bound to the list
-    private Grid<JobDTO> grid = new Grid<>();
+    private final Grid<JobDTO> grid = new Grid<>();
 
     public JobsView(JobControl jobControl) {
 
@@ -38,16 +37,9 @@ public class JobsView extends Div {
         grid.addColumn(JobDTO::getTitle).setHeader("Titel").setSortable(true);
         grid.addColumn(JobDTO::getSalary).setHeader("Bezahlung").setSortable(true);
         
-        searchField.addKeyPressListener(Key.ENTER, event -> {
-            searchButton.click();
-        });
-        searchButton.addClickListener(event -> {
-            String keyword = searchField.getValue();
-            List<JobDTO> jobs = jobControl.getJobsMatchingKeyword(keyword);
-
-            // pass relevant job list to grid
-            grid.setItems(jobs);
-        });
+        searchField.addKeyPressListener(Key.ENTER, event -> searchButton.click());
+        // pass relevant job list to grid
+        searchButton.addClickListener(event -> grid.setItems(jobControl.getJobsMatchingKeyword(searchField.getValue())));
 
         // set items details renderer
         grid.setItemDetailsRenderer(new ComponentRenderer<>(job -> {
