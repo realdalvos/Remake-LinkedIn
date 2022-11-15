@@ -35,13 +35,12 @@ public class JobsView extends Div {
     public JobsView(JobControl jobControl) {
 
         // Header
-        grid.addColumn(JobDTO::getTitle).setHeader("Titel");
-        grid.addColumn(JobDTO::getSalary).setHeader("Bezahlung");
-
+        grid.addColumn(JobDTO::getTitle).setHeader("Titel").setSortable(true);
+        grid.addColumn(JobDTO::getSalary).setHeader("Bezahlung").setSortable(true);
+        
         searchField.addKeyPressListener(Key.ENTER, event -> {
             searchButton.click();
         });
-        
         searchButton.addClickListener(event -> {
             String keyword = searchField.getValue();
             List<JobDTO> jobs = jobControl.getJobsMatchingKeyword(keyword);
@@ -59,7 +58,7 @@ public class JobsView extends Div {
             final TextField companyContactDetails = new TextField("Kontaktdaten");
             final TextArea jobDescription = new TextArea("Beschreibung");
 
-            // set all field with job details
+            // set all fields with job details
             companyName.setValue(jobControl.getCompanyOfJob(job));
             jobLocation.setValue(job.getLocation());
             companyContactDetails.setValue(job.getContactdetails());
