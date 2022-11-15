@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.views.studentViews;
 
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -24,9 +25,9 @@ import java.util.stream.Stream;
 @PageTitle("Jobs")
 public class JobsView extends Div {
 
-    // Grid components
-    private TextField textField = new TextField("Jobsuche");
-    private Button button = new Button("Suchen");
+    // interactive search field
+    private TextField searchField = new TextField("Jobsuche");
+    private Button searchButton = new Button("Suchen");
 
     // Create a Grid bound to the list
     private Grid<JobDTO> grid = new Grid<>();
@@ -37,9 +38,12 @@ public class JobsView extends Div {
         grid.addColumn(JobDTO::getTitle).setHeader("Titel");
         grid.addColumn(JobDTO::getSalary).setHeader("Bezahlung");
 
-        // search button
-        button.addClickListener(event -> {
-            String keyword = textField.getValue();
+        searchField.addKeyPressListener(Key.ENTER, event -> {
+            searchButton.click();
+        });
+        
+        searchButton.addClickListener(event -> {
+            String keyword = searchField.getValue();
             List<JobDTO> jobs = jobControl.getJobsMatchingKeyword(keyword);
 
             // pass relevant job list to grid
@@ -75,8 +79,8 @@ public class JobsView extends Div {
             return layout;
         }));
 
-        add(textField);
-        add(button);
+        add(searchField);
+        add(searchButton);
         add(grid);
     }
 
