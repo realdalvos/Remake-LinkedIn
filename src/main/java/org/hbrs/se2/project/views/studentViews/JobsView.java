@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.views.studentViews;
 
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -14,7 +15,6 @@ import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -24,109 +24,55 @@ import java.util.stream.Stream;
 @PageTitle("Jobs")
 public class JobsView extends Div {
 
+    // interactive search field
+    private final TextField searchField = new TextField("Jobsuche");
+    private final Button searchButton = new Button("Suchen");
+
+    // Create a Grid bound to the list
+    private final Grid<JobDTO> grid = new Grid<>();
+
     public JobsView(JobControl jobControl) {
-        setSizeFull();
 
-        // Grid components
-        TextField textField = new TextField("Jobsuche");
-        Button button = new Button("Suchen");
-
-        // Create a Grid bound to the list
-        Grid<JobDetail> grid = new Grid<>();
         // Header
-        grid.addColumn(JobDetail::getTitle).setHeader("Titel");
-        grid.addColumn(JobDetail::getSalary).setHeader("Bezahlung");
+        grid.addColumn(JobDTO::getTitle).setHeader("Titel").setSortable(true);
+        grid.addColumn(JobDTO::getSalary).setHeader("Bezahlung").setSortable(true);
+        
+        searchField.addKeyPressListener(Key.ENTER, event -> searchButton.click());
+        // pass relevant job list to grid
+        searchButton.addClickListener(event -> grid.setItems(jobControl.getJobsMatchingKeyword(searchField.getValue())));
+
         // set items details renderer
-        grid.setItemDetailsRenderer(createJobDetailsRenderer());
+        grid.setItemDetailsRenderer(new ComponentRenderer<>(job -> {
+            FormLayout layout = new FormLayout();
 
-        button.addClickListener(event -> {
-            String keyword = textField.getValue();
-            List<JobDTO> jobs = jobControl.getJobsMatchingKeyword(keyword);
+            final TextField companyName = new TextField("Unternehmen");
+            final TextField jobLocation = new TextField("Arbeitsort");
+            final TextField companyContactDetails = new TextField("Kontaktdaten");
+            final TextArea jobDescription = new TextArea("Beschreibung");
 
-            // gather all important data !!!!!!!
-            // user email, company name, job description
-            List<JobDetail> jobDetails = jobControl.getAllJobsData(jobs);
-            // pass relevant job list with detail information to grid
-            grid.setItems(jobDetails);
-        });
+            // set all fields with job details
+            companyName.setValue(jobControl.getCompanyOfJob(job));
+            jobLocation.setValue(job.getLocation());
+            companyContactDetails.setValue(job.getContactdetails());
+            jobDescription.setValue(job.getDescription());
 
-        add(textField);
-        add(button);
-        add(grid);
-    }
-
-    private static ComponentRenderer<JobDetailsFormLayout, JobDetail> createJobDetailsRenderer() {
-        return new ComponentRenderer<>(
-                JobDetailsFormLayout::new, JobDetailsFormLayout::setJobDetails);
-    }
-
-    private static class JobDetailsFormLayout extends FormLayout {
-
-        // Grid Detail View Components
-        private final TextField companyName = new TextField("Unternehmen");
-
-        private final TextField jobLocation = new TextField("Arbeitsort");
-        private final TextField companyContactDetails = new TextField("Kontaktdaten");
-        private final TextArea jobDescription = new TextArea("Beschreibung");
-
-        public JobDetailsFormLayout() {
+            // add textFields to FormLayout
             Stream.of(companyName, jobLocation, companyContactDetails, jobDescription).forEach(
                     field -> {
                         field.setReadOnly(true);
-                        add(field);
+                        layout.add(field);
                     }
             );
+            layout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 2));
+            layout.setColspan(companyContactDetails, 2);
+            layout.setColspan(jobDescription, 2);
 
-            setResponsiveSteps(new ResponsiveStep("0", 2));
-            setColspan(companyContactDetails, 2);
-            setColspan(jobDescription, 2);
-        }
+            return layout;
+        }));
 
-        public void setJobDetails(JobDetail details) {
-            // set all field with job details
-            companyName.setValue(details.getName());
-            jobLocation.setValue(details.getLocation());
-            companyContactDetails.setValue(details.getContactdetails());
-            jobDescription.setValue(details.getDescription());
-        }
+        add(searchField);
+        add(searchButton);
+        add(grid);
     }
 
-    public static class JobDetail {
-        private String title;
-        private Integer salary;
-        private String description;
-        private String location;
-        private String name;
-        private String contactdetails;
-
-        public JobDetail(String title, Integer salary, String description, String location, String name, String contactdetails) {
-            this.title = title;
-            this.salary = salary;
-            this.description = description;
-            this.location = location;
-            this.name = name;
-            this.contactdetails = contactdetails;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public Integer getSalary() {
-            return salary;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-        public String getLocation() { return location; }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getContactdetails() {
-            return contactdetails;
-        }
-    }
 }

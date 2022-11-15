@@ -7,7 +7,6 @@ import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.entities.Job;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;
-import org.hbrs.se2.project.views.studentViews.JobsView;
 import org.hbrs.se2.project.services.JobServiceInterface;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +31,11 @@ public class JobService implements JobServiceInterface {
     }
 
     @Override
+    public String getCompanyOfJob(JobDTO job) {
+        return companyRepository.findCompanyByCompanyid(job.getCompanyid()).getName();
+    }
+
+    @Override
     public void createNewJobPost(JobDTO job) {
         this.jobRepository.save(JobFactory.createJob(job));
     }
@@ -51,17 +55,6 @@ public class JobService implements JobServiceInterface {
             jobDTOs.add(jobDTO);
         }
         return getFilteredJobs(jobDTOs, keyword);
-    }
-
-    @Override
-    public List<JobsView.JobDetail> getAllJobsData(List<JobDTO> jobs) {
-        List<JobsView.JobDetail> jobsData = new ArrayList<>();
-        CompanyDTO companyDTO;
-        for(JobDTO job : jobs) {
-            companyDTO = companyRepository.findCompanyByCompanyid(job.getCompanyid());
-            jobsData.add(new JobsView.JobDetail(job.getTitle(), job.getSalary(), job.getDescription(), job.getLocation(), companyDTO.getName(), job.getContactdetails()));
-        }
-        return jobsData;
     }
 
     @Override
