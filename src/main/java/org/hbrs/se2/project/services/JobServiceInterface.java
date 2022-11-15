@@ -16,6 +16,13 @@ public interface JobServiceInterface {
     CompanyDTO getCompanyByUserid(int id);
 
     /**
+     * Get Company Name for a Job
+     * @param job Job
+     * @return Company Name for the Job
+     */
+    String getCompanyOfJob(JobDTO job);
+
+    /**
      * Creates a new Job and saves it in the database
      * @param job Job object with new Job
      */
@@ -27,13 +34,6 @@ public interface JobServiceInterface {
      * @return A List of all matching Jobs
      */
     List<JobDTO> getJobsMatchingKeyword(String keyword);
-
-    /**
-     * Get all the Data of a List of Jobs
-     * @param jobs List of Job Objects
-     * @return List of Jobs with all their Details
-     */
-    List<JobsView.JobDetail> getAllJobsData(List<JobDTO> jobs);
 
     /**
      * Get all Jobs of a Company

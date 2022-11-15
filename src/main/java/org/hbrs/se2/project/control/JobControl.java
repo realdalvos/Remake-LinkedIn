@@ -26,6 +26,15 @@ public class JobControl {
     }
 
     /**
+     * Get Company Name for a Job
+     * @param job Job
+     * @return Company Name for the Job
+     */
+    public String getCompanyOfJob(JobDTO job) {
+        return jobService.getCompanyOfJob(job);
+    }
+
+    /**
      * Creates a new Job and saves it in the database
      * @param job Job object with new Job
      */
@@ -40,16 +49,6 @@ public class JobControl {
      */
     public List<JobDTO> getJobsMatchingKeyword(String keyword) {
         return jobService.getJobsMatchingKeyword(keyword);
-    }
-
-
-    /**
-     * Get all the Data of a List of Jobs
-     * @param jobs List of Job Objects
-     * @return List of Jobs with all their Details
-     */
-    public List<JobsView.JobDetail> getAllJobsData(List<JobDTO> jobs) {
-        return jobService.getAllJobsData(jobs);
     }
 
     /**
