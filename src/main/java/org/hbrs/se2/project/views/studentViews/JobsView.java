@@ -24,8 +24,6 @@ import java.util.stream.Stream;
 @PageTitle("Jobs")
 public class JobsView extends Div {
 
-    private JobControl jobControl;
-
     // Grid components
     private TextField textField = new TextField("Jobsuche");
     private Button button = new Button("Suchen");
@@ -34,61 +32,52 @@ public class JobsView extends Div {
     private Grid<JobDTO> grid = new Grid<>();
 
     public JobsView(JobControl jobControl) {
-        this.jobControl = jobControl;
-        setSizeFull();
 
         // Header
         grid.addColumn(JobDTO::getTitle).setHeader("Titel");
         grid.addColumn(JobDTO::getSalary).setHeader("Bezahlung");
-        // set items details renderer
-        grid.setItemDetailsRenderer(createJobDetailsRenderer());
 
+        // search button
         button.addClickListener(event -> {
             String keyword = textField.getValue();
             List<JobDTO> jobs = jobControl.getJobsMatchingKeyword(keyword);
 
-            // pass relevant job list with detail information to grid
+            // pass relevant job list to grid
             grid.setItems(jobs);
         });
 
-        add(textField);
-        add(button);
-        add(grid);
-    }
+        // set items details renderer
+        grid.setItemDetailsRenderer(new ComponentRenderer<>(job -> {
+            FormLayout layout = new FormLayout();
 
-    private ComponentRenderer<JobDetailsFormLayout, JobDTO> createJobDetailsRenderer() {
-        return new ComponentRenderer<>(
-                JobDetailsFormLayout::new, JobDetailsFormLayout::setJobDetails);
-    }
+            final TextField companyName = new TextField("Unternehmen");
+            final TextField jobLocation = new TextField("Arbeitsort");
+            final TextField companyContactDetails = new TextField("Kontaktdaten");
+            final TextArea jobDescription = new TextArea("Beschreibung");
 
-    private class JobDetailsFormLayout extends FormLayout {
-
-        // Grid Detail View Components
-        private final TextField companyName = new TextField("Unternehmen");
-        private final TextField jobLocation = new TextField("Arbeitsort");
-        private final TextField companyContactDetails = new TextField("Kontaktdaten");
-        private final TextArea jobDescription = new TextArea("Beschreibung");
-
-        public JobDetailsFormLayout() {
-            Stream.of(companyName, jobLocation, companyContactDetails, jobDescription).forEach(
-                    field -> {
-                        field.setReadOnly(true);
-                        add(field);
-                    }
-            );
-
-            setResponsiveSteps(new ResponsiveStep("0", 2));
-            setColspan(companyContactDetails, 2);
-            setColspan(jobDescription, 2);
-        }
-
-        public void setJobDetails(JobDTO job) {
             // set all field with job details
             companyName.setValue(jobControl.getCompanyOfJob(job));
             jobLocation.setValue(job.getLocation());
             companyContactDetails.setValue(job.getContactdetails());
             jobDescription.setValue(job.getDescription());
-        }
+
+            // add textFields to FormLayout
+            Stream.of(companyName, jobLocation, companyContactDetails, jobDescription).forEach(
+                    field -> {
+                        field.setReadOnly(true);
+                        layout.add(field);
+                    }
+            );
+            layout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 2));
+            layout.setColspan(companyContactDetails, 2);
+            layout.setColspan(jobDescription, 2);
+
+            return layout;
+        }));
+
+        add(textField);
+        add(button);
+        add(grid);
     }
 
 }
