@@ -10,12 +10,9 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.component.textfield.TextField;
 import org.hbrs.se2.project.control.ProfileControl;
-import org.hbrs.se2.project.dtos.StudentHasMajorDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
-import org.hbrs.se2.project.repository.StudentHasMajorRepository;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
