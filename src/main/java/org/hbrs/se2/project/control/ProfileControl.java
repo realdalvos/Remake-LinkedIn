@@ -11,9 +11,6 @@ import java.util.List;
 
 @Component
 public class ProfileControl {
-    // we might remove this if it will not be used
-    @Autowired
-    private UserRepository userRepository;
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
@@ -109,7 +106,6 @@ public class ProfileControl {
         studentRepository.save(student);
     }
 
-    // if statement has empty body
     public String getUniversityOfStudent(int userid) {
         StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
         if ( studentDTO.getUniversity() == null ){

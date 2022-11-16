@@ -20,41 +20,23 @@ import java.util.List;
 @PageTitle("Profile")
 public class ProfileView extends Div {
 
+    private TextField major = new TextField("Major");
+    private TextField university = new TextField("University");
+
+    private TextField topic = new TextField("Topics");
+    private TextField skill = new TextField("Skills");
+
+    Button save = new Button("save");
+    Button delete = new Button("delete");
+    Button undo = new Button("undo");
+
     private final ProfileControl profileControl;
 
-    public ProfileView(ProfileControl profileControl, ProfileControl profileControl1){
-        this.profileControl = profileControl1;
-
+    public ProfileView(ProfileControl profileControl){
+        this.profileControl = profileControl;
         setSizeFull();
 
-        List<String> majors = profileControl.getMajorOfStudent(this.getCurrentUser().getUserid());
-        List<String> topics = profileControl.getTopicOfStudent(this.getCurrentUser().getUserid());
-        List<String> skills = profileControl.getSkillOfStudent(this.getCurrentUser().getUserid());
-
-        Grid<String> gridMajors = new Grid<>();
-        gridMajors.addColumn(ValueProvider.identity());
-        gridMajors.setItems(majors);
-        add(gridMajors);
-
-        Grid<String> gridTopics = new Grid<>();
-        gridTopics.addColumn(ValueProvider.identity());
-        gridTopics.setItems(topics);
-        add(gridTopics);
-
-        Grid<String> gridSkills = new Grid<>();
-        gridSkills.addColumn(ValueProvider.identity());
-        gridSkills.setItems(skills);
-        add(gridSkills);
-
-        Button save = new Button("save");
-        Button delete = new Button("delete");
-        Button undo = new Button("undo");
-
-        TextField major = new TextField("Major");
-        TextField university = new TextField("University");
         university.setValue(profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid()));
-        TextField topic = new TextField("Topics");
-        TextField skill = new TextField("Skills");
 
         FormLayout formLayout =  new FormLayout();
         formLayout.add(major,university,delete,undo,topic,skill,save);
@@ -69,7 +51,6 @@ public class ProfileView extends Div {
                 profileControl.updateUniversity(universitySaved, this.getCurrentUser().getUserid());
                 university.setValue(universitySaved);
             });
-
         }));
 
         save.addClickListener(buttonClickEvent -> {
@@ -87,14 +68,36 @@ public class ProfileView extends Div {
             // skills input is just being printed out in the console
             // there is no call of the function profileControl.updateSkills to update skills in the database
             if (skill.getValue() != null && !skill.getValue().equals("")) {
-                profileControl.updateSkills(skill.getValue(), this.getCurrentUser().getUserid());            }
+                profileControl.updateSkills(skill.getValue(), this.getCurrentUser().getUserid());
+            }
+            UI.getCurrent().getPage().reload();
         });
-        // initialization of the profileControl should be done
-        // at the beginning of the ProfileView constructor
+        setAllGrids();
     }
     public UserDTO getCurrentUser() {
         UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
         System.out.println(userDTO.getUserid());
         return userDTO;
+    }
+
+    private void setAllGrids() {
+        List<String> majors = profileControl.getMajorOfStudent(this.getCurrentUser().getUserid());
+        List<String> topics = profileControl.getTopicOfStudent(this.getCurrentUser().getUserid());
+        List<String> skills = profileControl.getSkillOfStudent(this.getCurrentUser().getUserid());
+
+        Grid<String> gridMajors = new Grid<>();
+        gridMajors.addColumn(ValueProvider.identity()).setHeader("Majors");
+        gridMajors.setItems(majors);
+        add(gridMajors);
+
+        Grid<String> gridTopics = new Grid<>();
+        gridTopics.addColumn(ValueProvider.identity()).setHeader("Topics");
+        gridTopics.setItems(topics);
+        add(gridTopics);
+
+        Grid<String> gridSkills = new Grid<>();
+        gridSkills.addColumn(ValueProvider.identity()).setHeader("Skills");
+        gridSkills.setItems(skills);
+        add(gridSkills);
     }
 }
