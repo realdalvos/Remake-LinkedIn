@@ -30,64 +30,39 @@ public class ProfileView extends Div {
 
         setSizeFull();
 
-        Button save = new Button("save");
-        Button delete = new Button("delete");
-        Button undo = new Button("undo");
-
-        TextField major = new TextField("Major");
-        // can be removed for now
-        // placeholder will not work because there can be multiple majors and
-        // placeholder would only work for one string
-        // major.setPlaceholder(profileControl.getMajorOfStudent(this.getCurrentUser().getUserid()));
-
-        // print out all majors of a student in console
         List<String> majors = profileControl.getMajorOfStudent(this.getCurrentUser().getUserid());
+        List<String> topics = profileControl.getTopicOfStudent(this.getCurrentUser().getUserid());
+        List<String> skills = profileControl.getSkillOfStudent(this.getCurrentUser().getUserid());
 
         Grid<String> gridMajors = new Grid<>();
         gridMajors.addColumn(ValueProvider.identity());
         gridMajors.setItems(majors);
         add(gridMajors);
 
-
-
-
-        for (Object o : majors) {
-            //gridMajors.addColumn(ValueProvider.identity());
-            System.out.println(o);
-        }
-
-
-
-        TextField university = new TextField("University");
-        university.setValue(profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid()));
-
-        TextField topic = new TextField("Topics");
-        List<String> topics = profileControl.getTopicOfStudent(this.getCurrentUser().getUserid());
         Grid<String> gridTopics = new Grid<>();
         gridTopics.addColumn(ValueProvider.identity());
         gridTopics.setItems(topics);
         add(gridTopics);
 
-        for (Object o : topics) {
-            System.out.println(o);
-        }
-
-        TextField skill = new TextField("Skills");
-        List<String> skills = profileControl.getSkillOfStudent(this.getCurrentUser().getUserid());
         Grid<String> gridSkills = new Grid<>();
         gridSkills.addColumn(ValueProvider.identity());
         gridSkills.setItems(skills);
         add(gridSkills);
 
-        for (Object o : skills){
-            System.out.println(o);
-        }
+        Button save = new Button("save");
+        Button delete = new Button("delete");
+        Button undo = new Button("undo");
+
+        TextField major = new TextField("Major");
+        TextField university = new TextField("University");
+        university.setValue(profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid()));
+        TextField topic = new TextField("Topics");
+        TextField skill = new TextField("Skills");
 
         FormLayout formLayout =  new FormLayout();
-        formLayout.add(major,university,delete, undo,topic,skill);
+        formLayout.add(major,university,delete,undo,topic,skill,save);
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",1));
         add(formLayout);
-        add(save);
 
         delete.addClickListener((buttonClickEvent -> {
             String universitySaved = profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid());
