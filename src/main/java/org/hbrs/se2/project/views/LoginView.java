@@ -43,14 +43,13 @@ public class LoginView extends VerticalLayout {
         i18n.getHeader().setTitle("HEADER");
         i18n.getHeader().setDescription("HEADER DESCRIPTION");
 	     */
-        i18n.getForm().setUsername("Benutzername");
-        i18n.getForm().setTitle("Anmeldung");
-        i18n.getForm().setSubmit("Anmelden");
-        i18n.getForm().setPassword("Passwort");
-        i18n.getForm().setForgotPassword("Haben sie ihr Passwort vergessen?");
-        i18n.getErrorMessage().setTitle("Anmeldung fehlgeschlagen");
-        i18n.getErrorMessage()
-                .setMessage("Falscher Benutzername oder Passwort");
+        i18n.getForm().setUsername(getTranslation("view.login.form.username"));
+        i18n.getForm().setTitle(getTranslation("view.login.form.title"));
+        i18n.getForm().setSubmit(getTranslation("view.login.form.submit"));
+        i18n.getForm().setPassword(getTranslation("view.login.form.password"));
+        i18n.getForm().setForgotPassword(getTranslation("view.login.form.forgotPassword"));
+        i18n.getErrorMessage().setTitle(getTranslation("view.login.error.title"));
+        i18n.getErrorMessage().setMessage(getTranslation("view.login.error.message"));
         i18n.setAdditionalInformation("");
         return i18n;
     }
@@ -61,22 +60,19 @@ public class LoginView extends VerticalLayout {
         LoginForm component = new LoginForm();
         component.setI18n(createLoginI18n());
 
-
         // buttons
-        Button buttonStudent = new Button("Registrieren als Student");
+        Button buttonStudent = new Button(getTranslation("view.login.button.student"));
         buttonStudent.addThemeVariants(ButtonVariant.LUMO_LARGE);           // changing size for better usability
         buttonStudent.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
         Icon studentIcon = new Icon(VaadinIcon.NOTEBOOK);
         buttonStudent.getElement().appendChild(studentIcon.getElement());
 
-        Button buttonCompany = new Button("Registrieren als Unternehmen");
+        Button buttonCompany = new Button(getTranslation("view.login.button.company"));
         buttonCompany.addThemeVariants(ButtonVariant.LUMO_LARGE);           // changing size for better usability
         buttonCompany.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
 
         Icon companyIcon = new Icon(VaadinIcon.HOME_O);
         buttonCompany.getElement().appendChild(companyIcon.getElement());
-
-
 
         component.addLoginListener(e -> {
             boolean isAuthenticated = false;

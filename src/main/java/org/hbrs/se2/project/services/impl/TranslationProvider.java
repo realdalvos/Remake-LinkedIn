@@ -1,4 +1,4 @@
-package org.hbrs.se2.project;
+package org.hbrs.se2.project.services.impl;
 
 import com.vaadin.flow.i18n.I18NProvider;
 import org.hbrs.se2.project.util.Utils;
@@ -14,8 +14,8 @@ public class TranslationProvider implements I18NProvider {
     private final Logger logger = Utils.getLogger(this.getClass().getName());
     public static final String BUNDLE_PREFIX = "translate";
 
-    public final Locale LOCALE_DE = new Locale("de", "DE");
-    public final Locale LOCALE_EN = new Locale("en", "GB");
+    public final Locale LOCALE_DE = new Locale("de");
+    public final Locale LOCALE_EN = new Locale("en");
 
     private List<Locale> locales = Collections
             .unmodifiableList(Arrays.asList(LOCALE_DE, LOCALE_EN));
