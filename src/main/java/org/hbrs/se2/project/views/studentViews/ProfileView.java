@@ -35,7 +35,7 @@ public class ProfileView extends Div {
         setSizeFull();
         setLayout();
         setAllGrids();
-        
+
         // set value of the text field university
         university.setValue(profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid()));
 
