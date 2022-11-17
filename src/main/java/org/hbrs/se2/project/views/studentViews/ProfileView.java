@@ -35,11 +35,7 @@ public class ProfileView extends Div {
         setSizeFull();
         setLayout();
         setAllGrids();
-
-        // ToDo: fix layout of profile view
-        // problem: the upper text field university is partly covered by the nav bar
-        // temp fix: reload page - not optimal
-
+        
         // set value of the text field university
         university.setValue(profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid()));
 

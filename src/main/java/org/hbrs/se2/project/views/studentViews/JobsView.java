@@ -1,13 +1,5 @@
 package org.hbrs.se2.project.views.studentViews;
 
-<<<<<<< HEAD
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
-import org.hbrs.se2.project.util.Globals;
-import org.hbrs.se2.project.views.AppView;
-
-=======
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -25,16 +17,12 @@ import org.hbrs.se2.project.views.AppView;
 
 import java.util.stream.Stream;
 
->>>>>>> main
 /**
  * Student - Jobs list View
  */
 @Route(value = Globals.Pages.JOBS_VIEW, layout = AppView.class)
 @PageTitle("Jobs")
 public class JobsView extends Div {
-<<<<<<< HEAD
-=======
-
     // interactive search field
     private final TextField searchField = new TextField("Jobsuche");
     private final Button searchButton = new Button("Suchen");
@@ -85,6 +73,4 @@ public class JobsView extends Div {
         add(searchButton);
         add(grid);
     }
-
->>>>>>> main
 }
