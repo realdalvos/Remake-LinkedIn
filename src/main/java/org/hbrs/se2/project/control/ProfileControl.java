@@ -137,6 +137,40 @@ public class ProfileControl {
         // return list of majors
         return majors;
     }
+/*
+    public List<MajorDTO>   getMajorOfStudentAsDTOLIST(int userid) {
+        // temp major
+        MajorDTO majorDTO;
+
+        List<MajorDTO> majorDTOList = new ArrayList<>();
+        // list for majors
+        List<String> majors = new ArrayList<>();
+        // get student with matching user id
+        StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
+        // get data from student_has_major table with matching student ids
+        List<StudentHasMajorDTO> studentHasMajors =
+                studentHasMajorRepository.findByStudentid(studentDTO.getStudentid());
+        // get matching majors from major table with major id from studentHasMajor list
+        for (StudentHasMajorDTO studentHasMajor : studentHasMajors) {
+            majorDTO = majorRepository.findByMajorid(studentHasMajor.getMajorid());
+            // check if major is null
+            if(majorDTO.getMajor() == null) {
+                majors.add("");
+            } else {
+                majors.add(majorDTO.getMajor());
+            }
+            majorDTOList = majorRepository.findByMajoridGiveList(studentHasMajor.getMajorid());
+            System.out.println(majorDTOList);
+        }
+        // return list of majors
+        //return majorDTOList;
+    }
+
+    */
+
+
+
+
 
     public List<String> getTopicOfStudent(int userid){
         TopicDTO topicDTO;

@@ -10,6 +10,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.component.textfield.TextField;
 import org.hbrs.se2.project.control.ProfileControl;
+import org.hbrs.se2.project.dtos.MajorDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
@@ -94,7 +95,15 @@ public class ProfileView extends Div {
         List<String> majors = profileControl.getMajorOfStudent(this.getCurrentUser().getUserid());
         List<String> topics = profileControl.getTopicOfStudent(this.getCurrentUser().getUserid());
         List<String> skills = profileControl.getSkillOfStudent(this.getCurrentUser().getUserid());
+        /*List<MajorDTO> majorDTOList = profileControl.getMajorOfStudentAsDTOLIST((this.getCurrentUser().getUserid()));
 
+        Grid<MajorDTO> gridMajorDTO = new Grid<>();
+        gridMajorDTO.setItems(majorDTOList);
+        gridMajorDTO.setSelectionMode((Grid.SelectionMode.MULTI));
+        gridMajorDTO.addColumn(MajorDTO::getMajor).setHeader("MajorDTOGRID");
+
+
+         */
         Grid<String> gridMajors = new Grid<>();
         gridMajors.setSelectionMode(Grid.SelectionMode.MULTI);
         gridMajors.addColumn(ValueProvider.identity()).setHeader("Majors");
