@@ -9,7 +9,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * The entry point of the Spring Boot application.
  */
 @SpringBootApplication(
-        scanBasePackages = {"org.hbrs.se2.project*"},
+        scanBasePackages = {"org.hbrs.se2.project.*"},
         exclude = SecurityAutoConfiguration.class
 )
 public class Application extends SpringBootServletInitializer {

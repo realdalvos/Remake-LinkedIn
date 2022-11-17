@@ -18,7 +18,6 @@ public class Student {
     private String lastname;
     private String matrikelnumber;
     private String university;
-
     public Student() {
 
     }
@@ -52,3 +51,4 @@ public class Student {
     public String getUniversity() {return university;}
     public void setUniversity(String uni) {this.university = uni;}
 }
+
