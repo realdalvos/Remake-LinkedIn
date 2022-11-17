@@ -31,6 +31,12 @@ public class ProfileView extends Div {
     Button undo = new Button("undo");
     Button showInputs = new Button("Show Inputs");
 
+    Button deleteSelectedMajors = new Button("Delete Selected Majors");
+
+    Button deleteSelectedTopics = new Button("Delete Selected Topics");
+
+    Button deleteSelectedSkills = new Button("Delete Selected Skills");
+
     private final ProfileControl profileControl;
 
     public ProfileView(ProfileControl profileControl){
@@ -93,18 +99,20 @@ public class ProfileView extends Div {
         gridMajors.setSelectionMode(Grid.SelectionMode.MULTI);
         gridMajors.addColumn(ValueProvider.identity()).setHeader("Majors");
         gridMajors.setItems(majors);
-        add(gridMajors);
 
         Grid<String> gridTopics = new Grid<>();
         gridTopics.setSelectionMode(Grid.SelectionMode.MULTI);
         gridTopics.addColumn(ValueProvider.identity()).setHeader("Topics");
         gridTopics.setItems(topics);
-        add(gridTopics);
 
         Grid<String> gridSkills = new Grid<>();
         gridSkills.setSelectionMode(Grid.SelectionMode.MULTI);
         gridSkills.addColumn(ValueProvider.identity()).setHeader("Skills");
         gridSkills.setItems(skills);
-        add(gridSkills);
+
+        add(    gridMajors,deleteSelectedMajors,
+                gridTopics,deleteSelectedTopics,
+                gridSkills, deleteSelectedSkills
+                );
     }
 }
