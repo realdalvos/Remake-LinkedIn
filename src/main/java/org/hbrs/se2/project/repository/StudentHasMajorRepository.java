@@ -10,6 +10,5 @@ import java.util.List;
 @Component
 public interface StudentHasMajorRepository extends JpaRepository<StudentHasMajor, Integer> {
 
-    // return a list of StudentHasMajor DTOs that match the passed student id
     List<StudentHasMajorDTO> findByStudentid(int studentid);
 }

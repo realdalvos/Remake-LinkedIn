@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.control;
 
+import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.entities.*;
 import org.hbrs.se2.project.repository.*;
@@ -17,32 +18,50 @@ public class ProfileControl {
     private StudentHasMajorRepository studentHasMajorRepository;
     @Autowired
     private MajorRepository majorRepository;
-
     @Autowired
     private SkillRepository skillRepository;
-
     @Autowired
     private TopicRepository topicRepository;
-
     @Autowired
     private StudentHasSkillRepository studentHasSkillRepository;
-
     @Autowired
     private StudentHasTopicRepository studentHasTopicRepository;
 
-    public void updateStudyMajor(String major, int userid){
-        StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
-        if(studentDTO == null) {
-            System.out.println("Is null");
-            // we might throw an exception here instead of a print-out statement, see warning line 49
+    public void saveStudentData(int id, String major, String university, String topic, String skill) throws DatabaseUserException {
+        // if input is not null or not empty, save student data
+        if (major != null && !major.equals("")) {
+            updateStudyMajor(major, id);
         }
-       MajorDTO majorDTO = majorRepository.findByMajor(major);
+        if (university != null && !university.equals("")) {
+            updateUniversity(university, id);
+        }
+        if (topic != null && !topic.equals("")) {
+            updateTopics(topic, id);
+        }
+        if (skill != null && !skill.equals("")) {
+            updateSkills(skill, id);
+        }
+    }
+
+    public void updateStudyMajor(String major, int userid) throws DatabaseUserException {
+        // get student data through user id
+        StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
+        // check if student with the user id exists
+        if(studentDTO == null) {
+            throw new DatabaseUserException("There is no Student with the passed id");
+        }
+        // get major data from database by major attribute
+        MajorDTO majorDTO = majorRepository.findByMajor(major);
+        // check if found major is null
         if(majorDTO == null){
+            // if major does not exist, create new major from input
             Major majorEntity = new Major();
             majorEntity.setMajor(major);
             majorRepository.save(majorEntity);
+            // get saved major data
             majorDTO = majorRepository.findByMajor(major);
         }
+        // create new studentHasMajor entity
         StudentHasMajor studentHasMajor = new StudentHasMajor();
         studentHasMajor.setMajorid(majorDTO.getMajorid());
         studentHasMajor.setStudentid(studentDTO.getStudentid());
@@ -50,19 +69,25 @@ public class ProfileControl {
     }
 
     // methods are never called, see comments in profile View
-    public void updateTopics(String topic, int userid){
+    public void updateTopics(String topic, int userid) throws DatabaseUserException {
+        // get student data through user id
         StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
+        // check if student with the user id exists
         if(studentDTO == null) {
-            System.out.println("Is null");
-            // we might throw an exception here instead of a print-out statement, see warning line 68
+            throw new DatabaseUserException("There is no Student with the passed id");
         }
+        // get topic data from database by major attribute
         TopicDTO topicDTO = topicRepository.findByTopic(topic);
+        // check if found topic is null
         if(topicDTO == null){
+            // if topic does not exist, create new topic from input
             Topic topicEntity = new Topic();
             topicEntity.setTopic(topic);
             topicRepository.save(topicEntity);
+            // get topic major data
             topicDTO = topicRepository.findByTopic(topic);
         }
+        // create new studentHasMajor entity
         StudentHasTopic studentHasTopic = new StudentHasTopic();
         studentHasTopic.setTopicid((topicDTO.getTopicid()));
         studentHasTopic.setStudentid(studentDTO.getStudentid());
@@ -70,11 +95,11 @@ public class ProfileControl {
     }
 
     // methods are never called, see comments in profile Views
-    public void updateSkills(String skill, int userid){
+    public void updateSkills(String skill, int userid) throws DatabaseUserException {
+        // same process as in updateMajors and updateTopics
         StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
         if(studentDTO == null) {
-            System.out.println("Is null");
-            // we might throw an exception here instead of a print-out statement
+            throw new DatabaseUserException("There is no Student with the passed id");
         }
         SkillDTO skillDTO = skillRepository.findBySkill(skill);
         if(skillDTO == null){
@@ -89,11 +114,14 @@ public class ProfileControl {
         studentHasSkillRepository.save(studentHasSkill);
     }
 
-    public void updateUniversity(String university, int userid){
+    public void updateUniversity(String university, int userid) throws DatabaseUserException {
+        // get student with matching user id
         StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
+        // check if student is null
         if(studentDTO == null) {
-            System.out.println("Is null");
+            throw new DatabaseUserException("There is no Student with the passed id");
         }
+        // create new student entity to update university attribute
         Student student = new Student();
         student.setUserid(studentDTO.getUserid());
         student.setStudentid(studentDTO.getStudentid());
@@ -101,22 +129,27 @@ public class ProfileControl {
         student.setLastname(studentDTO.getLastname());
         student.setUniversity(studentDTO.getUniversity());
         student.setMatrikelnumber(studentDTO.getMatrikelnumber());
-        //student.setStudyMajor(studentDTO.getStudyMajor()); // line can be removed
         student.setUniversity(university);
+        // save updated student
         studentRepository.save(student);
     }
 
     public String getUniversityOfStudent(int userid) {
+        // get student with matching user id
         StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
-        if ( studentDTO.getUniversity() == null ){
+        // if university is null we to return an empty string
+        // because the grid needs a value but not null
+        if (studentDTO.getUniversity() == null) {
             return "";
         }
         return studentDTO.getUniversity();
     }
 
     public List<String> getMajorOfStudent(int userid) {
-        // temp major
+        // major dto
         MajorDTO majorDTO;
+        // comment: maybe we should return a list of major dtos and not strings
+        // important for data binding in view
         // list for majors
         List<String> majors = new ArrayList<>();
         // get student with matching user id
@@ -128,6 +161,7 @@ public class ProfileControl {
         for (StudentHasMajorDTO studentHasMajor : studentHasMajors) {
             majorDTO = majorRepository.findByMajorid(studentHasMajor.getMajorid());
             // check if major is null
+            // if major is null, we return an empty string like getUniversityOfStudent method
             if(majorDTO.getMajor() == null) {
                 majors.add("");
             } else {
@@ -137,42 +171,8 @@ public class ProfileControl {
         // return list of majors
         return majors;
     }
-/*
-    public List<MajorDTO>   getMajorOfStudentAsDTOLIST(int userid) {
-        // temp major
-        MajorDTO majorDTO;
-
-        List<MajorDTO> majorDTOList = new ArrayList<>();
-        // list for majors
-        List<String> majors = new ArrayList<>();
-        // get student with matching user id
-        StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
-        // get data from student_has_major table with matching student ids
-        List<StudentHasMajorDTO> studentHasMajors =
-                studentHasMajorRepository.findByStudentid(studentDTO.getStudentid());
-        // get matching majors from major table with major id from studentHasMajor list
-        for (StudentHasMajorDTO studentHasMajor : studentHasMajors) {
-            majorDTO = majorRepository.findByMajorid(studentHasMajor.getMajorid());
-            // check if major is null
-            if(majorDTO.getMajor() == null) {
-                majors.add("");
-            } else {
-                majors.add(majorDTO.getMajor());
-            }
-            majorDTOList = majorRepository.findByMajoridGiveList(studentHasMajor.getMajorid());
-            System.out.println(majorDTOList);
-        }
-        // return list of majors
-        //return majorDTOList;
-    }
-
-    */
-
-
-
-
-
     public List<String> getTopicOfStudent(int userid){
+        // same process as in getMajorOfStudent method
         TopicDTO topicDTO;
         List<String> topics = new ArrayList<>();
         StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
@@ -190,6 +190,7 @@ public class ProfileControl {
     }
 
     public List<String> getSkillOfStudent(int userid){
+        // same process as in getMajorOfStudent method
         SkillDTO skillDTO;
         List<String> skills = new ArrayList<>();
         StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
