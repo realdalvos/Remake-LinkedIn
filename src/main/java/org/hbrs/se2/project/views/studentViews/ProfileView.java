@@ -29,6 +29,7 @@ public class ProfileView extends Div {
     Button save = new Button("save");
     Button delete = new Button("delete");
     Button undo = new Button("undo");
+    Button showInputs = new Button("Show Inputs");
 
     private final ProfileControl profileControl;
 
@@ -39,7 +40,7 @@ public class ProfileView extends Div {
         university.setValue(profileControl.getUniversityOfStudent(this.getCurrentUser().getUserid()));
 
         FormLayout formLayout =  new FormLayout();
-        formLayout.add(major,university,delete,undo,topic,skill,save);
+        formLayout.add(major,university,delete,undo,topic,skill,save,showInputs);
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",1));
         add(formLayout);
 
@@ -72,7 +73,10 @@ public class ProfileView extends Div {
             }
             UI.getCurrent().getPage().reload();
         });
-        setAllGrids();
+        showInputs.addClickListener(buttonClickEvent -> {
+            setAllGrids();
+            showInputs.setText("Hide Inputs");
+        });
     }
     public UserDTO getCurrentUser() {
         UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
@@ -86,16 +90,19 @@ public class ProfileView extends Div {
         List<String> skills = profileControl.getSkillOfStudent(this.getCurrentUser().getUserid());
 
         Grid<String> gridMajors = new Grid<>();
+        gridMajors.setSelectionMode(Grid.SelectionMode.MULTI);
         gridMajors.addColumn(ValueProvider.identity()).setHeader("Majors");
         gridMajors.setItems(majors);
         add(gridMajors);
 
         Grid<String> gridTopics = new Grid<>();
+        gridTopics.setSelectionMode(Grid.SelectionMode.MULTI);
         gridTopics.addColumn(ValueProvider.identity()).setHeader("Topics");
         gridTopics.setItems(topics);
         add(gridTopics);
 
         Grid<String> gridSkills = new Grid<>();
+        gridSkills.setSelectionMode(Grid.SelectionMode.MULTI);
         gridSkills.addColumn(ValueProvider.identity()).setHeader("Skills");
         gridSkills.setItems(skills);
         add(gridSkills);
