@@ -46,4 +46,6 @@ public interface JobServiceInterface {
      * @param jobid Job ID
      */
     void removeJob(int jobid);
+
+    List<JobDTO> getAllJobs();
 }
