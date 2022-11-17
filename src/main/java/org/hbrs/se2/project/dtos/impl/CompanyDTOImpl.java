@@ -1,14 +1,26 @@
 package org.hbrs.se2.project.dtos.impl;
 
 import org.hbrs.se2.project.dtos.CompanyDTO;
+import org.springframework.stereotype.Component;
+import javax.validation.constraints.NotEmpty;
 
+@Component
 public class CompanyDTOImpl implements CompanyDTO {
     private int companyid;
     private int userid;
+    @NotEmpty
     private String name;
     private String industry;
     private boolean banned;
 
+    public CompanyDTOImpl(){}
+
+    public CompanyDTOImpl(int userid,String name, String industy, boolean banned){
+        this.userid=userid;
+        this.name=name;
+        this.industry=industy;
+        this.banned=banned;
+    }
     public void setCompanyid(int id) {
         this.companyid = id;
     }
@@ -29,25 +41,31 @@ public class CompanyDTOImpl implements CompanyDTO {
         this.banned = banned;
     }
 
-    @Override
     public int getCompanyid() {return companyid;}
-    @Override
     public int getUserid() {
         return userid;
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public String getIndustry() {
         return industry;
     }
 
-    @Override
     public boolean getBanned() {
         return banned;
+    }
+
+    @Override
+    public String toString() {
+        return "JobDTOImpl{" +
+                "companyid= " + companyid +
+                ", userid= '" + userid + '\'' +
+                ", name= '" + name + '\'' +
+                ", industry= '" + industry + '\'' +
+                ", banned= " + banned +
+                '}';
     }
 }

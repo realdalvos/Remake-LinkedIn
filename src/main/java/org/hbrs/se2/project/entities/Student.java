@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.entities;
 
 import javax.persistence.*;
+
 /**
  * This entity reflects the exact same database table "student"
  * so JPA Repository 'understands' how to save or read data from/to this table
@@ -15,9 +16,8 @@ public class Student {
     private int userid;
     private String firstname;
     private String lastname;
-    private int matrikelnumber;
+    private String matrikelnumber;
     private String university;
-
     public Student() {
 
     }
@@ -43,8 +43,8 @@ public class Student {
 
     @Basic
     @Column(name="matrikelnumber")
-    public int getMatrikelnumber() {return matrikelnumber;}
-    public void setMatrikelnumber(int number) {this.matrikelnumber = number;}
+    public String getMatrikelnumber() {return matrikelnumber;}
+    public void setMatrikelnumber(String number) {this.matrikelnumber = number;}
 
     @Basic
     @Column(name="university")

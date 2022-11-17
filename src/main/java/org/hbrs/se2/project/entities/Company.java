@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.entities;
 
 import javax.persistence.*;
+
 /**
  * This entity reflects the exact same database table "company"
  * so JPA Repository 'understands' how to save or read data from/to this table
@@ -28,6 +29,7 @@ public class Company {
     public int getCompanyid() {return companyid;}
 
     public void setCompanyid(int id) {this.companyid = id;}
+
     @Basic
     @Column(name="userid")
     public int getUserid() {return userid;}
