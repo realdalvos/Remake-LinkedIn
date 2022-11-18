@@ -41,36 +41,18 @@ public class JobService implements JobServiceInterface {
     }
 
     @Override
-    public List<JobDTO> getJobsMatchingKeyword(String keyword) {
-        // empty list jobDTOs
-        List<JobDTO> jobDTOs = new ArrayList<>();
-        // get all jobs
-        List<Job> jobs = jobRepository.findAll();
-        // transform all job entities into jobDTOs
-        JobDTO jobDTO;
-        for(Job job : jobs) {
-            jobDTO = new JobDTOImpl(
-                    job.getJobid(), job.getCompanyid(), job.getTitle(), job.getDescription(), job.getSalary(), job.getLocation(), job.getContactdetails()
-            );
-            jobDTOs.add(jobDTO);
-        }
-        return getFilteredJobs(jobDTOs, keyword);
-    }
-
-    @Override
     public List<JobDTO> getAllCompanyJobs(int compId) {
         return jobRepository.findJobByCompanyid(compId);
     }
 
     /**
      * Search for the given keyword in either the job title or the job description
-     * @param jobs List of Jobs to filter
      * @param keyword Keyword to filter the List with
      * @return  Filtered List of Jobs
      */
-    private List<JobDTO> getFilteredJobs(List<JobDTO> jobs, String keyword) {
+    public List<JobDTO> getJobsMatchingKeyword(String keyword) {
         List<JobDTO> matchingJobs = new ArrayList<>();
-        for(JobDTO job : jobs) {
+        for(JobDTO job : getAllJobs()) {
             if(job.getTitle().toLowerCase().contains(keyword.toLowerCase())) {
                 matchingJobs.add(job);
             } else if(job.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
@@ -87,5 +69,26 @@ public class JobService implements JobServiceInterface {
     @Override
     public void removeJob(int jobid) {
         this.jobRepository.deleteById(jobid);
+    }
+
+    /**
+     * returns all jobs in the DB-table "jobs"
+     * @return List<JobDTO> of all Jobs in DB-table
+     */
+    @Override
+    public List<JobDTO> getAllJobs() {
+        // empty list jobDTOs
+        List<JobDTO> jobDTOs = new ArrayList<>();
+        // get all jobs
+        List<Job> jobs = jobRepository.findAll();
+        // transform all job entities into jobDTOs
+        JobDTO jobDTO;
+        for(Job job : jobs) {
+            jobDTO = new JobDTOImpl(
+                    job.getJobid(), job.getCompanyid(), job.getTitle(), job.getDescription(), job.getSalary(), job.getLocation(), job.getContactdetails()
+            );
+            jobDTOs.add(jobDTO);
+        }
+        return jobDTOs;
     }
 }

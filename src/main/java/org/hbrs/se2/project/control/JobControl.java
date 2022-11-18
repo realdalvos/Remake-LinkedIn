@@ -66,5 +66,7 @@ public class JobControl {
     public void deleteJob(int jobid){
         jobService.removeJob(jobid);
     }
+
+    public List<JobDTO> getAllJobs() { return jobService.getAllJobs();}
 }
 
