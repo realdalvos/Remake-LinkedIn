@@ -1,9 +1,6 @@
 package org.hbrs.se2.project.services.impl;
 
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.control.factories.CompanyFactory;
-import org.hbrs.se2.project.control.factories.StudentFactory;
-import org.hbrs.se2.project.control.factories.UserFactory;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.StudentDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
@@ -11,6 +8,7 @@ import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.StudentRepository;
 import org.hbrs.se2.project.repository.UserRepository;
 import org.hbrs.se2.project.services.RegistrationServiceInterface;
+import org.hbrs.se2.project.services.factory.EntityCreationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +24,9 @@ public class RegistrationService implements RegistrationServiceInterface {
 
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    private EntityCreationService entityCreationService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -84,7 +85,7 @@ public class RegistrationService implements RegistrationServiceInterface {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         try {
             //Saving user in db
-            this.userRepository.save(UserFactory.createUser(userDTO));
+            this.userRepository.save(entityCreationService.userFactory(userDTO).createEntity());
         } catch (org.springframework.dao.DataAccessResourceFailureException e) {
             throw new DatabaseUserException("A Failure occurred while saving a user account in the database at createAccount");
         }
@@ -99,7 +100,7 @@ public class RegistrationService implements RegistrationServiceInterface {
      */
     private void createStudentProfile(StudentDTO studentDTO, UserDTO userDTO) throws DatabaseUserException {
         try {
-            this.studentRepository.save(StudentFactory.createStudent(studentDTO, userDTO));
+            this.studentRepository.save(entityCreationService.studentFactory(userDTO, studentDTO).createEntity());
         } catch (org.springframework.dao.DataAccessResourceFailureException e) {
             throw new DatabaseUserException("A Failure occurred while saving a Student Profile into the database at createStudentProfile");
         }
@@ -114,7 +115,7 @@ public class RegistrationService implements RegistrationServiceInterface {
      */
     private void createCompanyProfile(CompanyDTO companyDTO, UserDTO userDTO) throws DatabaseUserException {
         try {
-            this.companyRepository.save(CompanyFactory.createCompany(companyDTO, userDTO));
+            this.companyRepository.save(entityCreationService.companyFactory(userDTO, companyDTO).createEntity());
         } catch (org.springframework.dao.DataAccessResourceFailureException e) {
             throw new DatabaseUserException("A Failure occurred while saving a Company Profile into the database at createCompanyProfile");
         }

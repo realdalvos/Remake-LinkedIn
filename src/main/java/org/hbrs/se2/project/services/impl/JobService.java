@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.services.impl;
 
-import org.hbrs.se2.project.control.factories.JobFactory;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
@@ -8,6 +7,8 @@ import org.hbrs.se2.project.entities.Job;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;
 import org.hbrs.se2.project.services.JobServiceInterface;
+import org.hbrs.se2.project.services.factory.EntityCreationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +16,9 @@ import java.util.List;
 
 @Service
 public class JobService implements JobServiceInterface {
+
+    @Autowired
+    private EntityCreationService entityCreationService;
 
     private final CompanyRepository companyRepository;
 
@@ -37,7 +41,7 @@ public class JobService implements JobServiceInterface {
 
     @Override
     public void createNewJobPost(JobDTO job) {
-        this.jobRepository.save(JobFactory.createJob(job));
+        this.jobRepository.save(entityCreationService.jobFactory(job).createEntity());
     }
 
     @Override
