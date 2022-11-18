@@ -46,6 +46,7 @@ public class ProfileControl {
     public ListDataProvider<MajorDTO> getMajorOfStudent(int userid) {
         return profileService.getMajorOfStudent(userid);
     }
+
     public ListDataProvider<TopicDTO> getTopicOfStudent(int userid){
         return profileService.getTopicOfStudent(userid);
     }
@@ -53,6 +54,19 @@ public class ProfileControl {
     public ListDataProvider<SkillDTO> getSkillOfStudent(int userid){
         return profileService.getSkillOfStudent(userid);
     }
+
+    public void removeMajor(int userid, int majorid) {
+        profileService.removeMajor(userid, majorid);
+    }
+
+    public void removeTopic(int userid, int topicid) {
+        profileService.removeTopic(userid, topicid);
+    }
+
+    public void removeSkill(int userid, int skillid) {
+        profileService.removeSkill(userid, skillid);
+    }
+
 }
 
 

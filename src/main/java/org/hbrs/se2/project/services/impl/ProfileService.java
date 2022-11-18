@@ -9,6 +9,7 @@ import org.hbrs.se2.project.services.ProfileServiceInterface;
 import org.hbrs.se2.project.services.factory.EntityCreationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -181,6 +182,21 @@ public class ProfileService implements ProfileServiceInterface {
             skills.add(skillRepository.findBySkillid(studentHasSkill.getSkillid()));
         }
         return new ListDataProvider<>(skills);
+    }
+
+    @Override
+    public void removeMajor(int userid, int majorid) {
+        studentHasMajorRepository.deleteByStudentidAndMajorid(studentRepository.findStudentByUserid(userid).getStudentid(), majorid);
+    }
+
+    @Override
+    public void removeTopic(int userid, int topicid) {
+        studentHasTopicRepository.deleteByStudentidAndTopicid(studentRepository.findStudentByUserid(userid).getStudentid(), topicid);
+    }
+
+    @Override
+    public void removeSkill(int userid, int skillid) {
+        studentHasSkillRepository.deleteByStudentidAndSkillid(studentRepository.findStudentByUserid(userid).getStudentid(), skillid);
     }
 
 }

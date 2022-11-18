@@ -16,4 +16,7 @@ public interface ProfileServiceInterface {
      ListDataProvider<MajorDTO> getMajorOfStudent(int userid);
      ListDataProvider<TopicDTO> getTopicOfStudent(int userid);
      ListDataProvider<SkillDTO> getSkillOfStudent(int userid);
+     void removeMajor(int userid, int majorid);
+     void removeTopic(int userid, int topicid);
+     void removeSkill(int userid, int skillid);
 }

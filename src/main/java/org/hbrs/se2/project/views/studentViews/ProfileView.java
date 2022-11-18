@@ -17,8 +17,6 @@ import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
 
-import java.util.List;
-
 @Route(value = Globals.Pages.PROFILE_VIEW, layout = AppView.class)
 @PageTitle("Profile")
 public class ProfileView extends Div {
@@ -68,14 +66,32 @@ public class ProfileView extends Div {
         Grid<MajorDTO> gridMajors = new Grid<>();
         gridMajors.setDataProvider(profileControl.getMajorOfStudent(this.getCurrentUser().getUserid()));
         gridMajors.addColumn(MajorDTO::getMajor).setHeader("Majors");
+        gridMajors.addComponentColumn(major -> {
+            Button deleteButton = new Button("Entfernen");
+            deleteButton.addClickListener(e -> {profileControl.removeMajor(this.getCurrentUser().getUserid(), major.getMajorid());
+                UI.getCurrent().getPage().reload();});
+            return deleteButton;
+        });
 
         Grid<TopicDTO> gridTopics = new Grid<>();
         gridTopics.setDataProvider(profileControl.getTopicOfStudent(this.getCurrentUser().getUserid()));
         gridTopics.addColumn(TopicDTO::getTopic).setHeader("Topics");
+        gridTopics.addComponentColumn(topic -> {
+            Button deleteButton = new Button("Entfernen");
+            deleteButton.addClickListener(e -> {profileControl.removeTopic(this.getCurrentUser().getUserid(), topic.getTopicid());
+                UI.getCurrent().getPage().reload();});
+            return deleteButton;
+        });
 
         Grid<SkillDTO> gridSkills = new Grid<>();
         gridSkills.setDataProvider(profileControl.getSkillOfStudent(this.getCurrentUser().getUserid()));
         gridSkills.addColumn(SkillDTO::getSkill).setHeader("Skills");
+        gridSkills.addComponentColumn(skill -> {
+            Button deleteButton = new Button("Entfernen");
+            deleteButton.addClickListener(e -> {profileControl.removeSkill(this.getCurrentUser().getUserid(), skill.getSkillid());
+                UI.getCurrent().getPage().reload();});
+            return deleteButton;
+        });
 
         // add to view
         add(gridMajors);
