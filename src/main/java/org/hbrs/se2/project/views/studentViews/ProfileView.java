@@ -5,12 +5,14 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.component.textfield.TextField;
 import org.hbrs.se2.project.control.ProfileControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
+import org.hbrs.se2.project.dtos.MajorDTO;
+import org.hbrs.se2.project.dtos.SkillDTO;
+import org.hbrs.se2.project.dtos.TopicDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
@@ -61,23 +63,19 @@ public class ProfileView extends Div {
     }
 
     private void setAllGrids() {
-        // get all majors, topics and skills from a student
-        List<String> majors = profileControl.getMajorOfStudent(this.getCurrentUser().getUserid());
-        List<String> topics = profileControl.getTopicOfStudent(this.getCurrentUser().getUserid());
-        List<String> skills = profileControl.getSkillOfStudent(this.getCurrentUser().getUserid());
 
         // Create grids for skills, topics and majors
-        Grid<String> gridMajors = new Grid<>();
-        gridMajors.addColumn(ValueProvider.identity()).setHeader("Majors");
-        gridMajors.setItems(majors);
+        Grid<MajorDTO> gridMajors = new Grid<>();
+        gridMajors.setDataProvider(profileControl.getMajorOfStudent(this.getCurrentUser().getUserid()));
+        gridMajors.addColumn(MajorDTO::getMajor).setHeader("Majors");
 
-        Grid<String> gridTopics = new Grid<>();
-        gridTopics.addColumn(ValueProvider.identity()).setHeader("Topics");
-        gridTopics.setItems(topics);
+        Grid<TopicDTO> gridTopics = new Grid<>();
+        gridTopics.setDataProvider(profileControl.getTopicOfStudent(this.getCurrentUser().getUserid()));
+        gridTopics.addColumn(TopicDTO::getTopic).setHeader("Topics");
 
-        Grid<String> gridSkills = new Grid<>();
-        gridSkills.addColumn(ValueProvider.identity()).setHeader("Skills");
-        gridSkills.setItems(skills);
+        Grid<SkillDTO> gridSkills = new Grid<>();
+        gridSkills.setDataProvider(profileControl.getSkillOfStudent(this.getCurrentUser().getUserid()));
+        gridSkills.addColumn(SkillDTO::getSkill).setHeader("Skills");
 
         // add to view
         add(gridMajors);
