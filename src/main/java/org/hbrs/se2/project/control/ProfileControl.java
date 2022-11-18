@@ -1,10 +1,12 @@
 package org.hbrs.se2.project.control;
 
+import com.vaadin.flow.data.provider.ListDataProvider;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
+import org.hbrs.se2.project.dtos.MajorDTO;
+import org.hbrs.se2.project.dtos.SkillDTO;
+import org.hbrs.se2.project.dtos.TopicDTO;
 import org.hbrs.se2.project.services.impl.ProfileService;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class ProfileControl {
@@ -41,14 +43,14 @@ public class ProfileControl {
         return profileService.getUniversityOfStudent(userid);
     }
 
-    public List<String> getMajorOfStudent(int userid) {
+    public ListDataProvider<MajorDTO> getMajorOfStudent(int userid) {
         return profileService.getMajorOfStudent(userid);
     }
-    public List<String> getTopicOfStudent(int userid){
+    public ListDataProvider<TopicDTO> getTopicOfStudent(int userid){
         return profileService.getTopicOfStudent(userid);
     }
 
-    public List<String> getSkillOfStudent(int userid){
+    public ListDataProvider<SkillDTO> getSkillOfStudent(int userid){
         return profileService.getSkillOfStudent(userid);
     }
 }

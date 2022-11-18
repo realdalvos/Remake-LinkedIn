@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.services.impl;
 
+import com.vaadin.flow.data.provider.ListDataProvider;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
@@ -138,69 +139,48 @@ public class ProfileService implements ProfileServiceInterface {
     }
 
     @Override
-    public List<String> getMajorOfStudent(int userid) {
-        // major dto
-        MajorDTO majorDTO;
+    public ListDataProvider<MajorDTO> getMajorOfStudent(int userid) {
         // comment: maybe we should return a list of major dtos and not strings
         // important for data binding in view
         // list for majors
-        List<String> majors = new ArrayList<>();
+        List<MajorDTO> majors = new ArrayList<>();
         // get student with matching user id
-        StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
         // get data from student_has_major table with matching student ids
-        List<StudentHasMajorDTO> studentHasMajors =
-                studentHasMajorRepository.findByStudentid(studentDTO.getStudentid());
         // get matching majors from major table with major id from studentHasMajor list
-        for (StudentHasMajorDTO studentHasMajor : studentHasMajors) {
-            majorDTO = majorRepository.findByMajorid(studentHasMajor.getMajorid());
-            // check if major is null
-            // if major is null, we return an empty string like getUniversityOfStudent method
-            if(majorDTO.getMajor() == null) {
-                majors.add("");
-            } else {
-                majors.add(majorDTO.getMajor());
-            }
+        for (StudentHasMajorDTO studentHasMajor : studentHasMajorRepository
+                .findByStudentid(studentRepository
+                        .findStudentByUserid(userid)
+                        .getStudentid())) {
+            majors.add(majorRepository.findByMajorid(studentHasMajor.getMajorid()));
         }
         // return list of majors
-        return majors;
+        return new ListDataProvider<>(majors);
     }
 
     @Override
-    public List<String> getTopicOfStudent(int userid) {
+    public ListDataProvider<TopicDTO> getTopicOfStudent(int userid) {
         // same process as in getMajorOfStudent method
-        TopicDTO topicDTO;
-        List<String> topics = new ArrayList<>();
-        StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
-        List<StudentHasTopicDTO> studentHasTopics = studentHasTopicRepository.findByStudentid(studentDTO.getStudentid());
-        for(StudentHasTopicDTO studentHasTopic : studentHasTopics){
-            topicDTO = topicRepository.findByTopicid(studentHasTopic.getTopicid());
-            // check if topic is null
-            if(topicDTO.getTopic() == null) {
-                topics.add("");
-            } else {
-                topics.add(topicDTO.getTopic());
-            }
+        List<TopicDTO> topics = new ArrayList<>();
+        for(StudentHasTopicDTO studentHasTopic : studentHasTopicRepository
+                .findByStudentid(studentRepository
+                        .findStudentByUserid(userid)
+                        .getStudentid())){
+            topics.add(topicRepository.findByTopicid(studentHasTopic.getTopicid()));
         }
-        return topics;
+        return new ListDataProvider<>(topics);
     }
 
     @Override
-    public List<String> getSkillOfStudent(int userid) {
+    public ListDataProvider<SkillDTO> getSkillOfStudent(int userid) {
         // same process as in getMajorOfStudent method
-        SkillDTO skillDTO;
-        List<String> skills = new ArrayList<>();
-        StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
-        List<StudentHasSkillDTO> studentHasSkills = studentHasSkillRepository.findByStudentid(studentDTO.getStudentid());
-        for(StudentHasSkillDTO studentHasSkill : studentHasSkills){
-            skillDTO = skillRepository.findBySkillid(studentHasSkill.getSkillid());
-            // check if skill is null
-            if(skillDTO.getSkill() == null) {
-                skills.add("");
-            } else {
-                skills.add(skillDTO.getSkill());
-            }
+        List<SkillDTO> skills = new ArrayList<>();
+        for(StudentHasSkillDTO studentHasSkill : studentHasSkillRepository
+                .findByStudentid(studentRepository
+                        .findStudentByUserid(userid)
+                        .getStudentid())){
+            skills.add(skillRepository.findBySkillid(studentHasSkill.getSkillid()));
         }
-        return skills;
+        return new ListDataProvider<>(skills);
     }
 
 }
