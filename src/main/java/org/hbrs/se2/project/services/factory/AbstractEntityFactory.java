@@ -1,8 +1,10 @@
 package org.hbrs.se2.project.services.factory;
 
-@FunctionalInterface
-public interface AbstractEntityFactory<T> {
+import javax.persistence.Entity;
 
-    T createEntity();
+@FunctionalInterface
+public interface AbstractEntityFactory<T, S> {
+
+    T createEntity(S input);
 
 }

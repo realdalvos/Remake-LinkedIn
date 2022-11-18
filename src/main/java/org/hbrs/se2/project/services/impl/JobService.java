@@ -41,7 +41,7 @@ public class JobService implements JobServiceInterface {
 
     @Override
     public void createNewJobPost(JobDTO job) {
-        this.jobRepository.save(entityCreationService.jobFactory(job).createEntity());
+        this.jobRepository.save(entityCreationService.jobFactory().createEntity(job));
     }
 
     @Override

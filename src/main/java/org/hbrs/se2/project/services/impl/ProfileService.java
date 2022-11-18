@@ -2,14 +2,18 @@ package org.hbrs.se2.project.services.impl;
 
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
-import org.hbrs.se2.project.entities.*;
+import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.repository.*;
 import org.hbrs.se2.project.services.ProfileServiceInterface;
+import org.hbrs.se2.project.services.factory.EntityCreationService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ProfileService implements ProfileServiceInterface {
     @Autowired
     private StudentRepository studentRepository;
@@ -25,6 +29,10 @@ public class ProfileService implements ProfileServiceInterface {
     private StudentHasSkillRepository studentHasSkillRepository;
     @Autowired
     private StudentHasTopicRepository studentHasTopicRepository;
+    @Autowired
+    private EntityCreationService entityCreationService;
+
+    private ModelMapper mapper = new ModelMapper();
 
 
     @Override
@@ -57,17 +65,13 @@ public class ProfileService implements ProfileServiceInterface {
         // check if found major is null
         if(majorDTO == null){
             // if major does not exist, create new major from input
-            Major majorEntity = new Major();
-            majorEntity.setMajor(major);
-            majorRepository.save(majorEntity);
+            majorRepository.save(entityCreationService.majorFactory().createEntity(major));
             // get saved major data
             majorDTO = majorRepository.findByMajor(major);
         }
         // create new studentHasMajor entity
-        StudentHasMajor studentHasMajor = new StudentHasMajor();
-        studentHasMajor.setMajorid(majorDTO.getMajorid());
-        studentHasMajor.setStudentid(studentDTO.getStudentid());
-        studentHasMajorRepository.save(studentHasMajor);
+        studentHasMajorRepository.save(entityCreationService.shmFactory()
+                .createEntity(new int[]{studentDTO.getStudentid(),majorDTO.getMajorid()}));
     }
 
     @Override
@@ -83,17 +87,13 @@ public class ProfileService implements ProfileServiceInterface {
         // check if found topic is null
         if(topicDTO == null){
             // if topic does not exist, create new topic from input
-            Topic topicEntity = new Topic();
-            topicEntity.setTopic(topic);
-            topicRepository.save(topicEntity);
+            topicRepository.save(entityCreationService.topicFactory().createEntity(topic));
             // get topic major data
             topicDTO = topicRepository.findByTopic(topic);
         }
         // create new studentHasMajor entity
-        StudentHasTopic studentHasTopic = new StudentHasTopic();
-        studentHasTopic.setTopicid((topicDTO.getTopicid()));
-        studentHasTopic.setStudentid(studentDTO.getStudentid());
-        studentHasTopicRepository.save(studentHasTopic);
+        studentHasTopicRepository.save(entityCreationService.shtFactory()
+                .createEntity(new int[]{studentDTO.getStudentid(),topicDTO.getTopicid()}));
     }
 
     @Override
@@ -105,36 +105,24 @@ public class ProfileService implements ProfileServiceInterface {
         }
         SkillDTO skillDTO = skillRepository.findBySkill(skill);
         if(skillDTO == null){
-            Skill skillEntity = new Skill();
-            skillEntity.setSkill(skill);
-            skillRepository.save(skillEntity);
+            skillRepository.save(entityCreationService.skillFactory().createEntity(skill));
             skillDTO = skillRepository.findBySkill(skill);
         }
-        StudentHasSkill studentHasSkill = new StudentHasSkill();
-        studentHasSkill.setSkillid(skillDTO.getSkillid());
-        studentHasSkill.setStudentid(studentDTO.getStudentid());
-        studentHasSkillRepository.save(studentHasSkill);
+        studentHasSkillRepository.save(entityCreationService.shsFactory()
+                .createEntity(new int[]{studentDTO.getStudentid(),skillDTO.getSkillid()}));
     }
 
     @Override
     public void updateUniversity(String university, int userid) throws DatabaseUserException {
         // get student with matching user id
-        StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
+        StudentDTOImpl student = mapper.map(studentRepository.findStudentByUserid(userid), StudentDTOImpl.class);
         // check if student is null
-        if(studentDTO == null) {
+        if(student == null) {
             throw new DatabaseUserException("There is no Student with the passed id");
         }
-        // create new student entity to update university attribute
-        Student student = new Student();
-        student.setUserid(studentDTO.getUserid());
-        student.setStudentid(studentDTO.getStudentid());
-        student.setFirstname(studentDTO.getFirstname());
-        student.setLastname(studentDTO.getLastname());
-        student.setUniversity(studentDTO.getUniversity());
-        student.setMatrikelnumber(studentDTO.getMatrikelnumber());
         student.setUniversity(university);
-        // save updated student
-        studentRepository.save(student);
+        // update student entity with university attribute
+        studentRepository.save(entityCreationService.studentFactory().createEntity(student));
     }
 
     @Override
@@ -214,4 +202,5 @@ public class ProfileService implements ProfileServiceInterface {
         }
         return skills;
     }
+
 }

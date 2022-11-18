@@ -85,7 +85,7 @@ public class RegistrationService implements RegistrationServiceInterface {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         try {
             //Saving user in db
-            this.userRepository.save(entityCreationService.userFactory(userDTO).createEntity());
+            this.userRepository.save(entityCreationService.userFactory().createEntity(userDTO));
         } catch (org.springframework.dao.DataAccessResourceFailureException e) {
             throw new DatabaseUserException("A Failure occurred while saving a user account in the database at createAccount");
         }
@@ -100,7 +100,8 @@ public class RegistrationService implements RegistrationServiceInterface {
      */
     private void createStudentProfile(StudentDTO studentDTO, UserDTO userDTO) throws DatabaseUserException {
         try {
-            this.studentRepository.save(entityCreationService.studentFactory(userDTO, studentDTO).createEntity());
+            studentDTO.setUserid(userDTO.getUserid());
+            this.studentRepository.save(entityCreationService.studentFactory().createEntity(studentDTO));
         } catch (org.springframework.dao.DataAccessResourceFailureException e) {
             throw new DatabaseUserException("A Failure occurred while saving a Student Profile into the database at createStudentProfile");
         }
@@ -115,7 +116,8 @@ public class RegistrationService implements RegistrationServiceInterface {
      */
     private void createCompanyProfile(CompanyDTO companyDTO, UserDTO userDTO) throws DatabaseUserException {
         try {
-            this.companyRepository.save(entityCreationService.companyFactory(userDTO, companyDTO).createEntity());
+            companyDTO.setUserid(userDTO.getUserid());
+            this.companyRepository.save(entityCreationService.companyFactory().createEntity(companyDTO));
         } catch (org.springframework.dao.DataAccessResourceFailureException e) {
             throw new DatabaseUserException("A Failure occurred while saving a Company Profile into the database at createCompanyProfile");
         }
