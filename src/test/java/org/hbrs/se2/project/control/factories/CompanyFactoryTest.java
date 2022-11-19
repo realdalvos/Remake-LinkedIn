@@ -5,17 +5,21 @@ import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.entities.Company;
+import org.hbrs.se2.project.services.factory.EntityCreationService;
 import org.hbrs.se2.project.util.Globals;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CompanyFactoryTest {
+    static EntityCreationService entityCreationService;
     UserDTO testUser;
     CompanyDTO testCompany;
+
+    @BeforeAll
+    static void init() {
+        entityCreationService = new EntityCreationService();
+    }
 
     @BeforeEach
     void setUp() {
@@ -33,7 +37,7 @@ class CompanyFactoryTest {
     @Test
     @DisplayName("Testing if the CompanyFactory works as expected.")
     void testCreateCompany() {
-        Company companyFromFactory = CompanyFactory.createCompany(testCompany, testUser);
+        Company companyFromFactory = entityCreationService.companyFactory(testUser, testCompany).createEntity();
         assertNotNull(companyFromFactory, "createCompany Method should return a Instance of Company and not null.");
 
         //Checking the values of the returned company
