@@ -26,8 +26,6 @@ class StudentFactoryTest {
 
     @BeforeEach
     void setUp() {
-        entityCreationService = new EntityCreationService();
-
         testUser = new UserDTOImpl("JUnitTest", "SicheresPasswort", "testUser@JUnitTest.de", Globals.Roles.student);
         testUser.setUserid(99999);
 
