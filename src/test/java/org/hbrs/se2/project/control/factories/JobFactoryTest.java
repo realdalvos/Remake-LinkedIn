@@ -28,7 +28,7 @@ class JobFactoryTest {
 
     @Test
     void createJob() {
-        Job jobFromFactory = entityCreationService.jobFactory(testJob).createEntity();
+        Job jobFromFactory = entityCreationService.jobFactory().createEntity(testJob);
         assertNotNull(jobFromFactory, "createJob Method should return a Instance of Job and not null.");
 
         //Checking the values of the returned job

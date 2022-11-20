@@ -35,7 +35,7 @@ class StudentFactoryTest {
     @Test
     @DisplayName("Checking if createStudent-Method works as expected.")
     void createStudent() {
-        Student studentFromFactory = entityCreationService.studentFactory(testUser, testStudent).createEntity();
+        Student studentFromFactory = entityCreationService.studentFactory().createEntity(testStudent);
         assertNotNull(studentFromFactory, "createStudent Method should return a Instance of Student and not null.");
 
         assertEquals(testStudent.getMatrikelnumber(), studentFromFactory.getMatrikelnumber(), "Matrikelnumber should match.");

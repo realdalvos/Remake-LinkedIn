@@ -30,8 +30,7 @@ class UserFactoryTest {
     @Test
     @DisplayName("Testing if createUser-Method works as expected.")
     void testCreateUser() {
-        User userFromFactory;
-        userFromFactory = entityCreationService.userFactory(testUser).createEntity();
+        User userFromFactory = entityCreationService.userFactory().createEntity(testUser);
         assertNotNull(userFromFactory, "createUser Method should return a Instance of User and not null.");
 
         assertEquals(testUser.getUserid(), userFromFactory.getUserid(), "UserID should match.");

@@ -37,7 +37,7 @@ class CompanyFactoryTest {
     @Test
     @DisplayName("Testing if the CompanyFactory works as expected.")
     void testCreateCompany() {
-        Company companyFromFactory = entityCreationService.companyFactory(testUser, testCompany).createEntity();
+        Company companyFromFactory = entityCreationService.companyFactory().createEntity(testCompany);
         assertNotNull(companyFromFactory, "createCompany Method should return a Instance of Company and not null.");
 
         //Checking the values of the returned company
