@@ -63,5 +63,5 @@ public abstract class RegisterView extends VerticalLayout {
         );
         return formLayout;
     }
-
 }
+

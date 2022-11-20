@@ -1,6 +1,8 @@
 package org.hbrs.se2.project.dtos;
 
-public interface UserDTO {
+import java.io.Serializable;
+
+public interface UserDTO extends Serializable {
     int getUserid();
 
     void setUserid(int id);

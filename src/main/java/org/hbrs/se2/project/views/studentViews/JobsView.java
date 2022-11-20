@@ -23,7 +23,6 @@ import java.util.stream.Stream;
 @Route(value = Globals.Pages.JOBS_VIEW, layout = AppView.class)
 @PageTitle("Jobs")
 public class JobsView extends Div {
-
     // interactive search field
     private final TextField searchField = new TextField("Jobsuche");
     private final Button searchButton = new Button("Suchen");
@@ -77,5 +76,4 @@ public class JobsView extends Div {
         add(grid);
         grid.setItems(jobControl.getAllJobs());
     }
-
 }

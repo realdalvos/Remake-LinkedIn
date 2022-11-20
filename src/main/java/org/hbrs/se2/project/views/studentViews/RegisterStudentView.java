@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.views.studentViews;
 
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 /**
  * Register View - Form to register as a student
  */
+
 @Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
 @PageTitle("Als Student registrieren")
 public class RegisterStudentView extends RegisterView {

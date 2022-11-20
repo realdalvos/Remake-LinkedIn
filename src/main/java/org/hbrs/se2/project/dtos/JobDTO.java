@@ -1,6 +1,8 @@
 package org.hbrs.se2.project.dtos;
 
-public interface JobDTO {
+import java.io.Serializable;
+
+public interface JobDTO extends Serializable {
     int getJobid();
 
     void setJobid(int jobid);
