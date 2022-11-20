@@ -78,7 +78,6 @@ public class ProfileView extends Div {
             });
             return deleteButton;
         });
-
         formLayout.addComponentAtIndex(2, major);
 
         gridTopics.addComponentColumn(topic -> {
