@@ -19,10 +19,6 @@ public class Student {
     private String matrikelnumber;
     private String university;
 
-    public Student() {
-
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="studentid")
@@ -51,4 +47,6 @@ public class Student {
     @Column(name="university")
     public String getUniversity() {return university;}
     public void setUniversity(String uni) {this.university = uni;}
+
 }
+

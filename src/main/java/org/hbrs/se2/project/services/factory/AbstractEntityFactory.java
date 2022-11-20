@@ -1,8 +1,10 @@
 package org.hbrs.se2.project.services.factory;
 
-@FunctionalInterface
-public interface AbstractEntityFactory<T> {
+import java.io.Serializable;
 
-    T createEntity();
+@FunctionalInterface
+public interface AbstractEntityFactory<T, S extends Serializable> {
+
+    T createEntity(S input);
 
 }

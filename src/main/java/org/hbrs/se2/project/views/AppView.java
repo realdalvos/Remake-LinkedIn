@@ -24,6 +24,7 @@ import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.companyViews.MyAdsView;
 import org.hbrs.se2.project.views.studentViews.JobsView;
+import org.hbrs.se2.project.views.studentViews.ProfileView;
 import org.slf4j.Logger;
 import java.util.Optional;
 
@@ -31,7 +32,6 @@ import java.util.Optional;
 @PWA(name="HBRS Collab", shortName = "HBRScollab", enableInstallPrompt = false)
 public class AppView extends AppLayout implements BeforeEnterObserver {
     private final Logger logger = Utils.getLogger(this.getClass().getName());
-
     private Tabs menu;
     private H1 viewTitle;
     private H4 helloUser;
@@ -173,6 +173,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         if(this.authorizationControl.hasUserRole(loginControl.getCurrentUser(), Globals.Roles.student)) {
             logger.info("User is student");
             tabs = Utils.append(tabs, createTab("Jobs", JobsView.class));
+            tabs = Utils.append(tabs, createTab("Profile", ProfileView.class));
         } else
             // has the user the role "company" they have the tabs "My Ads"
             if(this.authorizationControl.hasUserRole(loginControl.getCurrentUser(), Globals.Roles.company)) {
@@ -181,8 +182,6 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             }
         return tabs;
     }
-
-
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
         final Tab tab = new Tab();
         tab.add(new RouterLink(text, navigationTarget));
