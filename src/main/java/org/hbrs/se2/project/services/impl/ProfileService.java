@@ -40,16 +40,16 @@ public class ProfileService implements ProfileServiceInterface {
     @Override
     public void saveStudentData(int id, String major, String university, String topic, String skill) throws DatabaseUserException {
         // if input is not null or not empty, save student data
-        if (major != null && !major.equals("")) {
+        if (major != null && !major.isBlank()) {
             updateStudyMajor(major, id);
         }
-        if (university != null && !university.equals("")) {
+        if (university != null && !university.isBlank()) {
             updateUniversity(university, id);
         }
-        if (topic != null && !topic.equals("")) {
+        if (topic != null && !topic.isBlank()) {
             updateTopics(topic, id);
         }
-        if (skill != null && !skill.equals("")) {
+        if (skill != null && !skill.isBlank()) {
             updateSkills(skill, id);
         }
     }
