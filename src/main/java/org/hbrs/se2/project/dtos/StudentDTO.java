@@ -1,6 +1,8 @@
 package org.hbrs.se2.project.dtos;
 
-public interface StudentDTO {
+import java.io.Serializable;
+
+public interface StudentDTO extends Serializable {
 
     int getStudentid();
 

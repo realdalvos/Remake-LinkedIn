@@ -9,7 +9,6 @@ import org.hbrs.se2.project.services.ProfileServiceInterface;
 import org.hbrs.se2.project.services.factory.EntityCreationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
