@@ -4,8 +4,8 @@ import org.hbrs.se2.project.dtos.MajorDTO;
 
 public class MajorDTOImpl implements MajorDTO {
     private int majorid;
-
     private String major;
+    
     public int getMajorid() {
         return majorid;
     }
