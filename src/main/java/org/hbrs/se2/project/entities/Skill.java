@@ -4,7 +4,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "skill", schema = "mid9db")
 public class Skill {
-
     private int skillid;
     private String skill;
 
@@ -28,7 +27,5 @@ public class Skill {
     public void setSkill(String skill) {
         this.skill = skill;
     }
-
-
 
 }

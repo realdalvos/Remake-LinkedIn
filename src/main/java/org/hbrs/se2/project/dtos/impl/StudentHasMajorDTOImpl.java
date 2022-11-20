@@ -4,7 +4,6 @@ import org.hbrs.se2.project.dtos.StudentHasMajorDTO;
 
 public class StudentHasMajorDTOImpl implements StudentHasMajorDTO {
     private int studentid;
-
     private int majorid;
 
     public int getStudentid() {
@@ -22,7 +21,5 @@ public class StudentHasMajorDTOImpl implements StudentHasMajorDTO {
     public void setMajorid(int majorid) {
         this.majorid = majorid;
     }
-
-
 
 }

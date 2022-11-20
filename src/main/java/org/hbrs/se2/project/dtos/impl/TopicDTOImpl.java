@@ -21,4 +21,5 @@ public class TopicDTOImpl implements TopicDTO {
     public void setTopic(String topic) {
         this.topic = topic;
     }
+
 }

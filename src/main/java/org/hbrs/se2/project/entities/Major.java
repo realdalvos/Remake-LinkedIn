@@ -5,9 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name= "major", schema = "mid9db")
 public class Major {
-
     private int majorid;
-
     private String major;
 
     @Id
@@ -30,4 +28,5 @@ public class Major {
     public void setMajor(String major) {
         this.major = major;
     }
+
 }

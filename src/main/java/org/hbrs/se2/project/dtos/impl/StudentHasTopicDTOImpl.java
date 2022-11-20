@@ -2,11 +2,7 @@ package org.hbrs.se2.project.dtos.impl;
 
 import org.hbrs.se2.project.dtos.StudentHasTopicDTO;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-
 public class StudentHasTopicDTOImpl implements StudentHasTopicDTO {
-
     private int studentid;
     private int topicid;
 

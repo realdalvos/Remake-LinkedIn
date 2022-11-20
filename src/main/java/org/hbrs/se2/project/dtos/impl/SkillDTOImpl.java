@@ -10,7 +10,6 @@ public class SkillDTOImpl implements SkillDTO {
         return skillid;
     }
 
-
     public void setSkillid(int skillid) {
         this.skillid = skillid;
     }
@@ -22,4 +21,5 @@ public class SkillDTOImpl implements SkillDTO {
     public void setSkill(String skill) {
         this.skill = skill;
     }
+
 }

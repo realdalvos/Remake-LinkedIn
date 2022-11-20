@@ -1,13 +1,10 @@
 package org.hbrs.se2.project.entities;
 
-import org.springframework.stereotype.Component;
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "topic", schema = "mid9db")
 public class Topic {
-
     private int topicid;
     private String topic;
 

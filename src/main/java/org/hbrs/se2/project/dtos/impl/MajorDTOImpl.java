@@ -22,5 +22,4 @@ public class MajorDTOImpl implements MajorDTO {
         this.major = major;
     }
 
-
 }

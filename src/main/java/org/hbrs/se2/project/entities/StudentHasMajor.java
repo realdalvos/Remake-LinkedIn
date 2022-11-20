@@ -7,9 +7,7 @@ import javax.persistence.*;
 @Entity @IdClass(StudentHasMajorKey.class)
 @Table(name = "student_has_major", schema = "mid9db")
 public class StudentHasMajor {
-
     private int studentid;
-
     private int majorid;
 
     @Id
@@ -31,6 +29,5 @@ public class StudentHasMajor {
     public void setMajorid(int majorid) {
         this.majorid = majorid;
     }
-
 
 }
