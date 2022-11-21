@@ -15,11 +15,18 @@ import org.hbrs.se2.project.dtos.SkillDTO;
 import org.hbrs.se2.project.dtos.TopicDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.util.Globals;
+import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
+import org.slf4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Route(value = Globals.Pages.PROFILE_VIEW, layout = AppView.class)
 @PageTitle("Profile")
 public class ProfileView extends Div {
+
+    private final Logger logger = Utils.getLogger(this.getClass().getName());
     private final TextField university = new TextField("Universität:");
     private final TextField major = new TextField("Füge neuen Major hinzu:");
     private final TextField topic = new TextField("Füge neuen Topic hinzu:");
@@ -31,11 +38,11 @@ public class ProfileView extends Div {
 
     private Button button;
 
-    private final FormLayout formLayout =  new FormLayout();
+    private final FormLayout formLayout = new FormLayout();
 
     private final ProfileControl profileControl;
 
-    public ProfileView(ProfileControl profileControl){
+    public ProfileView(ProfileControl profileControl) {
         this.profileControl = profileControl;
 
         setSizeFull();
@@ -55,17 +62,20 @@ public class ProfileView extends Div {
     private void setAllGrids() {
         // Create grids for skills, topics and majors
         gridMajors.setHeightByRows(true);
-        gridMajors.setDataProvider(profileControl.getMajorOfStudent(this.getCurrentUser().getUserid()));
         gridMajors.addColumn(MajorDTO::getMajor).setHeader("Majors:");
+        gridMajors.setItems(profileControl.getMajorOfStudent(this.getCurrentUser().getUserid()));
         gridTopics.setHeightByRows(true);
-        gridTopics.setDataProvider(profileControl.getTopicOfStudent(this.getCurrentUser().getUserid()));
         gridTopics.addColumn(TopicDTO::getTopic).setHeader("Topics:");
+        gridTopics.setItems(profileControl.getTopicOfStudent(this.getCurrentUser().getUserid()));
         gridSkills.setHeightByRows(true);
-        gridSkills.setDataProvider(profileControl.getSkillOfStudent(this.getCurrentUser().getUserid()));
         gridSkills.addColumn(SkillDTO::getSkill).setHeader("Skills:");
+        gridSkills.setItems(profileControl.getSkillOfStudent(this.getCurrentUser().getUserid()));
     }
 
     private void editLayout() {
+        Grid<String> newMajorsGrid, newTopicsGrid, newSkillsGrid;
+        List<String> newMajors, newTopics, newSkills;
+
         university.setReadOnly(false);
         university.setLabel("Deine aktuelle Universität:");
 
@@ -73,47 +83,44 @@ public class ProfileView extends Div {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
                 profileControl.removeMajor(this.getCurrentUser().getUserid(), major.getMajorid());
-                deleteButton.setText("Entfernt");
-                deleteButton.setEnabled(false);
+                gridMajors.setItems(profileControl.getMajorOfStudent(this.getCurrentUser().getUserid()));
             });
             return deleteButton;
         });
-        formLayout.addComponentAtIndex(2, major);
+        formLayout.addComponentAtIndex(2, newMajorsGrid = newEntriesGrid(newMajors = new ArrayList<>()));
+        formLayout.addComponentAtIndex(3, newEntryLayout(major, newMajors, newMajorsGrid));
 
         gridTopics.addComponentColumn(topic -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
                 profileControl.removeTopic(this.getCurrentUser().getUserid(), topic.getTopicid());
-                deleteButton.setText("Entfernt");
-                deleteButton.setEnabled(false);
+                gridTopics.setItems(profileControl.getTopicOfStudent(this.getCurrentUser().getUserid()));
             });
             return deleteButton;
         });
-        formLayout.addComponentAtIndex(4, topic);
+        formLayout.addComponentAtIndex(5, newTopicsGrid = newEntriesGrid(newTopics = new ArrayList<>()));
+        formLayout.addComponentAtIndex(6, newEntryLayout(topic, newTopics, newTopicsGrid));
 
         gridSkills.addComponentColumn(skill -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
                 profileControl.removeSkill(this.getCurrentUser().getUserid(), skill.getSkillid());
-                deleteButton.setText("Entfernt");
-                deleteButton.setEnabled(false);
+                gridSkills.setItems(profileControl.getSkillOfStudent(this.getCurrentUser().getUserid()));
             });
             return deleteButton;
         });
-        formLayout.addComponentAtIndex(6, skill);
+        formLayout.addComponentAtIndex(8, newSkillsGrid = newEntriesGrid(newSkills = new ArrayList<>()));
+        formLayout.addComponentAtIndex(9, newEntryLayout(skill, newSkills, newSkillsGrid));
 
         formLayout.add(button = new Button("Profil speichern"));
         button.addClickListener(buttonClickEvent -> {
             try {
                 profileControl.saveStudentData(
                         this.getCurrentUser().getUserid(),
-                        major.getValue(),
                         university.getValue(),
-                        topic.getValue(),
-                        skill.getValue());
+                        newMajors, newTopics, newSkills);
             } catch (DatabaseUserException e) {
-                // should be replaced with logger
-                throw new Error("Something went wrong with saving student data");
+                logger.error("Something went wrong with saving student data");
             }
             // reload page to get updated view
             UI.getCurrent().getPage().reload();
@@ -123,11 +130,43 @@ public class ProfileView extends Div {
     private void viewLayout() {
         university.setReadOnly(true);
         button = new Button("Profil bearbeiten");
-        formLayout.add(university,gridMajors,gridTopics,gridSkills,button);
+        formLayout.add(university, gridMajors, gridTopics, gridSkills, button);
         button.addClickListener(buttonClickEvent -> {
             formLayout.remove(button);
             editLayout();
         });
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",1));
+        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
     }
+
+    private Grid<String> newEntriesGrid(List<String> entries) {
+        Grid<String> grid = new Grid<>();
+        grid.addColumn(String::valueOf);
+        grid.setHeightByRows(true);
+        grid.addComponentColumn(newEntry -> {
+            Button deleteButton = new Button("Entfernen");
+            deleteButton.addClickListener(e -> {
+                entries.remove(newEntry);
+                deleteButton.setText("Entfernt");
+                grid.setItems(entries);
+            });
+            return deleteButton;
+        });
+        return grid;
+    }
+
+    private FormLayout newEntryLayout(TextField input, List<String> entries, Grid<String> grid) {
+        FormLayout entryForm = new FormLayout();
+        Button saveButton = new Button("Hinzufügen");
+        saveButton.addClickListener(e -> {
+            if (!input.getValue().isBlank()) {
+                entries.add(input.getValue());
+                input.clear();
+                grid.setItems(entries);
+            }
+        });
+        entryForm.add(input);
+        entryForm.add(saveButton);
+        return entryForm;
+    }
+
 }
