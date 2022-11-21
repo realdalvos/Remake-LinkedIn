@@ -41,33 +41,27 @@ public class ProfileService implements ProfileServiceInterface {
         if (university != null && !university.isBlank()) {
             updateUniversity(university, id);
         }
-        if (!major.isEmpty()) {
-            major.forEach(m -> {
-                try {
-                    updateStudyMajor(m, id);
-                } catch (DatabaseUserException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-        }
-        if (!topic.isEmpty()) {
-            topic.forEach(t -> {
-                try {
-                    updateTopics(t, id);
-                } catch (DatabaseUserException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-        }
-        if (!skill.isEmpty()) {
-            skill.forEach(s -> {
-                try {
-                    updateSkills(s, id);
-                } catch (DatabaseUserException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-        }
+        major.forEach(m -> {
+            try {
+                updateStudyMajor(m, id);
+            } catch (DatabaseUserException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        topic.forEach(t -> {
+            try {
+                updateTopics(t, id);
+            } catch (DatabaseUserException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        skill.forEach(s -> {
+            try {
+                updateSkills(s, id);
+            } catch (DatabaseUserException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     private void updateStudyMajor(String major, int userid) throws DatabaseUserException {
