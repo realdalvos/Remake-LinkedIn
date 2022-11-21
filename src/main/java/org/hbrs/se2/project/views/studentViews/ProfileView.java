@@ -74,6 +74,7 @@ public class ProfileView extends Div {
             deleteButton.addClickListener(e -> {
                 profileControl.removeMajor(this.getCurrentUser().getUserid(), major.getMajorid());
                 deleteButton.setText("Entfernt");
+                deleteButton.setEnabled(false);
             });
             return deleteButton;
         });
@@ -84,6 +85,7 @@ public class ProfileView extends Div {
             deleteButton.addClickListener(e -> {
                 profileControl.removeTopic(this.getCurrentUser().getUserid(), topic.getTopicid());
                 deleteButton.setText("Entfernt");
+                deleteButton.setEnabled(false);
             });
             return deleteButton;
         });
@@ -94,6 +96,7 @@ public class ProfileView extends Div {
             deleteButton.addClickListener(e -> {
                 profileControl.removeSkill(this.getCurrentUser().getUserid(), skill.getSkillid());
                 deleteButton.setText("Entfernt");
+                deleteButton.setEnabled(false);
             });
             return deleteButton;
         });
