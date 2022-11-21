@@ -160,9 +160,9 @@ public class ProfileView extends Div {
         saveButton.addClickListener(e -> {
             if (!input.getValue().isBlank()) {
                 entries.add(input.getValue());
-                input.clear();
                 grid.setItems(entries);
             }
+            input.clear();
         });
         entryForm.add(input);
         entryForm.add(saveButton);
