@@ -19,8 +19,8 @@ public class ProfileControl {
         this.validationService = validationService;
     }
 
-    public void saveStudentData(UserDTO user, StudentDTO student, String university, List<String> major, List<String> topic, List<String> skill) throws DatabaseUserException {
-        profileService.saveStudentData(user, student, university, major, topic, skill);
+    public void saveStudentData(UserDTO user, StudentDTO student, List<String> major, List<String> topic, List<String> skill) throws DatabaseUserException {
+        profileService.saveStudentData(user, student, major, topic, skill);
     }
 
     public boolean checkUsernameUnique(String username) {

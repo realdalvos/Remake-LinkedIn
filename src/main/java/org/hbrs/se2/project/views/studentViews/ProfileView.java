@@ -168,7 +168,7 @@ public class ProfileView extends Div {
             try {
                 if (userBinder.isValid() && studentBinder.isValid()) {
                     profileControl.saveStudentData(
-                            userBinder.getBean(), studentBinder.getBean(), university.getValue(),
+                            userBinder.getBean(), studentBinder.getBean(),
                             newMajors, newTopics, newSkills);
                     // reload page to get updated view
                     UI.getCurrent().getPage().reload();

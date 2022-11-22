@@ -38,7 +38,7 @@ public class ProfileService implements ProfileServiceInterface {
 
 
     @Override
-    public void saveStudentData(UserDTO user, StudentDTO student, String university, List<String> major, List<String> topic, List<String> skill) throws DatabaseUserException {
+    public void saveStudentData(UserDTO user, StudentDTO student, List<String> major, List<String> topic, List<String> skill) throws DatabaseUserException {
         userRepository.save(entityCreationService.userFactory().createEntity(user));
         studentRepository.save(entityCreationService.studentFactory().createEntity(student));
         major.parallelStream().forEach(m -> {
@@ -121,32 +121,8 @@ public class ProfileService implements ProfileServiceInterface {
                 .createEntity(new int[]{studentDTO.getStudentid(), skillDTO.getSkillid()}));
     }
 
-    private void updateUniversity(String university, int userid) throws DatabaseUserException {
-        // get student with matching user id
-        StudentDTOImpl student = mapper.map(studentRepository.findStudentByUserid(userid), StudentDTOImpl.class);
-        // check if student is null
-        if (student == null) {
-            throw new DatabaseUserException("There is no Student with the passed id");
-        }
-        student.setUniversity(university);
-        // update student entity with university attribute
-        studentRepository.save(entityCreationService.studentFactory().createEntity(student));
-    }
-
     public StudentDTO getStudentProfile(int userid) {
         return studentRepository.findStudentByUserid(userid);
-    }
-
-    @Override
-    public String getUniversityOfStudent(int userid) {
-        // get student with matching user id
-        StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
-        // if university is null we to return an empty string
-        // because the grid needs a value but not null
-        if (studentDTO.getUniversity() == null) {
-            return "";
-        }
-        return studentDTO.getUniversity();
     }
 
     @Override
