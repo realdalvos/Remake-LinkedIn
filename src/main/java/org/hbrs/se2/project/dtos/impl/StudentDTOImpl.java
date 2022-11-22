@@ -9,9 +9,9 @@ import javax.validation.constraints.NotEmpty;
 public class StudentDTOImpl implements StudentDTO {
     private int studentid;
     private int userid;
-    @NotEmpty
+    @NotEmpty(message = "Darf nicht leer sein")
     private String firstname;
-    @NotEmpty
+    @NotEmpty(message = "Darf nicht leer sein")
     private String lastname;
     @Digits(integer = 7, fraction = 7, message = "Geben Sie bitte eine gültige Matrikelnummer ein")
     @NotEmpty

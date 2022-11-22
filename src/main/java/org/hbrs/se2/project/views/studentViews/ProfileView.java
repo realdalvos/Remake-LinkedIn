@@ -6,6 +6,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.data.binder.*;
+import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.component.textfield.TextField;
@@ -50,7 +51,7 @@ public class ProfileView extends Div {
 
     private final FormLayout formLayout = new FormLayout();
 
-    private final Binder<UserDTOImpl> userBinder = new BeanValidationBinder<>(UserDTOImpl.class);
+    private final Binder<UserDTOImpl> userBinder = new Binder<>(UserDTOImpl.class);
     private final Binder<StudentDTOImpl> studentBinder = new BeanValidationBinder<>(StudentDTOImpl.class);
 
     private final ModelMapper mapper = new ModelMapper();
@@ -63,6 +64,7 @@ public class ProfileView extends Div {
         setSizeFull();
         add(formLayout);
         setAllGrids();
+        setBinders();
         viewLayout();
     }
 
@@ -88,46 +90,6 @@ public class ProfileView extends Div {
                     field.setReadOnly(false);
                 }
         );
-        Binder.Binding<UserDTOImpl, String> checkUsernameBinding =
-                userBinder
-                        .forField(username)
-                        .asRequired()
-                        .withValidator(validation -> {
-                            if (!username.getValue().equals(CURRENT_USER.getUsername())){
-                                return profileControl.checkUsernameUnique(username.getValue());
-                            }
-                            return true;
-                        }, "Benutzername existiert bereits")
-                        .bind(UserDTOImpl::getUsername, UserDTOImpl::setUsername);
-        Binder.Binding<UserDTOImpl, String> checkEmailBinding =
-                userBinder
-                        .forField(email)
-                        .asRequired()
-                        .withValidator(validation -> {
-                            if (!email.getValue().equals(CURRENT_USER.getEmail())){
-                                return profileControl.checkEmailUnique(email.getValue());
-                            }
-                            return true;
-                        }, "Email existiert bereits")
-                        .bind(UserDTOImpl::getEmail, UserDTOImpl::setEmail);
-        Binder.Binding<StudentDTOImpl, String> checkMatrikelnumberBinding =
-                studentBinder
-                        .forField(matrikelnumber)
-                        .asRequired()
-                        .withValidator(validation -> {
-                            if (!matrikelnumber.getValue().equals(profileControl.getStudentProfile(CURRENT_USER.getUserid()).getMatrikelnumber())){
-                                return profileControl.checkMatrikelnumberUnique(matrikelnumber.getValue());
-                            }
-                            return true;
-                        }, "Matrikelnummer existiert bereits")
-                        .bind(StudentDTOImpl::getMatrikelnumber, StudentDTOImpl::setMatrikelnumber);
-
-        username.addValueChangeListener(
-                event -> checkUsernameBinding.validate());
-        email.addValueChangeListener(
-                event -> checkEmailBinding.validate());
-        matrikelnumber.addValueChangeListener(
-                event -> checkMatrikelnumberBinding.validate());
 
         gridMajors.addComponentColumn(major -> {
             Button deleteButton = new Button("Entfernen");
@@ -189,10 +151,7 @@ public class ProfileView extends Div {
                     formLayout.add(field);
                 }
         );
-        userBinder.bindInstanceFields(this);
-        studentBinder.bindInstanceFields(this);
-        userBinder.setBean(mapper.map(Utils.getCurrentUser(), UserDTOImpl.class));
-        studentBinder.setBean(mapper.map(profileControl.getStudentProfile(CURRENT_USER.getUserid()), StudentDTOImpl.class));
+
         button = new Button("Profil bearbeiten");
         formLayout.add(gridMajors, gridTopics, gridSkills, button);
         button.addClickListener(buttonClickEvent -> {
@@ -230,6 +189,41 @@ public class ProfileView extends Div {
         entryForm.add(input);
         entryForm.add(saveButton);
         return entryForm;
+    }
+
+    private void setBinders() {
+        userBinder.bindInstanceFields(this);
+        studentBinder.bindInstanceFields(this);
+        userBinder.setBean(mapper.map(Utils.getCurrentUser(), UserDTOImpl.class));
+        studentBinder.setBean(mapper.map(profileControl.getStudentProfile(CURRENT_USER.getUserid()), StudentDTOImpl.class));
+        userBinder
+                .forField(username)
+                .asRequired("Darf nicht leer sein")
+                .withValidator(validation -> !username.getValue().isBlank(), "Darf nicht leer sein")
+                .withValidator(validation -> username.getValue().equals(CURRENT_USER.getUsername())
+                        || profileControl.checkUsernameUnique(username.getValue()), "Benutzername existiert bereits")
+                .bind(UserDTOImpl::getUsername, UserDTOImpl::setUsername);
+        userBinder
+                .forField(email)
+                .asRequired("Darf nicht leer sein")
+                .withValidator(new EmailValidator("Keine gültige EMail Adresse"))
+                .withValidator(validation -> email.getValue().equals(CURRENT_USER.getEmail())
+                        || profileControl.checkEmailUnique(email.getValue()), "Email existiert bereits")
+                .bind(UserDTOImpl::getEmail, UserDTOImpl::setEmail);
+        studentBinder
+                .forField(matrikelnumber)
+                .asRequired("Darf nicht leer sein")
+                .withValidator(validation -> matrikelnumber.getValue().matches("-?\\d+")
+                        && matrikelnumber.getValue().length() <= 7, "Keine gültige Matrikelnummer")
+                .withValidator(validation -> matrikelnumber.getValue().equals(profileControl.getStudentProfile(CURRENT_USER.getUserid()).getMatrikelnumber())
+                        || profileControl.checkMatrikelnumberUnique(matrikelnumber.getValue()), "Matrikelnummer existiert bereits")
+                .bind(StudentDTOImpl::getMatrikelnumber, StudentDTOImpl::setMatrikelnumber);
+        username.addValueChangeListener(
+                event -> userBinder.validate());
+        email.addValueChangeListener(
+                event -> userBinder.validate());
+        matrikelnumber.addValueChangeListener(
+                event -> studentBinder.validate());
     }
 
 }
