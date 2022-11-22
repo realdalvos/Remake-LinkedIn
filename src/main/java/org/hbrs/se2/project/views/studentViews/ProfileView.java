@@ -49,11 +49,7 @@ public class ProfileView extends Div {
         setSizeFull();
         add(formLayout);
         setAllGrids();
-
         viewLayout();
-
-        // set value of the text field university
-        university.setValue(profileControl.getUniversityOfStudent(CURRENT_USER));
     }
 
     private void setAllGrids() {
@@ -124,6 +120,8 @@ public class ProfileView extends Div {
     }
 
     private void viewLayout() {
+        // set value of the text field university
+        university.setValue(profileControl.getUniversityOfStudent(CURRENT_USER));
         university.setReadOnly(true);
         button = new Button("Profil bearbeiten");
         formLayout.add(university, gridMajors, gridTopics, gridSkills, button);
