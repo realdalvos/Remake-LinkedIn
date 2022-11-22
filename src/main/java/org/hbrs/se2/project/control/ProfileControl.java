@@ -1,9 +1,7 @@
 package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.dtos.MajorDTO;
-import org.hbrs.se2.project.dtos.SkillDTO;
-import org.hbrs.se2.project.dtos.TopicDTO;
+import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.services.impl.ProfileService;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +16,12 @@ public class ProfileControl {
         this.profileService = profileService;
     }
 
-    public void saveStudentData(int id, String university, List<String> major, List<String> topic, List<String> skill) throws DatabaseUserException {
-        profileService.saveStudentData(id, university, major, topic, skill);
+    public void saveStudentData(int id, UserDTO user, StudentDTO student, String university, List<String> major, List<String> topic, List<String> skill) throws DatabaseUserException {
+        profileService.saveStudentData(id, user, student, university, major, topic, skill);
+    }
+
+    public StudentDTO getStudentProfile(int userid) {
+        return profileService.getStudentProfile(userid);
     }
 
     public String getUniversityOfStudent(int userid) {

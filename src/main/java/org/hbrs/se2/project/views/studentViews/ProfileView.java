@@ -1,26 +1,29 @@
 package org.hbrs.se2.project.views.studentViews;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.component.textfield.TextField;
 import org.hbrs.se2.project.control.ProfileControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.dtos.MajorDTO;
-import org.hbrs.se2.project.dtos.SkillDTO;
-import org.hbrs.se2.project.dtos.TopicDTO;
+import org.hbrs.se2.project.dtos.*;
+import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
+import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Route(value = Globals.Pages.PROFILE_VIEW, layout = AppView.class)
 @PageTitle("Profile")
@@ -29,10 +32,16 @@ public class ProfileView extends Div {
     private final int CURRENT_USER = Utils.getCurrentUser().getUserid();
 
     private final Logger logger = Utils.getLogger(this.getClass().getName());
-    private final TextField university = new TextField("Universität:");
+
     private final TextField major = new TextField("Füge neuen Major hinzu:");
     private final TextField topic = new TextField("Füge neuen Topic hinzu:");
     private final TextField skill = new TextField("Füge neuen Skills hinzu:");
+    private final TextField username = new TextField("Benutzername:");
+    private final TextField firstname = new TextField("Vorname:");
+    private final TextField lastname = new TextField("Nachname:");
+    private final TextField email = new TextField("EMail-Adresse:");
+    private final TextField university = new TextField("Universität:");
+    private final TextField matrikelnumber = new TextField("Matrikelnummer:");
 
     private final Grid<MajorDTO> gridMajors = new Grid<>();
     private final Grid<TopicDTO> gridTopics = new Grid<>();
@@ -41,6 +50,11 @@ public class ProfileView extends Div {
     private Button button;
 
     private final FormLayout formLayout = new FormLayout();
+
+    private final Binder<UserDTOImpl> userBinder = new BeanValidationBinder<>(UserDTOImpl.class);
+    private final Binder<StudentDTOImpl> studentBinder = new BeanValidationBinder<>(StudentDTOImpl.class);
+
+    private final ModelMapper mapper = new ModelMapper();
 
     private final ProfileControl profileControl;
 
@@ -70,8 +84,12 @@ public class ProfileView extends Div {
         Grid<String> newMajorsGrid, newTopicsGrid, newSkillsGrid;
         List<String> newMajors, newTopics, newSkills;
 
-        university.setReadOnly(false);
-        university.setLabel("Deine aktuelle Universität:");
+        //TODO: implement changing the other values, which need to be unique
+        Stream.of(firstname, lastname, university).forEach(
+                field -> {
+                    field.setReadOnly(false);
+                }
+        );
 
         gridMajors.addComponentColumn(major -> {
             Button deleteButton = new Button("Entfernen");
@@ -81,8 +99,8 @@ public class ProfileView extends Div {
             });
             return deleteButton;
         });
-        formLayout.addComponentAtIndex(2, newMajorsGrid = newEntriesGrid(newMajors = new ArrayList<>()));
-        formLayout.addComponentAtIndex(3, newEntryLayout(major, newMajors, newMajorsGrid));
+        formLayout.addComponentAtIndex(7, newMajorsGrid = newEntriesGrid(newMajors = new ArrayList<>()));
+        formLayout.addComponentAtIndex(8, newEntryLayout(major, newMajors, newMajorsGrid));
 
         gridTopics.addComponentColumn(topic -> {
             Button deleteButton = new Button("Entfernen");
@@ -92,8 +110,8 @@ public class ProfileView extends Div {
             });
             return deleteButton;
         });
-        formLayout.addComponentAtIndex(5, newTopicsGrid = newEntriesGrid(newTopics = new ArrayList<>()));
-        formLayout.addComponentAtIndex(6, newEntryLayout(topic, newTopics, newTopicsGrid));
+        formLayout.addComponentAtIndex(10, newTopicsGrid = newEntriesGrid(newTopics = new ArrayList<>()));
+        formLayout.addComponentAtIndex(11, newEntryLayout(topic, newTopics, newTopicsGrid));
 
         gridSkills.addComponentColumn(skill -> {
             Button deleteButton = new Button("Entfernen");
@@ -103,14 +121,14 @@ public class ProfileView extends Div {
             });
             return deleteButton;
         });
-        formLayout.addComponentAtIndex(8, newSkillsGrid = newEntriesGrid(newSkills = new ArrayList<>()));
-        formLayout.addComponentAtIndex(9, newEntryLayout(skill, newSkills, newSkillsGrid));
+        formLayout.addComponentAtIndex(13, newSkillsGrid = newEntriesGrid(newSkills = new ArrayList<>()));
+        formLayout.addComponentAtIndex(14, newEntryLayout(skill, newSkills, newSkillsGrid));
 
         button.setText("Profil speichern");
         button.addClickListener(buttonClickEvent -> {
             try {
                 profileControl.saveStudentData(
-                        CURRENT_USER, university.getValue(),
+                        CURRENT_USER, userBinder.getBean(), studentBinder.getBean(), university.getValue(),
                         newMajors, newTopics, newSkills);
             } catch (DatabaseUserException e) {
                 logger.error("Something went wrong with saving student data");
@@ -121,11 +139,19 @@ public class ProfileView extends Div {
     }
 
     private void viewLayout() {
-        // set value of the text field university
-        university.setValue(profileControl.getUniversityOfStudent(CURRENT_USER));
-        university.setReadOnly(true);
+        // set value of text fields to read only for profile view
+        Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(
+                field -> {
+                    field.setReadOnly(true);
+                    formLayout.add(field);
+                }
+        );
+        userBinder.bindInstanceFields(this);
+        studentBinder.bindInstanceFields(this);
+        userBinder.setBean(mapper.map(Utils.getCurrentUser(), UserDTOImpl.class));
+        studentBinder.setBean(mapper.map(profileControl.getStudentProfile(CURRENT_USER), StudentDTOImpl.class));
         button = new Button("Profil bearbeiten");
-        formLayout.add(university, gridMajors, gridTopics, gridSkills, button);
+        formLayout.add(gridMajors, gridTopics, gridSkills, button);
         button.addClickListener(buttonClickEvent -> {
             editLayout();
         });

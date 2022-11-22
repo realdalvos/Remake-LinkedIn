@@ -16,6 +16,8 @@ import java.util.List;
 @Service
 public class ProfileService implements ProfileServiceInterface {
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private StudentRepository studentRepository;
     @Autowired
     private StudentHasMajorRepository studentHasMajorRepository;
@@ -36,11 +38,9 @@ public class ProfileService implements ProfileServiceInterface {
 
 
     @Override
-    public void saveStudentData(int id, String university, List<String> major, List<String> topic, List<String> skill) throws DatabaseUserException {
-        // if input is not null or not empty, save student data
-        if (university != null && !university.isBlank()) {
-            updateUniversity(university, id);
-        }
+    public void saveStudentData(int id, UserDTO user, StudentDTO student, String university, List<String> major, List<String> topic, List<String> skill) throws DatabaseUserException {
+        userRepository.save(entityCreationService.userFactory().createEntity(user));
+        studentRepository.save(entityCreationService.studentFactory().createEntity(student));
         major.parallelStream().forEach(m -> {
             try {
                 updateStudyMajor(m, id);
@@ -131,6 +131,10 @@ public class ProfileService implements ProfileServiceInterface {
         student.setUniversity(university);
         // update student entity with university attribute
         studentRepository.save(entityCreationService.studentFactory().createEntity(student));
+    }
+
+    public StudentDTO getStudentProfile(int userid) {
+        return studentRepository.findStudentByUserid(userid);
     }
 
     @Override
