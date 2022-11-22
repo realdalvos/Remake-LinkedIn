@@ -34,7 +34,7 @@ public class JobsView extends Div {
         // Header
         grid.addColumn(JobDTO::getTitle).setHeader("Titel").setSortable(true);
         grid.addColumn(JobDTO::getSalary).setHeader("Bezahlung").setSortable(true);
-        
+        grid.setHeightByRows(true);
         searchField.addKeyPressListener(Key.ENTER, event -> searchButton.clickInClient());
         searchField.addValueChangeListener(x ->this.searchButton.setEnabled(!this.searchField.getValue().isEmpty()));
         searchField.addKeyPressListener(pressEvent ->this.searchButton.setEnabled(!this.searchField.getValue().isEmpty()));
