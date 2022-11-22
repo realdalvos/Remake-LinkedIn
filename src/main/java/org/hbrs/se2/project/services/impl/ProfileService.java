@@ -38,26 +38,26 @@ public class ProfileService implements ProfileServiceInterface {
 
 
     @Override
-    public void saveStudentData(int id, UserDTO user, StudentDTO student, String university, List<String> major, List<String> topic, List<String> skill) throws DatabaseUserException {
+    public void saveStudentData(UserDTO user, StudentDTO student, String university, List<String> major, List<String> topic, List<String> skill) throws DatabaseUserException {
         userRepository.save(entityCreationService.userFactory().createEntity(user));
         studentRepository.save(entityCreationService.studentFactory().createEntity(student));
         major.parallelStream().forEach(m -> {
             try {
-                updateStudyMajor(m, id);
+                updateStudyMajor(m, user.getUserid());
             } catch (DatabaseUserException e) {
                 throw new RuntimeException(e);
             }
         });
         topic.parallelStream().forEach(t -> {
             try {
-                updateTopics(t, id);
+                updateTopics(t, user.getUserid());
             } catch (DatabaseUserException e) {
                 throw new RuntimeException(e);
             }
         });
         skill.parallelStream().forEach(s -> {
             try {
-                updateSkills(s, id);
+                updateSkills(s, user.getUserid());
             } catch (DatabaseUserException e) {
                 throw new RuntimeException(e);
             }

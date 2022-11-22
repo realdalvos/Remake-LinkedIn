@@ -6,7 +6,7 @@ import org.hbrs.se2.project.dtos.*;
 import java.util.List;
 
 public interface ProfileServiceInterface {
-    void saveStudentData(int id, UserDTO user, StudentDTO student, String university, List<String> major, List<String> topic, List<String> skill) throws DatabaseUserException;
+    void saveStudentData(UserDTO user, StudentDTO student, String university, List<String> major, List<String> topic, List<String> skill) throws DatabaseUserException;
 
     String getUniversityOfStudent(int userid);
 

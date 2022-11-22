@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 @PageTitle("Profile")
 public class ProfileView extends Div {
 
-    private final int CURRENT_USER = Utils.getCurrentUser().getUserid();
+    private final UserDTO CURRENT_USER = Utils.getCurrentUser();
 
     private final Logger logger = Utils.getLogger(this.getClass().getName());
 
@@ -70,13 +70,13 @@ public class ProfileView extends Div {
         // Create grids for skills, topics and majors
         gridMajors.setHeightByRows(true);
         gridMajors.addColumn(MajorDTO::getMajor).setHeader("Majors:");
-        gridMajors.setItems(profileControl.getMajorOfStudent(CURRENT_USER));
+        gridMajors.setItems(profileControl.getMajorOfStudent(CURRENT_USER.getUserid()));
         gridTopics.setHeightByRows(true);
         gridTopics.addColumn(TopicDTO::getTopic).setHeader("Topics:");
-        gridTopics.setItems(profileControl.getTopicOfStudent(CURRENT_USER));
+        gridTopics.setItems(profileControl.getTopicOfStudent(CURRENT_USER.getUserid()));
         gridSkills.setHeightByRows(true);
         gridSkills.addColumn(SkillDTO::getSkill).setHeader("Skills:");
-        gridSkills.setItems(profileControl.getSkillOfStudent(CURRENT_USER));
+        gridSkills.setItems(profileControl.getSkillOfStudent(CURRENT_USER.getUserid()));
     }
 
     private void editLayout() {
@@ -93,7 +93,7 @@ public class ProfileView extends Div {
                         .forField(username)
                         .asRequired()
                         .withValidator(validation -> {
-                            if (!username.getValue().equals(Utils.getCurrentUser().getUsername())){
+                            if (!username.getValue().equals(CURRENT_USER.getUsername())){
                                 return profileControl.checkUsernameUnique(username.getValue());
                             }
                             return true;
@@ -104,7 +104,7 @@ public class ProfileView extends Div {
                         .forField(email)
                         .asRequired()
                         .withValidator(validation -> {
-                            if (!email.getValue().equals(Utils.getCurrentUser().getEmail())){
+                            if (!email.getValue().equals(CURRENT_USER.getEmail())){
                                 return profileControl.checkEmailUnique(email.getValue());
                             }
                             return true;
@@ -115,7 +115,7 @@ public class ProfileView extends Div {
                         .forField(matrikelnumber)
                         .asRequired()
                         .withValidator(validation -> {
-                            if (!matrikelnumber.getValue().equals(profileControl.getStudentProfile(CURRENT_USER).getMatrikelnumber())){
+                            if (!matrikelnumber.getValue().equals(profileControl.getStudentProfile(CURRENT_USER.getUserid()).getMatrikelnumber())){
                                 return profileControl.checkMatrikelnumberUnique(matrikelnumber.getValue());
                             }
                             return true;
@@ -132,8 +132,8 @@ public class ProfileView extends Div {
         gridMajors.addComponentColumn(major -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
-                profileControl.removeMajor(CURRENT_USER, major.getMajorid());
-                gridMajors.setItems(profileControl.getMajorOfStudent(CURRENT_USER));
+                profileControl.removeMajor(CURRENT_USER.getUserid(), major.getMajorid());
+                gridMajors.setItems(profileControl.getMajorOfStudent(CURRENT_USER.getUserid()));
             });
             return deleteButton;
         });
@@ -143,8 +143,8 @@ public class ProfileView extends Div {
         gridTopics.addComponentColumn(topic -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
-                profileControl.removeTopic(CURRENT_USER, topic.getTopicid());
-                gridTopics.setItems(profileControl.getTopicOfStudent(CURRENT_USER));
+                profileControl.removeTopic(CURRENT_USER.getUserid(), topic.getTopicid());
+                gridTopics.setItems(profileControl.getTopicOfStudent(CURRENT_USER.getUserid()));
             });
             return deleteButton;
         });
@@ -154,8 +154,8 @@ public class ProfileView extends Div {
         gridSkills.addComponentColumn(skill -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
-                profileControl.removeSkill(CURRENT_USER, skill.getSkillid());
-                gridSkills.setItems(profileControl.getSkillOfStudent(CURRENT_USER));
+                profileControl.removeSkill(CURRENT_USER.getUserid(), skill.getSkillid());
+                gridSkills.setItems(profileControl.getSkillOfStudent(CURRENT_USER.getUserid()));
             });
             return deleteButton;
         });
@@ -168,7 +168,7 @@ public class ProfileView extends Div {
             try {
                 if (userBinder.isValid() && studentBinder.isValid()) {
                     profileControl.saveStudentData(
-                            CURRENT_USER, userBinder.getBean(), studentBinder.getBean(), university.getValue(),
+                            userBinder.getBean(), studentBinder.getBean(), university.getValue(),
                             newMajors, newTopics, newSkills);
                     // reload page to get updated view
                     UI.getCurrent().getPage().reload();
@@ -192,7 +192,7 @@ public class ProfileView extends Div {
         userBinder.bindInstanceFields(this);
         studentBinder.bindInstanceFields(this);
         userBinder.setBean(mapper.map(Utils.getCurrentUser(), UserDTOImpl.class));
-        studentBinder.setBean(mapper.map(profileControl.getStudentProfile(CURRENT_USER), StudentDTOImpl.class));
+        studentBinder.setBean(mapper.map(profileControl.getStudentProfile(CURRENT_USER.getUserid()), StudentDTOImpl.class));
         button = new Button("Profil bearbeiten");
         formLayout.add(gridMajors, gridTopics, gridSkills, button);
         button.addClickListener(buttonClickEvent -> {
