@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.views.studentViews;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -105,7 +106,7 @@ public class ProfileView extends Div {
         formLayout.addComponentAtIndex(8, newSkillsGrid = newEntriesGrid(newSkills = new ArrayList<>()));
         formLayout.addComponentAtIndex(9, newEntryLayout(skill, newSkills, newSkillsGrid));
 
-        formLayout.add(button = new Button("Profil speichern"));
+        button.setText("Profil speichern");
         button.addClickListener(buttonClickEvent -> {
             try {
                 profileControl.saveStudentData(
@@ -126,7 +127,6 @@ public class ProfileView extends Div {
         button = new Button("Profil bearbeiten");
         formLayout.add(university, gridMajors, gridTopics, gridSkills, button);
         button.addClickListener(buttonClickEvent -> {
-            formLayout.remove(button);
             editLayout();
         });
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
