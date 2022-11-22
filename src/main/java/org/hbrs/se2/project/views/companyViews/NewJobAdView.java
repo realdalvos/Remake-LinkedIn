@@ -42,7 +42,7 @@ public class NewJobAdView extends Div {
      */
 
     // Job title text area
-    private TextArea title = createTitleArea();
+    private TextField title = createTitleField();
     // Job Description text area
     private TextArea description = createDescriptionArea();
     // Contact details
@@ -62,7 +62,7 @@ public class NewJobAdView extends Div {
 
      */
 
-    private Button postButton = new Button("Anzeige erstellen");
+    private Button postButton = new Button(getTranslation("view.newJobAd.button"));
 
     private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
 
@@ -73,9 +73,8 @@ public class NewJobAdView extends Div {
         verticalLayout.setAlignSelf(FlexComponent.Alignment.CENTER);
         verticalLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
-        H3 newAdText = new H3();
-        H3 newJob = newAdText;
-        newJob.setText("Neue Jobanzeige erstellen            ");
+        H3 newJob = new H3();
+        newJob.setText(getTranslation("view.newJobAd.h3"));
         newJob.getElement().getStyle().set("font-size","30px");
         newJob.getElement().getStyle().set("text-align","center"); // content centered instead of being stuck on the side
         Icon createJobAdIcon = new Icon(VaadinIcon.EDIT);
@@ -105,13 +104,13 @@ public class NewJobAdView extends Div {
                 jobControl.createNewJobPost(binder.getBean());
                 navigateHandler.navigateToMyAdsView();
             } else {
-                Utils.makeDialog("Fülle bitte alle Felder aus");
+                Utils.makeDialog(getTranslation("view.newJobAd.error"));
                 logger.info("Not all fields have been filled in");
             }
         });
 
         // add all components to View
-        add(newAdText);
+        add(newJob);
         add(verticalLayout);
         this.setWidth("60%");
 
@@ -119,40 +118,40 @@ public class NewJobAdView extends Div {
 
     // Added character counts, placeholders and delete options
 
-    private TextArea createTitleArea() {
-        TextArea title = new TextArea("Titel");
+    private TextField createTitleField() {
+        TextField title = new TextField(getTranslation("view.newJobAd.form.title"));
         int charLimitTitle = 75;    // smaller character Limit for title
         title.setWidthFull();
         title.setMaxLength(charLimitTitle);
         title.setValueChangeMode(ValueChangeMode.EAGER); // changing character counter while typing
         title.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitTitle));
-        title.setPlaceholder("Titel");
+        title.setPlaceholder(getTranslation("view.newJobAd.form.title.placeholder"));
         title.setClearButtonVisible(true); // opens oportunity to delete text
         return title;
     }
 
     private TextArea createDescriptionArea() {
-        TextArea description = new TextArea("Beschreibung");
+        TextArea description = new TextArea(getTranslation("view.newJobAd.form.description"));
         description.getElement().setAttribute("name", "description");
         int charLimitDescr = 1024;
         description.setWidthFull();
         description.setMaxLength(charLimitDescr);
         description.setValueChangeMode(ValueChangeMode.EAGER);
         description.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
-        description.setPlaceholder("Aufgabenbereiche, Anforderungen, zusätzliche Informationen");
+        description.setPlaceholder(getTranslation("view.newJobAd.form.description.placeholder"));
         description.setClearButtonVisible(true);
         return description;
     }
 
     private EmailField  createEmailField() {
-        EmailField email = new EmailField("Kontaktdaten");
+        EmailField email = new EmailField(getTranslation("view.newJobAd.form.contactDetails"));
         email.getElement().setAttribute("name", "email");
-        email.setPlaceholder("username@example.com");
+        email.setPlaceholder(getTranslation("view.newJobAd.form.contactDetails.placeholder"));
         return email;
     }
 
     private IntegerField  createSalaryField() {
-        IntegerField euroField = new IntegerField("Jahresgehalt");
+        IntegerField euroField = new IntegerField(getTranslation("view.newJobAd.form.salary"));
         euroField.getElement().setAttribute("name", "salary");
         Div euroSuffix = new Div();
         euroSuffix.setText("€");
@@ -162,13 +161,13 @@ public class NewJobAdView extends Div {
     }
 
     private TextField createWorkLocation() {
-        TextField location = new TextField("Arbeitsort");
+        TextField location = new TextField(getTranslation("view.newJobAd.form.location"));
         int charLimitDescr = 100;
         location.setWidthFull();
         location.setMaxLength(charLimitDescr);
         location.setValueChangeMode(ValueChangeMode.EAGER);
         location.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
-        location.setPlaceholder("Straße, Ort, PLZ"); // added Placeholder for continuity in job offers
+        location.setPlaceholder(getTranslation("view.newJobAd.form.location.placeholder")); // added Placeholder for continuity in job offers
         location.setClearButtonVisible(true);
         return location;
     }
