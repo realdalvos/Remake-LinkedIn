@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.services.impl;
 
-import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.repository.*;
 import org.hbrs.se2.project.services.ProfileServiceInterface;
@@ -33,39 +32,15 @@ public class ProfileService implements ProfileServiceInterface {
     private EntityCreationService entityCreationService;
 
     @Override
-    public void saveStudentData(UserDTO user, StudentDTO student, List<String> major, List<String> topic, List<String> skill) throws DatabaseUserException {
+    public void saveStudentData(UserDTO user, StudentDTO student, List<String> major, List<String> topic, List<String> skill) {
         userRepository.save(entityCreationService.userFactory().createEntity(user));
         studentRepository.save(entityCreationService.studentFactory().createEntity(student));
-        major.parallelStream().forEach(m -> {
-            try {
-                updateStudyMajor(m, user.getUserid());
-            } catch (DatabaseUserException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        topic.parallelStream().forEach(t -> {
-            try {
-                updateTopics(t, user.getUserid());
-            } catch (DatabaseUserException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        skill.parallelStream().forEach(s -> {
-            try {
-                updateSkills(s, user.getUserid());
-            } catch (DatabaseUserException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        major.parallelStream().forEach(m -> updateStudyMajor(m, student.getStudentid()));
+        topic.parallelStream().forEach(t -> updateTopics(t, student.getStudentid()));
+        skill.parallelStream().forEach(s -> updateSkills(s, student.getStudentid()));
     }
 
-    private void updateStudyMajor(String major, int userid) throws DatabaseUserException {
-        // get student data through user id
-        StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
-        // check if student with the user id exists
-        if (studentDTO == null) {
-            throw new DatabaseUserException("There is no Student with the passed id");
-        }
+    private void updateStudyMajor(String major, int studentid) {
         // get major data from database by major attribute
         MajorDTO majorDTO = majorRepository.findByMajor(major);
         // check if found major is null
@@ -77,16 +52,10 @@ public class ProfileService implements ProfileServiceInterface {
         }
         // create new studentHasMajor entity
         studentHasMajorRepository.save(entityCreationService.shmFactory()
-                .createEntity(new int[]{studentDTO.getStudentid(), majorDTO.getMajorid()}));
+                .createEntity(new int[]{studentid, majorDTO.getMajorid()}));
     }
 
-    private void updateTopics(String topic, int userid) throws DatabaseUserException {
-        // get student data through user id
-        StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
-        // check if student with the user id exists
-        if (studentDTO == null) {
-            throw new DatabaseUserException("There is no Student with the passed id");
-        }
+    private void updateTopics(String topic, int studentid) {
         // get topic data from database by major attribute
         TopicDTO topicDTO = topicRepository.findByTopic(topic);
         // check if found topic is null
@@ -98,24 +67,21 @@ public class ProfileService implements ProfileServiceInterface {
         }
         // create new studentHasMajor entity
         studentHasTopicRepository.save(entityCreationService.shtFactory()
-                .createEntity(new int[]{studentDTO.getStudentid(), topicDTO.getTopicid()}));
+                .createEntity(new int[]{studentid, topicDTO.getTopicid()}));
     }
 
-    private void updateSkills(String skill, int userid) throws DatabaseUserException {
+    private void updateSkills(String skill, int studentid) {
         // same process as in updateMajors and updateTopics
-        StudentDTO studentDTO = studentRepository.findStudentByUserid(userid);
-        if (studentDTO == null) {
-            throw new DatabaseUserException("There is no Student with the passed id");
-        }
         SkillDTO skillDTO = skillRepository.findBySkill(skill);
         if (skillDTO == null) {
             skillRepository.save(entityCreationService.skillFactory().createEntity(skill));
             skillDTO = skillRepository.findBySkill(skill);
         }
         studentHasSkillRepository.save(entityCreationService.shsFactory()
-                .createEntity(new int[]{studentDTO.getStudentid(), skillDTO.getSkillid()}));
+                .createEntity(new int[]{studentid, skillDTO.getSkillid()}));
     }
 
+    @Override
     public StudentDTO getStudentProfile(int userid) {
         return studentRepository.findStudentByUserid(userid);
     }

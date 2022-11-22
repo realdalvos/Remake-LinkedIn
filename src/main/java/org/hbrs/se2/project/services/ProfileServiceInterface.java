@@ -14,6 +14,8 @@ public interface ProfileServiceInterface {
 
     List<SkillDTO> getSkillOfStudent(int userid);
 
+    StudentDTO getStudentProfile(int userid);
+
     void removeMajor(int userid, int majorid);
 
     void removeTopic(int userid, int topicid);
