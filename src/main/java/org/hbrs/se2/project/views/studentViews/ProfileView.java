@@ -142,7 +142,6 @@ public class ProfileView extends Div {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
                 entries.remove(newEntry);
-                deleteButton.setText("Entfernt");
                 grid.setItems(entries);
             });
             return deleteButton;
