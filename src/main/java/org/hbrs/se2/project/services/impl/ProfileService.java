@@ -41,21 +41,21 @@ public class ProfileService implements ProfileServiceInterface {
         if (university != null && !university.isBlank()) {
             updateUniversity(university, id);
         }
-        major.forEach(m -> {
+        major.parallelStream().forEach(m -> {
             try {
                 updateStudyMajor(m, id);
             } catch (DatabaseUserException e) {
                 throw new RuntimeException(e);
             }
         });
-        topic.forEach(t -> {
+        topic.parallelStream().forEach(t -> {
             try {
                 updateTopics(t, id);
             } catch (DatabaseUserException e) {
                 throw new RuntimeException(e);
             }
         });
-        skill.forEach(s -> {
+        skill.parallelStream().forEach(s -> {
             try {
                 updateSkills(s, id);
             } catch (DatabaseUserException e) {
