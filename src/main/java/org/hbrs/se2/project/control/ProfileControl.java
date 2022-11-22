@@ -3,6 +3,7 @@ package org.hbrs.se2.project.control;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.services.impl.ProfileService;
+import org.hbrs.se2.project.services.impl.ValidationService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -11,21 +12,31 @@ import java.util.List;
 public class ProfileControl {
 
     final ProfileService profileService;
+    final ValidationService validationService;
 
-    public ProfileControl(ProfileService profileService) {
+    public ProfileControl(ProfileService profileService, ValidationService validationService) {
         this.profileService = profileService;
+        this.validationService = validationService;
     }
 
     public void saveStudentData(int id, UserDTO user, StudentDTO student, String university, List<String> major, List<String> topic, List<String> skill) throws DatabaseUserException {
         profileService.saveStudentData(id, user, student, university, major, topic, skill);
     }
 
-    public StudentDTO getStudentProfile(int userid) {
-        return profileService.getStudentProfile(userid);
+    public boolean checkUsernameUnique(String username) {
+        return validationService.checkUsernameUnique(username);
     }
 
-    public String getUniversityOfStudent(int userid) {
-        return profileService.getUniversityOfStudent(userid);
+    public boolean checkEmailUnique(String email) {
+        return validationService.checkEmailUnique(email);
+    }
+
+    public boolean checkMatrikelnumberUnique(String matrikelnumber) {
+        return validationService.checkMatrikelnumberUnique(matrikelnumber);
+    }
+
+    public StudentDTO getStudentProfile(int userid) {
+        return profileService.getStudentProfile(userid);
     }
 
     public List<MajorDTO> getMajorOfStudent(int userid) {

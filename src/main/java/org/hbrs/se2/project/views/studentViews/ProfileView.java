@@ -5,8 +5,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.*;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.component.textfield.TextField;
@@ -84,12 +83,51 @@ public class ProfileView extends Div {
         Grid<String> newMajorsGrid, newTopicsGrid, newSkillsGrid;
         List<String> newMajors, newTopics, newSkills;
 
-        //TODO: implement changing the other values, which need to be unique
-        Stream.of(firstname, lastname, university).forEach(
+        Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(
                 field -> {
                     field.setReadOnly(false);
                 }
         );
+        Binder.Binding<UserDTOImpl, String> checkUsernameBinding =
+                userBinder
+                        .forField(username)
+                        .asRequired()
+                        .withValidator(validation -> {
+                            if (!username.getValue().equals(Utils.getCurrentUser().getUsername())){
+                                return profileControl.checkUsernameUnique(username.getValue());
+                            }
+                            return true;
+                        }, "Benutzername existiert bereits")
+                        .bind(UserDTOImpl::getUsername, UserDTOImpl::setUsername);
+        Binder.Binding<UserDTOImpl, String> checkEmailBinding =
+                userBinder
+                        .forField(email)
+                        .asRequired()
+                        .withValidator(validation -> {
+                            if (!email.getValue().equals(Utils.getCurrentUser().getEmail())){
+                                return profileControl.checkEmailUnique(email.getValue());
+                            }
+                            return true;
+                        }, "Email existiert bereits")
+                        .bind(UserDTOImpl::getEmail, UserDTOImpl::setEmail);
+        Binder.Binding<StudentDTOImpl, String> checkMatrikelnumberBinding =
+                studentBinder
+                        .forField(matrikelnumber)
+                        .asRequired()
+                        .withValidator(validation -> {
+                            if (!matrikelnumber.getValue().equals(profileControl.getStudentProfile(CURRENT_USER).getMatrikelnumber())){
+                                return profileControl.checkMatrikelnumberUnique(matrikelnumber.getValue());
+                            }
+                            return true;
+                        }, "Matrikelnummer existiert bereits")
+                        .bind(StudentDTOImpl::getMatrikelnumber, StudentDTOImpl::setMatrikelnumber);
+
+        username.addValueChangeListener(
+                event -> checkUsernameBinding.validate());
+        email.addValueChangeListener(
+                event -> checkEmailBinding.validate());
+        matrikelnumber.addValueChangeListener(
+                event -> checkMatrikelnumberBinding.validate());
 
         gridMajors.addComponentColumn(major -> {
             Button deleteButton = new Button("Entfernen");
@@ -124,17 +162,22 @@ public class ProfileView extends Div {
         formLayout.addComponentAtIndex(13, newSkillsGrid = newEntriesGrid(newSkills = new ArrayList<>()));
         formLayout.addComponentAtIndex(14, newEntryLayout(skill, newSkills, newSkillsGrid));
 
-        button.setText("Profil speichern");
+        button = new Button("Profil speichern");
+        formLayout.addComponentAtIndex(15, button);
         button.addClickListener(buttonClickEvent -> {
             try {
-                profileControl.saveStudentData(
-                        CURRENT_USER, userBinder.getBean(), studentBinder.getBean(), university.getValue(),
-                        newMajors, newTopics, newSkills);
+                if (userBinder.isValid() && studentBinder.isValid()) {
+                    profileControl.saveStudentData(
+                            CURRENT_USER, userBinder.getBean(), studentBinder.getBean(), university.getValue(),
+                            newMajors, newTopics, newSkills);
+                    // reload page to get updated view
+                    UI.getCurrent().getPage().reload();
+                } else {
+                    logger.info("Invalid Data Input");
+                }
             } catch (DatabaseUserException e) {
                 logger.error("Something went wrong with saving student data");
             }
-            // reload page to get updated view
-            UI.getCurrent().getPage().reload();
         });
     }
 
@@ -153,6 +196,7 @@ public class ProfileView extends Div {
         button = new Button("Profil bearbeiten");
         formLayout.add(gridMajors, gridTopics, gridSkills, button);
         button.addClickListener(buttonClickEvent -> {
+            formLayout.remove(button);
             editLayout();
         });
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
