@@ -1,254 +1,5 @@
 @startuml
-class org.hbrs.se2.project.util.Globals {
-+ {static} String CURRENT_USER
-}
-class org.hbrs.se2.project.util.Globals.Pages {
-+ {static} String MAIN_VIEW
-+ {static} String LOGIN_VIEW
-+ {static} String JOBS_VIEW
-+ {static} String MYADS_VIEW
-+ {static} String REGISTER_COMPANY_VIEW
-+ {static} String REGISTER_STUDENT_VIEW
-+ {static} String NEW_ADD_VIEW
-}
-class org.hbrs.se2.project.util.Globals.Roles {
-+ {static} String student
-+ {static} String company
-}
-class org.hbrs.se2.project.util.Globals.Errors {
-+ {static} String NOUSERFOUND
-+ {static} String SQLERROR
-+ {static} String DATABASE
-}
-package Model <<Rectangle>> {
-class Student {
-- int studentid
-- int userid
-- String firstname
-- String lastname
-- int matrikelnumber
-- String studyMajor
-- String university
-+ <<Create>> Student()
-+ int getStudentid()
-+ void setStudentid(int)
-+ int getUserid()
-+ void setUserid(int)
-+ String getFirstname()
-+ void setFirstname(String)
-+ String getLastname()
-+ void setLastname(String)
-+ int getMatrikelnumber()
-+ void setMatrikelnumber(int)
-+ String getStudyMajor()
-+ void setStudyMajor(String)
-+ String getUniversity()
-+ void setUniversity(String)
-}
-class Job {
-- int jobid
-- int companyid
-- String title
-- String description
-- String salary
-+ <<Create>> Job()
-+ int getJobid()
-+ void setJobid(int)
-+ int getCompanyid()
-+ void setCompanyid(int)
-+ String getTitle()
-+ void setTitle(String)
-+ String getDescription()
-+ void setDescription(String)
-+ String getSalary()
-+ void setSalary(String)
-}
-class Company {
-- int companyid
-- int userid
-- String name
-- String industry
-- boolean banned
-+ <<Create>> Company()
-+ int getCompanyid()
-+ void setCompanyid(int)
-+ int getUserid()
-+ void setUserid(int)
-+ String getName()
-+ void setName(String)
-+ String getIndustry()
-+ void setIndustry(String)
-+ boolean isBanned()
-+ void setBanned(boolean)
-}
-class User {
-- int userid
-- String username
-- String password
-- String email
-- String role
-+ <<Create>> User()
-+ int getUserid()
-+ void setUserid(int)
-+ String getUsername()
-+ void setUsername(String)
-+ String getPassword()
-+ void setPassword(String)
-+ String getEmail()
-+ void setEmail(String)
-+ String getRole()
-+ void setRole(String)
-}
-}
-package View <<Rectangle>> {
-class AppView {
-- Tabs menu
-- H1 viewTitle
-- H4 helloUser
-- AuthorizationControl authorizationControl
-+ <<Create>> AppView()
-+ void setUpUI()
-- boolean checkIfUserIsLoggedIn()
-- Component createHeaderContent()
-- void logoutUser()
-- Component createDrawerContent(Tabs)
-- Tabs createMenu()
-- Component[] createMenuItems()
-- {static} Tab createTab(String,Class<? extends Component>)
-# void afterNavigation()
-- Optional<Tab> getTabForComponent(Component)
-- String getCurrentPageTitle()
-- String getCurrentNameOfUser()
-- UserDTO getCurrentUser()
-+ void beforeEnter(BeforeEnterEvent)
-- void navigateToNewJob()
-}
-class LoginView {
-- LoginControl loginControl
-+ <<Create>> LoginView()
-- void grabAndSetUserIntoSession()
-- void navigateToMainPage()
-- void navigateToRegisterCompanyPage()
-- void navigateToRegisterStudentPage()
-}
-class NewJobAdView {
-- JobControl jobControl
-- H3 newAdText
-+ <<Create>> NewJobAdView()
-- UserDTO getCurrentUser()
-- void navigateToMyAdsView()
-}
-class RegisterStudentView {
-- RegistrationControl registrationControl
-- H4 registerText
-+ <<Create>> RegisterStudentView()
-- void navigateToLoginPage()
-}
-class JobsView {
-}
-class MyAdsView {
-}
-class RegisterCompanyView {
-- RegistrationControl registrationControl
-- H4 registerText
-+ <<Create>> RegisterCompanyView()
-- void navigateToLoginPage()
-}
-}
-package Controller <<Rectangle>> {
-class RegistrationControl {
-- UserRepository userRepository
-- StudentRepository studentRepository
-- CompanyRepository companyRepository
-- PasswordEncoder passwordEncoder
-- UserDTO userDTO
-- StudentDTO student
-- CompanyDTO company
-+ boolean registerStudent(User,Student)
-+ boolean registerCompany(User,Company)
-+ UserDTO getCurrentUser()
-- void createAccount(User)
-- void createStudentProfile(Student)
-- void createCompanyProfile(Company)
-+ boolean checkFormInputStudent(String,String,String,String,String)
-+ boolean checkFormInputCompany(String,String,String,String)
-+ boolean checkPasswordConfirmation(String,String)
-}
-class LoginControl {
-- UserRepository repository
-- PasswordEncoder passwordEncoder
-- UserDTO userDTO
-+ boolean authenticate(String,String)
-+ UserDTO getCurrentUser()
-- UserDTO getUserWithJPA(String)
-}
-class JobControl {
-- CompanyRepository companyRepository
-- JobRepository jobRepository
-+ CompanyDTO getCompanyByUserid(int)
-+ void createNewJobPost(Job)
-+ boolean checkFormJobInput(String,String,String)
-}
-class AuthorizationControl {
-+ boolean hasUserRole(UserDTO,String)
-}
-}
-package DataTransferObject <<Rectangle>> {
-interface JobDTO {
-+ int getJobid()
-+ int getCompanyid()
-+ String getTitle()
-+ String getDescription()
-+ String getSalary()
-}
-class StudentDTOImpl {
-- int studentid
-- int userid
-- String firstname
-- String lastname
-- int matrikelnumber
-- String studyMajor
-- String university
-+ void setStudentId(int)
-+ void setUserid(int)
-+ void setFirstname(String)
-+ void setLastname(String)
-+ void setMatrikelnumber(int)
-+ void setStudyMajor(String)
-+ void setUniversity(String)
-+ int getStudentid()
-+ int getUserid()
-+ String getFirstname()
-+ String getLastname()
-+ int getMatrikelnumber()
-+ String getStudyMajor()
-+ String getUniversity()
-}
-interface CompanyDTO {
-+ int getCompanyid()
-+ int getUserid()
-+ String getName()
-+ String getIndustry()
-+ boolean getBanned()
-}
-class JobDTOImpl {
-- int jobid
-- int companyid
-- String title
-- String description
-- String salary
-+ void setJobid(int)
-+ void setCompanyid(int)
-+ void setTitle(String)
-+ void setDescription(String)
-+ void setSalary(String)
-+ int getJobid()
-+ int getCompanyid()
-+ String getTitle()
-+ String getDescription()
-+ String getSalary()
-}
-class UserDTOImpl {
+class org.hbrs.se2.project.dtos.impl.UserDTOImpl {
 - int userid
 - String username
 - String password
@@ -266,23 +17,416 @@ class UserDTOImpl {
 + String getRole()
 + String toString()
 }
-interface UserDTO {
-+ int getUserid()
-+ String getUsername()
-+ String getPassword()
-+ String getEmail()
-+ String getRole()
-}
-interface StudentDTO {
+class org.hbrs.se2.project.wrapper.StudentHasTopicKey {
+- int studentid
+- int topicid
 + int getStudentid()
-+ int getUserid()
-+ String getFirstname()
-+ String getLastname()
-+ int getMatrikelnumber()
-+ String getStudyMajor()
-+ String getUniversity()
++ void setStudentid(int)
++ int getTopicid()
++ void setTopicid(int)
 }
-class CompanyDTOImpl {
+class org.hbrs.se2.project.control.ProfileControl {
+~ ProfileService profileService
++ void saveStudentData(int,String,String,String,String)
++ void updateStudyMajor(String,int)
++ void updateTopics(String,int)
++ void updateSkills(String,int)
++ void updateUniversity(String,int)
++ String getUniversityOfStudent(int)
++ ListDataProvider<MajorDTO> getMajorOfStudent(int)
++ ListDataProvider<TopicDTO> getTopicOfStudent(int)
++ ListDataProvider<SkillDTO> getSkillOfStudent(int)
++ void removeMajor(int,int)
++ void removeTopic(int,int)
++ void removeSkill(int,int)
+}
+interface org.hbrs.se2.project.dtos.StudentHasSkillDTO {
+~ int getStudentid()
+~ void setStudentid(int)
+~ int getSkillid()
+~ void setSkillid(int)
+}
+abstract class org.hbrs.se2.project.views.RegisterView {
+# RegistrationControl registrationControl
+# H4 registerText
+# PasswordField userPassword
+# PasswordField confirmPassword
+# TextField username
+# EmailField email
+# Button confirmButton
+# Binder<UserDTOImpl> userBinder
+# Button loginButton()
+# PasswordField createPasswordField()
+# EmailField createEmailField()
+# Component createFormLayout(Component[])
+}
+class MavenWrapperDownloader {
+- {static} String WRAPPER_VERSION
+- {static} String DEFAULT_DOWNLOAD_URL
+- {static} String MAVEN_WRAPPER_PROPERTIES_PATH
+- {static} String MAVEN_WRAPPER_JAR_PATH
+- {static} String PROPERTY_NAME_WRAPPER_URL
++ {static} void main(String[])
+- {static} void downloadFileFromURL(String,File)
+}
+class org.hbrs.se2.project.wrapper.StudentHasMajorKey {
+- int studentid
+- int majorid
++ int getStudentid()
++ void setStudentid(int)
++ int getMajorid()
++ void setMajorid(int)
+}
+interface org.hbrs.se2.project.dtos.StudentDTO {
+~ int getStudentid()
+~ int getUserid()
+~ String getFirstname()
+~ String getLastname()
+~ String getMatrikelnumber()
+~ String getUniversity()
+~ void setStudentId(int)
+~ void setUserid(int)
+~ void setFirstname(String)
+~ void setLastname(String)
+~ void setMatrikelnumber(String)
+~ void setUniversity(String)
+}
+class org.hbrs.se2.project.helper.navigateHandler {
++ {static} void navigateToLoginPage()
++ {static} void navigateToMainPage()
++ {static} void navigateToRegisterCompanyPage()
++ {static} void navigateToRegisterStudentPage()
++ {static} void navigateToNewJob()
++ {static} void navigateToMyAdsView()
++ {static} void navigateToJobsView()
+}
+class org.hbrs.se2.project.views.LoginView {
+- LoginControl loginControl
+- LoginI18n createLoginI18n()
+- void grabAndSetUserIntoSession()
+}
+interface org.hbrs.se2.project.dtos.UserDTO {
+~ int getUserid()
+~ void setUserid(int)
+~ String getUsername()
+~ void setUsername(String)
+~ String getPassword()
+~ void setPassword(String)
+~ String getEmail()
+~ void setEmail(String)
+~ String getRole()
+~ void setRole(String)
+}
+class org.hbrs.se2.project.views.studentViews.JobsView {
+- TextField searchField
+- Button searchButton
+- Grid<JobDTO> grid
+}
+class org.hbrs.se2.project.services.impl.TranslationProvider {
+- Logger logger
++ {static} String BUNDLE_PREFIX
++ Locale LOCALE_DE
++ Locale LOCALE_EN
+- List<Locale> locales
++ List<Locale> getProvidedLocales()
++ String getTranslation(String,Locale,Object)
+}
+interface org.hbrs.se2.project.dtos.StudentHasMajorDTO {
++ int getStudentid()
++ void setStudentid(int)
++ int getMajorid()
++ void setMajorid(int)
+}
+interface org.hbrs.se2.project.services.JobServiceInterface {
+~ CompanyDTO getCompanyByUserid(int)
+~ String getCompanyOfJob(JobDTO)
+~ void createNewJobPost(JobDTO)
+~ List<JobDTO> getJobsMatchingKeyword(String)
+~ List<JobDTO> getAllCompanyJobs(int)
+~ void removeJob(int)
+~ List<JobDTO> getAllJobs()
+}
+class org.hbrs.se2.project.entities.StudentHasSkill {
+- int studentid
+- int skillid
++ int getStudentid()
++ void setStudentid(int)
++ int getSkillid()
++ void setSkillid(int)
+}
+interface org.hbrs.se2.project.repository.StudentHasMajorRepository {
+~ List<StudentHasMajorDTO> findByStudentid(int)
+~ void deleteByStudentidAndMajorid(int,int)
+}
+class org.hbrs.se2.project.services.impl.ProfileService {
+- StudentRepository studentRepository
+- StudentHasMajorRepository studentHasMajorRepository
+- MajorRepository majorRepository
+- SkillRepository skillRepository
+- TopicRepository topicRepository
+- StudentHasSkillRepository studentHasSkillRepository
+- StudentHasTopicRepository studentHasTopicRepository
+- EntityCreationService entityCreationService
+- ModelMapper mapper
++ void saveStudentData(int,String,String,String,String)
++ void updateStudyMajor(String,int)
++ void updateTopics(String,int)
++ void updateSkills(String,int)
++ void updateUniversity(String,int)
++ String getUniversityOfStudent(int)
++ ListDataProvider<MajorDTO> getMajorOfStudent(int)
++ ListDataProvider<TopicDTO> getTopicOfStudent(int)
++ ListDataProvider<SkillDTO> getSkillOfStudent(int)
++ void removeMajor(int,int)
++ void removeTopic(int,int)
++ void removeSkill(int,int)
+}
+class org.hbrs.se2.project.views.AppView {
+- Logger logger
+- Tabs menu
+- H1 viewTitle
+- H4 helloUser
+~ LoginControl loginControl
+- AuthorizationControl authorizationControl
++ void setUpUI()
+- boolean checkIfUserIsLoggedIn()
+- Component createHeaderContent()
+- void logoutUser()
+- Component createDrawerContent(Tabs)
+- Tabs createMenu()
+- Component[] createMenuItems()
+- {static} Tab createTab(String,Class<? extends Component>)
+# void afterNavigation()
+- Optional<Tab> getTabForComponent(Component)
+- String getCurrentPageTitle()
+- String getCurrentNameOfUser()
++ void beforeEnter(BeforeEnterEvent)
+}
+interface org.hbrs.se2.project.services.ProfileServiceInterface {
+~ void saveStudentData(int,String,String,String,String)
+~ void updateStudyMajor(String,int)
+~ void updateTopics(String,int)
+~ void updateSkills(String,int)
+~ void updateUniversity(String,int)
+~ String getUniversityOfStudent(int)
+~ ListDataProvider<MajorDTO> getMajorOfStudent(int)
+~ ListDataProvider<TopicDTO> getTopicOfStudent(int)
+~ ListDataProvider<SkillDTO> getSkillOfStudent(int)
+~ void removeMajor(int,int)
+~ void removeTopic(int,int)
+~ void removeSkill(int,int)
+}
+interface org.hbrs.se2.project.services.factory.AbstractEntityFactory {
+~ T createEntity(S)
+}
+class org.hbrs.se2.project.Application {
++ {static} void main(String[])
+}
+class org.hbrs.se2.project.util.Utils {
++ {static} T[] append(T[],T)
++ {static} boolean checkIfInputEmpty(String[])
++ {static} String getRootCause(Exception)
++ {static} void makeDialog(String)
++ {static} UserDTO getCurrentUser()
++ {static} Logger getLogger(String)
+}
+class org.hbrs.se2.project.dtos.impl.MajorDTOImpl {
+- int majorid
+- String major
++ int getMajorid()
++ void setMajorid(int)
++ String getMajor()
++ void setMajor(String)
+}
+class org.hbrs.se2.project.services.impl.RegistrationService {
+- UserRepository userRepository
+- StudentRepository studentRepository
+- CompanyRepository companyRepository
+- EntityCreationService entityCreationService
+- PasswordEncoder passwordEncoder
++ void registerStudent(UserDTO,StudentDTO)
++ void registerCompany(UserDTO,CompanyDTO)
+- void createAccount(UserDTO)
+- void createStudentProfile(StudentDTO,UserDTO)
+- void createCompanyProfile(CompanyDTO,UserDTO)
+}
+interface org.hbrs.se2.project.dtos.StudentHasTopicDTO {
++ int getStudentid()
++ void setStudentid(int)
++ int getTopicid()
++ void setTopicid(int)
+}
+interface org.hbrs.se2.project.dtos.TopicDTO {
++ int getTopicid()
++ void setTopicid(int)
++ String getTopic()
++ void setTopic(String)
+}
+interface org.hbrs.se2.project.services.RegistrationServiceInterface {
+~ void registerStudent(UserDTO,StudentDTO)
+~ void registerCompany(UserDTO,CompanyDTO)
+}
+interface org.hbrs.se2.project.services.LoginServiceInterface {
+~ boolean authenticate(String,String)
+~ UserDTO getCurrentUser()
+}
+class org.hbrs.se2.project.entities.Major {
+- int majorid
+- String major
++ int getMajorid()
++ void setMajorid(int)
++ String getMajor()
++ void setMajor(String)
+}
+interface org.hbrs.se2.project.repository.TopicRepository {
+~ TopicDTO findByTopic(String)
+~ TopicDTO findByTopicid(int)
+}
+class org.hbrs.se2.project.control.LoginControl {
+~ LoginService loginService
++ boolean authenticate(String,String)
++ UserDTO getCurrentUser()
+}
+class org.hbrs.se2.project.entities.Student {
+- int studentid
+- int userid
+- String firstname
+- String lastname
+- String matrikelnumber
+- String university
++ int getStudentid()
++ void setStudentid(int)
++ int getUserid()
++ void setUserid(int)
++ String getFirstname()
++ void setFirstname(String)
++ String getLastname()
++ void setLastname(String)
++ String getMatrikelnumber()
++ void setMatrikelnumber(String)
++ String getUniversity()
++ void setUniversity(String)
+}
+class org.hbrs.se2.project.services.impl.ServiceInitListener {
+- I18NProvider i18nProvider
++ void serviceInit(ServiceInitEvent)
+- void initLanguage(UI)
+}
+class org.hbrs.se2.project.views.studentViews.RegisterStudentView {
+- Logger logger
+- TextField firstname
+- TextField lastname
+- TextField matrikelnumber
+- Binder<StudentDTOImpl> concreteUserBinder
+}
+class org.hbrs.se2.project.control.exception.DatabaseUserException {
+}
+interface org.hbrs.se2.project.repository.SkillRepository {
+~ SkillDTO findBySkill(String)
+~ SkillDTO findBySkillid(int)
+}
+class org.hbrs.se2.project.dtos.impl.StudentHasMajorDTOImpl {
+- int studentid
+- int majorid
++ int getStudentid()
++ void setStudentid(int)
++ int getMajorid()
++ void setMajorid(int)
+}
+class org.hbrs.se2.project.control.RegistrationControl {
+~ RegistrationService registrationService
++ void registerStudent(UserDTO,StudentDTO)
++ void registerCompany(UserDTO,CompanyDTO)
+}
+class org.hbrs.se2.project.services.factory.EntityCreationService {
+- ModelMapper mapper
++ AbstractEntityFactory<User,UserDTO> userFactory()
++ AbstractEntityFactory<Company,CompanyDTO> companyFactory()
++ AbstractEntityFactory<Student,StudentDTO> studentFactory()
++ AbstractEntityFactory<Job,JobDTO> jobFactory()
++ AbstractEntityFactory<Major,String> majorFactory()
++ AbstractEntityFactory<Topic,String> topicFactory()
++ AbstractEntityFactory<Skill,String> skillFactory()
++ AbstractEntityFactory<StudentHasMajor,int[]> shmFactory()
++ AbstractEntityFactory<StudentHasTopic,int[]> shtFactory()
++ AbstractEntityFactory<StudentHasSkill,int[]> shsFactory()
+}
+class org.hbrs.se2.project.entities.Skill {
+- int skillid
+- String skill
++ int getSkillid()
++ void setSkillid(int)
++ String getSkill()
++ void setSkill(String)
+}
+class org.hbrs.se2.project.views.studentViews.ProfileView {
+- TextField university
+- TextField major
+- TextField topic
+- TextField skill
+- Grid<MajorDTO> gridMajors
+- Grid<TopicDTO> gridTopics
+- Grid<SkillDTO> gridSkills
+- Button button
+- FormLayout formLayout
+- ProfileControl profileControl
++ UserDTO getCurrentUser()
+- void setAllGrids()
+- void editLayout()
+- void viewLayout()
+}
+class org.hbrs.se2.project.entities.User {
+- int userid
+- String username
+- String password
+- String email
+- String role
++ int getUserid()
++ void setUserid(int)
++ String getUsername()
++ void setUsername(String)
++ String getPassword()
++ void setPassword(String)
++ String getEmail()
++ void setEmail(String)
++ String getRole()
++ void setRole(String)
+}
+class org.hbrs.se2.project.control.JobControl {
+~ JobService jobService
++ CompanyDTO getCompanyByUserid(int)
++ String getCompanyOfJob(JobDTO)
++ void createNewJobPost(JobDTO)
++ List<JobDTO> getJobsMatchingKeyword(String)
++ List<JobDTO> getAllCompanyJobs(int)
++ void deleteJob(int)
++ List<JobDTO> getAllJobs()
+}
+interface org.hbrs.se2.project.services.CompanyServiceInterface {
+}
+class org.hbrs.se2.project.entities.StudentHasTopic {
+- int studentid
+- int topicid
++ int getStudentid()
++ void setStudentid(int)
++ int getTopicid()
++ void setTopicid(int)
+}
+interface org.hbrs.se2.project.dtos.SkillDTO {
++ int getSkillid()
++ void setSkillid(int)
++ String getSkill()
++ void setSkill(String)
+}
+class org.hbrs.se2.project.entities.StudentHasMajor {
+- int studentid
+- int majorid
++ int getStudentid()
++ void setStudentid(int)
++ int getMajorid()
++ void setMajorid(int)
+}
+class org.hbrs.se2.project.dtos.impl.CompanyDTOImpl {
 - int companyid
 - int userid
 - String name
@@ -298,74 +442,376 @@ class CompanyDTOImpl {
 + String getName()
 + String getIndustry()
 + boolean getBanned()
++ String toString()
 }
+interface org.hbrs.se2.project.dtos.JobDTO {
+~ int getJobid()
+~ void setJobid(int)
+~ int getCompanyid()
+~ void setCompanyid(int)
+~ String getTitle()
+~ void setTitle(String)
+~ String getDescription()
+~ void setDescription(String)
+~ Integer getSalary()
+~ void setSalary(Integer)
+~ String getLocation()
+~ void setLocation(String)
+~ String getContactdetails()
+~ void setContactdetails(String)
 }
-class org.hbrs.se2.project.util.Utils {
-+ {static} T[] append(T[],T)
-+ {static} boolean checkIfInputEmpty(String[])
-+ {static} String getRootCause(Exception)
-}
-package Repository <<Rectangle>> {
-interface CompanyRepository {
-~ CompanyDTO findCompanyByUserid(int)
-}
-interface JobRepository {
-~ JobDTO findJobByCompanyid(int)
-~ JobDTO findJobByJobid(int)
-}
-interface UserRepository {
-~ UserDTO findUserByUseridAndPassword(int,String)
-~ UserDTO findUserByUsernameAndPassword(String,String)
-~ UserDTO findUserByUsername(String)
-}
-interface StudentRepository {
+interface org.hbrs.se2.project.repository.StudentRepository {
 ~ StudentDTO findStudentByUserid(int)
-~ StudentDTO findStudentByMatrikelnumber(int)
+~ StudentDTO findStudentByMatrikelnumber(String)
 }
+class org.hbrs.se2.project.services.impl.CompanyService {
+}
+interface org.hbrs.se2.project.repository.JobRepository {
+~ JobDTO findJobByJobid(int)
+~ JobDTO findJobByCompanyidAndTitle(int,String)
+~ List<JobDTO> findJobByCompanyid(int)
+}
+interface org.hbrs.se2.project.dtos.MajorDTO {
++ int getMajorid()
++ void setMajorid(int)
++ String getMajor()
++ void setMajor(String)
+}
+class org.hbrs.se2.project.dtos.impl.StudentHasTopicDTOImpl {
+- int studentid
+- int topicid
++ int getStudentid()
++ void setStudentid(int)
++ int getTopicid()
++ void setTopicid(int)
+}
+class org.hbrs.se2.project.views.companyViews.RegisterCompanyView {
+- Logger logger
+- TextField name
+- Binder<CompanyDTOImpl> concreteUserBinder
+}
+class org.hbrs.se2.project.entities.Topic {
+- int topicid
+- String topic
++ int getTopicid()
++ void setTopicid(int)
++ String getTopic()
++ void setTopic(String)
+}
+class org.hbrs.se2.project.control.AuthorizationControl {
++ boolean hasUserRole(UserDTO,String)
+}
+class org.hbrs.se2.project.services.impl.JobService {
+- EntityCreationService entityCreationService
+- CompanyRepository companyRepository
+- JobRepository jobRepository
++ CompanyDTO getCompanyByUserid(int)
++ String getCompanyOfJob(JobDTO)
++ void createNewJobPost(JobDTO)
++ List<JobDTO> getAllCompanyJobs(int)
++ List<JobDTO> getJobsMatchingKeyword(String)
++ void removeJob(int)
++ List<JobDTO> getAllJobs()
+}
+interface org.hbrs.se2.project.repository.UserRepository {
+~ UserDTO findUserByUserid(int)
+~ UserDTO findUserByUsername(String)
+~ UserDTO findUserByEmail(String)
+}
+interface org.hbrs.se2.project.repository.MajorRepository {
+~ MajorDTO findByMajor(String)
+~ MajorDTO findByMajorid(int)
+}
+class org.hbrs.se2.project.util.HelperForTests {
+~ UserRepository userRepository
+~ CompanyRepository companyRepository
+~ StudentRepository studentRepository
+~ RegistrationControl registrationControl
+- UserDTO testUserForCompany
+- CompanyDTOImpl testCompany
+- UserDTO testUserForStudent
+- StudentDTO testStudent
+- List<CompanyDTO> registeredCompanies
++ CompanyDTO registerTestCompany()
++ List<CompanyDTO> registerTestCompany(int)
++ StudentDTO registerTestStudent()
++ UserDTO getUserDTOForCompany()
++ CompanyDTO getCompanyDTO()
++ UserDTO getUserDTOForStudent()
++ StudentDTO getStudentDTO()
++ void deleteRegisteredTestCompanies()
++ void deleteRegisteredTestStudent()
+- void deleteUsersOccupyingUniques(UserDTO)
++ void deleteTestUsers()
+- UserDTO clone(UserDTO)
+- CompanyDTO clone(CompanyDTO)
+- StudentDTO clone(StudentDTO)
+}
+interface org.hbrs.se2.project.repository.StudentHasSkillRepository {
+~ List<StudentHasSkillDTO> findByStudentid(int)
+~ void deleteByStudentidAndSkillid(int,int)
+}
+class org.hbrs.se2.project.services.impl.LoginService {
+- UserRepository repository
+- PasswordEncoder passwordEncoder
+- UserDTO userDTO
++ boolean authenticate(String,String)
++ UserDTO getCurrentUser()
+- UserDTO getUserWithJPA(String)
+}
+class org.hbrs.se2.project.dtos.impl.SkillDTOImpl {
+- int skillid
+- String skill
++ int getSkillid()
++ void setSkillid(int)
++ String getSkill()
++ void setSkill(String)
+}
+interface org.hbrs.se2.project.dtos.CompanyDTO {
+~ int getCompanyid()
+~ void setCompanyid(int)
+~ int getUserid()
+~ void setUserid(int)
+~ String getName()
+~ void setName(String)
+~ String getIndustry()
+~ void setIndustry(String)
+~ boolean getBanned()
+~ void setBanned(boolean)
+}
+class org.hbrs.se2.project.entities.Job {
+- int jobid
+- int companyid
+- String title
+- String description
+- Integer salary
+- String location
+- String contactdetails
++ int getJobid()
++ void setJobid(int)
++ int getCompanyid()
++ void setCompanyid(int)
++ String getTitle()
++ void setTitle(String)
++ String getDescription()
++ void setDescription(String)
++ Integer getSalary()
++ void setSalary(Integer)
++ String getLocation()
++ void setLocation(String)
++ String getContactdetails()
++ void setContactdetails(String)
+}
+class org.hbrs.se2.project.wrapper.StudentHasSkillKey {
+- int studentid
+- int skillid
++ int getStudentid()
++ void setStudentid(int)
++ int getSkillid()
++ void setSkillid(int)
+}
+class org.hbrs.se2.project.entities.Company {
+- int companyid
+- int userid
+- String name
+- String industry
+- boolean banned
++ int getCompanyid()
++ void setCompanyid(int)
++ int getUserid()
++ void setUserid(int)
++ String getName()
++ void setName(String)
++ String getIndustry()
++ void setIndustry(String)
++ boolean isBanned()
++ void setBanned(boolean)
+}
+interface org.hbrs.se2.project.repository.CompanyRepository {
+~ CompanyDTO findCompanyByUserid(int)
+~ CompanyDTO findCompanyByCompanyid(int)
+~ CompanyDTO findCompanyByName(String)
+}
+class org.hbrs.se2.project.dtos.impl.StudentDTOImpl {
+- int studentid
+- int userid
+- String firstname
+- String lastname
+- String matrikelnumber
+- String university
++ void setStudentId(int)
++ void setUserid(int)
++ void setFirstname(String)
++ void setLastname(String)
++ void setMatrikelnumber(String)
++ void setUniversity(String)
++ int getStudentid()
++ int getUserid()
++ String getFirstname()
++ String getLastname()
++ String getMatrikelnumber()
++ String getUniversity()
+}
+class org.hbrs.se2.project.util.Globals {
++ {static} String CURRENT_USER
+}
+class org.hbrs.se2.project.util.Globals.Pages {
++ {static} String MAIN_VIEW
++ {static} String LOGIN_VIEW
++ {static} String JOBS_VIEW
++ {static} String PROFILE_VIEW
++ {static} String MYADS_VIEW
++ {static} String REGISTER_COMPANY_VIEW
++ {static} String REGISTER_STUDENT_VIEW
++ {static} String NEW_ADD_VIEW
+}
+class org.hbrs.se2.project.util.Globals.Roles {
++ {static} String student
++ {static} String company
+}
+class org.hbrs.se2.project.util.Globals.Errors {
++ {static} String NOUSERFOUND
++ {static} String SQLERROR
++ {static} String DATABASE
 }
 class org.hbrs.se2.project.helper.cryptoHandler {
 + PasswordEncoder encoder()
 }
-
-class org.hbrs.se2.project.Application {
-+ {static} void main(String[])
+class org.hbrs.se2.project.views.companyViews.NewJobAdView {
+- Logger logger
+- TextArea title
+- TextArea description
+- EmailField contactdetails
+- IntegerField salary
+- TextField location
+- Button postButton
+- Binder<JobDTOImpl> binder
+- TextArea createTitleArea()
+- TextArea createDescriptionArea()
+- EmailField createEmailField()
+- IntegerField createSalaryField()
+- TextField createWorkLocation()
+}
+class org.hbrs.se2.project.dtos.impl.JobDTOImpl {
+- int jobid
+- int companyid
+- String title
+- String description
+- Integer salary
+- String location
+- String contactdetails
++ void setJobid(int)
++ void setCompanyid(int)
++ void setTitle(String)
++ void setDescription(String)
++ void setSalary(Integer)
++ int getJobid()
++ int getCompanyid()
++ String getTitle()
++ String getDescription()
++ Integer getSalary()
++ String getLocation()
++ void setLocation(String)
++ String getContactdetails()
++ void setContactdetails(String)
++ String toString()
+}
+class org.hbrs.se2.project.dtos.impl.TopicDTOImpl {
+- int topicid
+- String topic
++ int getTopicid()
++ void setTopicid(int)
++ String getTopic()
++ void setTopic(String)
+}
+class org.hbrs.se2.project.dtos.impl.StudentHasSkillDTOImpl {
+- int studentid
+- int skillid
++ int getStudentid()
++ void setStudentid(int)
++ int getSkillid()
++ void setSkillid(int)
+}
+class org.hbrs.se2.project.views.companyViews.MyAdsView {
+}
+interface org.hbrs.se2.project.repository.StudentHasTopicRepository {
+~ List<StudentHasTopicDTO> findByStudentid(int)
+~ void deleteByStudentidAndTopicid(int,int)
 }
 
 
-class org.hbrs.se2.project.control.exception.DatabaseUserException {
-- String reason
-+ <<Create>> DatabaseUserException(String)
-+ String getReason()
-+ void setReason(String)
-}
-
-
-
-
+org.hbrs.se2.project.dtos.UserDTO <|.. org.hbrs.se2.project.dtos.impl.UserDTOImpl
+java.io.Serializable <|.. org.hbrs.se2.project.wrapper.StudentHasTopicKey
+com.vaadin.flow.component.orderedlayout.VerticalLayout <|-- org.hbrs.se2.project.views.RegisterView
+java.io.Serializable <|.. org.hbrs.se2.project.wrapper.StudentHasMajorKey
+java.io.Serializable <|-- org.hbrs.se2.project.dtos.StudentDTO
+com.vaadin.flow.component.orderedlayout.VerticalLayout <|-- org.hbrs.se2.project.views.LoginView
+java.io.Serializable <|-- org.hbrs.se2.project.dtos.UserDTO
+com.vaadin.flow.component.html.Div <|-- org.hbrs.se2.project.views.studentViews.JobsView
+com.vaadin.flow.i18n.I18NProvider <|.. org.hbrs.se2.project.services.impl.TranslationProvider
+org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.StudentHasMajorRepository
+org.hbrs.se2.project.services.ProfileServiceInterface <|.. org.hbrs.se2.project.services.impl.ProfileService
+org.hbrs.se2.project.views.BeforeEnterObserver <|.. org.hbrs.se2.project.views.AppView
+com.vaadin.flow.component.applayout.AppLayout <|-- org.hbrs.se2.project.views.AppView
+org.springframework.boot.web.servlet.support.SpringBootServletInitializer <|-- org.hbrs.se2.project.Application
+org.hbrs.se2.project.dtos.MajorDTO <|.. org.hbrs.se2.project.dtos.impl.MajorDTOImpl
+org.hbrs.se2.project.services.RegistrationServiceInterface <|.. org.hbrs.se2.project.services.impl.RegistrationService
+org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.TopicRepository
+com.vaadin.flow.server.VaadinServiceInitListener <|.. org.hbrs.se2.project.services.impl.ServiceInitListener
+org.hbrs.se2.project.views.RegisterView <|-- org.hbrs.se2.project.views.studentViews.RegisterStudentView
+org.hbrs.se2.project.control.exception.Exception <|-- org.hbrs.se2.project.control.exception.DatabaseUserException
+org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.SkillRepository
+org.hbrs.se2.project.dtos.StudentHasMajorDTO <|.. org.hbrs.se2.project.dtos.impl.StudentHasMajorDTOImpl
+com.vaadin.flow.component.html.Div <|-- org.hbrs.se2.project.views.studentViews.ProfileView
+org.hbrs.se2.project.dtos.CompanyDTO <|.. org.hbrs.se2.project.dtos.impl.CompanyDTOImpl
+java.io.Serializable <|-- org.hbrs.se2.project.dtos.JobDTO
+org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.StudentRepository
+org.hbrs.se2.project.services.CompanyServiceInterface <|.. org.hbrs.se2.project.services.impl.CompanyService
+org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.JobRepository
+org.hbrs.se2.project.dtos.StudentHasTopicDTO <|.. org.hbrs.se2.project.dtos.impl.StudentHasTopicDTOImpl
+org.hbrs.se2.project.views.RegisterView <|-- org.hbrs.se2.project.views.companyViews.RegisterCompanyView
+org.hbrs.se2.project.services.JobServiceInterface <|.. org.hbrs.se2.project.services.impl.JobService
+org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.UserRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.MajorRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.StudentHasSkillRepository
+org.hbrs.se2.project.services.LoginServiceInterface <|.. org.hbrs.se2.project.services.impl.LoginService
+org.hbrs.se2.project.dtos.SkillDTO <|.. org.hbrs.se2.project.dtos.impl.SkillDTOImpl
+java.io.Serializable <|-- org.hbrs.se2.project.dtos.CompanyDTO
+java.io.Serializable <|.. org.hbrs.se2.project.wrapper.StudentHasSkillKey
+org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.CompanyRepository
+org.hbrs.se2.project.dtos.StudentDTO <|.. org.hbrs.se2.project.dtos.impl.StudentDTOImpl
 org.hbrs.se2.project.util.Globals +.. org.hbrs.se2.project.util.Globals.Pages
 org.hbrs.se2.project.util.Globals +.. org.hbrs.se2.project.util.Globals.Roles
 org.hbrs.se2.project.util.Globals +.. org.hbrs.se2.project.util.Globals.Errors
-org.hbrs.se2.project.views.BeforeEnterObserver <|.. AppView
-com.vaadin.flow.component.applayout.AppLayout <|-- AppView
-StudentDTO <|.. StudentDTOImpl
-org.springframework.data.jpa.repository.JpaRepository <|-- CompanyRepository
-org.springframework.data.jpa.repository.JpaRepository <|-- JobRepository
-com.vaadin.flow.component.orderedlayout.VerticalLayout <|-- LoginView
-com.vaadin.flow.component.html.Div <|-- NewJobAdView
-JobDTO <|.. JobDTOImpl
-com.vaadin.flow.component.orderedlayout.VerticalLayout <|-- RegisterStudentView
-org.springframework.data.jpa.repository.JpaRepository <|-- UserRepository
-UserDTO <|.. UserDTOImpl
-com.vaadin.flow.component.html.Div <|-- JobsView
-org.springframework.boot.web.servlet.support.SpringBootServletInitializer <|-- org.hbrs.se2.project.Application
-org.springframework.data.jpa.repository.JpaRepository <|-- StudentRepository
-CompanyDTO <|.. CompanyDTOImpl
-com.vaadin.flow.component.orderedlayout.VerticalLayout <|-- RegisterCompanyView
-org.hbrs.se2.project.control.exception.Exception <|-- org.hbrs.se2.project.control.exception.DatabaseUserException
-com.vaadin.flow.component.html.Div <|-- MyAdsView
-Controller --> Model : creates
-View --> Controller : initiates
-Controller --> DataTransferObject : uses
-View --> DataTransferObject : uses
-Controller --> Repository : reads
+com.vaadin.flow.component.html.Div <|-- org.hbrs.se2.project.views.companyViews.NewJobAdView
+org.hbrs.se2.project.dtos.JobDTO <|.. org.hbrs.se2.project.dtos.impl.JobDTOImpl
+org.hbrs.se2.project.dtos.TopicDTO <|.. org.hbrs.se2.project.dtos.impl.TopicDTOImpl
+org.hbrs.se2.project.dtos.StudentHasSkillDTO <|.. org.hbrs.se2.project.dtos.impl.StudentHasSkillDTOImpl
+com.vaadin.flow.component.html.Div <|-- org.hbrs.se2.project.views.companyViews.MyAdsView
+org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.StudentHasTopicRepository
+org.hbrs.se2.project.control.ProfileControl <-- org.hbrs.se2.project.views.studentViews.ProfileView
+org.hbrs.se2.project.control.RegistrationControl <-- org.hbrs.se2.project.views.RegisterView
+org.hbrs.se2.project.control.LoginControl <-- org.hbrs.se2.project.views.LoginView
+org.hbrs.se2.project.control.JobControl <-- org.hbrs.se2.project.views.studentViews.JobsView
+org.hbrs.se2.project.control.JobControl <-- org.hbrs.se2.project.views.companyViews.MyAdsView
+org.hbrs.se2.project.entities <-- org.hbrs.se2.project.services.factory.AbstractEntityFactory : builds
+org.hbrs.se2.project.entities.Company <-- org.hbrs.se2.project.repository.CompanyRepository
+org.hbrs.se2.project.entities.Student <-- org.hbrs.se2.project.repository.StudentRepository
+org.hbrs.se2.project.entities.Job <-- org.hbrs.se2.project.repository.JobRepository
+org.hbrs.se2.project.entities.Major <-- org.hbrs.se2.project.repository.MajorRepository
+org.hbrs.se2.project.entities.Skill <-- org.hbrs.se2.project.repository.SkillRepository
+org.hbrs.se2.project.entities.Topic <-- org.hbrs.se2.project.repository.TopicRepository
+org.hbrs.se2.project.entities.User <-- org.hbrs.se2.project.repository.UserRepository
+org.hbrs.se2.project.entities.StudentHasMajor <-- org.hbrs.se2.project.repository.StudentHasMajorRepository
+org.hbrs.se2.project.entities.StudentHasSkill <-- org.hbrs.se2.project.repository.StudentHasSkillRepository
+org.hbrs.se2.project.entities.StudentHasTopic <-- org.hbrs.se2.project.repository.StudentHasTopicRepository
+org.hbrs.se2.project.services.factory.EntityCreationService --> org.hbrs.se2.project.services.factory.AbstractEntityFactory : provides
+org.hbrs.se2.project.services.factory.EntityCreationService <-- org.hbrs.se2.project.control.RegistrationControl
+org.hbrs.se2.project.services.factory.EntityCreationService <-- org.hbrs.se2.project.control.ProfileControl
+org.hbrs.se2.project.services.factory.EntityCreationService <-- org.hbrs.se2.project.control.JobControl
+org.hbrs.se2.project.services.impl.JobService <-- org.hbrs.se2.project.control.JobControl
+org.hbrs.se2.project.services.impl.LoginService <-- org.hbrs.se2.project.control.LoginControl
+org.hbrs.se2.project.services.impl.ProfileService <-- org.hbrs.se2.project.control.ProfileControl
+org.hbrs.se2.project.services.impl.RegistrationService <-- org.hbrs.se2.project.control.RegistrationControl
+org.hbrs.se2.project.services.impl.ValidationService <-- org.hbrs.se2.project.control.ProfileControl
 @enduml
