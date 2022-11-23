@@ -7,6 +7,9 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
@@ -25,7 +28,27 @@ public class RegisterCompanyView extends RegisterView {
 
     public RegisterCompanyView() {
         setSizeFull();
-        registerText.setText("Registrierung");
+        registerText.setText("Registrieren als");
+
+        //create buttons and set layout
+        Button registerStudentButton = new Button("Student");
+        Button registerCompanyButton = new Button("Unternehmen");
+        registerCompanyButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        registerCompanyButton.setEnabled(true);
+        registerStudentButton.setEnabled(true);
+
+        HorizontalLayout buttonLayout = new HorizontalLayout();
+        buttonLayout.add(new Component[]{registerStudentButton,registerCompanyButton});
+        buttonLayout.setAlignItems(Alignment.CENTER);
+
+        //set layout for text input
+        HorizontalLayout inputTextLayout = new HorizontalLayout();
+        inputTextLayout.add(createFormLayout(new Component[]{name,username,email,userPassword,confirmPassword}));
+        inputTextLayout.setAlignItems(Alignment.CENTER);
+
+        Button confirmButton = new Button("Jetzt als Unternehmen registrieren");
+
+        registerStudentButton.addClickListener(event -> navigateHandler.navigateToRegisterStudentPage());
 
         userBinder.setBean(new UserDTOImpl(Globals.Roles.company));
         //The Pattern matches from left to right: At least one letter, at least one digit, at lest one special character and at least 8 characters
@@ -34,10 +57,10 @@ public class RegisterCompanyView extends RegisterView {
         concreteUserBinder.setBean(new CompanyDTOImpl());
 
         add(registerText);
-        add(createFormLayout(new Component[]{name,username,email,userPassword,confirmPassword}));
+        add(buttonLayout);
+        add(inputTextLayout);
         add(confirmButton);
         add(loginButton());
-        this.setWidth("30%");
         this.setAlignItems(Alignment.CENTER);
 
         // Map input field values to DTO variables based on chosen names

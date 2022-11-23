@@ -48,13 +48,13 @@ public class LoginView extends VerticalLayout {
         i18n.getHeader().setTitle("HEADER");
         i18n.getHeader().setDescription("HEADER DESCRIPTION");
 	     */
-        i18n.getForm().setUsername(getTranslation("view.login.form.username"));
-        i18n.getForm().setTitle(getTranslation("view.login.form.title"));
-        i18n.getForm().setSubmit(getTranslation("view.login.form.submit"));
-        i18n.getForm().setPassword(getTranslation("view.login.form.password"));
-        i18n.getForm().setForgotPassword(getTranslation("view.login.form.forgotPassword"));
-        i18n.getErrorMessage().setTitle(getTranslation("view.login.error.title"));
-        i18n.getErrorMessage().setMessage(getTranslation("view.login.error.message"));
+        i18n.getForm().setUsername(getTranslation("view.login.text.username"));
+        i18n.getForm().setTitle(getTranslation("view.login.text.title"));
+        i18n.getForm().setSubmit(getTranslation("view.login.text.submit"));
+        i18n.getForm().setPassword(getTranslation("view.login.text.password"));
+        i18n.getForm().setForgotPassword(getTranslation("view.login.text.forgotPassword"));
+        i18n.getErrorMessage().setTitle(getTranslation("view.login.error.loginFailed"));
+        i18n.getErrorMessage().setMessage(getTranslation("view.login.error.loginFailed.message"));
         i18n.setAdditionalInformation("");
         return i18n;
     }

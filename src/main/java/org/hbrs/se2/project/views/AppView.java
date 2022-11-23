@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H4;
@@ -11,6 +12,7 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
@@ -101,11 +103,11 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
         // Only if role is equal to company
         if(this.authorizationControl.hasUserRole(loginControl.getCurrentUser(), Globals.Roles.company)) {
-            bar.addItem("Neuen Job erstellen", e -> navigateHandler.navigateToNewJob());
+            bar.addItem(getTranslation("view.main.bar.newJob"), e -> navigateHandler.navigateToNewJob());
         }
 
         // for all roles add following bar items
-        bar.addItem("Abmelden" , e -> logoutUser());
+        bar.addItem(getTranslation("view.main.bar.logout"), e -> logoutUser());
         topRightPanel.add(bar);
 
         layout.add( topRightPanel );
@@ -125,18 +127,16 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
      */
     private Component createDrawerContent(Tabs menu) {
         VerticalLayout layout = new VerticalLayout();
-        layout.setSizeFull();
-        layout.setPadding(false);
-        layout.setSpacing(false);
-        layout.getThemeList().set("spacing-s", true);
-        layout.setAlignItems(FlexComponent.Alignment.STRETCH);
+        layout.setSpacing(true);
 
         HorizontalLayout logoLayout = new HorizontalLayout();
 
-        // add logo
+        // add logo with alignment
         logoLayout.setId("logo");
-        logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        logoLayout.add(new H1("HBRS Collab"));
+        H1 hbrsc = new H1("HBRS Collab");
+        hbrsc.getElement().getStyle().set("font-size","45px"); // changed font size
+        hbrsc.getElement().getStyle().set("text-align","center"); // logo is now in center
+        logoLayout.add(hbrsc);
 
         // add menu with tabs
         layout.add(logoLayout, menu);
@@ -172,13 +172,13 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // if the user has the role "student" he has the tabs "Jobs"
         if(this.authorizationControl.hasUserRole(loginControl.getCurrentUser(), Globals.Roles.student)) {
             logger.info("User is student");
-            tabs = Utils.append(tabs, createTab("Jobs", JobsView.class));
-            tabs = Utils.append(tabs, createTab("Profile", ProfileView.class));
+            tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.jobs"), JobsView.class));
+            tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.profile"), ProfileView.class));
         } else
             // has the user the role "company" they have the tabs "My Ads"
             if(this.authorizationControl.hasUserRole(loginControl.getCurrentUser(), Globals.Roles.company)) {
                 logger.info("User is company");
-                tabs = Utils.append(tabs, createTab("Meine Jobs", MyAdsView.class));
+                tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.myjobs"), MyAdsView.class));
             }
         return tabs;
     }
@@ -203,7 +203,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         viewTitle.setText(getCurrentPageTitle());
 
         // set firstname of the current user
-        helloUser.setText("Hallo "  + this.getCurrentNameOfUser() );
+        helloUser.setText(getTranslation("view.main.h1.greeting") + " " + this.getCurrentNameOfUser() );
     }
 
     private Optional<Tab> getTabForComponent(Component component) {

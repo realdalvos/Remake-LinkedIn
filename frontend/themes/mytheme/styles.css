@@ -46,3 +46,11 @@ html {
     --lumo-error-color: hsl(3, 59%, 49%);
     --lumo-font-family: "Georgia";
 }
+
+.v-vertical > .v-spacing {
+    height: 70px;
+}
+
+.v-horizontal > .v-spacing {
+    width: 70px;
+}
