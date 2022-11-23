@@ -31,7 +31,7 @@ import java.util.stream.Stream;
 public class JobsView extends Div {
     Label emptyLabel = new Label();
     // interactive search field
-    private final TextField searchField = new TextField(getTranslation("view.job.text.search"));
+    private final TextField searchField = new TextField();
     private final Button searchButton = new Button(getTranslation("view.job.button.search"));
     private final Button buttonAllJobs = new Button("Alle Jobs");
     // Create a Grid bound to the list
@@ -51,6 +51,8 @@ public class JobsView extends Div {
         searchField.setWidth("25");
         searchButton.setWidth("25%");
         buttonAllJobs.setWidth("25%");
+
+        searchField.setPlaceholder(getTranslation("view.job.text.search"));
 
         HorizontalLayout topLayout = new HorizontalLayout();
 
