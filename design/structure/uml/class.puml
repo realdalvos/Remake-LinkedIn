@@ -69,23 +69,6 @@ class MavenWrapperDownloader {
 + {static} void main(String[])
 - {static} void downloadFileFromURL(String,File)
 }
-class org.hbrs.se2.project.control.RegistrationControlTest {
-~ UserRepository userRepository
-~ StudentRepository studentRepository
-~ CompanyRepository companyRepository
-~ PasswordEncoder passwordEncoder
-~ RegistrationControl registrationControl
-~ HelperForTests h
-~ UserDTO userDTO
-~ StudentDTO studentDTO
-~ CompanyDTO companyDTO
-~ void setUp()
-~ void tearDown()
-~ void registerCompanySuccess()
-~ void registerCompanyUnique()
-~ void registerStudentSuccess()
-~ void registerStudentUnique()
-}
 class org.hbrs.se2.project.wrapper.StudentHasMajorKey {
 - int studentid
 - int majorid
@@ -139,15 +122,6 @@ class org.hbrs.se2.project.views.studentViews.JobsView {
 - Button searchButton
 - Grid<JobDTO> grid
 }
-class org.hbrs.se2.project.control.factories.CompanyFactoryTest {
-~ {static} EntityCreationService entityCreationService
-~ UserDTO testUser
-~ CompanyDTO testCompany
-~ {static} void init()
-~ void setUp()
-~ void tearDown()
-~ void testCreateCompany()
-}
 class org.hbrs.se2.project.services.impl.TranslationProvider {
 - Logger logger
 + {static} String BUNDLE_PREFIX
@@ -179,14 +153,6 @@ class org.hbrs.se2.project.entities.StudentHasSkill {
 + void setStudentid(int)
 + int getSkillid()
 + void setSkillid(int)
-}
-class org.hbrs.se2.project.control.factories.StudentFactoryTest {
-~ {static} EntityCreationService entityCreationService
-~ UserDTO testUser
-~ StudentDTO testStudent
-~ {static} void init()
-~ void setUp()
-~ void createStudent()
 }
 interface org.hbrs.se2.project.repository.StudentHasMajorRepository {
 ~ List<StudentHasMajorDTO> findByStudentid(int)
@@ -460,13 +426,6 @@ class org.hbrs.se2.project.entities.StudentHasMajor {
 + int getMajorid()
 + void setMajorid(int)
 }
-class org.hbrs.se2.project.control.factories.UserFactoryTest {
-~ {static} EntityCreationService entityCreationService
-~ UserDTO testUser
-~ {static} void init()
-~ void setUp()
-~ void testCreateUser()
-}
 class org.hbrs.se2.project.dtos.impl.CompanyDTOImpl {
 - int companyid
 - int userid
@@ -511,23 +470,6 @@ interface org.hbrs.se2.project.repository.JobRepository {
 ~ JobDTO findJobByJobid(int)
 ~ JobDTO findJobByCompanyidAndTitle(int,String)
 ~ List<JobDTO> findJobByCompanyid(int)
-}
-class org.hbrs.se2.project.control.JobControlTest {
-~ JobRepository jobRepository
-~ JobControl jobControl
-~ JobDTO testJob
-~ CompanyDTO testCompanyDTO
-~ HelperForTests h
-~ void setUp()
-~ void tearDown()
-+ void testIfJobIsCreatedInDB()
-~ void getJobsMatchingKeyword()
-- boolean containsTestJob(List<JobDTO>)
-- boolean containsJob(List<JobDTO>,JobDTO)
-~ void test_getCompanyOfJob()
-~ void test_getAllCompanyJobs()
-~ void test_removeJob()
-~ void test_getCompanyByUserid()
 }
 interface org.hbrs.se2.project.dtos.MajorDTO {
 + int getMajorid()
@@ -604,13 +546,6 @@ class org.hbrs.se2.project.util.HelperForTests {
 - UserDTO clone(UserDTO)
 - CompanyDTO clone(CompanyDTO)
 - StudentDTO clone(StudentDTO)
-}
-class org.hbrs.se2.project.control.factories.JobFactoryTest {
-~ {static} EntityCreationService entityCreationService
-~ JobDTO testJob
-~ {static} void init()
-~ void setUp()
-~ void createJob()
 }
 interface org.hbrs.se2.project.repository.StudentHasSkillRepository {
 ~ List<StudentHasSkillDTO> findByStudentid(int)
@@ -788,17 +723,6 @@ class org.hbrs.se2.project.dtos.impl.TopicDTOImpl {
 + void setTopicid(int)
 + String getTopic()
 + void setTopic(String)
-}
-class org.hbrs.se2.project.control.LoginControlTest {
-~ LoginControl loginControl
-~ HelperForTests h
-~ UserDTO testUser
-~ void init()
-~ void after()
-~ void testAuthenticateWhenNoSuchUser()
-~ void testAuthenticateShouldFail()
-~ void testAuthenticateShouldWork()
-~ void getCurrentUser()
 }
 class org.hbrs.se2.project.dtos.impl.StudentHasSkillDTOImpl {
 - int studentid
