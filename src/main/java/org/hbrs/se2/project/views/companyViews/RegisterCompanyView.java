@@ -23,8 +23,8 @@ public class RegisterCompanyView extends RegisterView {
     private final Logger logger = Utils.getLogger(this.getClass().getName());
 
     // text fields
-    private TextField name = new TextField("Unternehmensnamen");
-    private Binder<CompanyDTOImpl> concreteUserBinder = new BeanValidationBinder<>(CompanyDTOImpl.class);
+    private final TextField name = new TextField("Unternehmensname");
+    private final Binder<CompanyDTOImpl> concreteUserBinder = new BeanValidationBinder<>(CompanyDTOImpl.class);
 
     public RegisterCompanyView() {
         setSizeFull();
@@ -85,14 +85,13 @@ public class RegisterCompanyView extends RegisterView {
                     registrationControl.registerCompany(userBinder.getBean(), concreteUserBinder.getBean());
                     navigateHandler.navigateToLoginPage();
                 } else {
-                    Utils.makeDialog("Fülle bitte alle Felder aus");
+                    ui.makeDialog("Fülle bitte alle Felder aus");
                     logger.info("Not all fields have been filled in");
                 }
             } catch (Exception e) {
                 // get the root cause of an exception
-                String message = Utils.getRootCause(e);
                 // Error dialog
-                Utils.makeDialog(message);
+                ui.makeDialog(Utils.getRootCause(e));
                 logger.error("An error has occurred while saving to the database", e);
             }
         });

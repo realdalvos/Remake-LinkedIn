@@ -14,13 +14,15 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
-import org.hbrs.se2.project.control.LoginControl;
+import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.helper.navigateHandler;
+import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Company - Create new Job Post / Job Ad
@@ -29,6 +31,13 @@ import org.slf4j.Logger;
 @Route(value = Globals.Pages.NEW_ADD_VIEW, layout = AppView.class)
 @PageTitle("Anzeige erstellen")
 public class NewJobAdView extends Div {
+
+    @Autowired
+    CommonUIElementProvider ui;
+
+    private final JobControl jobControl;
+
+    private final UserDTO CURRENT_USER = Utils.getCurrentUser();
     private final Logger logger = Utils.getLogger(this.getClass().getName());
 
     /*
@@ -41,15 +50,15 @@ public class NewJobAdView extends Div {
     // Job title text area
     private TextField title = createTitleField();
     // Job Description text area
-    private TextArea description = createDescriptionArea();
+    private final TextArea description = createDescriptionArea();
     // Contact details
 
     // Changed TextField to EmailField to check email addresses
-    private EmailField contactdetails = createEmailField();
+    private final EmailField contactdetails = createEmailField();
     // Salary text field
-    private IntegerField salary = createSalaryField();
+    private final IntegerField salary = createSalaryField();
     // Location text field
-    private TextField location = createWorkLocation();
+    private final TextField location = createWorkLocation();
     // post new job button
 
     /*
@@ -63,7 +72,8 @@ public class NewJobAdView extends Div {
 
     private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
 
-    public NewJobAdView(JobControl jobControl, LoginControl loginControl) {
+    public NewJobAdView(JobControl jobControl) {
+        this.jobControl = jobControl;
 
         setHeightFull();
         VerticalLayout verticalLayout = new VerticalLayout();
@@ -80,20 +90,18 @@ public class NewJobAdView extends Div {
 
         verticalLayout.add(title, description, contactdetails, salary, location, postButton);
 
-        binder.setBean(new JobDTOImpl(jobControl.getCompanyByUserid(loginControl.getCurrentUser().getUserid()).getCompanyid()));
+        binder.setBean(new JobDTOImpl(jobControl.getCompanyByUserid(CURRENT_USER.getUserid()).getCompanyid()));
         // map input field values to DTO variables based on chosen names
         binder.bindInstanceFields(this);
 
-        contactdetails.setValue(loginControl.getCurrentUser().getEmail());
+        contactdetails.setValue(CURRENT_USER.getEmail());
 
         postButton.addClickListener(event -> {
 
             if (binder.isValid()) {
-                // call job control to save new job post entity
-                jobControl.createNewJobPost(binder.getBean());
-                navigateHandler.navigateToMyAdsView();
+                ui.makeConfirm("Möchtest du die Jobanzeige so veröffentlichen?", confirm());
             } else {
-                Utils.makeDialog(getTranslation("view.job.error.emptyFields"));
+                ui.makeDialog("Fülle bitte alle Felder aus");
                 logger.info("Not all fields have been filled in");
             }
         });
@@ -158,6 +166,16 @@ public class NewJobAdView extends Div {
         location.setPlaceholder(getTranslation("view.job.text.placeholder.location")); // added Placeholder for continuity in job offers
         location.setClearButtonVisible(true);
         return location;
+    }
+
+    private Button confirm() {
+        Button save = new Button();
+        save.addClickListener(event -> {
+            // call job control to save new job post entity
+            jobControl.createNewJobPost(binder.getBean());
+            navigateHandler.navigateToMyAdsView();
+        });
+        return save;
     }
 
     /*

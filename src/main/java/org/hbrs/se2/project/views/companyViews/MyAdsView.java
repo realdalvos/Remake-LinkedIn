@@ -11,9 +11,9 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
-import org.hbrs.se2.project.control.LoginControl;
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.util.Globals;
+import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
 
 /**
@@ -23,11 +23,11 @@ import org.hbrs.se2.project.views.AppView;
 @PageTitle("Meine Stellen")
 public class MyAdsView extends Div {
 
-    public MyAdsView(JobControl jobcontrol, LoginControl logincontrol){
+    public MyAdsView(JobControl jobcontrol){
 
         Grid<JobDTO> grid = new Grid<>();
 
-        grid.setItems(jobcontrol.getAllCompanyJobs(jobcontrol.getCompanyByUserid(logincontrol.getCurrentUser().getUserid()).getCompanyid()));
+        grid.setItems(jobcontrol.getAllCompanyJobs(jobcontrol.getCompanyByUserid(Utils.getCurrentUser().getUserid()).getCompanyid()));
         grid.setSelectionMode(Grid.SelectionMode.NONE);
 
         grid.addColumn(JobDTO::getTitle).setHeader(getTranslation("view.job.text.title")).setSortable(true);
