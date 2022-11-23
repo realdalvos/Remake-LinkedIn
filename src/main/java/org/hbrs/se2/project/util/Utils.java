@@ -28,24 +28,6 @@ public class Utils {
     }
 
     /**
-     * Checks if a field in an array is empty
-     *
-     * @param array Takes a String array
-     * @return True, if an empty field is found, otherwise false
-     */
-    public static boolean checkIfInputEmpty(String[] array) {
-        boolean empty = false;
-        // checks all input to not be empty string or null
-        for (String s : array) {
-            if (s == null || s.equals("")) {
-                empty = true;
-                break;
-            }
-        }
-        return empty;
-    }
-
-    /**
      * Exception handling
      *
      * @param e Takes an exception as an input
@@ -59,23 +41,6 @@ public class Utils {
         // Split string message, so we only get the last bit after key keyword
         String[] messArr = rootCause.getMessage().split("Key");
         return messArr[messArr.length - 1];
-    }
-
-    /**
-     * Creates an Error Dialog
-     *
-     * @param message Takes the message String as an input
-     */
-    public static void makeDialog(String message) {
-        Dialog dialog = new Dialog();
-        dialog.add(new Text(message));
-        // close button
-        Button closeb = new Button("Close");
-        closeb.addClickListener(event -> dialog.close());
-        dialog.add(closeb);
-        dialog.setWidth("400px");
-        dialog.setHeight("150px");
-        dialog.open();
     }
 
     /**
