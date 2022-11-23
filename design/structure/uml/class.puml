@@ -865,5 +865,9 @@ org.hbrs.se2.project.dtos.TopicDTO <|.. org.hbrs.se2.project.dtos.impl.TopicDTOI
 org.hbrs.se2.project.dtos.StudentHasSkillDTO <|.. org.hbrs.se2.project.dtos.impl.StudentHasSkillDTOImpl
 com.vaadin.flow.component.html.Div <|-- org.hbrs.se2.project.views.companyViews.MyAdsView
 org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.StudentHasTopicRepository
-org.hbrs.se2.project.control.ProfileControl <|-- org.hbrs.se2.project.views.studentViews.ProfileView
+org.hbrs.se2.project.control.ProfileControl <-- org.hbrs.se2.project.views.studentViews.ProfileView
+org.hbrs.se2.project.control.RegistrationControl <-- org.hbrs.se2.project.views.RegisterView
+org.hbrs.se2.project.control.LoginControl <-- org.hbrs.se2.project.views.LoginView
+org.hbrs.se2.project.control.JobControl <-- org.hbrs.se2.project.views.studentViews.JobsView
+org.hbrs.se2.project.control.JobControl <-- org.hbrs.se2.project.views.companyViews.MyAdsView
 @enduml
