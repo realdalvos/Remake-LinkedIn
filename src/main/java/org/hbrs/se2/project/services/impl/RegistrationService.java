@@ -29,20 +29,18 @@ public class RegistrationService implements RegistrationServiceInterface {
     private EntityCreationService entityCreationService;
 
     @Autowired
+    private ValidationService validationService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
     public void registerStudent(UserDTO user, StudentDTO student) throws Exception {
-        // check if username, email, matrikelnumber already exists
-        UserDTO userDTO = userRepository.findUserByUsername(user.getUsername());
-        UserDTO userDTO1 = userRepository.findUserByEmail(user.getEmail());
-        StudentDTO studentDTO = studentRepository.findStudentByMatrikelnumber(student.getMatrikelnumber());
-
-        if (userDTO != null) {
+        if (!validationService.checkUsernameUnique(user.getUsername())) {
             throw new DatabaseUserException("Username already exists");
-        } else if (userDTO1 != null) {
+        } else if (!validationService.checkEmailUnique(user.getEmail())) {
             throw new DatabaseUserException("Email already exists");
-        } else if (studentDTO != null) {
+        } else if (!validationService.checkMatrikelnumberUnique(student.getMatrikelnumber())) {
             throw new DatabaseUserException("Matrikelnumber already exists");
         }
 
@@ -56,13 +54,9 @@ public class RegistrationService implements RegistrationServiceInterface {
 
     @Override
     public void registerCompany(UserDTO user, CompanyDTO company) throws Exception {
-        // check if username or email already exists
-        UserDTO userDTO = userRepository.findUserByUsername(user.getUsername());
-        UserDTO userDTO1 = userRepository.findUserByEmail(user.getEmail());
-
-        if (userDTO != null) {
+        if (!validationService.checkUsernameUnique(user.getUsername())) {
             throw new DatabaseUserException("Username already exists");
-        } else if (userDTO1 != null) {
+        } else if (!validationService.checkEmailUnique(user.getEmail())) {
             throw new DatabaseUserException("Email already exists");
         }
 
