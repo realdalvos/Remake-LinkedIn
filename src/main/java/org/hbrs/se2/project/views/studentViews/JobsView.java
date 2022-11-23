@@ -63,9 +63,9 @@ public class JobsView extends Div {
         topLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
         // adding TextField and 2 buttons
+        topLayout.add(searchField);
         topLayout.add(searchButton);
         topLayout.add(buttonAllJobs);
-        topLayout.add(searchField);
 
         layout.add(topLayout);
         layout.add(emptyLabel);
