@@ -23,7 +23,6 @@ public abstract class RegisterView extends VerticalLayout {
     protected PasswordField confirmPassword = new PasswordField("Passwort bestätigen");
     protected TextField username = new TextField("Benutzername");
     protected EmailField email = createEmailField();
-    protected Button confirmButton = new Button("Registrieren");
     protected Binder<UserDTOImpl> userBinder = new BeanValidationBinder<>(UserDTOImpl.class);
 
     protected Button loginButton() {
@@ -59,8 +58,9 @@ public abstract class RegisterView extends VerticalLayout {
         formLayout.add(components);
         formLayout.setResponsiveSteps(
                 // Use two columns by default
-                new FormLayout.ResponsiveStep("0", 1)
+                new FormLayout.ResponsiveStep("0", 2)
         );
+        formLayout.setColspan(email, 2);
         return formLayout;
     }
 }
