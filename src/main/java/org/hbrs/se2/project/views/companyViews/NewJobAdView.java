@@ -2,9 +2,6 @@ package org.hbrs.se2.project.views.companyViews;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -73,13 +70,6 @@ public class NewJobAdView extends Div {
         verticalLayout.setAlignSelf(FlexComponent.Alignment.CENTER);
         verticalLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
-        H3 newJob = new H3(getTranslation("view.job.h3.newJob"));
-        newJob.getElement().getStyle().set("font-size","30px");
-        newJob.getElement().getStyle().set("text-align","center"); // content centered instead of being stuck on the side
-        Icon createJobAdIcon = new Icon(VaadinIcon.EDIT);
-        newJob.getElement().appendChild(createJobAdIcon.getElement()); // Added Icon
-
-
         /*
         entryData
 
@@ -109,7 +99,6 @@ public class NewJobAdView extends Div {
         });
 
         // add all components to View
-        add(newJob);
         add(verticalLayout);
         this.setWidth("60%");
 
