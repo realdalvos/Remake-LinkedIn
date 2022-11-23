@@ -1,5 +1,7 @@
 package org.hbrs.se2.project.views.studentViews;
 
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ClickNotifier;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -20,11 +22,13 @@ import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
+import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +37,9 @@ import java.util.stream.Stream;
 @Route(value = Globals.Pages.PROFILE_VIEW, layout = AppView.class)
 @PageTitle("Profile")
 public class ProfileView extends Div {
+
+    @Autowired
+    CommonUIElementProvider ui;
 
     private final UserDTO CURRENT_USER = Utils.getCurrentUser();
 
@@ -133,9 +140,10 @@ public class ProfileView extends Div {
         formLayout.addComponentAtIndex(15, button);
         button.addClickListener(buttonClickEvent -> {
             if (userBinder.isValid() && studentBinder.isValid()) {
-                confirm().open();
+                ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?", confirm());
+                //confirm().open();
             } else {
-                Utils.makeDialog("Überprüfe bitte deine Angaben auf Korrektheit");
+                ui.makeDialog("Überprüfe bitte deine Angaben auf Korrektheit");
             }
         });
     }
@@ -223,11 +231,23 @@ public class ProfileView extends Div {
                 event -> studentBinder.validate());
     }
 
-    private Dialog confirm() {
-        Dialog dialog = new Dialog();
+    private Button confirm() {
+        Button save = new Button();
+        save.addClickListener(event -> {
+            try {
+                profileControl.saveStudentData(
+                        userBinder.getBean(), studentBinder.getBean(),
+                        newMajors, newTopics, newSkills);
+                // reload page to get updated view
+                UI.getCurrent().getPage().reload();
+            } catch (DatabaseUserException e) {
+                logger.error("Something went wrong with saving student data");
+            }
+        });
+        return save;
+        /**Dialog dialog = new Dialog();
         dialog.setWidth("500");
         dialog.setHeight("200");
-        //dialog.add(new Text("Möchtest du die Änderungen an deinem Profil speichern?"));
         Button close = new Button("Abbrechen");
         close.addClickListener(event -> dialog.close());
         Button reject = new Button("Verwerfen");
@@ -246,7 +266,7 @@ public class ProfileView extends Div {
             }
         });
         dialog.add(new VerticalLayout(new Text("Möchtest du die Änderungen an deinem Profil speichern?"), new HorizontalLayout(close, reject, save)));
-        return dialog;
+        return dialog;**/
     }
 
 }

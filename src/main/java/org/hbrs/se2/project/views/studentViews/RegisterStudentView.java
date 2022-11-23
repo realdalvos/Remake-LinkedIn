@@ -28,10 +28,10 @@ public class RegisterStudentView extends RegisterView {
     private final Logger logger = Utils.getLogger(this.getClass().getName());
 
     // text fields
-    private TextField firstname = new TextField("Vorname");
-    private TextField lastname = new TextField("Nachname");
-    private TextField matrikelnumber = new TextField("Matrikelnummer");
-    private Binder<StudentDTOImpl> concreteUserBinder = new BeanValidationBinder<>(StudentDTOImpl.class);
+    private final TextField firstname = new TextField("Vorname");
+    private final TextField lastname = new TextField("Nachname");
+    private final TextField matrikelnumber = new TextField("Matrikelnummer");
+    private final Binder<StudentDTOImpl> concreteUserBinder = new BeanValidationBinder<>(StudentDTOImpl.class);
 
     public RegisterStudentView() {
         setSizeFull();
@@ -92,14 +92,13 @@ public class RegisterStudentView extends RegisterView {
                     registrationControl.registerStudent(userBinder.getBean(), concreteUserBinder.getBean());
                     navigateHandler.navigateToLoginPage();
                 } else {
-                    Utils.makeDialog("Fülle bitte alle Felder aus");
+                    ui.makeDialog("Fülle bitte alle Felder aus");
                     logger.info("Not all fields have been filled in");
                 }
             } catch (Exception e) {
                 // get the root cause of an exception
-                String message = Utils.getRootCause(e);
                 // Error dialog
-                Utils.makeDialog(message);
+                ui.makeDialog(Utils.getRootCause(e));
                 logger.error("An error has occurred while saving to the database", e);
             }
         });
