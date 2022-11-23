@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.control;
 
 
+import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
@@ -178,13 +179,26 @@ public class JobControlTest {
     @Test
     @DisplayName("Testing the deleteJob Method")
     void test_removeJob() {
-        List<JobDTO> list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
-        assertEquals(1, list.size(), "List should contain 1 element");
+        JobDTO testJob2 = new JobDTOImpl(
+                testCompanyDTO.getCompanyid(), "Test title2", "Testbeschreibung. assembly programmer.", 20, "Test location", "Test contactdetails");
+        jobControl.createNewJobPost(testJob2);
+        testJob2 = jobRepository.findJobByCompanyidAndTitle(testJob2.getCompanyid(), testJob2.getTitle());
 
-        jobControl.deleteJob(testJob.getJobid());
+        List<JobDTO> list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
+        assertEquals(2, list.size(), "List should contain 2 elements");
+
+        jobControl.deleteJob(testJob2.getJobid());
 
         list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
-        assertEquals(0, list.size(), "List should contain no element");
+        assertEquals(1, list.size(), "List should contain 1 element");
+        assertNotNull(jobRepository.findJobByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle()), "testJob should be in DB");
+
+        jobControl.deleteJob(testJob.getJobid());
+        list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
+        assertEquals(0, list.size(), "List should contain 0 elements");
+
+        DatabaseUserException thrown = assertThrows(DatabaseUserException.class, () -> jobControl.deleteJob(testJob.getJobid()));
+        assertEquals("Job not found", thrown.getMessage());
     }
 
     @Test
