@@ -2,6 +2,7 @@ package org.hbrs.se2.project.views.studentViews;
 
 
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -75,6 +76,7 @@ public class JobsView extends Div {
 
         // Header
         grid.addColumn(JobDTO::getTitle).setHeader(getTranslation("view.job.text.title")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER);
+        grid.addComponentColumn(job -> new Text(jobControl.getCompanyOfJob(job))).setHeader("Unternehmen");
         grid.addColumn(JobDTO::getSalary).setHeader(getTranslation("view.job.text.salary")).setSortable(true);
         grid.setHeightByRows(true);
         searchField.addKeyPressListener(Key.ENTER, event -> searchButton.clickInClient());
