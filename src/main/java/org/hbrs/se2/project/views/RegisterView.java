@@ -13,11 +13,14 @@ import com.vaadin.flow.data.binder.Binder;
 import org.hbrs.se2.project.control.RegistrationControl;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.helper.navigateHandler;
+import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class RegisterView extends VerticalLayout {
     @Autowired
     protected RegistrationControl registrationControl;
+    @Autowired
+    protected CommonUIElementProvider ui;
     protected H4 registerText = new H4();
     protected PasswordField userPassword = createPasswordField();
     protected PasswordField confirmPassword = new PasswordField("Passwort bestätigen");
@@ -54,7 +57,7 @@ public abstract class RegisterView extends VerticalLayout {
         return email;
     }
 
-    protected Component createFormLayout(Component[] components) {
+    protected FormLayout createFormLayout(Component[] components) {
         FormLayout formLayout = new FormLayout();
         formLayout.add(components);
         formLayout.setResponsiveSteps(

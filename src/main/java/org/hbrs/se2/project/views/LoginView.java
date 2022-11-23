@@ -19,8 +19,10 @@ import org.hbrs.se2.project.control.LoginControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.helper.navigateHandler;
+import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -31,6 +33,9 @@ import org.hbrs.se2.project.util.Utils;
 @Theme(themeFolder = "mytheme", variant = Lumo.DARK)
 @PageTitle("Login")
 public class LoginView extends VerticalLayout {
+
+    @Autowired
+    CommonUIElementProvider ui;
     private final LoginControl loginControl;
 
     private LoginI18n createLoginI18n(){
@@ -81,7 +86,7 @@ public class LoginView extends VerticalLayout {
                 isAuthenticated = loginControl.authenticate(e.getUsername(), e.getPassword());
             } catch (DatabaseUserException ex) {
                 // Error dialog
-                Utils.makeDialog(ex.getMessage());
+                ui.makeDialog(ex.getMessage());
             }
             if(isAuthenticated) {
                 //Generate new sessionid to prevent session fixation
