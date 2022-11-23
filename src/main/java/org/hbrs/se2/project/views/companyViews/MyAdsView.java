@@ -30,11 +30,11 @@ public class MyAdsView extends Div {
         grid.setItems(jobcontrol.getAllCompanyJobs(jobcontrol.getCompanyByUserid(logincontrol.getCurrentUser().getUserid()).getCompanyid()));
         grid.setSelectionMode(Grid.SelectionMode.NONE);
 
-        grid.addColumn(JobDTO::getTitle).setHeader("Titel").setSortable(true);
-        grid.addColumn(JobDTO::getDescription).setHeader("Beschreibung");
-        grid.addColumn(JobDTO::getSalary).setHeader("Gehalt").setSortable(true);
+        grid.addColumn(JobDTO::getTitle).setHeader(getTranslation("view.job.text.title")).setSortable(true);
+        grid.addColumn(JobDTO::getDescription).setHeader(getTranslation("view.job.text.description"));
+        grid.addColumn(JobDTO::getSalary).setHeader(getTranslation("view.job.text.salary")).setSortable(true);
         grid.addComponentColumn(JobDTO -> {
-            Button deleteButton = new Button("Entfernen");
+            Button deleteButton = new Button(getTranslation("view.job.button.delete"));
             deleteButton.addClickListener(e -> {jobcontrol.deleteJob(JobDTO.getJobid());
                 UI.getCurrent().getPage().reload();});
             return deleteButton;
@@ -46,26 +46,26 @@ public class MyAdsView extends Div {
             FormLayout layout = new FormLayout();
 
             // Title field
-            final TextField titleField = new TextField("Titel");
+            final TextField titleField = new TextField(getTranslation("view.job.text.title"));
             titleField.setValue(jobDTO.getTitle());
             titleField.setReadOnly(true);
 
             // Description Field (TextArea for more rows)
-            final TextArea descriptionField = new TextArea("Beschreibung");
+            final TextArea descriptionField = new TextArea(getTranslation("view.job.text.description"));
             descriptionField.setValue(jobDTO.getDescription());
             descriptionField.setReadOnly(true);
 
             // Salary Field
-            final TextField salaryField = new TextField("Gehalt");
+            final TextField salaryField = new TextField(getTranslation("view.job.text.salary"));
             salaryField.setValue(jobDTO.getSalary().toString());
             salaryField.setReadOnly(true);
 
             // Location Field
-            final TextField locationField = new TextField("Ort");
+            final TextField locationField = new TextField(getTranslation("view.job.text.location"));
             locationField.setValue(jobDTO.getLocation());
             locationField.setReadOnly(true);
 
-            final TextField contactdetailsField = new TextField("Kontaktdaten");
+            final TextField contactdetailsField = new TextField(getTranslation("view.job.text.contactDetails"));
             contactdetailsField.setValue(jobDTO.getContactdetails());
             contactdetailsField.setReadOnly(true);
 
