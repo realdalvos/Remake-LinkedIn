@@ -101,11 +101,11 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
         // Only if role is equal to company
         if(this.authorizationControl.hasUserRole(loginControl.getCurrentUser(), Globals.Roles.company)) {
-            bar.addItem("Neuen Job erstellen", e -> navigateHandler.navigateToNewJob());
+            bar.addItem(getTranslation("view.main.bar.newJob"), e -> navigateHandler.navigateToNewJob());
         }
 
         // for all roles add following bar items
-        bar.addItem("Abmelden" , e -> logoutUser());
+        bar.addItem(getTranslation("view.main.bar.logout"), e -> logoutUser());
         topRightPanel.add(bar);
 
         layout.add( topRightPanel );
@@ -136,7 +136,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // add logo
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        logoLayout.add(new H1("HBRS Collab"));
+        logoLayout.add(new H1(getTranslation("view.main.logo")));
 
         // add menu with tabs
         layout.add(logoLayout, menu);
@@ -172,13 +172,13 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // if the user has the role "student" he has the tabs "Jobs"
         if(this.authorizationControl.hasUserRole(loginControl.getCurrentUser(), Globals.Roles.student)) {
             logger.info("User is student");
-            tabs = Utils.append(tabs, createTab("Jobs", JobsView.class));
-            tabs = Utils.append(tabs, createTab("Profile", ProfileView.class));
+            tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.jobs"), JobsView.class));
+            tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.profile"), ProfileView.class));
         } else
             // has the user the role "company" they have the tabs "My Ads"
             if(this.authorizationControl.hasUserRole(loginControl.getCurrentUser(), Globals.Roles.company)) {
                 logger.info("User is company");
-                tabs = Utils.append(tabs, createTab("Meine Stellen", MyAdsView.class));
+                tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.myjobs"), MyAdsView.class));
             }
         return tabs;
     }
@@ -203,7 +203,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         viewTitle.setText(getCurrentPageTitle());
 
         // set firstname of the current user
-        helloUser.setText("Hallo "  + this.getCurrentNameOfUser() );
+        helloUser.setText(getTranslation("view.main.h1.greeting") + " " + this.getCurrentNameOfUser() );
     }
 
     private Optional<Tab> getTabForComponent(Component component) {
