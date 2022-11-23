@@ -15,10 +15,8 @@ public class TranslationProvider implements I18NProvider {
     public static final String BUNDLE_PREFIX = "translate";
 
     public final Locale LOCALE_DE = new Locale("de");
-    public final Locale LOCALE_EN = new Locale("en");
 
-    private List<Locale> locales = Collections
-            .unmodifiableList(Arrays.asList(LOCALE_DE, LOCALE_EN));
+    private final List<Locale> locales = List.of(LOCALE_DE);
 
     @Override
     public List<Locale> getProvidedLocales() {

@@ -24,16 +24,16 @@ import java.util.stream.Stream;
 @PageTitle("Jobs")
 public class JobsView extends Div {
     // interactive search field
-    private final TextField searchField = new TextField("Jobsuche");
-    private final Button searchButton = new Button("Suchen");
+    private final TextField searchField = new TextField(getTranslation("view.job.text.search"));
+    private final Button searchButton = new Button(getTranslation("view.job.button.search"));
 
     // Create a Grid bound to the list
     private final Grid<JobDTO> grid = new Grid<>();
 
     public JobsView(JobControl jobControl) {
         // Header
-        grid.addColumn(JobDTO::getTitle).setHeader("Titel").setSortable(true);
-        grid.addColumn(JobDTO::getSalary).setHeader("Bezahlung").setSortable(true);
+        grid.addColumn(JobDTO::getTitle).setHeader(getTranslation("view.job.text.title")).setSortable(true);
+        grid.addColumn(JobDTO::getSalary).setHeader(getTranslation("view.job.text.salary")).setSortable(true);
         grid.setHeightByRows(true);
         searchField.addKeyPressListener(Key.ENTER, event -> searchButton.clickInClient());
         // pass relevant job list to grid
@@ -42,10 +42,10 @@ public class JobsView extends Div {
         grid.setItemDetailsRenderer(new ComponentRenderer<>(job -> {
             FormLayout layout = new FormLayout();
 
-            final TextField companyName = new TextField("Unternehmen");
-            final TextField jobLocation = new TextField("Arbeitsort");
-            final TextField companyContactDetails = new TextField("Kontaktdaten");
-            final TextArea jobDescription = new TextArea("Beschreibung");
+            final TextField companyName = new TextField(getTranslation("view.job.text.company"));
+            final TextField jobLocation = new TextField(getTranslation("view.job.text.location"));
+            final TextField companyContactDetails = new TextField(getTranslation("view.job.text.contactDetails"));
+            final TextArea jobDescription = new TextArea(getTranslation("view.job.text.description"));
 
             // set all fields with job details
             companyName.setValue(jobControl.getCompanyOfJob(job));
