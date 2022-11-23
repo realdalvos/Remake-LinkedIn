@@ -809,4 +809,9 @@ org.hbrs.se2.project.services.factory.EntityCreationService --> org.hbrs.se2.pro
 org.hbrs.se2.project.services.factory.EntityCreationService <-- org.hbrs.se2.project.control.RegistrationControl
 org.hbrs.se2.project.services.factory.EntityCreationService <-- org.hbrs.se2.project.control.ProfileControl
 org.hbrs.se2.project.services.factory.EntityCreationService <-- org.hbrs.se2.project.control.JobControl
+org.hbrs.se2.project.services.impl.JobService <-- org.hbrs.se2.project.control.JobControl
+org.hbrs.se2.project.services.impl.LoginService <-- org.hbrs.se2.project.control.LoginControl
+org.hbrs.se2.project.services.impl.ProfileService <-- org.hbrs.se2.project.control.ProfileControl
+org.hbrs.se2.project.services.impl.RegistrationService<-- org.hbrs.se2.project.control.RegistrationControl
+org.hbrs.se2.project.services.impl.ValidationService<-- org.hbrs.se2.project.control.ProfileControl
 @enduml
