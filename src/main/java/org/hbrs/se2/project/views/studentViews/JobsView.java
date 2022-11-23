@@ -81,7 +81,7 @@ public class JobsView extends Div {
         grid.setHeightByRows(true);
         searchField.addKeyPressListener(Key.ENTER, event -> searchButton.clickInClient());
         // pass relevant job list to grid
-        searchButton.addClickListener(event -> grid.setItems(jobControl.getJobsMatchingKeyword(searchField.getValue())));
+        searchButton.addClickListener(event -> {grid.setItems(jobControl.getJobsMatchingKeyword(searchField.getValue())); searchField.clear();});
         // set items details renderer
         grid.setItemDetailsRenderer(new ComponentRenderer<>(job -> {
             FormLayout formLayout = new FormLayout();
