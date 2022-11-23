@@ -1,10 +1,15 @@
 package org.hbrs.se2.project.views.studentViews;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.*;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.router.PageTitle;
@@ -46,6 +51,9 @@ public class ProfileView extends Div {
     private final Grid<MajorDTO> gridMajors = new Grid<>();
     private final Grid<TopicDTO> gridTopics = new Grid<>();
     private final Grid<SkillDTO> gridSkills = new Grid<>();
+    private Grid<String> newMajorsGrid, newTopicsGrid, newSkillsGrid;
+    private List<String> newMajors, newTopics, newSkills;
+
 
     private Button button;
 
@@ -82,9 +90,6 @@ public class ProfileView extends Div {
     }
 
     private void editLayout() {
-        Grid<String> newMajorsGrid, newTopicsGrid, newSkillsGrid;
-        List<String> newMajors, newTopics, newSkills;
-
         Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(
                 field -> {
                     field.setReadOnly(false);
@@ -127,18 +132,10 @@ public class ProfileView extends Div {
         button = new Button("Profil speichern");
         formLayout.addComponentAtIndex(15, button);
         button.addClickListener(buttonClickEvent -> {
-            try {
-                if (userBinder.isValid() && studentBinder.isValid()) {
-                    profileControl.saveStudentData(
-                            userBinder.getBean(), studentBinder.getBean(),
-                            newMajors, newTopics, newSkills);
-                    // reload page to get updated view
-                    UI.getCurrent().getPage().reload();
-                } else {
-                    logger.info("Invalid Data Input");
-                }
-            } catch (DatabaseUserException e) {
-                logger.error("Something went wrong with saving student data");
+            if (userBinder.isValid() && studentBinder.isValid()) {
+                confirm().open();
+            } else {
+                Utils.makeDialog("Überprüfe bitte deine Angaben auf Korrektheit");
             }
         });
     }
@@ -224,6 +221,32 @@ public class ProfileView extends Div {
                 event -> userBinder.validate());
         matrikelnumber.addValueChangeListener(
                 event -> studentBinder.validate());
+    }
+
+    private Dialog confirm() {
+        Dialog dialog = new Dialog();
+        dialog.setWidth("500");
+        dialog.setHeight("200");
+        //dialog.add(new Text("Möchtest du die Änderungen an deinem Profil speichern?"));
+        Button close = new Button("Abbrechen");
+        close.addClickListener(event -> dialog.close());
+        Button reject = new Button("Verwerfen");
+        reject.addClickListener(event -> UI.getCurrent().getPage().reload());
+        Button save = new Button("Speichern");
+        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        save.addClickListener(event -> {
+            try {
+                profileControl.saveStudentData(
+                        userBinder.getBean(), studentBinder.getBean(),
+                        newMajors, newTopics, newSkills);
+                // reload page to get updated view
+                UI.getCurrent().getPage().reload();
+            } catch (DatabaseUserException e) {
+                logger.error("Something went wrong with saving student data");
+            }
+        });
+        dialog.add(new VerticalLayout(new Text("Möchtest du die Änderungen an deinem Profil speichern?"), new HorizontalLayout(close, reject, save)));
+        return dialog;
     }
 
 }
