@@ -10,6 +10,7 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.validator.EmailValidator;
 import org.hbrs.se2.project.control.RegistrationControl;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.helper.navigateHandler;
@@ -66,5 +67,32 @@ public abstract class RegisterView extends VerticalLayout {
         formLayout.setColspan(email, 2);
         return formLayout;
     }
-}
 
+    protected void setUserBinder() {
+        // Map input field values to DTO variables based on chosen names
+        userBinder.bindInstanceFields(this);
+        // checks if both passwords are equal
+        Binder.Binding<UserDTOImpl, String> confirmPasswordBinding =
+                userBinder
+                        .forField(confirmPassword)
+                        .asRequired()
+                        .withValidator(pw -> pw.equals(userPassword.getValue()), "Passwörter stimmen nicht überein")
+                        .bind(UserDTOImpl::getPassword, UserDTOImpl::setPassword);
+        //The Pattern matches from left to right: At least one letter, at least one digit, at lest one special character and at least 8 characters
+        userBinder
+                .withValidator(validation -> userPassword.getValue().matches("^(?=.+[a-zA-Z])(?=.+[\\d])(?=.+[\\W]).{8,}$"),"Dein Passwort ist wahrscheinlich nicht sicher genug. Halte dich bitte an die Vorgaben");
+        userBinder
+                .forField(username)
+                .asRequired("Darf nicht leer sein")
+                .withValidator(validation -> registrationControl.checkUsernameUnique(username.getValue()), "Benutzername existiert bereits")
+                .bind(UserDTOImpl::getUsername, UserDTOImpl::setUsername);
+        userBinder
+                .forField(email)
+                .asRequired("Darf nicht leer sein")
+                .withValidator(new EmailValidator("Keine gültige EMail Adresse"))
+                .withValidator(validation -> registrationControl.checkEmailUnique(email.getValue()), "Email existiert bereits")
+                .bind(UserDTOImpl::getEmail, UserDTOImpl::setEmail);
+        userPassword.addValueChangeListener(
+                event -> confirmPasswordBinding.validate());
+    }
+}

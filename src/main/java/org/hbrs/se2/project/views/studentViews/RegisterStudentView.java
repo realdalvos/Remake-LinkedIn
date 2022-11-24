@@ -31,7 +31,7 @@ public class RegisterStudentView extends RegisterView {
     private final TextField firstname = new TextField("Vorname");
     private final TextField lastname = new TextField("Nachname");
     private final TextField matrikelnumber = new TextField("Matrikelnummer");
-    private final Binder<StudentDTOImpl> concreteUserBinder = new BeanValidationBinder<>(StudentDTOImpl.class);
+    private final Binder<StudentDTOImpl> studentBinder = new BeanValidationBinder<>(StudentDTOImpl.class);
 
     public RegisterStudentView() {
         setSizeFull();
@@ -45,7 +45,7 @@ public class RegisterStudentView extends RegisterView {
         registerCompanyButton.setEnabled(true);
 
         HorizontalLayout buttonLayout = new HorizontalLayout();
-        buttonLayout.add(new Component[]{registerStudentButton,registerCompanyButton});
+        buttonLayout.add(registerStudentButton,registerCompanyButton);
         buttonLayout.setAlignItems(Alignment.CENTER);
 
         //set layout for text input
@@ -58,10 +58,9 @@ public class RegisterStudentView extends RegisterView {
         registerCompanyButton.addClickListener(event -> navigateHandler.navigateToRegisterCompanyPage());
 
         userBinder.setBean(new UserDTOImpl(Globals.Roles.student));
-        //The Pattern matches from left to right: At least one letter, at least one digit, at lest one special character and at least 8 characters
-        userBinder.withValidator(validation -> userPassword.getValue().matches("^(?=.+[a-zA-Z])(?=.+[\\d])(?=.+[\\W]).{8,}$"),"Dein Passwort ist wahrscheinlich nicht sicher genug. Halte dich bitte an die Vorgaben");
+        setUserBinder();
+        setStudentBinder();
 
-        concreteUserBinder.setBean(new StudentDTOImpl());
         // add all elements/components to View
         add(registerText);
         add(buttonLayout);
@@ -70,29 +69,15 @@ public class RegisterStudentView extends RegisterView {
         add(loginButton());
         this.setAlignItems(Alignment.CENTER);
 
-        // Map input field values to DTO variables based on chosen names
-        userBinder.bindInstanceFields(this);
-        // checks if both passwords are equal
-        Binder.Binding<UserDTOImpl, String> confirmPasswordBinding =
-                userBinder
-                        .forField(confirmPassword)
-                        .asRequired()
-                        .withValidator(pw -> pw.equals(userPassword.getValue()), "Passwörter stimmen nicht überein")
-                        .bind(UserDTOImpl::getPassword, UserDTOImpl::setPassword);
-        concreteUserBinder.bindInstanceFields(this);
-
-        userPassword.addValueChangeListener(
-                event -> confirmPasswordBinding.validate());
-
         confirmButton.addClickListener(event -> {
             // register new Company with passed in values from register form
             try {
-                if (userBinder.isValid() && concreteUserBinder.isValid()) {
+                if (userBinder.isValid() && studentBinder.isValid()) {
                     // function to register new company
-                    registrationControl.registerStudent(userBinder.getBean(), concreteUserBinder.getBean());
+                    registrationControl.registerStudent(userBinder.getBean(), studentBinder.getBean());
                     navigateHandler.navigateToLoginPage();
                 } else {
-                    ui.makeDialog("Fülle bitte alle Felder aus");
+                    ui.makeDialog("Überprüfe bitte deine Eingaben");
                     logger.info("Not all fields have been filled in");
                 }
             } catch (Exception e) {
@@ -102,5 +87,17 @@ public class RegisterStudentView extends RegisterView {
                 logger.error("An error has occurred while saving to the database", e);
             }
         });
+    }
+
+    private void setStudentBinder() {
+        studentBinder.setBean(new StudentDTOImpl());
+        studentBinder.bindInstanceFields(this);
+        studentBinder
+                .forField(matrikelnumber)
+                .asRequired("Darf nicht leer sein")
+                .withValidator(validation -> matrikelnumber.getValue().matches("-?\\d+")
+                        && matrikelnumber.getValue().length() <= 7, "Keine gültige Matrikelnummer")
+                .withValidator(validation -> registrationControl.checkMatrikelnumberUnique(matrikelnumber.getValue()), "Matrikelnummer existiert bereits")
+                .bind(StudentDTOImpl::getMatrikelnumber, StudentDTOImpl::setMatrikelnumber);
     }
 }
