@@ -20,14 +20,11 @@ public class CommonUIElementProvider {
     public void makeDialog(String message) {
         VerticalLayout layout = new VerticalLayout();
         Dialog dialog = new Dialog();
-        // close button
-        Button closeb = new Button("OK");
-        closeb.addClickListener(event -> dialog.close());
-        layout.add(new Text(message), closeb);
-        layout.setHorizontalComponentAlignment(FlexComponent.Alignment.END, closeb);
+        Button close = new Button("OK");
+        close.addClickListener(event -> dialog.close());
+        layout.add(new Text(message), close);
+        layout.setHorizontalComponentAlignment(FlexComponent.Alignment.END, close);
         dialog.add(layout);
-        dialog.setWidth("400px");
-        dialog.setHeight("150px");
         dialog.open();
     }
 
@@ -48,9 +45,8 @@ public class CommonUIElementProvider {
     }
 
     public void makeConfirm(String message, Button save) {
+        VerticalLayout vLayout = new VerticalLayout();
         Dialog dialog = new Dialog();
-        dialog.setWidth("500px");
-        dialog.setHeight("200px");
         Button close = new Button("Abbrechen");
         close.addClickListener(event -> dialog.close());
         Button reject = new Button("Verwerfen");
@@ -58,7 +54,11 @@ public class CommonUIElementProvider {
         save.setText("Speichern");
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         save.addClickListener(event -> dialog.close());
-        dialog.add(new VerticalLayout(new Text(message), new HorizontalLayout(close, reject, save)));
+        HorizontalLayout hLayout = new HorizontalLayout();
+        hLayout.add(close, reject, save);
+        vLayout.add(new Text(message), hLayout);
+        vLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, hLayout);
+        dialog.add(vLayout);
         dialog.open();
     }
 
