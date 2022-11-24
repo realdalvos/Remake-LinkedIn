@@ -5,6 +5,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -79,20 +80,29 @@ public class MyAdsView extends Div {
                         layout.add(field);
                     }
             );
-            layout.add(edit);
+            HorizontalLayout buttons = new HorizontalLayout(edit);
+            layout.add(buttons);
             edit.addClickListener(editEvent -> {
                 Stream.of(title, description, salary, location, contactdetails).forEach(
                         field -> field.setReadOnly(false)
                 );
-                layout.remove(edit);
+                buttons.remove(edit);
+                Button cancel = new Button("Abbrechen");
                 Button save = new Button("Speichern");
-                layout.add(save);
+                buttons.add(cancel, save);
                 save.addClickListener(saveEvent -> {
                     if (binder.isValid()) {
                         ui.makeConfirm("Möchten Sie die Änderungen an diesem Jobangebot speichern?", confirm(binder.getBean()));
                     } else {
                         ui.makeDialog("Überprüfen Sie bitte Ihre Angaben auf Korrektheit");
                     }
+                });
+                cancel.addClickListener(saveEvent -> {
+                    Stream.of(title, description, salary, location, contactdetails).forEach(
+                            field -> field.setReadOnly(true)
+                    );
+                    buttons.remove(cancel, save);
+                    buttons.add(edit);
                 });
             });
 
