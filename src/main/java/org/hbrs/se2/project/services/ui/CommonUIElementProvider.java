@@ -31,6 +31,22 @@ public class CommonUIElementProvider {
         dialog.open();
     }
 
+    public void makeYesNoDialog(String message, Button yes) {
+        VerticalLayout vLayout = new VerticalLayout();
+        Dialog dialog = new Dialog();
+        Button no = new Button("Nein");
+        no.addClickListener(event -> dialog.close());
+        yes.setText("Ja");
+        yes.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        yes.addClickListener(event -> dialog.close());
+        HorizontalLayout hLayout = new HorizontalLayout();
+        vLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.END, hLayout);
+        hLayout.add(no, yes);
+        vLayout.add(new Text(message), hLayout);
+        dialog.add(vLayout);
+        dialog.open();
+    }
+
     public void makeConfirm(String message, Button save) {
         Dialog dialog = new Dialog();
         dialog.setWidth("500px");
