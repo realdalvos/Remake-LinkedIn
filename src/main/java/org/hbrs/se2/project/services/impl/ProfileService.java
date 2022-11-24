@@ -17,6 +17,8 @@ public class ProfileService implements ProfileServiceInterface {
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
+    private CompanyRepository companyRepository;
+    @Autowired
     private StudentHasMajorRepository studentHasMajorRepository;
     @Autowired
     private MajorRepository majorRepository;
@@ -38,6 +40,12 @@ public class ProfileService implements ProfileServiceInterface {
         major.parallelStream().forEach(m -> updateStudyMajor(m, student.getStudentid()));
         topic.parallelStream().forEach(t -> updateTopics(t, student.getStudentid()));
         skill.parallelStream().forEach(s -> updateSkills(s, student.getStudentid()));
+    }
+
+    @Override
+    public void saveCompanyData(UserDTO user, CompanyDTO company) {
+        userRepository.save(entityCreationService.userFactory().createEntity(user));
+        companyRepository.save(entityCreationService.companyFactory().createEntity(company));
     }
 
     private void updateStudyMajor(String major, int studentid) {
@@ -84,6 +92,11 @@ public class ProfileService implements ProfileServiceInterface {
     @Override
     public StudentDTO getStudentProfile(int userid) {
         return studentRepository.findStudentByUserid(userid);
+    }
+
+    @Override
+    public CompanyDTO getCompanyProfile(int userid) {
+        return companyRepository.findCompanyByUserid(userid);
     }
 
     @Override
