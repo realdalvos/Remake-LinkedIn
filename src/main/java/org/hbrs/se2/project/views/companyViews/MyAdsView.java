@@ -19,7 +19,7 @@ import org.hbrs.se2.project.views.AppView;
 /**
  * Company - My Ads List View
  */
-@Route(value = Globals.Pages.MYADS_VIEW, layout = AppView.class)
+@Route(value = Globals.Pages.MYADS_VIEW, layout = AppView.class, registerAtStartup = false)
 @PageTitle("Meine Stellen")
 public class MyAdsView extends Div {
 

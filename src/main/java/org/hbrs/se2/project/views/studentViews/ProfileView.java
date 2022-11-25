@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-@Route(value = Globals.Pages.PROFILE_VIEW, layout = AppView.class)
+@Route(value = Globals.Pages.PROFILE_VIEW, layout = AppView.class, registerAtStartup = false)
 @PageTitle("Profile")
 public class ProfileView extends Div {
 

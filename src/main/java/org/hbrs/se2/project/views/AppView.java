@@ -30,7 +30,7 @@ import org.hbrs.se2.project.views.studentViews.ProfileView;
 import org.slf4j.Logger;
 import java.util.Optional;
 
-@Route(value=Globals.Pages.MAIN_VIEW)
+@Route(value=Globals.Pages.MAIN_VIEW, registerAtStartup = false)
 @PWA(name="HBRS Collab", shortName = "HBRScollab", enableInstallPrompt = false)
 public class AppView extends AppLayout implements BeforeEnterObserver {
     private final Logger logger = Utils.getLogger(this.getClass().getName());
