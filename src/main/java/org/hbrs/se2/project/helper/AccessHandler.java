@@ -34,7 +34,8 @@ public class AccessHandler {
         configuration.removeRoute(RegisterStudentView.class);
     }
 
-    /**Sets the default access. A user that is not logged in can visit both register pages and the login page.*/
+    /**
+     * Sets the default access. A user that is not logged in can visit both register pages and the login page.*/
     public static void setDefaultAccess() {
         RouteConfiguration configuration = RouteConfiguration
                 .forSessionScope();
