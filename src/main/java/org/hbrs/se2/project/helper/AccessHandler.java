@@ -34,7 +34,7 @@ public class AccessHandler {
             defaultView = JobsView.class;
         }
 
-        //mapping path "" to defaultView which differs in case of student and company
+        //mapping path "", which previously led to the LoginView, to defaultView which differs in case of student and company
         configuration.setRoute("", defaultView, AppView.class);
         //removing Route to RegisterViews
         configuration.removeRoute(RegisterCompanyView.class);
