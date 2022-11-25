@@ -30,7 +30,7 @@ public abstract class RegisterView extends VerticalLayout {
 
     protected Button loginButton() {
         Button loginButton = new Button("Zum Login");
-        loginButton.addClickListener(event -> navigateHandler.navigateToLoginPage());
+        loginButton.addClickListener(event -> navigateHandler.navigateToDefaultPage());
         return loginButton;
     }
 
