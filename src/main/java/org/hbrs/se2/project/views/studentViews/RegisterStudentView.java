@@ -22,7 +22,7 @@ import org.slf4j.Logger;
  * Register View - Form to register as a student
  */
 
-@Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
+@Route(value = Globals.Pages.REGISTER_STUDENT_VIEW, registerAtStartup = false)
 @PageTitle("Als Student registrieren")
 public class RegisterStudentView extends RegisterView {
     private final Logger logger = Utils.getLogger(this.getClass().getName());
@@ -90,7 +90,7 @@ public class RegisterStudentView extends RegisterView {
                 if (userBinder.isValid() && concreteUserBinder.isValid()) {
                     // function to register new company
                     registrationControl.registerStudent(userBinder.getBean(), concreteUserBinder.getBean());
-                    navigateHandler.navigateToLoginPage();
+                    navigateHandler.navigateToDefaultPage();
                 } else {
                     ui.makeDialog("Fülle bitte alle Felder aus");
                     logger.info("Not all fields have been filled in");
