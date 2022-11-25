@@ -11,17 +11,16 @@ import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.control.LoginControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
+import org.hbrs.se2.project.helper.AccessHandler;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
-import org.hbrs.se2.project.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -29,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Show Login View to user when not logged in
  */
 @Route(value="")
-@RouteAlias(value=Globals.Pages.LOGIN_VIEW)
 @Theme(themeFolder = "mytheme", variant = Lumo.DARK)
 @PageTitle("Login")
 public class LoginView extends VerticalLayout {
@@ -60,6 +58,7 @@ public class LoginView extends VerticalLayout {
     }
 
     public LoginView(LoginControl loginControl) {
+        AccessHandler.setDefaultAccess();
         setSizeFull();
         Avatar avatarBasic = new Avatar();
         LoginForm component = new LoginForm();
