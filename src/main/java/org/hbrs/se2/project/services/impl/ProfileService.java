@@ -1,6 +1,8 @@
 package org.hbrs.se2.project.services.impl;
 
 import org.hbrs.se2.project.dtos.*;
+import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
+import org.hbrs.se2.project.entities.Student;
 import org.hbrs.se2.project.repository.*;
 import org.hbrs.se2.project.services.ProfileServiceInterface;
 import org.hbrs.se2.project.services.factory.EntityCreationService;
@@ -146,4 +148,71 @@ public class ProfileService implements ProfileServiceInterface {
         studentHasSkillRepository.deleteByStudentidAndSkillid(studentRepository.findStudentByUserid(userid).getStudentid(), skillid);
     }
 
+    public List<StudentDTO> getStudentsMatchingKeyword(String keyword) {
+        // get all data for filtering
+        List<StudentDTO> matchingStudents = new ArrayList<>();
+        // String array for saving all data
+        List<String> list = new ArrayList<>();
+        for(StudentDTO studentDTO : getAllStudents()) {
+            list.clear();
+            // get skills, majors, topics of one student
+            List<SkillDTO> skills = getSkillOfStudent(studentDTO.getUserid());
+            List<TopicDTO> topics = getTopicOfStudent(studentDTO.getUserid());
+            List<MajorDTO> majors = getMajorOfStudent(studentDTO.getUserid());
+
+            // save university into string array
+            if(studentDTO.getUniversity() != null) {
+                list.add(studentDTO.getUniversity());
+            }
+
+            // save skills into string array
+            for(SkillDTO skill : skills) {
+                list.add(skill.getSkill());
+            }
+
+            // save topics into string array
+            for(TopicDTO topic : topics) {
+                list.add(topic.getTopic());
+            }
+
+            // save majors into string array
+            for(MajorDTO major : majors) {
+                list.add(major.getMajor());
+            }
+
+            for(String elem : list) {
+                if(elem.equalsIgnoreCase(keyword)) {
+                    matchingStudents.add(studentDTO);
+                    System.out.println(studentDTO.getStudentid());
+                }
+            }
+        }
+        return matchingStudents;
+    }
+
+    public List<StudentDTO> getAllStudents() {
+        // empty list studentDTOs
+        List<StudentDTO> studentDTOs = new ArrayList<>();
+        // get all students
+        List<Student> students = studentRepository.findAll();
+        // transform all student entities into studentDTOs
+        StudentDTO studentDTO;
+        for(Student student : students) {
+            studentDTO = new StudentDTOImpl(
+                    student.getUserid(),
+                    student.getStudentid(),
+                    student.getFirstname(),
+                    student.getLastname(),
+                    student.getMatrikelnumber(),
+                    student.getUniversity()
+            );
+            studentDTOs.add(studentDTO);
+        }
+        return studentDTOs;
+    }
+
+    public UserDTO getUserByUserid(int userid) {
+        return userRepository.findUserByUserid(userid);
+    }
 }
+

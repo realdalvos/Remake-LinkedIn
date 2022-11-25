@@ -63,4 +63,8 @@ public class ProfileControl {
         profileService.removeSkill(userid, skillid);
     }
 
+    public List<StudentDTO> getStudentsMatchingKeyword(String keyword) {return profileService.getStudentsMatchingKeyword(keyword);}
+
+    public UserDTO getUserByUserid(int id) {return profileService.getUserByUserid(id);}
+
 }

@@ -25,6 +25,7 @@ import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.companyViews.MyAdsView;
+import org.hbrs.se2.project.views.companyViews.SearchStudentsView;
 import org.hbrs.se2.project.views.studentViews.JobsView;
 import org.hbrs.se2.project.views.studentViews.ProfileView;
 import org.slf4j.Logger;
@@ -179,6 +180,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             if(this.authorizationControl.hasUserRole(loginControl.getCurrentUser(), Globals.Roles.company)) {
                 logger.info("User is company");
                 tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.myjobs"), MyAdsView.class));
+                tabs = Utils.append(tabs, createTab("Studentensuche", SearchStudentsView.class));
             }
         return tabs;
     }
