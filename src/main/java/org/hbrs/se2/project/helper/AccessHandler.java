@@ -18,18 +18,25 @@ public class AccessHandler {
         RouteConfiguration configuration = RouteConfiguration
                 .forSessionScope();
 
+        /*setAnnotatedRoute activates the Route specified in given View for this session
+            When adding a new view, its Route also has to be set to "RegisterAtStartup = false" and
+            get activated here with setAnnotatedRoute(NewView.class). */
         Class defaultView;
         if (user.getRole().equals(Globals.Roles.company)) {  //If company
             configuration.setAnnotatedRoute(MyAdsView.class);
             configuration.setAnnotatedRoute(NewJobAdView.class);
+
             defaultView = MyAdsView.class;
         } else {    //else student
             configuration.setAnnotatedRoute(JobsView.class);
             configuration.setAnnotatedRoute(ProfileView.class);
+
             defaultView = JobsView.class;
         }
 
+        //mapping path "" to defaultView which differs in case of student and company
         configuration.setRoute("", defaultView, AppView.class);
+        //removing Route to RegisterViews
         configuration.removeRoute(RegisterCompanyView.class);
         configuration.removeRoute(RegisterStudentView.class);
     }
