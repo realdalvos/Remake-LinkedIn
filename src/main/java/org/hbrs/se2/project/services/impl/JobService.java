@@ -81,18 +81,6 @@ public class JobService implements JobServiceInterface {
      */
     @Override
     public List<JobDTO> getAllJobs() {
-        // empty list jobDTOs
-        List<JobDTO> jobDTOs = new ArrayList<>();
-        // get all jobs
-        List<Job> jobs = jobRepository.findAll();
-        // transform all job entities into jobDTOs
-        JobDTO jobDTO;
-        for(Job job : jobs) {
-            jobDTO = new JobDTOImpl(
-                    job.getJobid(), job.getCompanyid(), job.getTitle(), job.getDescription(), job.getSalary(), job.getLocation(), job.getContactdetails()
-            );
-            jobDTOs.add(jobDTO);
-        }
-        return jobDTOs;
+        return jobRepository.getAll();
     }
 }
