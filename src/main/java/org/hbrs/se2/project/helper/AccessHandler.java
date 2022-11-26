@@ -4,11 +4,12 @@ import com.vaadin.flow.router.RouteConfiguration;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
+import org.hbrs.se2.project.views.companyViews.CompanyProfileView;
 import org.hbrs.se2.project.views.companyViews.MyAdsView;
 import org.hbrs.se2.project.views.companyViews.NewJobAdView;
 import org.hbrs.se2.project.views.companyViews.RegisterCompanyView;
 import org.hbrs.se2.project.views.studentViews.JobsView;
-import org.hbrs.se2.project.views.studentViews.ProfileView;
+import org.hbrs.se2.project.views.studentViews.StudentProfileView;
 import org.hbrs.se2.project.views.studentViews.RegisterStudentView;
 
 public class AccessHandler {
@@ -25,11 +26,12 @@ public class AccessHandler {
         if (user.getRole().equals(Globals.Roles.company)) {  //If company
             configuration.setAnnotatedRoute(MyAdsView.class);
             configuration.setAnnotatedRoute(NewJobAdView.class);
+            configuration.setAnnotatedRoute(CompanyProfileView.class);
 
             defaultView = MyAdsView.class;
         } else {    //else student
             configuration.setAnnotatedRoute(JobsView.class);
-            configuration.setAnnotatedRoute(ProfileView.class);
+            configuration.setAnnotatedRoute(StudentProfileView.class);
 
             defaultView = JobsView.class;
         }

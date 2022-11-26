@@ -23,6 +23,10 @@ public class ProfileControl {
         profileService.saveStudentData(user, student, major, topic, skill);
     }
 
+    public void saveCompanyData(UserDTO user, CompanyDTO company) {
+        profileService.saveCompanyData(user, company);
+    }
+
     public boolean checkUsernameUnique(String username) {
         return validationService.checkUsernameUnique(username);
     }
@@ -37,6 +41,10 @@ public class ProfileControl {
 
     public StudentDTO getStudentProfile(int userid) {
         return profileService.getStudentProfile(userid);
+    }
+
+    public CompanyDTO getCompanyProfile(int userid) {
+        return profileService.getCompanyProfile(userid);
     }
 
     public List<MajorDTO> getMajorOfStudent(int userid) {
