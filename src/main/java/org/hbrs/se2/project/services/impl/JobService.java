@@ -6,7 +6,6 @@ import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;
 import org.hbrs.se2.project.services.JobServiceInterface;
 import org.hbrs.se2.project.services.factory.EntityCreationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,16 +15,16 @@ import java.util.stream.Collectors;
 @Service
 public class JobService implements JobServiceInterface {
 
-    @Autowired
-    private EntityCreationService entityCreationService;
+    private final EntityCreationService entityCreationService;
 
     private final CompanyRepository companyRepository;
 
     private final JobRepository jobRepository;
 
-    public JobService(CompanyRepository companyRepository, JobRepository jobRepository) {
+    public JobService(CompanyRepository companyRepository, JobRepository jobRepository, EntityCreationService entityCreationService) {
         this.companyRepository = companyRepository;
         this.jobRepository = jobRepository;
+        this.entityCreationService = entityCreationService;
     }
 
     @Override
