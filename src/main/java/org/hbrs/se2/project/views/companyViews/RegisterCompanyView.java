@@ -17,7 +17,7 @@ import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.RegisterView;
 import org.slf4j.Logger;
 
-@Route(value = Globals.Pages.REGISTER_COMPANY_VIEW)
+@Route(value = Globals.Pages.REGISTER_COMPANY_VIEW, registerAtStartup = false)
 @PageTitle("Als Unternehmen registrieren")
 public class RegisterCompanyView extends RegisterView {
     private final Logger logger = Utils.getLogger(this.getClass().getName());

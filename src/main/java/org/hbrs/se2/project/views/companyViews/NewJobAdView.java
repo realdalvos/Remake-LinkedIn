@@ -28,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Company - Create new Job Post / Job Ad
  */
 
-@Route(value = Globals.Pages.NEW_ADD_VIEW, layout = AppView.class)
+@Route(value = Globals.Pages.NEW_ADD_VIEW, layout = AppView.class, registerAtStartup = false)
 @PageTitle("Anzeige erstellen")
 public class NewJobAdView extends Div {
 

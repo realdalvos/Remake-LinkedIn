@@ -22,7 +22,7 @@ import org.slf4j.Logger;
  * Register View - Form to register as a student
  */
 
-@Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
+@Route(value = Globals.Pages.REGISTER_STUDENT_VIEW, registerAtStartup = false)
 @PageTitle("Als Student registrieren")
 public class RegisterStudentView extends RegisterView {
     private final Logger logger = Utils.getLogger(this.getClass().getName());

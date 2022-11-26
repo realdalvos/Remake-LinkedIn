@@ -29,7 +29,6 @@ import org.hbrs.se2.project.views.studentViews.StudentProfileView;
 import org.slf4j.Logger;
 import java.util.Optional;
 
-@Route(value=Globals.Pages.MAIN_VIEW)
 @PWA(name="HBRS Collab", shortName = "HBRScollab", enableInstallPrompt = false)
 public class AppView extends AppLayout implements BeforeEnterObserver {
     private final Logger logger = Utils.getLogger(this.getClass().getName());
@@ -59,15 +58,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         menu = createMenu();
         addToDrawer(createDrawerContent(menu));
     }
-    private boolean checkIfUserIsLoggedIn() {
-        // if user is not logged in navigate to login view
-        UserDTO userDTO = loginControl.getCurrentUser();
-        if (userDTO == null) {
-            navigateHandler.navigateToLoginPage();
-            return false;
-        }
-        return true;
-    }
+
     private Component createHeaderContent() {
         authorizationControl = new AuthorizationControl();
         // a few basic settings
@@ -192,9 +183,6 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     @Override
     protected void afterNavigation() {
         super.afterNavigation();
-
-        // if user is not logged in navigate to login view
-        if ( !checkIfUserIsLoggedIn() ) return;
 
         // selected tab is highlighted
         getTabForComponent(getContent()).ifPresent(menu::setSelectedTab);
