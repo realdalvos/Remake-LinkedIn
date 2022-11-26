@@ -4,14 +4,18 @@ import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.StudentDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.services.impl.RegistrationService;
+import org.hbrs.se2.project.services.impl.ValidationService;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class RegistrationControl {
-    final RegistrationService registrationService;
+    private final RegistrationService registrationService;
 
-    public RegistrationControl(RegistrationService registrationService) {
+    private final ValidationService validationService;
+
+    public RegistrationControl(RegistrationService registrationService, ValidationService validationService) {
         this.registrationService = registrationService;
+        this.validationService = validationService;
     }
 
     /**
@@ -33,5 +37,17 @@ public class RegistrationControl {
     public void registerCompany(UserDTO user, CompanyDTO company) throws Exception {
         registrationService.registerCompany(user, company);
     }
-}
 
+    public boolean checkUsernameUnique(String username) {
+        return validationService.checkUsernameUnique(username);
+    }
+
+    public boolean checkEmailUnique(String email) {
+        return validationService.checkEmailUnique(email);
+    }
+
+    public boolean checkMatrikelnumberUnique(String matrikelnumber) {
+        return validationService.checkMatrikelnumberUnique(matrikelnumber);
+    }
+
+}

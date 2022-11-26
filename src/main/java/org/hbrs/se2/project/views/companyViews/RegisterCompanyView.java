@@ -24,7 +24,7 @@ public class RegisterCompanyView extends RegisterView {
 
     // text fields
     private final TextField name = new TextField("Unternehmensname");
-    private final Binder<CompanyDTOImpl> concreteUserBinder = new BeanValidationBinder<>(CompanyDTOImpl.class);
+    private final Binder<CompanyDTOImpl> companyBinder = new BeanValidationBinder<>(CompanyDTOImpl.class);
 
     public RegisterCompanyView() {
         setSizeFull();
@@ -38,7 +38,7 @@ public class RegisterCompanyView extends RegisterView {
         registerStudentButton.setEnabled(true);
 
         HorizontalLayout buttonLayout = new HorizontalLayout();
-        buttonLayout.add(new Component[]{registerStudentButton,registerCompanyButton});
+        buttonLayout.add(registerStudentButton,registerCompanyButton);
         buttonLayout.setAlignItems(Alignment.CENTER);
 
         //set layout for text input
@@ -51,10 +51,9 @@ public class RegisterCompanyView extends RegisterView {
         registerStudentButton.addClickListener(event -> navigateHandler.navigateToRegisterStudentPage());
 
         userBinder.setBean(new UserDTOImpl(Globals.Roles.company));
-        //The Pattern matches from left to right: At least one letter, at least one digit, at lest one special character and at least 8 characters
-        userBinder.withValidator(validation -> userPassword.getValue().matches("^(?=.+[a-zA-Z])(?=.+[\\d])(?=.+[\\W]).{8,}$"),"Dein Passwort ist wahrscheinlich nicht sicher genug. Halte dich bitte an die Vorgaben");
-
-        concreteUserBinder.setBean(new CompanyDTOImpl());
+        setUserBinder();
+        companyBinder.setBean(new CompanyDTOImpl());
+        companyBinder.bindInstanceFields(this);
 
         add(registerText);
         add(buttonLayout);
@@ -63,29 +62,15 @@ public class RegisterCompanyView extends RegisterView {
         add(loginButton());
         this.setAlignItems(Alignment.CENTER);
 
-        // Map input field values to DTO variables based on chosen names
-        userBinder.bindInstanceFields(this);
-        // checks if both passwords are equal
-        Binder.Binding<UserDTOImpl, String> confirmPasswordBinding =
-                userBinder
-                        .forField(confirmPassword)
-                        .asRequired()
-                        .withValidator(pw -> pw.equals(userPassword.getValue()), "Passwörter stimmen nicht überein")
-                        .bind(UserDTOImpl::getPassword, UserDTOImpl::setPassword);
-        concreteUserBinder.bindInstanceFields(this);
-
-        userPassword.addValueChangeListener(
-                event -> confirmPasswordBinding.validate());
-
         confirmButton.addClickListener(event -> {
             // register new Company with passed in values from register form
             try {
-                if (userBinder.isValid() && concreteUserBinder.isValid()) {
+                if (userBinder.isValid() && companyBinder.isValid()) {
                     // function to register new company
-                    registrationControl.registerCompany(userBinder.getBean(), concreteUserBinder.getBean());
+                    registrationControl.registerCompany(userBinder.getBean(), companyBinder.getBean());
                     navigateHandler.navigateToLoginPage();
                 } else {
-                    ui.makeDialog("Fülle bitte alle Felder aus");
+                    ui.makeDialog("Überprüfen Sie bitte Ihre Eingaben");
                     logger.info("Not all fields have been filled in");
                 }
             } catch (Exception e) {
