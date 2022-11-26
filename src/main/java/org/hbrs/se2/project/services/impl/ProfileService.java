@@ -6,6 +6,7 @@ import org.hbrs.se2.project.entities.Student;
 import org.hbrs.se2.project.repository.*;
 import org.hbrs.se2.project.services.ProfileServiceInterface;
 import org.hbrs.se2.project.services.factory.EntityCreationService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,8 @@ public class ProfileService implements ProfileServiceInterface {
     private StudentHasTopicRepository studentHasTopicRepository;
     @Autowired
     private EntityCreationService entityCreationService;
+
+    private ModelMapper mapper;
 
     @Override
     public void saveStudentData(UserDTO user, StudentDTO student, List<String> major, List<String> topic, List<String> skill) {
@@ -153,7 +156,7 @@ public class ProfileService implements ProfileServiceInterface {
         List<StudentDTO> matchingStudents = new ArrayList<>();
         // String array for saving all data
         List<String> list = new ArrayList<>();
-        for(StudentDTO studentDTO : getAllStudents()) {
+        for(StudentDTO studentDTO : studentRepository.getAll()) {
             list.clear();
             // get skills, majors, topics of one student
             List<SkillDTO> skills = getSkillOfStudent(studentDTO.getUserid());
@@ -188,27 +191,6 @@ public class ProfileService implements ProfileServiceInterface {
             }
         }
         return matchingStudents;
-    }
-
-    public List<StudentDTO> getAllStudents() {
-        // empty list studentDTOs
-        List<StudentDTO> studentDTOs = new ArrayList<>();
-        // get all students
-        List<Student> students = studentRepository.findAll();
-        // transform all student entities into studentDTOs
-        StudentDTO studentDTO;
-        for(Student student : students) {
-            studentDTO = new StudentDTOImpl(
-                    student.getUserid(),
-                    student.getStudentid(),
-                    student.getFirstname(),
-                    student.getLastname(),
-                    student.getMatrikelnumber(),
-                    student.getUniversity()
-            );
-            studentDTOs.add(studentDTO);
-        }
-        return studentDTOs;
     }
 
     public UserDTO getUserByUserid(int userid) {
