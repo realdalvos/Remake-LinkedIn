@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.control;
 
-import org.hbrs.se2.project.helper.AccessHandler;
 import org.hbrs.se2.project.services.impl.LoginService;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
@@ -22,11 +21,7 @@ public class LoginControl {
      * @throws DatabaseUserException Something went wrong with the Database
      * */
     public boolean authenticate(String username, String password) throws DatabaseUserException {
-        boolean authenticatedSuccessfully = loginService.authenticate(username, password);
-        if(authenticatedSuccessfully){
-            AccessHandler.setAccess(loginService.getCurrentUser());
-        }
-        return authenticatedSuccessfully;
+        return loginService.authenticate(username, password);
     }
 
     /**

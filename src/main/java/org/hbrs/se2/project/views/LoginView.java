@@ -92,6 +92,7 @@ public class LoginView extends VerticalLayout {
                 VaadinService.reinitializeSession(VaadinService.getCurrentRequest());
                 // create session for user
                 grabAndSetUserIntoSession();
+                AccessHandler.setAccess(loginControl.getCurrentUser());
 
                 if(loginControl.getCurrentUser().getRole().equals(Globals.Roles.student)) {
                     // navigate to jobs view for student
