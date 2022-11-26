@@ -51,23 +51,26 @@ public class JobService implements JobServiceInterface {
 
     /**
      * Search for the given keyword in either the job title or the job description
+     *
      * @param keyword Keyword to filter the List with
-     * @return  Filtered List of Jobs
+     * @return Filtered List of Jobs
      */
     public List<JobDTO> getJobsMatchingKeyword(String keyword) {
         List<JobDTO> matchingJobs = new ArrayList<>();
-        for(JobDTO job : getAllJobs()) {
-            if(job.getTitle().toLowerCase().contains(keyword.toLowerCase())) {
+        getAllJobs().parallelStream().forEach(job -> {
+            if (job.getTitle().toLowerCase().contains(keyword.toLowerCase())) {
                 matchingJobs.add(job);
-            } else if(job.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+            } else if (job.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                 matchingJobs.add(job);
             }
-        }
+
+        });
         return matchingJobs;
     }
 
     /**
      * Removes a job entry in the Database identified by the Job ID
+     *
      * @param jobid Job ID
      */
     @Override
@@ -77,6 +80,7 @@ public class JobService implements JobServiceInterface {
 
     /**
      * returns all jobs in the DB-table "jobs"
+     *
      * @return List<JobDTO> of all Jobs in DB-table
      */
     @Override
