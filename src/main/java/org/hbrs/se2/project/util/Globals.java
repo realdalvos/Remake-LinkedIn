@@ -7,8 +7,8 @@ public class Globals {
         public static final String MAIN_VIEW = "main";
         public static final String LOGIN_VIEW = "login";
         public static final String JOBS_VIEW = "jobs";
-
-        public static final String PROFILE_VIEW = "profile";
+        public static final String STUDENT_PROFILE_VIEW = "student-profile";
+        public static final String COMPANY_PROFILE_VIEW = "company-profile";
         public static final String MYADS_VIEW = "myads";
         public static final String REGISTER_COMPANY_VIEW = "register-company";
         public static final String REGISTER_STUDENT_VIEW = "register-student";
