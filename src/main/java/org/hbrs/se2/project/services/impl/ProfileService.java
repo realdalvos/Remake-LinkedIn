@@ -181,7 +181,7 @@ public class ProfileService implements ProfileServiceInterface {
             majors.parallelStream().forEach(major -> list.add(major.getMajor()));
 
             list.parallelStream().forEach(element -> {
-                if(element.equalsIgnoreCase(keyword)){
+                if(element.toLowerCase().contains(keyword.toLowerCase())){
                     matchingStudents.add(studentDTO);
                 }
             });
