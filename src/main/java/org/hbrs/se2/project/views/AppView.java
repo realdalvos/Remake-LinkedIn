@@ -4,7 +4,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H4;
@@ -12,7 +11,6 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
@@ -24,9 +22,10 @@ import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
+import org.hbrs.se2.project.views.companyViews.CompanyProfileView;
 import org.hbrs.se2.project.views.companyViews.MyAdsView;
 import org.hbrs.se2.project.views.studentViews.JobsView;
-import org.hbrs.se2.project.views.studentViews.ProfileView;
+import org.hbrs.se2.project.views.studentViews.StudentProfileView;
 import org.slf4j.Logger;
 import java.util.Optional;
 
@@ -173,12 +172,13 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         if(this.authorizationControl.hasUserRole(loginControl.getCurrentUser(), Globals.Roles.student)) {
             logger.info("User is student");
             tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.jobs"), JobsView.class));
-            tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.profile"), ProfileView.class));
+            tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.profile"), StudentProfileView.class));
         } else
             // has the user the role "company" they have the tabs "My Ads"
             if(this.authorizationControl.hasUserRole(loginControl.getCurrentUser(), Globals.Roles.company)) {
                 logger.info("User is company");
                 tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.myjobs"), MyAdsView.class));
+                tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.profile"), CompanyProfileView.class));
             }
         return tabs;
     }
