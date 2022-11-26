@@ -5,6 +5,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -49,15 +50,26 @@ public class MyAdsView extends Div {
 
     public MyAdsView(JobControl jobControl){
         this.jobControl = jobControl;
+        title.setMaxWidth("33%");
+        title.setWidthFull();
+        salary.setMaxWidth("33%");
+        salary.setWidthFull();
+        location.setMaxWidth("33%");
+        location.setWidthFull();
+        description.setMaxWidth("55%");
+        description.setWidthFull();
+        contactdetails.setMaxWidth("30%");
+        contactdetails.setWidthFull();
 
         Grid<JobDTO> grid = new Grid<>();
 
         grid.setItems(jobControl.getAllCompanyJobs(jobControl.getCompanyByUserid(Utils.getCurrentUser().getUserid()).getCompanyid()));
         grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.setHeightByRows(true);
-        grid.addColumn(JobDTO::getTitle).setHeader(getTranslation("view.job.text.title")).setSortable(true);
-        grid.addColumn(JobDTO::getDescription).setHeader(getTranslation("view.job.text.description"));
-        grid.addColumn(JobDTO::getSalary).setHeader(getTranslation("view.job.text.salary")).setSortable(true);
+        grid.addColumn(JobDTO::getTitle).setHeader(getTranslation("view.job.text.title")).setSortable(true).setWidth("20%");
+        grid.addColumn(JobDTO::getDescription).setHeader(getTranslation("view.job.text.description")).setWidth("30%");
+        grid.addColumn(JobDTO::getSalary).setHeader(getTranslation("view.job.text.salary")).setSortable(true).setWidth("15%");
+        grid.addColumn(JobDTO::getLocation).setHeader(getTranslation("view.job.text.location")).setWidth("15%");
         grid.addComponentColumn(JobDTO -> {
             Button deleteButton = new Button(getTranslation("view.job.button.delete"));
             deleteButton.addClickListener(e -> ui.makeYesNoDialog("Möchten Sie dieses Jobangebot wirklich löschen?", delete(JobDTO.getJobid())));
@@ -105,11 +117,21 @@ public class MyAdsView extends Div {
                     buttons.add(edit);
                 });
             });
-
+            layout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 6));
+            layout.setColspan(title, 2);
+            layout.setColspan(description, 4);
+            layout.setColspan(salary, 1);
+            layout.setColspan(location, 2);
+            layout.setColspan(contactdetails, 2);
             return layout;
         }));
-
+        grid.setHeight("100%");
+        H3 title = new H3(" Übersicht über ihre aktuellen Stellenausschreibungen");
+        title.getElement().getStyle().set("color", "#f2a6b4");
+        title.getElement().getStyle().set("text-align", "center");
+        add(title);
         add(grid);
+        setHeight("100%");
     }
 
     private Button confirm(JobDTO job) {
