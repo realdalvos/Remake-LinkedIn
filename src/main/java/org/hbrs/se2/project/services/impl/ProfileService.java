@@ -1,17 +1,13 @@
 package org.hbrs.se2.project.services.impl;
 
 import org.hbrs.se2.project.dtos.*;
-import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
-import org.hbrs.se2.project.entities.Student;
 import org.hbrs.se2.project.repository.*;
 import org.hbrs.se2.project.services.ProfileServiceInterface;
 import org.hbrs.se2.project.services.factory.EntityCreationService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 @Service
 public class ProfileService implements ProfileServiceInterface {

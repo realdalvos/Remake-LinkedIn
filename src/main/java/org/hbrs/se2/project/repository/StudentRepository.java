@@ -2,15 +2,12 @@ package org.hbrs.se2.project.repository;
 
 import org.hbrs.se2.project.dtos.StudentDTO;
 import org.hbrs.se2.project.entities.Student;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * https://www.baeldung.com/spring-data-jpa-projections
