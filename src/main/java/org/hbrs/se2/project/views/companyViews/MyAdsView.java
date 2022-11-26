@@ -53,16 +53,22 @@ public class MyAdsView extends Div {
 
     public MyAdsView(JobControl jobControl){
         this.jobControl = jobControl;
+        title.setMaxWidth("33%");
+        title.setWidthFull();
+        salary.setMaxWidth("33%");
+        salary.setWidthFull();
+        location.setMaxWidth("33%");
+        location.setWidthFull();
+        description.setMaxWidth("55%");
+        description.setWidthFull();
+        contactdetails.setMaxWidth("30%");
+        contactdetails.setWidthFull();
 
         Grid<JobDTO> grid = new Grid<>();
 
         grid.setItems(jobControl.getAllCompanyJobs(jobControl.getCompanyByUserid(Utils.getCurrentUser().getUserid()).getCompanyid()));
         grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.setHeightByRows(true);
-        grid.addColumn(JobDTO::getTitle).setHeader(getTranslation("view.job.text.title")).setSortable(true);
-        grid.addColumn(JobDTO::getDescription).setHeader(getTranslation("view.job.text.description"));
-        grid.addColumn(JobDTO::getSalary).setHeader(getTranslation("view.job.text.salary")).setSortable(true);
-
         grid.addColumn(JobDTO::getTitle).setHeader(getTranslation("view.job.text.title")).setSortable(true).setWidth("20%");
         grid.addColumn(JobDTO::getDescription).setHeader(getTranslation("view.job.text.description")).setWidth("30%");
         grid.addColumn(JobDTO::getSalary).setHeader(getTranslation("view.job.text.salary")).setSortable(true).setWidth("15%");
@@ -114,7 +120,12 @@ public class MyAdsView extends Div {
                     buttons.add(edit);
                 });
             });
-
+            layout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 6));
+            layout.setColspan(title, 2);
+            layout.setColspan(description, 4);
+            layout.setColspan(salary, 1);
+            layout.setColspan(location, 2);
+            layout.setColspan(contactdetails, 2);
             return layout;
         }));
         grid.setHeight("100%");
