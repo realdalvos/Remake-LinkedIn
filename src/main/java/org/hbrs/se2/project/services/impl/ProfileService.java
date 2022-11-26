@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ProfileService implements ProfileServiceInterface {
@@ -151,9 +153,9 @@ public class ProfileService implements ProfileServiceInterface {
         studentHasSkillRepository.deleteByStudentidAndSkillid(studentRepository.findStudentByUserid(userid).getStudentid(), skillid);
     }
 
-    public List<StudentDTO> getStudentsMatchingKeyword(String keyword) {
+    public Set<StudentDTO> getStudentsMatchingKeyword(String keyword) {
         // get all data for filtering
-        List<StudentDTO> matchingStudents = new ArrayList<>();
+        Set<StudentDTO> matchingStudents = new HashSet<>();
         // String array for saving all data
         List<String> list = new ArrayList<>();
         for(StudentDTO studentDTO : studentRepository.getAll()) {
