@@ -10,10 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 public class ProfileService implements ProfileServiceInterface {
@@ -35,8 +33,6 @@ public class ProfileService implements ProfileServiceInterface {
     private StudentHasTopicRepository studentHasTopicRepository;
     @Autowired
     private EntityCreationService entityCreationService;
-
-    private ModelMapper mapper;
 
     @Override
     public void saveStudentData(UserDTO user, StudentDTO student, List<String> major, List<String> topic, List<String> skill) {
@@ -156,10 +152,12 @@ public class ProfileService implements ProfileServiceInterface {
     public Set<StudentDTO> getStudentsMatchingKeyword(String keyword) {
         // get all data for filtering
         Set<StudentDTO> matchingStudents = new HashSet<>();
-        // String array for saving all data
-        List<String> list = new ArrayList<>();
-        for(StudentDTO studentDTO : studentRepository.getAll()) {
-            list.clear();
+
+        List<StudentDTO> temp = studentRepository.getAll();
+        temp.parallelStream().forEach(studentDTO -> {
+            // String array for saving all data
+            List<String> list = new ArrayList<>();
+
             // get skills, majors, topics of one student
             List<SkillDTO> skills = getSkillOfStudent(studentDTO.getUserid());
             List<TopicDTO> topics = getTopicOfStudent(studentDTO.getUserid());
@@ -169,29 +167,16 @@ public class ProfileService implements ProfileServiceInterface {
             if(studentDTO.getUniversity() != null) {
                 list.add(studentDTO.getUniversity());
             }
+            skills.parallelStream().forEach(skill -> list.add(skill.getSkill()));
+            topics.parallelStream().forEach(topic -> list.add(topic.getTopic()));
+            majors.parallelStream().forEach(major -> list.add(major.getMajor()));
 
-            // save skills into string array
-            for(SkillDTO skill : skills) {
-                list.add(skill.getSkill());
-            }
-
-            // save topics into string array
-            for(TopicDTO topic : topics) {
-                list.add(topic.getTopic());
-            }
-
-            // save majors into string array
-            for(MajorDTO major : majors) {
-                list.add(major.getMajor());
-            }
-
-            for(String elem : list) {
-                if(elem.equalsIgnoreCase(keyword)) {
+            list.parallelStream().forEach(element -> {
+                if(element.equalsIgnoreCase(keyword)){
                     matchingStudents.add(studentDTO);
-                    System.out.println(studentDTO.getStudentid());
                 }
-            }
-        }
+            });
+        });
         return matchingStudents;
     }
 
