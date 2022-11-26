@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 @JsModule("@vaadin/vaadin-lumo-styles/badge.js")
 @CssImport(value = "./themes/mytheme/styles.css", include = "lumo-badge")
-@Route(value = Globals.Pages.COMPANY_PROFILE_VIEW, layout = AppView.class)
+@Route(value = Globals.Pages.COMPANY_PROFILE_VIEW, layout = AppView.class, registerAtStartup = false)
 @PageTitle("Profile")
 public class CompanyProfileView extends ProfileView {
 

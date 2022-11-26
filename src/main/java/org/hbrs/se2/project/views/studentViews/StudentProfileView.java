@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-@Route(value = Globals.Pages.STUDENT_PROFILE_VIEW, layout = AppView.class)
+
+@Route(value = Globals.Pages.STUDENT_PROFILE_VIEW, layout = AppView.class, registerAtStartup = false)
 @PageTitle("Profile")
 public class StudentProfileView extends ProfileView {
 

@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 /**
  * Student - Jobs list View
  */
-@Route(value = Globals.Pages.JOBS_VIEW, layout = AppView.class)
+@Route(value = Globals.Pages.JOBS_VIEW, layout = AppView.class, registerAtStartup = false)
 @PageTitle("Jobs")
 public class JobsView extends Div {
     Label emptyLabel = new Label();

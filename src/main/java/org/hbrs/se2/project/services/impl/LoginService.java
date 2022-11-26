@@ -22,7 +22,7 @@ public class LoginService implements LoginServiceInterface {
     public boolean authenticate(String username, String password) throws DatabaseUserException {
         UserDTO tmpUser = this.getUserWithJPA(username);
 
-        if(tmpUser == null || !passwordEncoder.matches(password, tmpUser.getPassword().trim())) {
+        if (tmpUser == null || !passwordEncoder.matches(password, tmpUser.getPassword().trim())) {
             return false;
         }
         this.userDTO = tmpUser;
