@@ -2,8 +2,6 @@ package org.hbrs.se2.project.services.impl;
 
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.JobDTO;
-import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
-import org.hbrs.se2.project.entities.Job;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;
 import org.hbrs.se2.project.services.JobServiceInterface;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JobService implements JobServiceInterface {
@@ -63,7 +62,6 @@ public class JobService implements JobServiceInterface {
             } else if (job.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                 matchingJobs.add(job);
             }
-
         });
         return matchingJobs;
     }
@@ -85,6 +83,6 @@ public class JobService implements JobServiceInterface {
      */
     @Override
     public List<JobDTO> getAllJobs() {
-        return jobRepository.getAll();
+        return jobRepository.getAll().parallelStream().filter(job -> !companyRepository.findCompanyByCompanyid(job.getCompanyid()).getBanned()).collect(Collectors.toList());
     }
 }
