@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 /**
  * Company - Students List View
  */
-@Route(value = Globals.Pages.SEARCH_STUDENT_VIEW, layout = AppView.class)
+@Route(value = Globals.Pages.SEARCH_STUDENT_VIEW, layout = AppView.class, registerAtStartup = false)
 @PageTitle("Student")
 public class SearchStudentsView extends Div {
     Label emptyLabel = new Label();
