@@ -162,23 +162,18 @@ public class ProfileService implements ProfileServiceInterface {
         // get all data for filtering
         Set<StudentDTO> matchingStudents = new HashSet<>();
 
-        List<StudentDTO> temp = studentRepository.getAll();
-        temp.parallelStream().forEach(studentDTO -> {
+        studentRepository.getAll().parallelStream().forEach(studentDTO -> {
             // String array for saving all data
             List<String> list = new ArrayList<>();
-
-            // get skills, majors, topics of one student
-            List<SkillDTO> skills = getSkillOfStudent(studentDTO.getUserid());
-            List<TopicDTO> topics = getTopicOfStudent(studentDTO.getUserid());
-            List<MajorDTO> majors = getMajorOfStudent(studentDTO.getUserid());
 
             // save university into string array
             if(studentDTO.getUniversity() != null) {
                 list.add(studentDTO.getUniversity());
             }
-            skills.parallelStream().forEach(skill -> list.add(skill.getSkill()));
-            topics.parallelStream().forEach(topic -> list.add(topic.getTopic()));
-            majors.parallelStream().forEach(major -> list.add(major.getMajor()));
+            // get skills, majors, topics of one student and add them to list
+            getSkillOfStudent(studentDTO.getUserid()).parallelStream().forEach(skill -> list.add(skill.getSkill()));
+            getTopicOfStudent(studentDTO.getUserid()).parallelStream().forEach(topic -> list.add(topic.getTopic()));
+            getMajorOfStudent(studentDTO.getUserid()).parallelStream().forEach(major -> list.add(major.getMajor()));
 
             list.parallelStream().forEach(element -> {
                 if(element.toLowerCase().contains(keyword.toLowerCase())){
