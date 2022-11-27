@@ -1,7 +1,5 @@
 package org.hbrs.se2.project.control;
 
-
-import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
@@ -10,6 +8,8 @@ import org.hbrs.se2.project.util.HelperForTests;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
+
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -197,8 +197,9 @@ public class JobControlTest {
         list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
         assertEquals(0, list.size(), "List should contain 0 elements");
 
-        DatabaseUserException thrown = assertThrows(DatabaseUserException.class, () -> jobControl.deleteJob(testJob.getJobid()));
-        assertEquals("Job not found", thrown.getMessage());
+        int jobID = testJob.getJobid();
+        EmptyResultDataAccessException thrown = assertThrows(EmptyResultDataAccessException.class, () -> jobControl.deleteJob(testJob.getJobid()));
+        assertEquals("No class org.hbrs.se2.project.entities.Job entity with id " + jobID + " exists!", thrown.getMessage());
     }
 
     @Test
