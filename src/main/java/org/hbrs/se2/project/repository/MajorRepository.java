@@ -17,9 +17,4 @@ public interface MajorRepository extends JpaRepository<Major, Integer> {
 
     MajorDTO findByMajorid(int majorid);
 
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM Major m WHERE m.majorid=:majorid")
-    void deleteByMajorid(int majorid);
-
 }

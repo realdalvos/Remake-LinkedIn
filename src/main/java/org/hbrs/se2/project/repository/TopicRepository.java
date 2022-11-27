@@ -15,9 +15,4 @@ public interface TopicRepository extends JpaRepository<Topic, Integer> {
 
     TopicDTO findByTopicid(int topicid);
 
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM Topic t WHERE t.topicid=:topicid")
-    void deleteByTopicid(int topicid);
-
 }

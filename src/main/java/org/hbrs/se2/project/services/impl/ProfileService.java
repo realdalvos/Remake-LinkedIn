@@ -148,7 +148,7 @@ public class ProfileService implements ProfileServiceInterface {
     public void removeMajor(int userid, int majorid) {
         studentHasMajorRepository.deleteByStudentidAndMajorid(studentRepository.findStudentByUserid(userid).getStudentid(), majorid);
         if (!studentHasMajorRepository.existsRelation(majorid)) {
-            majorRepository.deleteByMajorid(majorid);
+            majorRepository.deleteById(majorid);
         }
     }
 
@@ -156,7 +156,7 @@ public class ProfileService implements ProfileServiceInterface {
     public void removeTopic(int userid, int topicid) {
         studentHasTopicRepository.deleteByStudentidAndTopicid(studentRepository.findStudentByUserid(userid).getStudentid(), topicid);
         if (!studentHasTopicRepository.existsRelation(topicid)) {
-            topicRepository.deleteByTopicid(topicid);
+            topicRepository.deleteById(topicid);
         }
     }
 
@@ -164,7 +164,7 @@ public class ProfileService implements ProfileServiceInterface {
     public void removeSkill(int userid, int skillid) {
         studentHasSkillRepository.deleteByStudentidAndSkillid(studentRepository.findStudentByUserid(userid).getStudentid(), skillid);
         if (!studentHasSkillRepository.existsRelation(skillid)) {
-            skillRepository.deleteBySkillid(skillid);
+            skillRepository.deleteById(skillid);
         }
     }
 

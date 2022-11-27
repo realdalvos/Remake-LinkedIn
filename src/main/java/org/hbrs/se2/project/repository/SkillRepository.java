@@ -15,9 +15,4 @@ public interface SkillRepository extends JpaRepository<Skill, Integer> {
 
     SkillDTO findBySkillid(int skillid);
 
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM Skill s WHERE s.skillid=:skillid")
-    void deleteBySkillid(int skillid);
-
 }
