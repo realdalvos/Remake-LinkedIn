@@ -54,8 +54,8 @@ public class HelperForTests {
             throw new RuntimeException(e);
         }
 
-        UserDTO u = userRepository.findUserByUsername(testUserForCompany.getUsername());
-        CompanyDTO testCompany = companyRepository.findCompanyByUserid(u.getUserid());
+        UserDTO u = userRepository.findByUsername(testUserForCompany.getUsername());
+        CompanyDTO testCompany = companyRepository.findByUserid(u.getUserid());
         //Add testCompany to list of registered companies
         registeredCompanies.add(testCompany);
         return testCompany;
@@ -93,7 +93,7 @@ public class HelperForTests {
             }
 
             //adding company to list of registered companies
-            list.add(companyRepository.findCompanyByUserid((userRepository.findUserByUsername(testUser.getUsername())).getUserid()));
+            list.add(companyRepository.findByUserid((userRepository.findByUsername(testUser.getUsername())).getUserid()));
         }
 
         this.registeredCompanies = list;
@@ -116,8 +116,8 @@ public class HelperForTests {
             throw new RuntimeException(e);
         }
 
-        UserDTO u = userRepository.findUserByUsername(testUserForStudent.getUsername());
-        return studentRepository.findStudentByUserid(u.getUserid());
+        UserDTO u = userRepository.findByUsername(testUserForStudent.getUsername());
+        return studentRepository.findByUserid(u.getUserid());
     }
 
     /**
@@ -152,7 +152,7 @@ public class HelperForTests {
      * Deleting the registered test companies from the database.*/
     public void deleteRegisteredTestCompanies() {
         for(CompanyDTO c : registeredCompanies){
-            UserDTO tmp = userRepository.findUserByUserid(c.getUserid());
+            UserDTO tmp = userRepository.findByUserid(c.getUserid());
             deleteUsersOccupyingUniques(tmp);
         }
         /*Has to be deleted explicitly.
@@ -167,9 +167,9 @@ public class HelperForTests {
         deleteUsersOccupyingUniques(getUserDTOForStudent());
 
         //Deleting user that occupies MatrikelNr
-        StudentDTO student = studentRepository.findStudentByMatrikelnumber(getStudentDTO().getMatrikelnumber());
+        StudentDTO student = studentRepository.findByMatrikelnumber(getStudentDTO().getMatrikelnumber());
         if(student != null) {
-            UserDTO user = userRepository.findUserByUserid(student.getUserid());
+            UserDTO user = userRepository.findByUserid(student.getUserid());
             userRepository.deleteById(user.getUserid());
         }
     }
@@ -178,13 +178,13 @@ public class HelperForTests {
      * Since Username and Email might already be taken we have to delete those users to make space for our test user. */
     private void deleteUsersOccupyingUniques(UserDTO u){
         //Deleting user that occupies Username
-        UserDTO user = userRepository.findUserByUsername(u.getUsername());
+        UserDTO user = userRepository.findByUsername(u.getUsername());
         if(user != null) {
             userRepository.deleteById(user.getUserid());
         }
 
         //Deleting user that occupies Email
-        user = userRepository.findUserByEmail(u.getEmail());
+        user = userRepository.findByEmail(u.getEmail());
         if(user != null) {
             userRepository.deleteById(user.getUserid());
         }

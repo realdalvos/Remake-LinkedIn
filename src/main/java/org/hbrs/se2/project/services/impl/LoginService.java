@@ -43,7 +43,7 @@ public class LoginService implements LoginServiceInterface {
     private UserDTO getUserWithJPA(String username) throws DatabaseUserException {
         UserDTO userTmp;
         try {
-            userTmp = repository.findUserByUsername(username);
+            userTmp = repository.findByUsername(username);
         } catch (org.springframework.dao.DataAccessResourceFailureException e) {
             throw new DatabaseUserException("A Failure occured while trying to connect to database with JPA");
         }

@@ -35,7 +35,7 @@ public class JobControlTest {
                 testCompanyDTO.getCompanyid(), "Test title", "Testbeschreibung. assembly programmer.", 20, "Test location", "Test contactdetails");
         jobControl.createNewJobPost(testJob);
 
-        testJob = jobRepository.findJobByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle());
+        testJob = jobRepository.findByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle());
     }
 
     @AfterEach
@@ -48,7 +48,7 @@ public class JobControlTest {
     @DisplayName("Tests if the test Job was created in the database.")
     public void testIfJobIsCreatedInDB(){
         //Checking if there is a job with companyid of the testCompany and title of the testJob
-        JobDTO jobFromRepo = jobRepository.findJobByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle());
+        JobDTO jobFromRepo = jobRepository.findByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle());
         Assertions.assertNotNull(jobFromRepo);
 
         assertEquals("Testbeschreibung. assembly programmer.", jobFromRepo.getDescription());

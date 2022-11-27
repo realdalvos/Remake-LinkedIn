@@ -60,8 +60,8 @@ class RegistrationControlTest {
     void registerCompanySuccess() {
         userDTO.setRole(Globals.Roles.company);
         assertDoesNotThrow(() -> registrationControl.registerCompany(userDTO, companyDTO));
-        assertNotNull(userRepository.findUserByUsername(userDTO.getUsername()), "Can not find user in database after registration");
-        assertNotNull(companyRepository.findCompanyByUserid(userRepository.findUserByUsername(userDTO.getUsername()).getUserid()), "Can not find company in database after registration");
+        assertNotNull(userRepository.findByUsername(userDTO.getUsername()), "Can not find user in database after registration");
+        assertNotNull(companyRepository.findByUserid(userRepository.findByUsername(userDTO.getUsername()).getUserid()), "Can not find company in database after registration");
     }
 
     @Test
@@ -87,8 +87,8 @@ class RegistrationControlTest {
     void registerStudentSuccess() {
         userDTO.setRole(Globals.Roles.student);
         assertDoesNotThrow(() -> registrationControl.registerStudent(userDTO, studentDTO));
-        assertNotNull(userRepository.findUserByUsername(userDTO.getUsername()), "Can not find user in database after registration");
-        assertNotNull(studentRepository.findStudentByUserid(userRepository.findUserByUsername(userDTO.getUsername()).getUserid()), "Can not find company in database after registration");
+        assertNotNull(userRepository.findByUsername(userDTO.getUsername()), "Can not find user in database after registration");
+        assertNotNull(studentRepository.findByUserid(userRepository.findByUsername(userDTO.getUsername()).getUserid()), "Can not find company in database after registration");
     }
 
     @Test

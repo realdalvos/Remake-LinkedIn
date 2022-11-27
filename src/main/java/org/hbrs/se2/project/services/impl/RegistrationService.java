@@ -47,7 +47,7 @@ public class RegistrationService implements RegistrationServiceInterface {
         // create new user of role "student"
         this.createAccount(user);
         // get User id from new saved user in db, so we can assign the userid to the data in student table
-        UserDTO newSavedUser = userRepository.findUserByUsername(user.getUsername());
+        UserDTO newSavedUser = userRepository.findByUsername(user.getUsername());
         // create student profile
         this.createStudentProfile(student, newSavedUser);
     }
@@ -63,7 +63,7 @@ public class RegistrationService implements RegistrationServiceInterface {
         // create new user of role "company"
         this.createAccount(user);
         // get User id from new saved user in db
-        UserDTO newSavedUser = userRepository.findUserByUsername(user.getUsername());
+        UserDTO newSavedUser = userRepository.findByUsername(user.getUsername());
         // create company profile
         this.createCompanyProfile(company, newSavedUser);
     }

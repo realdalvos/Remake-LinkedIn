@@ -5,12 +5,12 @@ import org.hbrs.se2.project.entities.StudentHasMajor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Component
+@Repository
 public interface StudentHasMajorRepository extends JpaRepository<StudentHasMajor, Integer> {
 
     List<StudentHasMajorDTO> findByStudentid(int studentid);
@@ -19,5 +19,4 @@ public interface StudentHasMajorRepository extends JpaRepository<StudentHasMajor
     @Modifying
     @Query("DELETE FROM StudentHasMajor s WHERE s.studentid=:studentid AND s.majorid=:majorid")
     void deleteByStudentidAndMajorid(int studentid, int majorid);
-
 }
