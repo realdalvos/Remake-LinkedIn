@@ -5,7 +5,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.data.binder.*;
-import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.component.textfield.TextField;
@@ -92,8 +91,6 @@ public class StudentProfileView extends ProfileView {
             return deleteButton;
         });
         formLayout.add(gridMajors, newMajorsGrid = newEntriesGrid(newMajors = new ArrayList<>()), newEntryLayout(major, newMajors, newMajorsGrid));
-        DataProvider<TopicDTO, ?> tempTopics = gridTopics.getDataProvider();
-        gridTopics.setDataProvider(tempTopics);
         gridTopics.addComponentColumn(topic -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
@@ -104,8 +101,6 @@ public class StudentProfileView extends ProfileView {
             return deleteButton;
         });
         formLayout.add(gridTopics, newTopicsGrid = newEntriesGrid(newTopics = new ArrayList<>()), newEntryLayout(topic, newTopics, newTopicsGrid));
-        DataProvider<SkillDTO, ?> tempSkills = gridSkills.getDataProvider();
-        gridSkills.setDataProvider(tempSkills);
         gridSkills.addComponentColumn(skill -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
