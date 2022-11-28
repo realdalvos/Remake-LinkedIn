@@ -7,6 +7,7 @@ import org.hbrs.se2.project.services.impl.ValidationService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class ProfileControl {
@@ -70,5 +71,9 @@ public class ProfileControl {
     public void removeSkill(int userid, int skillid) {
         profileService.removeSkill(userid, skillid);
     }
+
+    public Set<StudentDTO> getStudentsMatchingKeyword(String keyword) {return profileService.getStudentsMatchingKeyword(keyword);}
+
+    public UserDTO getUserByUserid(int id) {return profileService.getUserByUserid(id);}
 
 }
