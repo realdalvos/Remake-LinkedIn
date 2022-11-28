@@ -28,15 +28,6 @@ public class StudentDTOImpl implements StudentDTO {
         this.university=university;
     }
 
-    public StudentDTOImpl(int userid, int studentid, String firstname, String lastname, String matrikelnumber, String university){
-        this.userid=userid;
-        this.studentid = studentid;
-        this.firstname=firstname;
-        this.lastname=lastname;
-        this.matrikelnumber=matrikelnumber;
-        this.university=university;
-    }
-
     public void setStudentId(int id) {this.studentid = id;}
 
     public void setUserid(int userid) { this.userid = userid; }
