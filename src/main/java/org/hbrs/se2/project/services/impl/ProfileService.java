@@ -146,16 +146,25 @@ public class ProfileService implements ProfileServiceInterface {
     @Override
     public void removeMajor(int userid, int majorid) {
         studentHasMajorRepository.deleteByStudentidAndMajorid(studentRepository.findStudentByUserid(userid).getStudentid(), majorid);
+        if (!studentHasMajorRepository.existsRelation(majorid)) {
+            majorRepository.deleteById(majorid);
+        }
     }
 
     @Override
     public void removeTopic(int userid, int topicid) {
         studentHasTopicRepository.deleteByStudentidAndTopicid(studentRepository.findStudentByUserid(userid).getStudentid(), topicid);
+        if (!studentHasTopicRepository.existsRelation(topicid)) {
+            topicRepository.deleteById(topicid);
+        }
     }
 
     @Override
     public void removeSkill(int userid, int skillid) {
         studentHasSkillRepository.deleteByStudentidAndSkillid(studentRepository.findStudentByUserid(userid).getStudentid(), skillid);
+        if (!studentHasSkillRepository.existsRelation(skillid)) {
+            skillRepository.deleteById(skillid);
+        }
     }
 
     public Set<StudentDTO> getStudentsMatchingKeyword(String keyword) {
