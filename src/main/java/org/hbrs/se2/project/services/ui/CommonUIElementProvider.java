@@ -4,6 +4,9 @@ import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -60,6 +63,32 @@ public class CommonUIElementProvider {
         vLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, hLayout);
         dialog.add(vLayout);
         dialog.open();
+    }
+
+    public VerticalLayout introductionText(String headline, String description) {
+        VerticalLayout vLayout = new VerticalLayout();
+        H2 startText = new H2(headline);
+
+        H3 descriptionText = new H3(description);
+
+        vLayout.setSizeFull();
+        vLayout.setPadding(false);
+        vLayout.setSpacing(true);
+        vLayout.getThemeList().set("spacing-s", true);
+        vLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
+
+        startText.getElement().getStyle().set("font-size","45px"); // font size
+        startText.getElement().getStyle().set("color", "#f2a6b4"); // hex value of color in custom Theme for continuity
+        startText.getElement().getStyle().set("text-align","center"); // text is now in center
+
+        descriptionText.getElement().getStyle().set("font-size","20px");
+        descriptionText.getElement().getStyle().set("text-align","center");
+
+        vLayout.add(startText);
+        vLayout.add(descriptionText);
+        vLayout.add(new Label());
+
+        return vLayout;
     }
 
 }

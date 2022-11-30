@@ -11,4 +11,5 @@ public interface MajorRepository extends JpaRepository<Major, Integer> {
     MajorDTO findByMajor(String major);
 
     MajorDTO findByMajorid(int majorid);
+
 }

@@ -19,4 +19,9 @@ public interface StudentHasTopicRepository extends JpaRepository<StudentHasTopic
     @Modifying
     @Query("DELETE FROM StudentHasTopic s WHERE s.studentid=:studentid AND s.topicid=:topicid")
     void deleteByStudentidAndTopicid(int studentid, int topicid);
+
+    @Transactional
+    @Query("SELECT COUNT(c) > 0 FROM StudentHasTopic c WHERE c.topicid=:topicid")
+    boolean existsRelation(int topicid);
+
 }

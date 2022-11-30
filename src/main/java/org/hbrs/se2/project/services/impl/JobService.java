@@ -84,4 +84,5 @@ public class JobService implements JobServiceInterface {
     public List<JobDTO> getAllJobs() {
         return jobRepository.getAll().parallelStream().filter(job -> !companyRepository.findByCompanyid(job.getCompanyid()).getBanned()).collect(Collectors.toList());
     }
+
 }

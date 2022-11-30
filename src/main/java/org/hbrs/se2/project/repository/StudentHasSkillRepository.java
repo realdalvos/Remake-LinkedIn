@@ -19,4 +19,9 @@ public interface StudentHasSkillRepository extends JpaRepository<StudentHasSkill
     @Modifying
     @Query("DELETE FROM StudentHasSkill s WHERE s.studentid=:studentid AND s.skillid=:skillid")
     void deleteByStudentidAndSkillid(int studentid, int skillid);
+
+    @Transactional
+    @Query("SELECT COUNT(c) > 0 FROM StudentHasSkill c WHERE c.skillid=:skillid")
+    boolean existsRelation(int skillid);
+
 }

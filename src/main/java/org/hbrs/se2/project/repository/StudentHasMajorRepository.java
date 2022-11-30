@@ -19,4 +19,9 @@ public interface StudentHasMajorRepository extends JpaRepository<StudentHasMajor
     @Modifying
     @Query("DELETE FROM StudentHasMajor s WHERE s.studentid=:studentid AND s.majorid=:majorid")
     void deleteByStudentidAndMajorid(int studentid, int majorid);
+
+    @Transactional
+    @Query("SELECT COUNT(c) > 0 FROM StudentHasMajor c WHERE c.majorid=:majorid")
+    boolean existsRelation(int majorid);
+
 }

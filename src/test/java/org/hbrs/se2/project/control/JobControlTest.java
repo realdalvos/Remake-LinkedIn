@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.control;
 
-
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
@@ -9,6 +8,8 @@ import org.hbrs.se2.project.util.HelperForTests;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
+
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -178,13 +179,27 @@ public class JobControlTest {
     @Test
     @DisplayName("Testing the deleteJob Method")
     void test_removeJob() {
-        List<JobDTO> list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
-        assertEquals(1, list.size(), "List should contain 1 element");
+        JobDTO testJob2 = new JobDTOImpl(
+                testCompanyDTO.getCompanyid(), "Test title2", "Testbeschreibung. assembly programmer.", 20, "Test location", "Test contactdetails");
+        jobControl.createNewJobPost(testJob2);
+        testJob2 = jobRepository.findJobByCompanyidAndTitle(testJob2.getCompanyid(), testJob2.getTitle());
 
-        jobControl.deleteJob(testJob.getJobid());
+        List<JobDTO> list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
+        assertEquals(2, list.size(), "List should contain 2 elements");
+
+        jobControl.deleteJob(testJob2.getJobid());
 
         list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
-        assertEquals(0, list.size(), "List should contain no element");
+        assertEquals(1, list.size(), "List should contain 1 element");
+        assertNotNull(jobRepository.findJobByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle()), "testJob should be in DB");
+
+        jobControl.deleteJob(testJob.getJobid());
+        list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
+        assertEquals(0, list.size(), "List should contain 0 elements");
+
+        int jobID = testJob.getJobid();
+        EmptyResultDataAccessException thrown = assertThrows(EmptyResultDataAccessException.class, () -> jobControl.deleteJob(testJob.getJobid()));
+        assertEquals("No class org.hbrs.se2.project.entities.Job entity with id " + jobID + " exists!", thrown.getMessage());
     }
 
     @Test
