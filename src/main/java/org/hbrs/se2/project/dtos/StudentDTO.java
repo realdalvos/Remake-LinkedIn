@@ -3,7 +3,6 @@ package org.hbrs.se2.project.dtos;
 import java.io.Serializable;
 
 public interface StudentDTO extends Serializable {
-
     int getStudentid();
 
     int getUserid();
@@ -16,7 +15,7 @@ public interface StudentDTO extends Serializable {
 
     String getUniversity();
 
-    void setStudentId(int id);
+    void setStudentid(int id);
 
     void setUserid(int userid);
 

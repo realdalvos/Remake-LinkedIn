@@ -13,9 +13,9 @@ import java.util.List;
 public interface JobRepository extends JpaRepository<Job, Integer> {
 
         //could return multiple datasets, careful
-        JobDTO findJobByCompanyidAndTitle(int id, String title);
+        JobDTO findByCompanyidAndTitle(int id, String title);
 
-        List<JobDTO> findJobByCompanyid(int id);
+        List<JobDTO> findByCompanyid(int id);
 
         @Transactional
         @Query("SELECT j FROM Job j")

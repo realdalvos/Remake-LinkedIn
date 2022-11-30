@@ -18,32 +18,22 @@ public class ValidationService {
 
     public boolean checkUsernameUnique(String username) {
         // check if username or email already exists
-        UserDTO userDTO = userRepository.findUserByUsername(username);
+        UserDTO userDTO = userRepository.findByUsername(username);
 
-        if (userDTO != null) {
-            return false;
-        }
-        return true;
+        return userDTO == null;
     }
 
     public boolean checkEmailUnique(String email) {
         // check if email already exists
-        UserDTO userDTO = userRepository.findUserByEmail(email);
+        UserDTO userDTO = userRepository.findByEmail(email);
 
-        if (userDTO != null) {
-            return false;
-        }
-        return true;
+        return userDTO == null;
     }
 
     public boolean checkMatrikelnumberUnique(String matrikelnumber) {
         // check if matrikelnumber already exists
-        StudentDTO studentDTO = studentRepository.findStudentByMatrikelnumber(matrikelnumber);
+        StudentDTO studentDTO = studentRepository.findByMatrikelnumber(matrikelnumber);
 
-        if (studentDTO != null) {
-            return false;
-        }
-        return true;
+        return studentDTO == null;
     }
-
 }

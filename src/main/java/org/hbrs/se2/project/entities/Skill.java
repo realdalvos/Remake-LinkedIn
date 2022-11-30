@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.entities;
 
 import javax.persistence.*;
+
 @Entity
 @Table(name = "skill", schema = "mid9db")
 public class Skill {

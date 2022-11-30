@@ -2,13 +2,6 @@ package org.hbrs.se2.project.entities;
 
 import javax.persistence.*;
 
-/**
- * This entity reflects the exact same database table "job"
- * so JPA Repository 'understands' how to save or read data from/to this table
- *
- * This is why you for instance pass a job entity 'job' to the method
- * repository.save(job)
- */
 @Entity
 @Table(name="job", schema = "mid9db")
 public class Job {
@@ -19,10 +12,6 @@ public class Job {
     private Integer salary;
     private String location;
     private String contactdetails;
-
-    public Job() {
-
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
