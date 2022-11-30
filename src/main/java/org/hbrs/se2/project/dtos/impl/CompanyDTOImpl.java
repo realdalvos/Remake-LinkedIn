@@ -68,4 +68,24 @@ public class CompanyDTOImpl implements CompanyDTO {
                 ", banned= " + banned +
                 '}';
     }
+
+    /**
+     * Ich wollte eine equals Methode für das assertEquals in Tests für companyDTOs bauen.
+     * Leider funktioniert die nicht. Kann also gelöscht werden, sollten wir die nicht doch noch evtl. brauchen
+     * @param companyDTO the companyDTO that is compared
+     * @return Are companyDTO and this equal
+     */
+    public boolean equals(CompanyDTO companyDTO){
+        if(this == companyDTO){
+            return true;
+        } else if (companyDTO == null) {
+            return false;
+        } else if (companyDTO.getClass() != getClass()) {
+            return false;
+        } else return this.userid == ((CompanyDTOImpl) companyDTO).userid
+                && this.name.equals(((CompanyDTOImpl) companyDTO).name)
+                && this.industry.equals(((CompanyDTOImpl) companyDTO).industry)
+                && this.banned == ((CompanyDTOImpl) companyDTO).banned
+                && this.companyid == ((CompanyDTOImpl) companyDTO).companyid;
+    }
 }

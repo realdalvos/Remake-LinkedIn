@@ -121,10 +121,44 @@ class ProfileControlTest {
     }
 
     @Test
-    @DisplayName("Checking if save company works")
-    void saveCompanyTest(){
+    @DisplayName("Checking if methods concerning company work")
+    void companyTest(){
         assertDoesNotThrow(() -> profileControl.saveCompanyData(userRepository.findUserByUserid(companyDTO.getUserid()), companyDTO));
+        assertEquals(companyDTO.getCompanyid(), profileControl.getCompanyProfile(companyDTO.getUserid()).getCompanyid());
+        assertEquals(companyDTO.getUserid(), profileControl.getCompanyProfile(companyDTO.getUserid()).getUserid());
+        assertEquals(companyDTO.getName(), profileControl.getCompanyProfile(companyDTO.getUserid()).getName());
+        assertEquals(companyDTO.getIndustry(), profileControl.getCompanyProfile(companyDTO.getUserid()).getIndustry());
+        assertEquals(companyDTO.getBanned(), profileControl.getCompanyProfile(companyDTO.getUserid()).getBanned());
     }
 
+    @Test
+    @DisplayName("Checking if getStudentProfile() works as expected")
+    void getStudentProfileTest(){
+        assertEquals(studentDTO.getUserid(), profileControl.getStudentProfile(studentDTO.getUserid()).getUserid());
+        assertEquals(studentDTO.getStudentid(), profileControl.getStudentProfile(studentDTO.getUserid()).getStudentid());
+        assertEquals(studentDTO.getFirstname(), profileControl.getStudentProfile(studentDTO.getUserid()).getFirstname());
+        assertEquals(studentDTO.getLastname(), profileControl.getStudentProfile(studentDTO.getUserid()).getLastname());
+        assertEquals(studentDTO.getMatrikelnumber(), profileControl.getStudentProfile(studentDTO.getUserid()).getMatrikelnumber());
+        assertEquals(studentDTO.getUniversity(), profileControl.getStudentProfile(studentDTO.getUserid()).getUniversity());
 
+    }
+
+    @Test
+    @DisplayName("Checking if getStudentsMatchingKeyword() works as expected")
+    void getStudentMatchingKeywordTest(){
+        //These assertions kind of check for the same thing. Just wanted to make sure that the returned has a stored value.
+        assertDoesNotThrow(() -> profileControl.getStudentsMatchingKeyword("hbrs").iterator().next());
+        assertTrue(profileControl.getStudentsMatchingKeyword("hbrs").iterator().hasNext());
+    }
+
+    @Test
+    @DisplayName("Checking if getUderByUserid() works as expected")
+    void getUserByUseridTest(){
+        userDTO = userRepository.findUserByUserid(studentDTO.getUserid());
+        UserDTO userDTO2 = profileControl.getUserByUserid(userDTO.getUserid());
+        assertEquals(userDTO.getUserid(), userDTO2.getUserid());
+        assertEquals(userDTO.getUsername(), userDTO2.getUsername());
+        assertEquals(userDTO.getEmail(), userDTO2.getEmail());
+        assertEquals(userDTO.getRole(), userDTO2.getRole());
+    }
 }
