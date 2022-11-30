@@ -194,7 +194,7 @@ public class ProfileService implements ProfileServiceInterface {
     }
 
     public UserDTO getUserByUserid(int userid) {
-        return userRepository.findUserByUserid(userid);
+        return userRepository.findByUserid(userid);
     }
 }
 

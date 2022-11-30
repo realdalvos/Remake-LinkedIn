@@ -12,13 +12,11 @@ import java.util.List;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Integer> {
 
-    StudentDTO findStudentByMatrikelnumber(String matrikelnumber);
+    StudentDTO findByMatrikelnumber(String matrikelnumber);
+
+    StudentDTO findByUserid(int id);
 
     @Transactional
     @Query("SELECT s FROM Student s")
     List<StudentDTO> getAll();
-}
-    StudentDTO findByUserid(int id);
-
-    StudentDTO findByMatrikelnumber(String matrikelnumber);
 }
