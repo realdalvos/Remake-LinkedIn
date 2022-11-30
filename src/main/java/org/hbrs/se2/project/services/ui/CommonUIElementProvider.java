@@ -31,13 +31,15 @@ public class CommonUIElementProvider {
         dialog.open();
     }
 
-    public void makeYesNoDialog(String message, Button yes) {
+    public void makeYesNoDialog(String message, ComponentEventListener<ClickEvent<Button>> listener) {
         VerticalLayout vLayout = new VerticalLayout();
         Dialog dialog = new Dialog();
         Button no = new Button("Nein");
         no.addClickListener(event -> dialog.close());
-        yes.setText("Ja");
+        Button yes = new Button("Ja");
         yes.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        yes.addClickListener(listener);
+        yes.addClickListener(event -> UI.getCurrent().getPage().reload());
         yes.addClickListener(event -> dialog.close());
         HorizontalLayout hLayout = new HorizontalLayout();
         vLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.END, hLayout);
@@ -47,15 +49,16 @@ public class CommonUIElementProvider {
         dialog.open();
     }
 
-    public void makeConfirm(String message, Button save) {
+    public void makeConfirm(String message, ComponentEventListener<ClickEvent<Button>> listener) {
         VerticalLayout vLayout = new VerticalLayout();
         Dialog dialog = new Dialog();
         Button close = new Button("Abbrechen");
         close.addClickListener(event -> dialog.close());
         Button reject = new Button("Verwerfen");
         reject.addClickListener(event -> UI.getCurrent().getPage().reload());
-        save.setText("Speichern");
+        Button save = new Button("Speichern");
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        save.addClickListener(listener);
         save.addClickListener(event -> dialog.close());
         HorizontalLayout hLayout = new HorizontalLayout();
         hLayout.add(close, reject, save);

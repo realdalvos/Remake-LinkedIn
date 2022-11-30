@@ -116,8 +116,18 @@ public class StudentProfileView extends ProfileView {
         formLayout.addComponentAtIndex(15, button);
         button.addClickListener(buttonClickEvent -> {
             if (userBinder.isValid() && studentBinder.isValid()) {
-                ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?", confirm());
-                //confirm().open();
+                ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?",
+                        event -> {
+                            try {
+                                profileControl.saveStudentData(
+                                        userBinder.getBean(), studentBinder.getBean(),
+                                        newMajors, newTopics, newSkills);
+                                // reload page to get updated view
+                                UI.getCurrent().getPage().reload();
+                            } catch (DatabaseUserException e) {
+                                logger.error("Something went wrong with saving student data");
+                            }
+                        });
             } else {
                 ui.makeDialog("Überprüfe bitte deine Angaben auf Korrektheit");
             }
@@ -185,22 +195,6 @@ public class StudentProfileView extends ProfileView {
                 .bind(StudentDTOImpl::getMatrikelnumber, StudentDTOImpl::setMatrikelnumber);
         matrikelnumber.addValueChangeListener(
                 event -> studentBinder.validate());
-    }
-
-    private Button confirm() {
-        Button save = new Button();
-        save.addClickListener(event -> {
-            try {
-                profileControl.saveStudentData(
-                        userBinder.getBean(), studentBinder.getBean(),
-                        newMajors, newTopics, newSkills);
-                // reload page to get updated view
-                UI.getCurrent().getPage().reload();
-            } catch (DatabaseUserException e) {
-                logger.error("Something went wrong with saving student data");
-            }
-        });
-        return save;
     }
 
 }

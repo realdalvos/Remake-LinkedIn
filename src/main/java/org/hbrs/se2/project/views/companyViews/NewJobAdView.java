@@ -96,10 +96,10 @@ public class NewJobAdView extends Div {
 
         contactdetails.setValue(CURRENT_USER.getEmail());
 
-        postButton.addClickListener(event -> {
-
+        postButton.addClickListener(e -> {
             if (binder.isValid()) {
-                ui.makeConfirm("Möchtest du die Jobanzeige so veröffentlichen?", confirm());
+                ui.makeConfirm("Möchtest du die Jobanzeige so veröffentlichen?",
+                        event -> {jobControl.createNewJobPost(binder.getBean());navigateHandler.navigateToMyAdsView();});
             } else {
                 ui.makeDialog("Fülle bitte alle Felder aus");
                 logger.info("Not all fields have been filled in");
