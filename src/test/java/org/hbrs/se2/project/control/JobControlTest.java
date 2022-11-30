@@ -182,7 +182,7 @@ public class JobControlTest {
         JobDTO testJob2 = new JobDTOImpl(
                 testCompanyDTO.getCompanyid(), "Test title2", "Testbeschreibung. assembly programmer.", 20, "Test location", "Test contactdetails");
         jobControl.createNewJobPost(testJob2);
-        testJob2 = jobRepository.findJobByCompanyidAndTitle(testJob2.getCompanyid(), testJob2.getTitle());
+        testJob2 = jobRepository.findByCompanyidAndTitle(testJob2.getCompanyid(), testJob2.getTitle());
 
         List<JobDTO> list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
         assertEquals(2, list.size(), "List should contain 2 elements");
@@ -191,7 +191,7 @@ public class JobControlTest {
 
         list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
         assertEquals(1, list.size(), "List should contain 1 element");
-        assertNotNull(jobRepository.findJobByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle()), "testJob should be in DB");
+        assertNotNull(jobRepository.findByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle()), "testJob should be in DB");
 
         jobControl.deleteJob(testJob.getJobid());
         list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
