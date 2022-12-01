@@ -36,7 +36,7 @@ public class JobControlTest {
                 testCompanyDTO.getCompanyid(), "Test title", "Testbeschreibung. assembly programmer.", 20, "Test location", "Test contactdetails");
         jobControl.createNewJobPost(testJob);
 
-        testJob = jobRepository.findJobByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle());
+        testJob = jobRepository.findByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle());
     }
 
     @AfterEach
@@ -49,7 +49,7 @@ public class JobControlTest {
     @DisplayName("Tests if the test Job was created in the database.")
     public void testIfJobIsCreatedInDB(){
         //Checking if there is a job with companyid of the testCompany and title of the testJob
-        JobDTO jobFromRepo = jobRepository.findJobByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle());
+        JobDTO jobFromRepo = jobRepository.findByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle());
         Assertions.assertNotNull(jobFromRepo);
 
         assertEquals("Testbeschreibung. assembly programmer.", jobFromRepo.getDescription());
@@ -182,7 +182,7 @@ public class JobControlTest {
         JobDTO testJob2 = new JobDTOImpl(
                 testCompanyDTO.getCompanyid(), "Test title2", "Testbeschreibung. assembly programmer.", 20, "Test location", "Test contactdetails");
         jobControl.createNewJobPost(testJob2);
-        testJob2 = jobRepository.findJobByCompanyidAndTitle(testJob2.getCompanyid(), testJob2.getTitle());
+        testJob2 = jobRepository.findByCompanyidAndTitle(testJob2.getCompanyid(), testJob2.getTitle());
 
         List<JobDTO> list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
         assertEquals(2, list.size(), "List should contain 2 elements");
@@ -191,7 +191,7 @@ public class JobControlTest {
 
         list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());
         assertEquals(1, list.size(), "List should contain 1 element");
-        assertNotNull(jobRepository.findJobByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle()), "testJob should be in DB");
+        assertNotNull(jobRepository.findByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle()), "testJob should be in DB");
 
         jobControl.deleteJob(testJob.getJobid());
         list = jobControl.getAllCompanyJobs(testCompanyDTO.getCompanyid());

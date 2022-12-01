@@ -11,7 +11,6 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
@@ -19,8 +18,10 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
 import org.hbrs.se2.project.dtos.JobDTO;
+import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
+
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -30,7 +31,7 @@ import java.util.stream.Stream;
 @Route(value = Globals.Pages.JOBS_VIEW, layout = AppView.class, registerAtStartup = false)
 @PageTitle("Jobs")
 public class JobsView extends Div {
-    Label emptyLabel = new Label();
+    CommonUIElementProvider ui;
     // interactive search field
     private final TextField searchField = new TextField();
     private final Button searchButton = new Button(getTranslation("view.job.button.search"));
@@ -38,7 +39,8 @@ public class JobsView extends Div {
     // Create a Grid bound to the list
     private final Grid<JobDTO> grid = new Grid<>();
 
-    public JobsView(JobControl jobControl) {
+    public JobsView(JobControl jobControl, CommonUIElementProvider ui) {
+        this.ui = ui;
         HorizontalLayout layout = new HorizontalLayout();
 
         layout.setSizeFull();
@@ -71,7 +73,7 @@ public class JobsView extends Div {
         topLayout.add(buttonAllJobs);
 
         layout.add(topLayout);
-        layout.add(emptyLabel);
+        layout.add(new Label());
         layout.setWidth("100%");
 
         // Header
@@ -140,39 +142,14 @@ public class JobsView extends Div {
 
         // adding text, topLayout, grid and the text for showing the total number of jobs available
 
-        add(introductionText());
+        /*
+        with introductionText() below the career page will show information and help the user
+        guide through the option of either filtering the job ads or showing all available job ads
+        */
+        add(ui.introductionText("Willkommen auf Ihrer Karriereseite!", "Sie können nach Jobs filtern oder sich direkt alle anzeigen lassen!"));
         add(topLayout);
         add(grid);
         add(jobCountText);
     }
 
-    /*
-    with introductionText() below the career page will show information and help the user
-    guide through the option of either filtering the job ads or showing all available job ads
-    */
-    private VerticalLayout introductionText() {
-        VerticalLayout vLayout = new VerticalLayout();
-        H2 startText = new H2("Willkommen auf Ihrer Karriereseite!" );
-
-        H3 descriptionText = new H3("Sie können nach Jobs filtern oder sich direkt alle anzeigen lassen! ");
-
-        vLayout.setSizeFull();
-        vLayout.setPadding(false);
-        vLayout.setSpacing(true);
-        vLayout.getThemeList().set("spacing-s", true);
-        vLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
-
-        startText.getElement().getStyle().set("font-size","45px"); // font size
-        startText.getElement().getStyle().set("color", "#f2a6b4"); // hex value of color in custom Theme for continuity
-        startText.getElement().getStyle().set("text-align","center"); // text is now in center
-
-        descriptionText.getElement().getStyle().set("font-size","20px");
-        descriptionText.getElement().getStyle().set("text-align","center");
-
-        vLayout.add(startText);
-        vLayout.add(descriptionText);
-        vLayout.add(emptyLabel);
-
-        return vLayout;
-    }
 }

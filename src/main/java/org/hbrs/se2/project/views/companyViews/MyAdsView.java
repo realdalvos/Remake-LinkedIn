@@ -72,7 +72,8 @@ public class MyAdsView extends Div {
         grid.addColumn(JobDTO::getLocation).setHeader(getTranslation("view.job.text.location")).setWidth("15%");
         grid.addComponentColumn(JobDTO -> {
             Button deleteButton = new Button(getTranslation("view.job.button.delete"));
-            deleteButton.addClickListener(e -> ui.makeYesNoDialog("Möchten Sie dieses Jobangebot wirklich löschen?", delete(JobDTO.getJobid())));
+            deleteButton.addClickListener(e -> ui.makeYesNoDialog("Möchten Sie dieses Jobangebot wirklich löschen?",
+                    event -> jobControl.deleteJob(JobDTO.getJobid())));
             return deleteButton;
         });
 
@@ -104,7 +105,8 @@ public class MyAdsView extends Div {
                 buttons.add(cancel, save);
                 save.addClickListener(saveEvent -> {
                     if (binder.isValid()) {
-                        ui.makeConfirm("Möchten Sie die Änderungen an diesem Jobangebot speichern?", confirm(binder.getBean()));
+                        ui.makeConfirm("Möchten Sie die Änderungen an diesem Jobangebot speichern?",
+                                event -> {jobControl.createNewJobPost(binder.getBean());UI.getCurrent().getPage().reload();});
                     } else {
                         ui.makeDialog("Überprüfen Sie bitte Ihre Angaben auf Korrektheit");
                     }
@@ -132,18 +134,6 @@ public class MyAdsView extends Div {
         add(title);
         add(grid);
         setHeight("100%");
-    }
-
-    private Button confirm(JobDTO job) {
-        Button save = new Button();
-        save.addClickListener(event -> {jobControl.createNewJobPost(job);UI.getCurrent().getPage().reload();});
-        return save;
-    }
-
-    private Button delete(int jobid) {
-        Button delete = new Button();
-        delete.addClickListener(event -> {jobControl.deleteJob(jobid);UI.getCurrent().getPage().reload();});
-        return delete;
     }
 
 }

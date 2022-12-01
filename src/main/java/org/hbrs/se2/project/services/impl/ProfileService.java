@@ -7,8 +7,7 @@ import org.hbrs.se2.project.services.factory.EntityCreationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ProfileService implements ProfileServiceInterface {
@@ -91,12 +90,12 @@ public class ProfileService implements ProfileServiceInterface {
 
     @Override
     public StudentDTO getStudentProfile(int userid) {
-        return studentRepository.findStudentByUserid(userid);
+        return studentRepository.findByUserid(userid);
     }
 
     @Override
     public CompanyDTO getCompanyProfile(int userid) {
-        return companyRepository.findCompanyByUserid(userid);
+        return companyRepository.findByUserid(userid);
     }
 
     @Override
@@ -110,7 +109,7 @@ public class ProfileService implements ProfileServiceInterface {
         // get matching majors from major table with major id from studentHasMajor list
         for (StudentHasMajorDTO studentHasMajor : studentHasMajorRepository
                 .findByStudentid(studentRepository
-                        .findStudentByUserid(userid)
+                        .findByUserid(userid)
                         .getStudentid())) {
             majors.add(majorRepository.findByMajorid(studentHasMajor.getMajorid()));
         }
@@ -124,7 +123,7 @@ public class ProfileService implements ProfileServiceInterface {
         List<TopicDTO> topics = new ArrayList<>();
         for (StudentHasTopicDTO studentHasTopic : studentHasTopicRepository
                 .findByStudentid(studentRepository
-                        .findStudentByUserid(userid)
+                        .findByUserid(userid)
                         .getStudentid())) {
             topics.add(topicRepository.findByTopicid(studentHasTopic.getTopicid()));
         }
@@ -137,7 +136,7 @@ public class ProfileService implements ProfileServiceInterface {
         List<SkillDTO> skills = new ArrayList<>();
         for (StudentHasSkillDTO studentHasSkill : studentHasSkillRepository
                 .findByStudentid(studentRepository
-                        .findStudentByUserid(userid)
+                        .findByUserid(userid)
                         .getStudentid())) {
             skills.add(skillRepository.findBySkillid(studentHasSkill.getSkillid()));
         }
@@ -146,17 +145,56 @@ public class ProfileService implements ProfileServiceInterface {
 
     @Override
     public void removeMajor(int userid, int majorid) {
-        studentHasMajorRepository.deleteByStudentidAndMajorid(studentRepository.findStudentByUserid(userid).getStudentid(), majorid);
+        studentHasMajorRepository.deleteByStudentidAndMajorid(studentRepository.findByUserid(userid).getStudentid(), majorid);
+        if (!studentHasMajorRepository.existsRelation(majorid)) {
+            majorRepository.deleteById(majorid);
+        }
     }
 
     @Override
     public void removeTopic(int userid, int topicid) {
-        studentHasTopicRepository.deleteByStudentidAndTopicid(studentRepository.findStudentByUserid(userid).getStudentid(), topicid);
+        studentHasTopicRepository.deleteByStudentidAndTopicid(studentRepository.findByUserid(userid).getStudentid(), topicid);
+        if (!studentHasTopicRepository.existsRelation(topicid)) {
+            topicRepository.deleteById(topicid);
+        }
     }
 
     @Override
     public void removeSkill(int userid, int skillid) {
-        studentHasSkillRepository.deleteByStudentidAndSkillid(studentRepository.findStudentByUserid(userid).getStudentid(), skillid);
+        studentHasSkillRepository.deleteByStudentidAndSkillid(studentRepository.findByUserid(userid).getStudentid(), skillid);
+        if (!studentHasSkillRepository.existsRelation(skillid)) {
+            skillRepository.deleteById(skillid);
+        }
     }
 
+    public Set<StudentDTO> getStudentsMatchingKeyword(String keyword) {
+        // get all data for filtering
+        Set<StudentDTO> matchingStudents = new HashSet<>();
+
+        studentRepository.getAll().parallelStream().forEach(studentDTO -> {
+            // String array for saving all data
+            List<String> list = new ArrayList<>();
+
+            // save university into string array
+            if(studentDTO.getUniversity() != null) {
+                list.add(studentDTO.getUniversity());
+            }
+            // get skills, majors, topics of one student and add them to list
+            getSkillOfStudent(studentDTO.getUserid()).parallelStream().forEach(skill -> list.add(skill.getSkill()));
+            getTopicOfStudent(studentDTO.getUserid()).parallelStream().forEach(topic -> list.add(topic.getTopic()));
+            getMajorOfStudent(studentDTO.getUserid()).parallelStream().forEach(major -> list.add(major.getMajor()));
+
+            list.parallelStream().forEach(element -> {
+                if(element.toLowerCase().contains(keyword.toLowerCase())){
+                    matchingStudents.add(studentDTO);
+                }
+            });
+        });
+        return matchingStudents;
+    }
+
+    public UserDTO getUserByUserid(int userid) {
+        return userRepository.findByUserid(userid);
+    }
 }
+

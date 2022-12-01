@@ -29,12 +29,12 @@ public class JobService implements JobServiceInterface {
 
     @Override
     public CompanyDTO getCompanyByUserid(int id) {
-        return companyRepository.findCompanyByUserid(id);
+        return companyRepository.findByUserid(id);
     }
 
     @Override
     public String getCompanyOfJob(JobDTO job) {
-        return companyRepository.findCompanyByCompanyid(job.getCompanyid()).getName();
+        return companyRepository.findByCompanyid(job.getCompanyid()).getName();
     }
 
     @Override
@@ -44,7 +44,7 @@ public class JobService implements JobServiceInterface {
 
     @Override
     public List<JobDTO> getAllCompanyJobs(int compId) {
-        return jobRepository.findJobByCompanyid(compId);
+        return jobRepository.findByCompanyid(compId);
     }
 
     /**
@@ -82,6 +82,7 @@ public class JobService implements JobServiceInterface {
      */
     @Override
     public List<JobDTO> getAllJobs() {
-        return jobRepository.getAll().parallelStream().filter(job -> !companyRepository.findCompanyByCompanyid(job.getCompanyid()).getBanned()).collect(Collectors.toList());
+        return jobRepository.getAll().parallelStream().filter(job -> !companyRepository.findByCompanyid(job.getCompanyid()).getBanned()).collect(Collectors.toList());
     }
+
 }
