@@ -76,4 +76,7 @@ public class ProfileControl {
 
     public UserDTO getUserByUserid(int id) {return profileService.getUserByUserid(id);}
 
+    public void deleteUser(UserDTO user) throws DatabaseUserException {
+        profileService.deleteUser(user);
+    }
 }

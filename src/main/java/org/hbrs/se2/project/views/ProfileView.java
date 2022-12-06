@@ -26,6 +26,7 @@ public abstract class ProfileView extends Div {
     protected final TextField username = new TextField("Benutzername:");
     protected final TextField email = new TextField("EMail-Adresse:");
     protected Button button;
+    protected Button delete = new Button("Account löschen");
     protected final FormLayout formLayout = new FormLayout();
 
     protected final Binder<UserDTOImpl> userBinder = new Binder<>(UserDTOImpl.class);

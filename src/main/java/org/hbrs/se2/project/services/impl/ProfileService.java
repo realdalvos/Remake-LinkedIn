@@ -1,9 +1,11 @@
 package org.hbrs.se2.project.services.impl;
 
+import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.repository.*;
 import org.hbrs.se2.project.services.ProfileServiceInterface;
 import org.hbrs.se2.project.services.factory.EntityCreationService;
+import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,9 @@ public class ProfileService implements ProfileServiceInterface {
     private StudentHasTopicRepository studentHasTopicRepository;
     @Autowired
     private EntityCreationService entityCreationService;
+
+    @Autowired
+    protected CommonUIElementProvider ui;
 
     @Override
     public void saveStudentData(UserDTO user, StudentDTO student, List<String> major, List<String> topic, List<String> skill) {
@@ -196,5 +201,10 @@ public class ProfileService implements ProfileServiceInterface {
     public UserDTO getUserByUserid(int userid) {
         return userRepository.findByUserid(userid);
     }
-}
 
+    public void deleteUser(UserDTO user) throws DatabaseUserException {
+        if (userRepository.deleteByUserid(user.getUserid()) != 1) {
+            throw new DatabaseUserException("Wrong amount of datasets deleted");
+        }
+    }
+}

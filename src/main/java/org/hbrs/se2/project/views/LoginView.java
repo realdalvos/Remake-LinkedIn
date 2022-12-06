@@ -21,19 +21,17 @@ import org.hbrs.se2.project.helper.AccessHandler;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
  * Show Login View to user when not logged in
  */
-@Route(value="")
+@Route(value="login")
 @Theme(themeFolder = "mytheme", variant = Lumo.DARK)
 @PageTitle("Login")
 public class LoginView extends VerticalLayout {
 
-    @Autowired
-    CommonUIElementProvider ui;
+    final CommonUIElementProvider ui;
     private final LoginControl loginControl;
 
     private LoginI18n createLoginI18n(){
@@ -57,7 +55,7 @@ public class LoginView extends VerticalLayout {
         return i18n;
     }
 
-    public LoginView(LoginControl loginControl) {
+    public LoginView(LoginControl loginControl, CommonUIElementProvider ui) {
         AccessHandler.setDefaultAccess();
         setSizeFull();
         Avatar avatarBasic = new Avatar();
@@ -116,6 +114,7 @@ public class LoginView extends VerticalLayout {
         this.setAlignItems(Alignment.CENTER);
 
         this.loginControl = loginControl;
+        this.ui = ui;
     }
 
     private void grabAndSetUserIntoSession() {
