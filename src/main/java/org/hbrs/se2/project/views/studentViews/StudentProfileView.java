@@ -12,7 +12,6 @@ import org.hbrs.se2.project.control.ProfileControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
-import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
@@ -60,13 +59,13 @@ public class StudentProfileView extends ProfileView {
 
     private void setAllGrids() {
         // Create grids for skills, topics and majors
-        gridMajors.setHeightByRows(true);
+        gridMajors.setAllRowsVisible(true);
         gridMajors.addColumn(MajorDTO::getMajor).setHeader("Majors:");
         gridMajors.setItems(profileControl.getMajorOfStudent(CURRENT_USER.getUserid()));
-        gridTopics.setHeightByRows(true);
+        gridTopics.setAllRowsVisible(true);
         gridTopics.addColumn(TopicDTO::getTopic).setHeader("Topics:");
         gridTopics.setItems(profileControl.getTopicOfStudent(CURRENT_USER.getUserid()));
-        gridSkills.setHeightByRows(true);
+        gridSkills.setAllRowsVisible(true);
         gridSkills.addColumn(SkillDTO::getSkill).setHeader("Skills:");
         gridSkills.setItems(profileControl.getSkillOfStudent(CURRENT_USER.getUserid()));
     }
@@ -148,15 +147,6 @@ public class StudentProfileView extends ProfileView {
             formLayout.remove(button);
             editLayout();
         });
-        delete.addClickListener(buttonClickEvent -> ui.makeDeleteConfirm("Bitte gib deinen Accountnamen zur Bestätigung ein:", event -> {
-            try {
-                profileControl.deleteUser(CURRENT_USER);
-                this.getUI().ifPresent(ui -> ui.getSession().close());
-                navigateHandler.navigateToLoginPage();
-            } catch (DatabaseUserException e) {
-                logger.error("Something went wrong when deleting student from DB");
-            }
-        }));
 
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
     }
@@ -164,7 +154,7 @@ public class StudentProfileView extends ProfileView {
     private Grid<String> newEntriesGrid(List<String> entries) {
         Grid<String> grid = new Grid<>();
         grid.addColumn(String::valueOf);
-        grid.setHeightByRows(true);
+        grid.setAllRowsVisible(true);
         grid.addComponentColumn(newEntry -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
