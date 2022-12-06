@@ -13,6 +13,10 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.TextFieldVariant;
+import com.vaadin.flow.data.value.ValueChangeMode;
+import org.hbrs.se2.project.util.Utils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -67,6 +71,30 @@ public class CommonUIElementProvider {
         hLayout.add(close, reject, save);
         vLayout.add(new Text(message), hLayout);
         vLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, hLayout);
+        dialog.add(vLayout);
+        dialog.open();
+    }
+
+    public void makeDeleteConfirm(String message, ComponentEventListener<ClickEvent<Button>> listener) {
+        VerticalLayout vLayout = new VerticalLayout();
+        Dialog dialog = new Dialog();
+        TextField confirmField = new TextField();
+        String user = Utils.getCurrentUser().getUsername();
+        confirmField.setPlaceholder(user);
+        confirmField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
+        Button close = new Button("Abbrechen");
+        close.addClickListener(event -> dialog.close());
+        Button delete = new Button("Löschen");
+        delete.setEnabled(false);
+        confirmField.setValueChangeMode(ValueChangeMode.EAGER);
+        confirmField.addValueChangeListener(event -> delete.setEnabled(confirmField.getValue().equals(user)));
+        delete.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        delete.addClickListener(listener);
+        delete.addClickListener(event -> dialog.close());
+        HorizontalLayout hLayout = new HorizontalLayout();
+        hLayout.add(close, delete);
+        vLayout.add(new Text(message), confirmField, hLayout);
+        vLayout.setAlignItems(FlexComponent.Alignment.CENTER);
         dialog.add(vLayout);
         dialog.open();
     }

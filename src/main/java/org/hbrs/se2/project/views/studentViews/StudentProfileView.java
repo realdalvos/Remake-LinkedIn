@@ -1,18 +1,10 @@
 package org.hbrs.se2.project.views.studentViews;
 
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.binder.*;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.component.textfield.TextField;
@@ -156,36 +148,16 @@ public class StudentProfileView extends ProfileView {
             formLayout.remove(button);
             editLayout();
         });
-        delete.addClickListener(buttonClickEvent -> {
-            VerticalLayout vLayout = new VerticalLayout();
-            Dialog dialog = new Dialog();
-            TextField confirmField = new TextField();
-            confirmField.setPlaceholder(CURRENT_USER.getUsername());
-            confirmField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
-            Button close = new Button("Abbrechen");
-            close.addClickListener(event -> dialog.close());
-            Button delete = new Button("Löschen");
-            delete.setEnabled(false);
-            confirmField.setValueChangeMode(ValueChangeMode.EAGER);
-            confirmField.addValueChangeListener(event -> delete.setEnabled(confirmField.getValue().equals(CURRENT_USER.getUsername())));
-            delete.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-            delete.addClickListener(event -> {
-                try {
-                    profileControl.deleteUser(CURRENT_USER);
-                    dialog.close();
-                    this.getUI().ifPresent(ui -> ui.getSession().close());
-                    navigateHandler.navigateToLoginPage();
-                } catch (DatabaseUserException e) {
-                    logger.error("Something went wrong when deleting student from DB");
-                }
-            });
-            HorizontalLayout hLayout = new HorizontalLayout();
-            hLayout.add(close, delete);
-            vLayout.add(new Text("Bitte gib deinen Accountnamen zur Bestätigung ein:"), confirmField, hLayout);
-            vLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-            dialog.add(vLayout);
-            dialog.open();
-            });
+        delete.addClickListener(buttonClickEvent -> ui.makeDeleteConfirm("Bitte gib deinen Accountnamen zur Bestätigung ein:", event -> {
+            try {
+                profileControl.deleteUser(CURRENT_USER);
+                this.getUI().ifPresent(ui -> ui.getSession().close());
+                navigateHandler.navigateToLoginPage();
+            } catch (DatabaseUserException e) {
+                logger.error("Something went wrong when deleting student from DB");
+            }
+        }));
+
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
     }
 
