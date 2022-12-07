@@ -152,7 +152,7 @@ class ProfileControlTest {
     }
 
     @Test
-    @DisplayName("Checking if getUderByUserid() works as expected")
+    @DisplayName("Checking if getUserByUserid() works as expected")
     void getUserByUseridTest(){
         userDTO = userRepository.findUserByUserid(studentDTO.getUserid());
         UserDTO userDTO2 = profileControl.getUserByUserid(userDTO.getUserid());
