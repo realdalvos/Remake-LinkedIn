@@ -71,8 +71,6 @@ public class StudentProfileView extends ProfileView {
         gridMajors.setAllRowsVisible(true);
         gridMajors.addColumn(MajorDTO::getMajor).setHeader("Majors:");
         gridMajors.setItems(majors);
-        gridTopics.setHeightByRows(true);
-        gridMajors.setItems(profileControl.getMajorOfStudent(CURRENT_USER.getUserid()));
         gridTopics.setAllRowsVisible(true);
         gridTopics.addColumn(TopicDTO::getTopic).setHeader("Topics:");
         gridTopics.setItems(topics);
@@ -117,9 +115,7 @@ public class StudentProfileView extends ProfileView {
 
     private void editLayout() {
         Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(
-                field -> {
-                    field.setReadOnly(false);
-                }
+                field -> field.setReadOnly(false)
         );
         setEditGrids();
 
