@@ -105,7 +105,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
     private void logoutUser() {
         this.getUI().ifPresent(ui -> ui.getSession().close());
-        navigateHandler.navigateToLoginPage();
+        navigateHandler.navigateToDefaultPage();
     }
 
     /**

@@ -75,7 +75,7 @@ public class RegisterStudentView extends RegisterView {
                 if (userBinder.isValid() && studentBinder.isValid()) {
                     // function to register new company
                     registrationControl.registerStudent(userBinder.getBean(), studentBinder.getBean());
-                    navigateHandler.navigateToLoginPage();
+                    navigateHandler.navigateToDefaultPage();
                 } else {
                     ui.makeDialog("Überprüfe bitte deine Eingaben");
                     logger.info("Not all fields have been filled in");

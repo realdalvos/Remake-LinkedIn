@@ -26,7 +26,7 @@ import org.hbrs.se2.project.util.Globals;
 /**
  * Show Login View to user when not logged in
  */
-@Route(value="login")
+@Route(value="")
 @Theme(themeFolder = "mytheme", variant = Lumo.DARK)
 @PageTitle("Login")
 public class LoginView extends VerticalLayout {

@@ -43,7 +43,7 @@ public abstract class ProfileView extends Div {
             try {
                 profileControl.deleteUser(CURRENT_USER);
                 this.getUI().ifPresent(ui -> ui.getSession().close());
-                navigateHandler.navigateToLoginPage();
+                navigateHandler.navigateToDefaultPage();
             } catch (DatabaseUserException e) {
                 logger.error("Something went wrong when deleting student from DB");
             }
