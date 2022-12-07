@@ -42,12 +42,21 @@ public class StudentProfileView extends ProfileView {
     private final Grid<MajorDTO> gridMajors = new Grid<>();
     private final Grid<TopicDTO> gridTopics = new Grid<>();
     private final Grid<SkillDTO> gridSkills = new Grid<>();
+    private final List<MajorDTO> majors;
+    private final List<TopicDTO> topics;
+    private final List<SkillDTO> skills;
     private List<String> newMajors, newTopics, newSkills;
+    private final List<MajorDTO> removeMajors = new ArrayList<>();
+    private final List<TopicDTO> removeTopics = new ArrayList<>();
+    private final List<SkillDTO> removeSkills = new ArrayList<>();
 
     private final Binder<StudentDTOImpl> studentBinder = new BeanValidationBinder<>(StudentDTOImpl.class);
 
     public StudentProfileView(ProfileControl profileControl) {
         this.profileControl = profileControl;
+        majors = profileControl.getMajorOfStudent(CURRENT_USER.getUserid());
+        topics = profileControl.getTopicOfStudent(CURRENT_USER.getUserid());
+        skills = profileControl.getSkillOfStudent(CURRENT_USER.getUserid());
 
         setSizeFull();
         add(formLayout);
@@ -61,57 +70,61 @@ public class StudentProfileView extends ProfileView {
         // Create grids for skills, topics and majors
         gridMajors.setAllRowsVisible(true);
         gridMajors.addColumn(MajorDTO::getMajor).setHeader("Majors:");
+        gridMajors.setItems(majors);
+        gridTopics.setHeightByRows(true);
         gridMajors.setItems(profileControl.getMajorOfStudent(CURRENT_USER.getUserid()));
         gridTopics.setAllRowsVisible(true);
         gridTopics.addColumn(TopicDTO::getTopic).setHeader("Topics:");
-        gridTopics.setItems(profileControl.getTopicOfStudent(CURRENT_USER.getUserid()));
+        gridTopics.setItems(topics);
         gridSkills.setAllRowsVisible(true);
         gridSkills.addColumn(SkillDTO::getSkill).setHeader("Skills:");
-        gridSkills.setItems(profileControl.getSkillOfStudent(CURRENT_USER.getUserid()));
+        gridSkills.setItems(skills);
     }
 
-    private void editLayout() {
+    private void setEditGrids() {
         Grid<String> newMajorsGrid, newTopicsGrid, newSkillsGrid;
-
-        Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(
-                field -> field.setReadOnly(false)
-        );
-
         gridMajors.addComponentColumn(major -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
-                profileControl.removeMajor(CURRENT_USER.getUserid(), major.getMajorid());
-                gridMajors.setItems(profileControl.getMajorOfStudent(CURRENT_USER.getUserid()));
+                removeMajors.add(major);
+                majors.remove(major);
+                gridMajors.setItems(majors);
             });
             return deleteButton;
         });
-        formLayout.addComponentAtIndex(7, newMajorsGrid = newEntriesGrid(newMajors = new ArrayList<>()));
-        formLayout.addComponentAtIndex(8, newEntryLayout(major, newMajors, newMajorsGrid));
-
+        formLayout.add(gridMajors, newMajorsGrid = newEntriesGrid(newMajors = new ArrayList<>()), newEntryLayout(major, newMajors, newMajorsGrid));
         gridTopics.addComponentColumn(topic -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
-                profileControl.removeTopic(CURRENT_USER.getUserid(), topic.getTopicid());
-                gridTopics.setItems(profileControl.getTopicOfStudent(CURRENT_USER.getUserid()));
+                removeTopics.add(topic);
+                topics.remove(topic);
+                gridTopics.setItems(topics);
             });
             return deleteButton;
         });
-        formLayout.addComponentAtIndex(10, newTopicsGrid = newEntriesGrid(newTopics = new ArrayList<>()));
-        formLayout.addComponentAtIndex(11, newEntryLayout(topic, newTopics, newTopicsGrid));
-
+        formLayout.add(gridTopics, newTopicsGrid = newEntriesGrid(newTopics = new ArrayList<>()), newEntryLayout(topic, newTopics, newTopicsGrid));
         gridSkills.addComponentColumn(skill -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
-                profileControl.removeSkill(CURRENT_USER.getUserid(), skill.getSkillid());
-                gridSkills.setItems(profileControl.getSkillOfStudent(CURRENT_USER.getUserid()));
+                removeSkills.add(skill);
+                skills.remove(skill);
+                gridSkills.setItems(skills);
             });
             return deleteButton;
         });
-        formLayout.addComponentAtIndex(13, newSkillsGrid = newEntriesGrid(newSkills = new ArrayList<>()));
-        formLayout.addComponentAtIndex(14, newEntryLayout(skill, newSkills, newSkillsGrid));
+        formLayout.add(gridSkills, newSkillsGrid = newEntriesGrid(newSkills = new ArrayList<>()), newEntryLayout(skill, newSkills, newSkillsGrid));
+    }
+
+    private void editLayout() {
+        Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(
+                field -> {
+                    field.setReadOnly(false);
+                }
+        );
+        setEditGrids();
 
         button = new Button("Profil speichern");
-        formLayout.addComponentAtIndex(15, button);
+        formLayout.add(button);
         button.addClickListener(buttonClickEvent -> {
             if (userBinder.isValid() && studentBinder.isValid()) {
                 ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?",
@@ -125,6 +138,9 @@ public class StudentProfileView extends ProfileView {
                             } catch (DatabaseUserException e) {
                                 logger.error("Something went wrong with saving student data");
                             }
+                            removeMajors.forEach(major -> profileControl.removeMajor(CURRENT_USER.getUserid(), major.getMajorid()));
+                            removeTopics.forEach(topic -> profileControl.removeTopic(CURRENT_USER.getUserid(), topic.getTopicid()));
+                            removeSkills.forEach(skill -> profileControl.removeSkill(CURRENT_USER.getUserid(), skill.getSkillid()));
                         });
             } else {
                 ui.makeDialog("Überprüfe bitte deine Angaben auf Korrektheit");
@@ -144,10 +160,9 @@ public class StudentProfileView extends ProfileView {
         button = new Button("Profil bearbeiten");
         formLayout.add(gridMajors, gridTopics, gridSkills, button, delete);
         button.addClickListener(buttonClickEvent -> {
-            formLayout.remove(button);
+            formLayout.remove(gridMajors, gridTopics, gridSkills, button);
             editLayout();
         });
-
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
     }
 
