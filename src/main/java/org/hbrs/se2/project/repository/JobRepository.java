@@ -5,7 +5,6 @@ import org.hbrs.se2.project.entities.Job;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
 
         List<JobDTO> findByCompanyid(int id);
 
-        @Transactional
-        @Query("SELECT j FROM Job j")
-        List<JobDTO> getAll();
+        @Query("SELECT j FROM Job j WHERE LOWER(j.title) LIKE LOWER(CONCAT('%', :keyword,'%')) OR LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword,'%'))")
+        List<JobDTO> findByKeyword(String keyword);
+
 }

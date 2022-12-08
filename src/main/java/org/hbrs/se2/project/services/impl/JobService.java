@@ -54,15 +54,7 @@ public class JobService implements JobServiceInterface {
      * @return Filtered List of Jobs
      */
     public List<JobDTO> getJobsMatchingKeyword(String keyword) {
-        List<JobDTO> matchingJobs = new ArrayList<>();
-        getAllJobs().parallelStream().forEach(job -> {
-            if (job.getTitle().toLowerCase().contains(keyword.toLowerCase())) {
-                matchingJobs.add(job);
-            } else if (job.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
-                matchingJobs.add(job);
-            }
-        });
-        return matchingJobs;
+        return jobRepository.findByKeyword(keyword);
     }
 
     /**
