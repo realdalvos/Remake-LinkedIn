@@ -5,7 +5,6 @@ import org.hbrs.se2.project.entities.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,7 +15,10 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     StudentDTO findByUserid(int id);
 
-    @Transactional
     @Query("SELECT s FROM Student s")
     List<StudentDTO> getAll();
+
+    @Query("SELECT s FROM Student s WHERE LOWER(s.university) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    List<StudentDTO> findByKeyword(String keyword);
+
 }

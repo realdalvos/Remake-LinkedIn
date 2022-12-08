@@ -19,7 +19,7 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
         @Query("SELECT j FROM Job j")
         List<JobDTO> getAll();
 
-        @Query("SELECT j FROM Job j WHERE LOWER(j.title) LIKE LOWER(CONCAT('%', :keyword,'%')) OR LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword,'%'))")
+        @Query("SELECT j FROM Job j WHERE LOWER(j.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
         List<JobDTO> findByKeyword(String keyword);
 
 }
