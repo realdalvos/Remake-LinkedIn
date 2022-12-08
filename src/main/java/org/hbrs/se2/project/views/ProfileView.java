@@ -10,7 +10,6 @@ import org.hbrs.se2.project.control.ProfileControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
-import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Utils;
 import org.modelmapper.ModelMapper;
@@ -42,8 +41,10 @@ public abstract class ProfileView extends Div {
         delete.addClickListener(buttonClickEvent -> ui.makeDeleteConfirm("Bitte gib deinen Accountnamen zur Bestätigung ein:", event -> {
             try {
                 profileControl.deleteUser(CURRENT_USER);
-                this.getUI().ifPresent(ui -> ui.getSession().close());
-                navigateHandler.navigateToDefaultPage();
+                this.getUI().ifPresent(ui -> {
+                    ui.getSession().close();
+                    ui.getPage().setLocation("/");
+                });
             } catch (DatabaseUserException e) {
                 logger.error("Something went wrong when deleting student from DB");
             }

@@ -64,7 +64,7 @@ class ProfileControlTest {
     @DisplayName("Checking if saveStudentData-Method, getMajorOfStudent, getTopicOfStudent, getSkillOfStudent work as expected")
     void saveStudentTest(){
         int studentID = studentDTO.getUserid();
-        userDTO = userRepository.findUserByUserid(studentID);
+        userDTO = userRepository.findByUserid(studentID);
         try{
             profileControl.saveStudentData(userDTO, studentDTO, major, topic, skill);
         }
@@ -93,7 +93,7 @@ class ProfileControlTest {
     @DisplayName("Checking if the remove Methods work as expected")
     void removeTest(){
         int studentID = studentDTO.getUserid();
-        userDTO = userRepository.findUserByUserid(studentID);
+        userDTO = userRepository.findByUserid(studentID);
         try{
             profileControl.saveStudentData(userDTO, studentDTO, major, topic, skill);
         }
@@ -114,7 +114,7 @@ class ProfileControlTest {
     @Test
     @DisplayName("Checking if the methods testing for unique work as expected")
     void uniqueTest(){
-        userDTO = userRepository.findUserByUserid(studentDTO.getUserid());
+        userDTO = userRepository.findByUserid(studentDTO.getUserid());
         assertFalse(profileControl.checkUsernameUnique(userDTO.getUsername()));
         assertFalse(profileControl.checkEmailUnique(userDTO.getEmail()));
         assertFalse(profileControl.checkMatrikelnumberUnique(studentDTO.getMatrikelnumber()));
@@ -123,7 +123,7 @@ class ProfileControlTest {
     @Test
     @DisplayName("Checking if methods concerning company work")
     void companyTest(){
-        assertDoesNotThrow(() -> profileControl.saveCompanyData(userRepository.findUserByUserid(companyDTO.getUserid()), companyDTO));
+        assertDoesNotThrow(() -> profileControl.saveCompanyData(userRepository.findByUserid(companyDTO.getUserid()), companyDTO));
         assertEquals(companyDTO.getCompanyid(), profileControl.getCompanyProfile(companyDTO.getUserid()).getCompanyid());
         assertEquals(companyDTO.getUserid(), profileControl.getCompanyProfile(companyDTO.getUserid()).getUserid());
         assertEquals(companyDTO.getName(), profileControl.getCompanyProfile(companyDTO.getUserid()).getName());
@@ -154,7 +154,7 @@ class ProfileControlTest {
     @Test
     @DisplayName("Checking if getUserByUserid() works as expected")
     void getUserByUseridTest(){
-        userDTO = userRepository.findUserByUserid(studentDTO.getUserid());
+        userDTO = userRepository.findByUserid(studentDTO.getUserid());
         UserDTO userDTO2 = profileControl.getUserByUserid(userDTO.getUserid());
         assertEquals(userDTO.getUserid(), userDTO2.getUserid());
         assertEquals(userDTO.getUsername(), userDTO2.getUsername());
