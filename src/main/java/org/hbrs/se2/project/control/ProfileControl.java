@@ -5,8 +5,6 @@ import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.services.impl.ProfileService;
 import org.hbrs.se2.project.services.impl.ValidationService;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 import java.util.Set;
 
 @Component
@@ -20,7 +18,7 @@ public class ProfileControl {
         this.validationService = validationService;
     }
 
-    public void saveStudentData(UserDTO user, StudentDTO student, List<String> major, List<String> topic, List<String> skill) throws DatabaseUserException {
+    public void saveStudentData(UserDTO user, StudentDTO student, Set<String> major, Set<String> topic, Set<String> skill) throws DatabaseUserException {
         profileService.saveStudentData(user, student, major, topic, skill);
     }
 
@@ -48,28 +46,28 @@ public class ProfileControl {
         return profileService.getCompanyProfile(userid);
     }
 
-    public List<MajorDTO> getMajorOfStudent(int userid) {
+    public Set<MajorDTO> getMajorOfStudent(int userid) {
         return profileService.getMajorOfStudent(userid);
     }
 
-    public List<TopicDTO> getTopicOfStudent(int userid) {
+    public Set<TopicDTO> getTopicOfStudent(int userid) {
         return profileService.getTopicOfStudent(userid);
     }
 
-    public List<SkillDTO> getSkillOfStudent(int userid) {
+    public Set<SkillDTO> getSkillOfStudent(int userid) {
         return profileService.getSkillOfStudent(userid);
     }
 
-    public void removeMajor(int userid, int majorid) {
-        profileService.removeMajor(userid, majorid);
+    public void removeMajor(int userid, MajorDTO major) {
+        profileService.removeMajor(userid, major);
     }
 
-    public void removeTopic(int userid, int topicid) {
-        profileService.removeTopic(userid, topicid);
+    public void removeTopic(int userid, TopicDTO topic) {
+        profileService.removeTopic(userid, topic);
     }
 
-    public void removeSkill(int userid, int skillid) {
-        profileService.removeSkill(userid, skillid);
+    public void removeSkill(int userid, SkillDTO skill) {
+        profileService.removeSkill(userid, skill);
     }
 
     public Set<StudentDTO> getStudentsMatchingKeyword(String keyword) {return profileService.getStudentsMatchingKeyword(keyword);}
