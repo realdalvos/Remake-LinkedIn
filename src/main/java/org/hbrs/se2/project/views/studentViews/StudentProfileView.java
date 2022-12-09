@@ -154,7 +154,7 @@ public class StudentProfileView extends ProfileView {
         );
 
         button = new Button("Profil bearbeiten");
-        formLayout.add(gridMajors, gridTopics, gridSkills, button, delete);
+        formLayout.add(gridMajors, gridTopics, gridSkills, button, changePasswd, delete);
         button.addClickListener(buttonClickEvent -> {
             formLayout.remove(gridMajors, gridTopics, gridSkills, button);
             editLayout();

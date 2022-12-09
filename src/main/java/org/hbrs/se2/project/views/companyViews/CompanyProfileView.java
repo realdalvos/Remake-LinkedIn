@@ -58,7 +58,7 @@ public class CompanyProfileView extends ProfileView {
                 }
         );
         button = new Button("Profil bearbeiten");
-        formLayout.add(button, delete);
+        formLayout.add(button, changePasswd, delete);
         button.addClickListener(buttonClickEvent -> {
             formLayout.remove(button);
             editLayout();

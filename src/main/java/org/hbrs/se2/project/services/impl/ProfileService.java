@@ -7,6 +7,7 @@ import org.hbrs.se2.project.services.ProfileServiceInterface;
 import org.hbrs.se2.project.services.factory.EntityCreationService;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -36,6 +37,9 @@ public class ProfileService implements ProfileServiceInterface {
 
     @Autowired
     protected CommonUIElementProvider ui;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void saveStudentData(UserDTO user, StudentDTO student, List<String> major, List<String> topic, List<String> skill) {
@@ -205,6 +209,16 @@ public class ProfileService implements ProfileServiceInterface {
     public void deleteUser(UserDTO user) throws DatabaseUserException {
         if (userRepository.deleteByUserid(user.getUserid()) != 1) {
             throw new DatabaseUserException("Wrong amount of datasets deleted");
+        }
+    }
+
+    public void saveUserPasswd(UserDTO user) throws DatabaseUserException {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        try {
+            //Saving user in db
+            this.userRepository.save(entityCreationService.userFactory().createEntity(user));
+        } catch (org.springframework.dao.DataAccessResourceFailureException e) {
+            throw new DatabaseUserException("A Failure occurred while saving a user account in the database at createAccount");
         }
     }
 }
