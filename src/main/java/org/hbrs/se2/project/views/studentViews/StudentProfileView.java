@@ -134,9 +134,9 @@ public class StudentProfileView extends ProfileView {
                             } catch (DatabaseUserException e) {
                                 logger.error("Something went wrong with saving student data");
                             }
-                            removeMajors.forEach(major -> profileControl.removeMajor(CURRENT_USER.getUserid(), major));
-                            removeTopics.forEach(topic -> profileControl.removeTopic(CURRENT_USER.getUserid(), topic));
-                            removeSkills.forEach(skill -> profileControl.removeSkill(CURRENT_USER.getUserid(), skill));
+                            removeMajors.forEach(major -> profileControl.removeMajor(CURRENT_USER.getUserid(), major.getMajorid()));
+                            removeTopics.forEach(topic -> profileControl.removeTopic(CURRENT_USER.getUserid(), topic.getTopicid()));
+                            removeSkills.forEach(skill -> profileControl.removeSkill(CURRENT_USER.getUserid(), skill.getSkillid()));
                         });
             } else {
                 ui.makeDialog("Überprüfe bitte deine Angaben auf Korrektheit");

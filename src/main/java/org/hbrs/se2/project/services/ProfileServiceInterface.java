@@ -20,9 +20,9 @@ public interface ProfileServiceInterface {
 
     CompanyDTO getCompanyProfile(int userid);
 
-    void removeMajor(int userid, MajorDTO major);
+    void removeMajor(int userid, int majorid);
 
-    void removeTopic(int userid, TopicDTO topic);
+    void removeTopic(int userid, int topicid);
 
-    void removeSkill(int userid, SkillDTO skill);
+    void removeSkill(int userid, int skillid);
 }

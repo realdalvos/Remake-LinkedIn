@@ -58,16 +58,16 @@ public class ProfileControl {
         return profileService.getSkillOfStudent(userid);
     }
 
-    public void removeMajor(int userid, MajorDTO major) {
-        profileService.removeMajor(userid, major);
+    public void removeMajor(int userid, int majorid) {
+        profileService.removeMajor(userid, majorid);
     }
 
-    public void removeTopic(int userid, TopicDTO topic) {
-        profileService.removeTopic(userid, topic);
+    public void removeTopic(int userid, int topicid) {
+        profileService.removeTopic(userid, topicid);
     }
 
-    public void removeSkill(int userid, SkillDTO skill) {
-        profileService.removeSkill(userid, skill);
+    public void removeSkill(int userid, int skillid) {
+        profileService.removeSkill(userid, skillid);
     }
 
     public Set<StudentDTO> getStudentsMatchingKeyword(String keyword) {return profileService.getStudentsMatchingKeyword(keyword);}

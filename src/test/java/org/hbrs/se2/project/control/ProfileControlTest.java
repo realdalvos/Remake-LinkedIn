@@ -101,13 +101,13 @@ class ProfileControlTest {
             throw new Error("Something went wrong with saving student data");
         }
         MajorDTO majorDTO = majorRepository.findByMajor("Math");
-        assertDoesNotThrow(() -> profileControl.removeMajor(studentID, majorDTO));
+        assertDoesNotThrow(() -> profileControl.removeMajor(studentID, majorDTO.getMajorid()));
 
         TopicDTO topicDTO = topicRepository.findByTopic("Zahlen");
-        assertDoesNotThrow(() -> profileControl.removeTopic(studentID, topicDTO));
+        assertDoesNotThrow(() -> profileControl.removeTopic(studentID, topicDTO.getTopicid()));
 
         SkillDTO skillDTO = skillRepository.findBySkill("Kopfrechnen");
-        assertDoesNotThrow(() -> profileControl.removeSkill(studentID, skillDTO));
+        assertDoesNotThrow(() -> profileControl.removeSkill(studentID, skillDTO.getSkillid()));
 
     }
 

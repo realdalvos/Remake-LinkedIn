@@ -6,6 +6,8 @@ import org.hbrs.se2.project.services.ProfileServiceInterface;
 import org.hbrs.se2.project.services.factory.EntityCreationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.*;
 
 @Service
@@ -116,26 +118,29 @@ public class ProfileService implements ProfileServiceInterface {
     }
 
     @Override
-    public void removeMajor(int userid, MajorDTO major) {
-        studentRepository.save(entityCreationService.studentRemoveMajor(studentRepository.findByUserid(userid), major));
-        if (!studentRepository.existsMajorRelation(major.getMajorid())) {
-            majorRepository.deleteById(major.getMajorid());
+    @Transactional
+    public void removeMajor(int userid, int majorid) {
+        studentRepository.save(entityCreationService.studentRemoveMajorFactory(majorid).createEntity(studentRepository.findByUserid(userid)));
+        if (!studentRepository.existsMajorRelation(majorid)) {
+            majorRepository.deleteById(majorid);
         }
     }
 
     @Override
-    public void removeTopic(int userid, TopicDTO topic) {
-        studentRepository.save(entityCreationService.studentRemoveTopic(studentRepository.findByUserid(userid), topic));
-        if (!studentRepository.existsTopicRelation(topic.getTopicid())) {
-            topicRepository.deleteById(topic.getTopicid());
+    @Transactional
+    public void removeTopic(int userid, int topicid) {
+        studentRepository.save(entityCreationService.studentRemoveTopicFactory(topicid).createEntity(studentRepository.findByUserid(userid)));
+        if (!studentRepository.existsTopicRelation(topicid)) {
+            topicRepository.deleteById(topicid);
         }
     }
 
     @Override
-    public void removeSkill(int userid, SkillDTO skill) {
-        studentRepository.save(entityCreationService.studentRemoveSkill(studentRepository.findByUserid(userid), skill));
-        if (!studentRepository.existsSkillRelation(skill.getSkillid())) {
-            skillRepository.deleteById(skill.getSkillid());
+    @Transactional
+    public void removeSkill(int userid, int skillid) {
+        studentRepository.save(entityCreationService.studentRemoveSkillFactory(skillid).createEntity(studentRepository.findByUserid(userid)));
+        if (!studentRepository.existsSkillRelation(skillid)) {
+            skillRepository.deleteById(skillid);
         }
     }
 

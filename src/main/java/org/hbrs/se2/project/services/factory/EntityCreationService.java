@@ -9,7 +9,6 @@ import org.hbrs.se2.project.repository.TopicRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -39,7 +38,6 @@ public class EntityCreationService {
         return student -> mapper.map(student, Student.class);
     }
 
-    @Transactional
     public AbstractEntityFactory<Student, StudentDTO> studentFactory(Set<MajorDTO> majors, Set<TopicDTO> topics, Set<SkillDTO> skills) {
         return student -> {
             Student s = studentRepository.findById(student.getStudentid()).get();
@@ -51,25 +49,28 @@ public class EntityCreationService {
         };
     }
 
-    @Transactional
-    public Student studentRemoveMajor(StudentDTO student, MajorDTO major) {
-        Student s = studentRepository.findById(student.getStudentid()).get();
-        s.removeMajor(majorRepository.getReferenceById(major.getMajorid()));
-        return s;
+    public AbstractEntityFactory<Student, StudentDTO> studentRemoveMajorFactory(int majorid) {
+        return student -> {
+            Student s = studentRepository.findById(student.getStudentid()).get();
+            s.removeMajor(majorRepository.getReferenceById(majorid));
+            return s;
+        };
     }
 
-    @Transactional
-    public Student studentRemoveTopic(StudentDTO student, TopicDTO topic) {
-        Student s = studentRepository.findById(student.getStudentid()).get();
-        s.removeTopic(topicRepository.getReferenceById(topic.getTopicid()));
-        return s;
+    public AbstractEntityFactory<Student, StudentDTO> studentRemoveTopicFactory(int topicid) {
+        return student -> {
+            Student s = studentRepository.findById(student.getStudentid()).get();
+            s.removeTopic(topicRepository.getReferenceById(topicid));
+            return s;
+        };
     }
 
-    @Transactional
-    public Student studentRemoveSkill(StudentDTO student, SkillDTO skill) {
-        Student s = studentRepository.findById(student.getStudentid()).get();
-        s.removeSkill(skillRepository.getReferenceById(skill.getSkillid()));
-        return s;
+    public AbstractEntityFactory<Student, StudentDTO> studentRemoveSkillFactory(int skillid) {
+        return student -> {
+            Student s = studentRepository.findById(student.getStudentid()).get();
+            s.removeSkill(skillRepository.getReferenceById(skillid));
+            return s;
+        };
     }
 
     public AbstractEntityFactory<Job, JobDTO> jobFactory() {
