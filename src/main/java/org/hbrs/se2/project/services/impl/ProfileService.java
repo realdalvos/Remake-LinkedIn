@@ -212,13 +212,9 @@ public class ProfileService implements ProfileServiceInterface {
         }
     }
 
-    public void saveUserPasswd(UserDTO user) throws DatabaseUserException {
+    public void changeUserPassword(UserDTO user) throws Exception {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        try {
-            //Saving user in db
-            this.userRepository.save(entityCreationService.userFactory().createEntity(user));
-        } catch (org.springframework.dao.DataAccessResourceFailureException e) {
+        if (userRepository.updateUserSetPasswordForUserid(user.getPassword(), user.getUserid()) != 1)
             throw new DatabaseUserException("A Failure occurred while saving a user account in the database at createAccount");
-        }
     }
 }

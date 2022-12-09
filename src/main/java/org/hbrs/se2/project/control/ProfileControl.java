@@ -76,11 +76,7 @@ public class ProfileControl {
 
     public UserDTO getUserByUserid(int id) {return profileService.getUserByUserid(id);}
 
-    public void deleteUser(UserDTO user) throws DatabaseUserException {
-        profileService.deleteUser(user);
-    }
+    public void deleteUser(UserDTO user) throws DatabaseUserException { profileService.deleteUser(user); }
 
-    public void saveUserPasswd(UserDTO user) throws DatabaseUserException {
-        profileService.saveUserPasswd(user);
-    }
+    public void changeUserPassword(UserDTO user) throws Exception { profileService.changeUserPassword(user); }
 }

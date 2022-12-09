@@ -14,7 +14,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
 import org.hbrs.se2.project.control.ProfileControl;
-import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
@@ -57,7 +56,7 @@ public abstract class ProfileView extends Div {
                     ui.getSession().close();
                     ui.getPage().setLocation("/");
                 });
-            } catch (DatabaseUserException e) {
+            } catch (Exception e) {
                 logger.error("Something went wrong when deleting student from DB");
             }
         }));
@@ -72,13 +71,17 @@ public abstract class ProfileView extends Div {
             save.addClickListener(event -> {
                 if (userBinder.isValid()) {
                     try {
-                        profileControl.saveUserPasswd(userBinder.getBean());
-                    } catch (DatabaseUserException e) {
-                        logger.error("Something went wrong while changing the password");
+                        profileControl.changeUserPassword(userBinder.getBean());
+                        ui.makeDialog("Passwort erfolgreich geändert");
+                    } catch (Exception e) {
+                        logger.error("Something went wrong while changing the password", e);
+                        ui.makeDialog("Passwort NICHT geändert");
                     }
+                    dialog.close();
+                } else {
+                    ui.makeDialog("Bitte überprüfe deine Eingaben");
                 }
             });
-            save.addClickListener(event -> dialog.close());
             HorizontalLayout hLayout = new HorizontalLayout();
             hLayout.add(close, save);
             vLayout.add(new Text("Bitte gib dein neues Passwort ein und bestätige es:"), passwdField, confirmField, hLayout);
@@ -91,9 +94,6 @@ public abstract class ProfileView extends Div {
     protected void setUserBinder() {
         userBinder.bindInstanceFields(this);
         userBinder.setBean(mapper.map(Utils.getCurrentUser(), UserDTOImpl.class));
-        //Binder.Binding<UserDTOImpl, String> confirmPasswordBinding =
-        passwdField.clear();
-        confirmField.clear();
         userBinder
                 .forField(confirmField)
                 .withValidator(pw -> pw.equals(passwdField.getValue()), "Passwörter stimmen nicht überein")
@@ -101,7 +101,7 @@ public abstract class ProfileView extends Div {
         userBinder
                 .forField(passwdField)
                 .asRequired("Darf nicht leer sein")
-                .withValidator(pw -> pw.matches("^(?=.+[a-zA-Z])(?=.+[\\d])(?=.+[\\W]).{8,}$"),"Dein Passwort ist wahrscheinlich nicht sicher genug. Halte dich bitte an die Vorgaben")
+                .withValidator(pw -> pw.matches("^(?=.+[a-zA-Z])(?=.+\\d)(?=.+\\W).{8,}$"),"Dein Passwort ist wahrscheinlich nicht sicher genug. Halte dich bitte an die Vorgaben")
                 .bind(UserDTOImpl::getPassword, UserDTOImpl::setPassword);
         userBinder
                 .forField(username)
@@ -122,15 +122,10 @@ public abstract class ProfileView extends Div {
         email.addValueChangeListener(
                 event -> userBinder.validate());
         passwdField.addValueChangeListener(
-                event -> {
-                    userBinder.validate();
-                    //confirmPasswordBinding.validate();
-                });
+                event -> userBinder.validate());
         confirmField.addValueChangeListener(
-                event -> {
-                    userBinder.validate();
-                    //confirmPasswordBinding.validate();
-                });
+                event -> userBinder.validate());
+        passwdField.clear();
+        confirmField.clear();
     }
-
 }
