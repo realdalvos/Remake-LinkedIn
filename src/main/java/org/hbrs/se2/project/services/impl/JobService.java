@@ -6,26 +6,22 @@ import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;
 import org.hbrs.se2.project.services.JobServiceInterface;
 import org.hbrs.se2.project.services.factory.EntityCreationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class JobService implements JobServiceInterface {
 
-    private final EntityCreationService entityCreationService;
+    @Autowired
+    private EntityCreationService entityCreationService;
 
-    private final CompanyRepository companyRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
 
-    private final JobRepository jobRepository;
-
-    public JobService(CompanyRepository companyRepository, JobRepository jobRepository, EntityCreationService entityCreationService) {
-        this.companyRepository = companyRepository;
-        this.jobRepository = jobRepository;
-        this.entityCreationService = entityCreationService;
-    }
+    @Autowired
+    private JobRepository jobRepository;
 
     @Override
     public CompanyDTO getCompanyByUserid(int id) {
