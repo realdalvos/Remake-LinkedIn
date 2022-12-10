@@ -5,7 +5,7 @@ public class Globals {
 
     public static class Pages {
         public static final String MAIN_VIEW = "main";
-        public static final String LOGIN_VIEW = "login";
+        public static final String LOGIN_VIEW = "";
         public static final String JOBS_VIEW = "jobs";
         public static final String STUDENT_PROFILE_VIEW = "student-profile";
         public static final String COMPANY_PROFILE_VIEW = "company-profile";
