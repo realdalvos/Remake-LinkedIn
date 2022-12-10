@@ -12,6 +12,8 @@ import org.hbrs.se2.project.control.ProfileControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
+import org.hbrs.se2.project.helper.AccessHandler;
+import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
@@ -128,6 +130,13 @@ public class StudentProfileView extends ProfileView {
                 ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?",
                         event -> {
                             try {
+                                if(!userBinder.getBean().getUsername().equals(CURRENT_USER.getUsername())){
+                                    UI.getCurrent().getSession().setAttribute(Globals.CURRENT_USER, null);
+                                    UI.getCurrent().getSession().close();
+                                    AccessHandler.setDefaultAccess();
+                                    UI.getCurrent().getPage().setLocation("");
+                                    navigateHandler.navigateToLoginPage();
+                                }
                                 profileControl.saveStudentData(
                                         userBinder.getBean(), studentBinder.getBean(),
                                         newMajors, newTopics, newSkills);
