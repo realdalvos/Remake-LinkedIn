@@ -14,6 +14,7 @@ import java.util.List;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Integer> {
 
+    @Query("SELECT m FROM Message m WHERE m.conversationid=:conversationid ORDER BY m.timestamp ASC")
     List<MessageDTO> findByConversationid(int conversationid);
 
     @Query("SELECT count(c) FROM Message c WHERE c.conversationid=:conversationid AND NOT c.userid=:userid AND c.read=FALSE")

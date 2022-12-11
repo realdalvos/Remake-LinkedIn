@@ -22,8 +22,8 @@ public class StudentInboxView extends InboxView {
                 inboxControl.getNameOfCompanyFromConversation(conversation))).setWidth("70%").setHeader("Posteingang");
         grid.addComponentColumn(this::unreadMessages).setWidth("10%").setTextAlign(ColumnTextAlign.END);
         grid.addComponentColumn(this::latestMessage).setWidth("20%").setTextAlign(ColumnTextAlign.END);
-        grid.addSelectionListener(select -> layout.replace(layout.getComponentAt(1),
-                conversationLayout(inboxControl.getMessagesOfStudent(select.getFirstSelectedItem().get()), select.getFirstSelectedItem().get())));
+        grid.addSelectionListener(select -> select.getFirstSelectedItem().ifPresent(conversation ->
+                layout.replace(layout.getComponentAt(1), conversationLayout(inboxControl.getMessagesOfStudent(conversation), conversation))));
         setSizeFull();
         add(layout);
     }
