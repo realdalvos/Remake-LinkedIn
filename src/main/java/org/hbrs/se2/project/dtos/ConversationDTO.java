@@ -1,6 +1,8 @@
 package org.hbrs.se2.project.dtos;
 
-public interface ConversationDTO {
+import java.io.Serializable;
+
+public interface ConversationDTO extends Serializable {
 
     public int getConversationid();
 
