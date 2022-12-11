@@ -16,7 +16,10 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     StudentDTO findByUserid(int id);
 
+    StudentDTO findByStudentid(int id);
+
     @Transactional
     @Query("SELECT s FROM Student s")
     List<StudentDTO> getAll();
+
 }
