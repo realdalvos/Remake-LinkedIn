@@ -15,16 +15,13 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
 import org.hbrs.se2.project.control.UserControl;
-import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
-import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Company - Create new Job Post / Job Ad
@@ -34,7 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @PageTitle("Anzeige erstellen")
 public class NewJobAdView extends Div {
 
-    @Autowired
     CommonUIElementProvider ui;
 
     private final JobControl jobControl;
@@ -74,16 +70,10 @@ public class NewJobAdView extends Div {
 
     private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
 
-<<<<<<< src/main/java/org/hbrs/se2/project/views/companyViews/NewJobAdView.java
-    public NewJobAdView(JobControl jobControl, UserControl userControl) {
-        this.jobControl = jobControl;
-        this.userControl = userControl;
-=======
     public NewJobAdView(JobControl jobControl, UserControl userControl, CommonUIElementProvider ui) {
         this.jobControl = jobControl;
         this.userControl = userControl;
         this.ui = ui;
->>>>>>> src/main/java/org/hbrs/se2/project/views/companyViews/NewJobAdView.java
 
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.setAlignSelf(FlexComponent.Alignment.CENTER);
