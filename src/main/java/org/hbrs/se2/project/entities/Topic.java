@@ -1,12 +1,15 @@
 package org.hbrs.se2.project.entities;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "topic", schema = "mid9db")
 public class Topic {
     private int topicid;
     private String topic;
+    private Set<Student> students = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,5 +31,10 @@ public class Topic {
     public void setTopic(String topic) {
         this.topic = topic;
     }
+
+    @ManyToMany(mappedBy = "topics")
+    public Set<Student> getStudents() {return students;}
+
+    public void setStudents(Set<Student> students) {this.students = students;}
 
 }

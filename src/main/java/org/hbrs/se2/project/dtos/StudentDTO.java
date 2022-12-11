@@ -26,4 +26,5 @@ public interface StudentDTO extends Serializable {
     void setMatrikelnumber(String matrikelnumber);
 
     void setUniversity(String university);
+
 }
