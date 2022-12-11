@@ -28,11 +28,6 @@ public class JobService implements JobServiceInterface {
     }
 
     @Override
-    public CompanyDTO getCompanyByUserid(int id) {
-        return companyRepository.findByUserid(id);
-    }
-
-    @Override
     public String getCompanyOfJob(JobDTO job) {
         return companyRepository.findByCompanyid(job.getCompanyid()).getName();
     }

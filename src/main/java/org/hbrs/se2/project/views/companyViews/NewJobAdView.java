@@ -14,6 +14,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
+import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.helper.navigateHandler;
@@ -36,8 +37,8 @@ public class NewJobAdView extends Div {
     CommonUIElementProvider ui;
 
     private final JobControl jobControl;
+    private final UserControl userControl;
 
-    private final UserDTO CURRENT_USER = Utils.getCurrentUser();
     private final Logger logger = Utils.getLogger(this.getClass().getName());
 
     /*
@@ -72,8 +73,9 @@ public class NewJobAdView extends Div {
 
     private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
 
-    public NewJobAdView(JobControl jobControl) {
+    public NewJobAdView(JobControl jobControl, UserControl userControl) {
         this.jobControl = jobControl;
+        this.userControl = userControl;
 
         setHeightFull();
         VerticalLayout verticalLayout = new VerticalLayout();
@@ -90,11 +92,11 @@ public class NewJobAdView extends Div {
 
         verticalLayout.add(title, description, contactdetails, salary, location, postButton);
 
-        binder.setBean(new JobDTOImpl(jobControl.getCompanyByUserid(CURRENT_USER.getUserid()).getCompanyid()));
+        binder.setBean(new JobDTOImpl(userControl.getCompanyProfile(userControl.getCurrentUser().getUserid()).getCompanyid()));
         // map input field values to DTO variables based on chosen names
         binder.bindInstanceFields(this);
 
-        contactdetails.setValue(CURRENT_USER.getEmail());
+        contactdetails.setValue(userControl.getCurrentUser().getEmail());
 
         postButton.addClickListener(e -> {
             if (binder.isValid()) {

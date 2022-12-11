@@ -89,16 +89,6 @@ public class ProfileService implements ProfileServiceInterface {
     }
 
     @Override
-    public StudentDTO getStudentProfile(int userid) {
-        return studentRepository.findByUserid(userid);
-    }
-
-    @Override
-    public CompanyDTO getCompanyProfile(int userid) {
-        return companyRepository.findByUserid(userid);
-    }
-
-    @Override
     public List<MajorDTO> getMajorOfStudent(int userid) {
         // comment: maybe we should return a list of major dtos and not strings
         // important for data binding in view
@@ -193,8 +183,5 @@ public class ProfileService implements ProfileServiceInterface {
         return matchingStudents;
     }
 
-    public UserDTO getUserByUserid(int userid) {
-        return userRepository.findByUserid(userid);
-    }
 }
 

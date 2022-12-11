@@ -5,7 +5,6 @@ import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.services.impl.ProfileService;
 import org.hbrs.se2.project.services.impl.ValidationService;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Set;
 
@@ -40,14 +39,6 @@ public class ProfileControl {
         return validationService.checkMatrikelnumberUnique(matrikelnumber);
     }
 
-    public StudentDTO getStudentProfile(int userid) {
-        return profileService.getStudentProfile(userid);
-    }
-
-    public CompanyDTO getCompanyProfile(int userid) {
-        return profileService.getCompanyProfile(userid);
-    }
-
     public List<MajorDTO> getMajorOfStudent(int userid) {
         return profileService.getMajorOfStudent(userid);
     }
@@ -73,7 +64,5 @@ public class ProfileControl {
     }
 
     public Set<StudentDTO> getStudentsMatchingKeyword(String keyword) {return profileService.getStudentsMatchingKeyword(keyword);}
-
-    public UserDTO getUserByUserid(int id) {return profileService.getUserByUserid(id);}
 
 }

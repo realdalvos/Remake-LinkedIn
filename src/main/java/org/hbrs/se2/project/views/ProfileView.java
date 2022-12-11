@@ -7,7 +7,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
 import org.hbrs.se2.project.control.ProfileControl;
-import org.hbrs.se2.project.dtos.UserDTO;
+import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Utils;
@@ -17,11 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class ProfileView extends Div {
 
     protected ProfileControl profileControl;
+    protected UserControl userControl;
 
     @Autowired
     protected CommonUIElementProvider ui;
-
-    protected final UserDTO CURRENT_USER = Utils.getCurrentUser();
 
     protected final TextField username = new TextField("Benutzername:");
     protected final TextField email = new TextField("EMail-Adresse:");
@@ -34,19 +33,19 @@ public abstract class ProfileView extends Div {
 
     protected void setUserBinder() {
         userBinder.bindInstanceFields(this);
-        userBinder.setBean(mapper.map(Utils.getCurrentUser(), UserDTOImpl.class));
+        userBinder.setBean(mapper.map(userControl.getCurrentUser(), UserDTOImpl.class));
         userBinder
                 .forField(username)
                 .asRequired("Darf nicht leer sein")
                 .withValidator(validation -> !username.getValue().isBlank(), "Darf nicht leer sein")
-                .withValidator(validation -> username.getValue().equals(CURRENT_USER.getUsername())
+                .withValidator(validation -> username.getValue().equals(userControl.getCurrentUser().getUsername())
                         || profileControl.checkUsernameUnique(username.getValue()), "Benutzername existiert bereits")
                 .bind(UserDTOImpl::getUsername, UserDTOImpl::setUsername);
         userBinder
                 .forField(email)
                 .asRequired("Darf nicht leer sein")
                 .withValidator(new EmailValidator("Keine gültige EMail Adresse"))
-                .withValidator(validation -> email.getValue().equals(CURRENT_USER.getEmail())
+                .withValidator(validation -> email.getValue().equals(userControl.getCurrentUser().getEmail())
                         || profileControl.checkEmailUnique(email.getValue()), "Email existiert bereits")
                 .bind(UserDTOImpl::getEmail, UserDTOImpl::setEmail);
         username.addValueChangeListener(

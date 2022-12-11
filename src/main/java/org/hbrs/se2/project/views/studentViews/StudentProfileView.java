@@ -9,6 +9,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.component.textfield.TextField;
 import org.hbrs.se2.project.control.ProfileControl;
+import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
@@ -52,11 +53,13 @@ public class StudentProfileView extends ProfileView {
 
     private final Binder<StudentDTOImpl> studentBinder = new BeanValidationBinder<>(StudentDTOImpl.class);
 
-    public StudentProfileView(ProfileControl profileControl) {
+    public StudentProfileView(ProfileControl profileControl, UserControl userControl) {
         this.profileControl = profileControl;
-        majors = profileControl.getMajorOfStudent(CURRENT_USER.getUserid());
-        topics = profileControl.getTopicOfStudent(CURRENT_USER.getUserid());
-        skills = profileControl.getSkillOfStudent(CURRENT_USER.getUserid());
+        this.userControl = userControl;
+
+        majors = profileControl.getMajorOfStudent(userControl.getCurrentUser().getUserid());
+        topics = profileControl.getTopicOfStudent(userControl.getCurrentUser().getUserid());
+        skills = profileControl.getSkillOfStudent(userControl.getCurrentUser().getUserid());
 
         setSizeFull();
         add(formLayout);
@@ -136,9 +139,9 @@ public class StudentProfileView extends ProfileView {
                             } catch (DatabaseUserException e) {
                                 logger.error("Something went wrong with saving student data");
                             }
-                            removeMajors.forEach(major -> profileControl.removeMajor(CURRENT_USER.getUserid(), major.getMajorid()));
-                            removeTopics.forEach(topic -> profileControl.removeTopic(CURRENT_USER.getUserid(), topic.getTopicid()));
-                            removeSkills.forEach(skill -> profileControl.removeSkill(CURRENT_USER.getUserid(), skill.getSkillid()));
+                            removeMajors.forEach(major -> profileControl.removeMajor(userControl.getCurrentUser().getUserid(), major.getMajorid()));
+                            removeTopics.forEach(topic -> profileControl.removeTopic(userControl.getCurrentUser().getUserid(), topic.getTopicid()));
+                            removeSkills.forEach(skill -> profileControl.removeSkill(userControl.getCurrentUser().getUserid(), skill.getSkillid()));
                         });
             } else {
                 ui.makeDialog("Überprüfe bitte deine Angaben auf Korrektheit");
@@ -196,13 +199,13 @@ public class StudentProfileView extends ProfileView {
 
     private void setStudentBinder() {
         studentBinder.bindInstanceFields(this);
-        studentBinder.setBean(mapper.map(profileControl.getStudentProfile(CURRENT_USER.getUserid()), StudentDTOImpl.class));
+        studentBinder.setBean(mapper.map(userControl.getStudentProfile(userControl.getCurrentUser().getUserid()), StudentDTOImpl.class));
         studentBinder
                 .forField(matrikelnumber)
                 .asRequired("Darf nicht leer sein")
                 .withValidator(validation -> matrikelnumber.getValue().matches("-?\\d+")
                         && matrikelnumber.getValue().length() <= 7, "Keine gültige Matrikelnummer")
-                .withValidator(validation -> matrikelnumber.getValue().equals(profileControl.getStudentProfile(CURRENT_USER.getUserid()).getMatrikelnumber())
+                .withValidator(validation -> matrikelnumber.getValue().equals(userControl.getStudentProfile(userControl.getCurrentUser().getUserid()).getMatrikelnumber())
                         || profileControl.checkMatrikelnumberUnique(matrikelnumber.getValue()), "Matrikelnummer existiert bereits")
                 .bind(StudentDTOImpl::getMatrikelnumber, StudentDTOImpl::setMatrikelnumber);
         matrikelnumber.addValueChangeListener(

@@ -14,6 +14,7 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.ProfileControl;
+import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
@@ -37,10 +38,12 @@ public class SearchStudentsView extends Div {
     private final HorizontalLayout layout = new HorizontalLayout();
     private final HorizontalLayout topLayout = new HorizontalLayout();
     private final ProfileControl profileControl;
+    private final UserControl userControl;
 
-    public SearchStudentsView(ProfileControl profileControl, CommonUIElementProvider ui) {
+    public SearchStudentsView(ProfileControl profileControl, UserControl userControl, CommonUIElementProvider ui) {
         this.ui = ui;
         this.profileControl = profileControl;
+        this.userControl = userControl;
 
         grid.setItemDetailsRenderer(new ComponentRenderer<>(student -> {
             FormLayout formLayout = new FormLayout();
@@ -48,7 +51,7 @@ public class SearchStudentsView extends Div {
             final TextField username = new TextField("Username");
             final TextField email = new TextField("Email");
 
-            UserDTO userDTO = profileControl.getUserByUserid(student.getUserid());
+            UserDTO userDTO = userControl.getUserByUserid(student.getUserid());
             // get username of student
             username.setValue(userDTO.getUsername());
             // get email of student
