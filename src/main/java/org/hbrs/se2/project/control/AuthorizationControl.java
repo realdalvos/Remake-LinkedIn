@@ -1,7 +1,9 @@
 package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.dtos.UserDTO;
+import org.springframework.stereotype.Controller;
 
+@Controller
 public class AuthorizationControl {
 
     /**

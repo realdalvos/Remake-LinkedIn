@@ -32,10 +32,8 @@ public class StudentProfileView extends ProfileView {
     private final TextField major = new TextField("Füge neuen Major hinzu:");
     private final TextField topic = new TextField("Füge neuen Topic hinzu:");
     private final TextField skill = new TextField("Füge neuen Skill hinzu:");
-    private final TextField username = new TextField("Benutzername:");
     private final TextField firstname = new TextField("Vorname:");
     private final TextField lastname = new TextField("Nachname:");
-    private final TextField email = new TextField("EMail-Adresse:");
     private final TextField university = new TextField("Universität:");
     private final TextField matrikelnumber = new TextField("Matrikelnummer:");
 
@@ -156,7 +154,7 @@ public class StudentProfileView extends ProfileView {
         button = new Button("Profil bearbeiten");
         formLayout.add(gridMajors, gridTopics, gridSkills, button, changePasswd, delete);
         button.addClickListener(buttonClickEvent -> {
-            formLayout.remove(gridMajors, gridTopics, gridSkills, button);
+            formLayout.remove(gridMajors, gridTopics, gridSkills, button, changePasswd, delete);
             editLayout();
         });
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
@@ -193,18 +191,15 @@ public class StudentProfileView extends ProfileView {
     }
 
     private void setStudentBinder() {
-        studentBinder.bindInstanceFields(this);
         studentBinder.setBean(mapper.map(profileControl.getStudentProfile(CURRENT_USER.getUserid()), StudentDTOImpl.class));
         studentBinder
                 .forField(matrikelnumber)
                 .asRequired("Darf nicht leer sein")
-                .withValidator(validation -> matrikelnumber.getValue().matches("-?\\d+")
-                        && matrikelnumber.getValue().length() <= 7, "Keine gültige Matrikelnummer")
-                .withValidator(validation -> matrikelnumber.getValue().equals(profileControl.getStudentProfile(CURRENT_USER.getUserid()).getMatrikelnumber())
-                        || profileControl.checkMatrikelnumberUnique(matrikelnumber.getValue()), "Matrikelnummer existiert bereits")
+                .withValidator(matrikelnumber -> matrikelnumber.matches("-?\\d+")
+                        && matrikelnumber.length() <= 7, "Keine gültige Matrikelnummer")
+                .withValidator(matrikelnumber -> matrikelnumber.equals(profileControl.getStudentProfile(CURRENT_USER.getUserid()).getMatrikelnumber())
+                        || profileControl.checkMatrikelnumberUnique(matrikelnumber), "Matrikelnummer existiert bereits")
                 .bind(StudentDTOImpl::getMatrikelnumber, StudentDTOImpl::setMatrikelnumber);
-        matrikelnumber.addValueChangeListener(
-                event -> studentBinder.validate());
+        studentBinder.bindInstanceFields(this);
     }
-
 }
