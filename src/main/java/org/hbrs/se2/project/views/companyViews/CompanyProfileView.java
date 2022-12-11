@@ -82,10 +82,7 @@ public class CompanyProfileView extends ProfileView {
                         event -> {
                             if (!userBinder.getBean().getUsername().equals(CURRENT_USER.getUsername())) {
                                 UI.getCurrent().getSession().close();
-                                AccessHandler.setDefaultAccess();
-                                UI.getCurrent().getPage().setLocation("");
                                 navigateHandler.navigateToLoginPage();
-                                UI.getCurrent().getSession().setAttribute(Globals.CURRENT_USER, null);
                             }
                             profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());
                             UI.getCurrent().getPage().reload();});

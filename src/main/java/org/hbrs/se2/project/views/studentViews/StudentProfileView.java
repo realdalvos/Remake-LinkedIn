@@ -131,10 +131,7 @@ public class StudentProfileView extends ProfileView {
                         event -> {
                             try {
                                 if (!userBinder.getBean().getUsername().equals(CURRENT_USER.getUsername())) {
-                                    UI.getCurrent().getSession().setAttribute(Globals.CURRENT_USER, null);
                                     UI.getCurrent().getSession().close();
-                                    AccessHandler.setDefaultAccess();
-                                    UI.getCurrent().getPage().setLocation("");
                                     navigateHandler.navigateToLoginPage();
                                 }
                                 profileControl.saveStudentData(
