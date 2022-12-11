@@ -68,7 +68,7 @@ public class RegisterCompanyView extends RegisterView {
                 if (userBinder.isValid() && companyBinder.isValid()) {
                     // function to register new company
                     registrationControl.registerCompany(userBinder.getBean(), companyBinder.getBean());
-                    navigateHandler.navigateToLoginPage();
+                    navigateHandler.navigateToDefaultPage();
                 } else {
                     ui.makeDialog("Überprüfen Sie bitte Ihre Eingaben");
                     logger.info("Not all fields have been filled in");

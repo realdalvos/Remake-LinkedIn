@@ -1,6 +1,9 @@
 package org.hbrs.se2.project.services.ui;
 
-import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -12,6 +15,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.TextFieldVariant;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import org.hbrs.se2.project.control.InboxControl;
 import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.dtos.ConversationDTO;
@@ -111,6 +116,30 @@ public class CommonUIElementProvider {
         buttons.add(close, send);
         vLayout.add(new Text("Kontakt:"), title, content, buttons);
         vLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, buttons);
+        dialog.add(vLayout);
+        dialog.open();
+    }
+
+    public void makeDeleteConfirm(String message, ComponentEventListener<ClickEvent<Button>> listener) {
+        VerticalLayout vLayout = new VerticalLayout();
+        Dialog dialog = new Dialog();
+        TextField confirmField = new TextField();
+        String user = userControl.getCurrentUser().getUsername();
+        confirmField.setPlaceholder(user);
+        confirmField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
+        Button close = new Button("Abbrechen");
+        close.addClickListener(event -> dialog.close());
+        Button delete = new Button("Löschen");
+        delete.setEnabled(false);
+        confirmField.setValueChangeMode(ValueChangeMode.EAGER);
+        confirmField.addValueChangeListener(event -> delete.setEnabled(confirmField.getValue().equals(user)));
+        delete.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        delete.addClickListener(listener);
+        delete.addClickListener(event -> dialog.close());
+        HorizontalLayout hLayout = new HorizontalLayout();
+        hLayout.add(close, delete);
+        vLayout.add(new Text(message), confirmField, hLayout);
+        vLayout.setAlignItems(FlexComponent.Alignment.CENTER);
         dialog.add(vLayout);
         dialog.open();
     }

@@ -8,13 +8,17 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
 import org.hbrs.se2.project.control.ProfileControl;
 import org.hbrs.se2.project.control.UserControl;
+import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Utils;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class ProfileView extends Div {
+
+    private final Logger logger = Utils.getLogger(this.getClass().getName());
 
     protected ProfileControl profileControl;
     protected UserControl userControl;
@@ -25,11 +29,26 @@ public abstract class ProfileView extends Div {
     protected final TextField username = new TextField("Benutzername:");
     protected final TextField email = new TextField("EMail-Adresse:");
     protected Button button;
+    protected Button delete = new Button("Account löschen");
     protected final FormLayout formLayout = new FormLayout();
 
     protected final Binder<UserDTOImpl> userBinder = new Binder<>(UserDTOImpl.class);
 
     protected final ModelMapper mapper = new ModelMapper();
+
+    public ProfileView() {
+        delete.addClickListener(buttonClickEvent -> ui.makeDeleteConfirm("Bitte gib deinen Accountnamen zur Bestätigung ein:", event -> {
+            try {
+                profileControl.deleteUser(userControl.getCurrentUser());
+                this.getUI().ifPresent(ui -> {
+                    ui.getSession().close();
+                    ui.getPage().setLocation("/");
+                });
+            } catch (DatabaseUserException e) {
+                logger.error("Something went wrong when deleting student from DB");
+            }
+        }));
+    }
 
     protected void setUserBinder() {
         userBinder.bindInstanceFields(this);

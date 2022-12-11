@@ -60,7 +60,7 @@ public class CompanyProfileView extends ProfileView {
                 }
         );
         button = new Button("Profil bearbeiten");
-        formLayout.add(button);
+        formLayout.add(button, delete);
         button.addClickListener(buttonClickEvent -> {
             formLayout.remove(button);
             editLayout();
@@ -70,9 +70,7 @@ public class CompanyProfileView extends ProfileView {
 
     private void editLayout() {
         Stream.of(username, name, email, industry).forEach(
-                field -> {
-                    field.setReadOnly(false);
-                }
+                field -> field.setReadOnly(false)
         );
         button = new Button("Profil speichern");
         formLayout.add(button);

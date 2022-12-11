@@ -64,4 +64,8 @@ public class ProfileControl {
 
     public Set<StudentDTO> getStudentsMatchingKeyword(String keyword) {return profileService.getStudentsMatchingKeyword(keyword);}
 
+    public void deleteUser(UserDTO user) throws DatabaseUserException {
+        profileService.deleteUser(user);
+    }
+
 }

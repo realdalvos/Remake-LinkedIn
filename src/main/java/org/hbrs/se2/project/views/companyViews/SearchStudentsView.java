@@ -86,13 +86,13 @@ public class SearchStudentsView extends Div {
         gridSkills = new Grid<>();
         gridTopics = new Grid<>();
         // Create grids for skills, topics and majors
-        gridMajors.setHeightByRows(true);
+        gridMajors.setAllRowsVisible(true);
         gridMajors.addColumn(MajorDTO::getMajor).setHeader("Majors:");
         gridMajors.setItems(profileControl.getMajorOfStudent(student.getUserid()));
-        gridTopics.setHeightByRows(true);
+        gridTopics.setAllRowsVisible(true);
         gridTopics.addColumn(TopicDTO::getTopic).setHeader("Topics:");
         gridTopics.setItems(profileControl.getTopicOfStudent(student.getUserid()));
-        gridSkills.setHeightByRows(true);
+        gridSkills.setAllRowsVisible(true);
         gridSkills.addColumn(SkillDTO::getSkill).setHeader("Skills:");
         gridSkills.setItems(profileControl.getSkillOfStudent(student.getUserid()));
     }
@@ -129,7 +129,7 @@ public class SearchStudentsView extends Div {
         grid.addColumn(StudentDTO::getFirstname).setHeader("Vorname").setTextAlign(ColumnTextAlign.CENTER);
         grid.addColumn(StudentDTO::getLastname).setHeader("Nachname").setTextAlign(ColumnTextAlign.CENTER);
         grid.addColumn(StudentDTO::getUniversity).setHeader("Universität").setTextAlign(ColumnTextAlign.CENTER);
-        grid.setHeightByRows(true);
+        grid.setAllRowsVisible(true);
 
         searchField.addKeyPressListener(Key.ENTER, event -> searchButton.clickInClient());
         // to implement

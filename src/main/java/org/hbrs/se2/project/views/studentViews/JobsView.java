@@ -79,7 +79,7 @@ public class JobsView extends Div {
         grid.addColumn(JobDTO::getTitle).setHeader(getTranslation("view.job.text.title")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER);
         grid.addComponentColumn(job -> new Text(jobControl.getCompanyOfJob(job))).setHeader("Unternehmen");
         grid.addColumn(JobDTO::getSalary).setHeader(getTranslation("view.job.text.salary")).setSortable(true);
-        grid.setHeightByRows(true);
+        grid.setAllRowsVisible(true);
         searchField.addKeyPressListener(Key.ENTER, event -> searchButton.clickInClient());
         // pass relevant job list to grid
         searchButton.addClickListener(event -> {grid.setItems(jobControl.getJobsMatchingKeyword(searchField.getValue())); searchField.clear();});
