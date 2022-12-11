@@ -3,18 +3,18 @@ package org.hbrs.se2.project.services;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
 
-import java.util.List;
+import java.util.Set;
 
 public interface ProfileServiceInterface {
-    void saveStudentData(UserDTO user, StudentDTO student, List<String> major, List<String> topic, List<String> skill) throws DatabaseUserException;
+    void saveStudentData(UserDTO user, StudentDTO student, Set<String> major, Set<String> topic, Set<String> skill) throws DatabaseUserException;
 
     void saveCompanyData(UserDTO user, CompanyDTO company);
 
-    List<MajorDTO> getMajorOfStudent(int userid);
+    Set<MajorDTO> getMajorOfStudent(int userid);
 
-    List<TopicDTO> getTopicOfStudent(int userid);
+    Set<TopicDTO> getTopicOfStudent(int userid);
 
-    List<SkillDTO> getSkillOfStudent(int userid);
+    Set<SkillDTO> getSkillOfStudent(int userid);
 
     void removeMajor(int userid, int majorid);
 
