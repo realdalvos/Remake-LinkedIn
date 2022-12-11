@@ -22,6 +22,7 @@ import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
+import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -73,11 +74,17 @@ public class NewJobAdView extends Div {
 
     private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
 
+<<<<<<< src/main/java/org/hbrs/se2/project/views/companyViews/NewJobAdView.java
     public NewJobAdView(JobControl jobControl, UserControl userControl) {
         this.jobControl = jobControl;
         this.userControl = userControl;
+=======
+    public NewJobAdView(JobControl jobControl, UserControl userControl, CommonUIElementProvider ui) {
+        this.jobControl = jobControl;
+        this.userControl = userControl;
+        this.ui = ui;
+>>>>>>> src/main/java/org/hbrs/se2/project/views/companyViews/NewJobAdView.java
 
-        setHeightFull();
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.setAlignSelf(FlexComponent.Alignment.CENTER);
         verticalLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
@@ -108,7 +115,10 @@ public class NewJobAdView extends Div {
             }
         });
 
-        // add all components to View
+        // add an introduction text for further information
+        add(ui.introductionText("Hier können Sie eine neue Anzeige anfertigen!",
+                "Füllen Sie die unteren Felder aus und bestätigen Sie mit dem Button unten um dann Ihre Anzeige öffentlich zu machen"));
+        // add verticalLayout
         add(verticalLayout);
         this.setWidth("60%");
 
