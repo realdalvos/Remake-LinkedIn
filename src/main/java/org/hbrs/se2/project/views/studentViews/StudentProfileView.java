@@ -118,7 +118,7 @@ public class StudentProfileView extends ProfileView {
         setEditGrids();
 
         button = new Button("Profil speichern");
-        formLayout.add(button);
+        formLayout.add(button, delete);
         button.addClickListener(buttonClickEvent -> {
             if (userBinder.isValid() && studentBinder.isValid()) {
                 ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?",
@@ -154,7 +154,7 @@ public class StudentProfileView extends ProfileView {
         button = new Button("Profil bearbeiten");
         formLayout.add(gridMajors, gridTopics, gridSkills, button, delete);
         button.addClickListener(buttonClickEvent -> {
-            formLayout.remove(gridMajors, gridTopics, gridSkills, button);
+            formLayout.remove(gridMajors, gridTopics, gridSkills, button, delete);
             editLayout();
         });
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
