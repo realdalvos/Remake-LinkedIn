@@ -1,9 +1,6 @@
 package org.hbrs.se2.project.services.factory;
 
-import org.hbrs.se2.project.dtos.CompanyDTO;
-import org.hbrs.se2.project.dtos.JobDTO;
-import org.hbrs.se2.project.dtos.StudentDTO;
-import org.hbrs.se2.project.dtos.UserDTO;
+import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.entities.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -51,6 +48,14 @@ public class EntityCreationService {
             s.setSkill(skill);
             return  s;
         };
+    }
+
+    public AbstractEntityFactory<Conversation, ConversationDTO> conversationFactory() {
+        return conversation -> mapper.map(conversation, Conversation.class);
+    }
+
+    public AbstractEntityFactory<Message, MessageDTO> messageFactory() {
+        return message -> mapper.map(message, Message.class);
     }
 
     public AbstractEntityFactory<StudentHasMajor, int[]> shmFactory() {
