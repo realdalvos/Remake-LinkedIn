@@ -66,13 +66,13 @@ public class StudentProfileView extends ProfileView {
 
     private void setAllGrids() {
         // Create grids for skills, topics and majors
-        gridMajors.setHeightByRows(true);
+        gridMajors.setAllRowsVisible(true);
         gridMajors.addColumn(MajorDTO::getMajor).setHeader("Majors:");
         gridMajors.setItems(majors);
-        gridTopics.setHeightByRows(true);
+        gridTopics.setAllRowsVisible(true);
         gridTopics.addColumn(TopicDTO::getTopic).setHeader("Topics:");
         gridTopics.setItems(topics);
-        gridSkills.setHeightByRows(true);
+        gridSkills.setAllRowsVisible(true);
         gridSkills.addColumn(SkillDTO::getSkill).setHeader("Skills:");
         gridSkills.setItems(skills);
     }
@@ -113,9 +113,7 @@ public class StudentProfileView extends ProfileView {
 
     private void editLayout() {
         Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(
-                field -> {
-                    field.setReadOnly(false);
-                }
+                field -> field.setReadOnly(false)
         );
         setEditGrids();
 
@@ -154,7 +152,7 @@ public class StudentProfileView extends ProfileView {
         );
 
         button = new Button("Profil bearbeiten");
-        formLayout.add(gridMajors, gridTopics, gridSkills, button);
+        formLayout.add(gridMajors, gridTopics, gridSkills, button, delete);
         button.addClickListener(buttonClickEvent -> {
             formLayout.remove(gridMajors, gridTopics, gridSkills, button);
             editLayout();
@@ -165,7 +163,7 @@ public class StudentProfileView extends ProfileView {
     private Grid<String> newEntriesGrid(Set<String> entries) {
         Grid<String> grid = new Grid<>();
         grid.addColumn(String::valueOf);
-        grid.setHeightByRows(true);
+        grid.setAllRowsVisible(true);
         grid.addComponentColumn(newEntry -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {

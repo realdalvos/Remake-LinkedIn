@@ -2,7 +2,6 @@ package org.hbrs.se2.project.views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H1;
@@ -18,7 +17,6 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.PWA;
 import org.hbrs.se2.project.control.AuthorizationControl;
 import org.hbrs.se2.project.control.LoginControl;
-import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
@@ -106,9 +104,10 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     }
 
     private void logoutUser() {
-        UI ui = this.getUI().get();
-        ui.getSession().close();
-        ui.getPage().setLocation("/");
+        this.getUI().ifPresent(ui -> {
+            ui.getSession().close();
+            ui.getPage().setLocation("/");
+        });
     }
 
     /**
