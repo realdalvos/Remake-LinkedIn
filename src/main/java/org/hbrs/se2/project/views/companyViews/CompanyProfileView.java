@@ -16,6 +16,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.ProfileControl;
 import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
+import org.hbrs.se2.project.helper.AccessHandler;
+import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
 import org.hbrs.se2.project.views.ProfileView;
@@ -77,7 +79,16 @@ public class CompanyProfileView extends ProfileView {
         button.addClickListener(buttonClickEvent -> {
             if (userBinder.isValid() && companyBinder.isValid()) {
                 ui.makeConfirm("Möchten Sie die Änderungen an Ihrem Profil speichern?",
-                        event -> {profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());UI.getCurrent().getPage().reload();});
+                        event -> {
+                            if (!userBinder.getBean().getUsername().equals(CURRENT_USER.getUsername())) {
+                                UI.getCurrent().getSession().close();
+                                AccessHandler.setDefaultAccess();
+                                UI.getCurrent().getPage().setLocation("");
+                                navigateHandler.navigateToLoginPage();
+                                UI.getCurrent().getSession().setAttribute(Globals.CURRENT_USER, null);
+                            }
+                            profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());
+                            UI.getCurrent().getPage().reload();});
             } else {
                 ui.makeDialog("Überprüfen Sie bitte Ihre Angaben auf Korrektheit");
             }
