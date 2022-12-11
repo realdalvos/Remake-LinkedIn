@@ -18,14 +18,15 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.PWA;
 import org.hbrs.se2.project.control.AuthorizationControl;
 import org.hbrs.se2.project.control.LoginControl;
-import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
+import org.hbrs.se2.project.views.companyViews.CompanyInboxView;
 import org.hbrs.se2.project.views.companyViews.CompanyProfileView;
 import org.hbrs.se2.project.views.companyViews.MyAdsView;
 import org.hbrs.se2.project.views.companyViews.SearchStudentsView;
 import org.hbrs.se2.project.views.studentViews.JobsView;
+import org.hbrs.se2.project.views.studentViews.StudentInboxView;
 import org.hbrs.se2.project.views.studentViews.StudentProfileView;
 import org.slf4j.Logger;
 import java.util.Optional;
@@ -165,6 +166,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             logger.info("User is student");
             tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.jobs"), JobsView.class));
             tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.profile"), StudentProfileView.class));
+            tabs = Utils.append(tabs, createTab("Kommunikation", StudentInboxView.class));
         } else
             // has the user the role "company" they have the tabs "My Ads"
             if(this.authorizationControl.hasUserRole(loginControl.getCurrentUser(), Globals.Roles.company)) {
@@ -172,6 +174,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
                 tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.myjobs"), MyAdsView.class));
                 tabs = Utils.append(tabs, createTab("Studentensuche", SearchStudentsView.class));
                 tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.profile"), CompanyProfileView.class));
+                tabs = Utils.append(tabs, createTab("Kommunikation", CompanyInboxView.class));
             }
         return tabs;
     }
