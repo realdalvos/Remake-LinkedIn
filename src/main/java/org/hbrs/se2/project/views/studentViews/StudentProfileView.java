@@ -31,10 +31,8 @@ public class StudentProfileView extends ProfileView {
     private final TextField major = new TextField("Füge neuen Major hinzu:");
     private final TextField topic = new TextField("Füge neuen Topic hinzu:");
     private final TextField skill = new TextField("Füge neuen Skill hinzu:");
-    private final TextField username = new TextField("Benutzername:");
     private final TextField firstname = new TextField("Vorname:");
     private final TextField lastname = new TextField("Nachname:");
-    private final TextField email = new TextField("EMail-Adresse:");
     private final TextField university = new TextField("Universität:");
     private final TextField matrikelnumber = new TextField("Matrikelnummer:");
 
