@@ -38,14 +38,6 @@ public class ProfileControl {
         return validationService.checkMatrikelnumberUnique(matrikelnumber);
     }
 
-    public StudentDTO getStudentProfile(int userid) {
-        return profileService.getStudentProfile(userid);
-    }
-
-    public CompanyDTO getCompanyProfile(int userid) {
-        return profileService.getCompanyProfile(userid);
-    }
-
     public Set<MajorDTO> getMajorOfStudent(int userid) {
         return profileService.getMajorOfStudent(userid);
     }
