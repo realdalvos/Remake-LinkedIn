@@ -17,11 +17,9 @@ import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
 import org.hbrs.se2.project.views.ProfileView;
 import org.slf4j.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Stream;
-
 
 @Route(value = Globals.Pages.STUDENT_PROFILE_VIEW, layout = AppView.class, registerAtStartup = false)
 @PageTitle("Profile")
@@ -42,13 +40,13 @@ public class StudentProfileView extends ProfileView {
     private final Grid<MajorDTO> gridMajors = new Grid<>();
     private final Grid<TopicDTO> gridTopics = new Grid<>();
     private final Grid<SkillDTO> gridSkills = new Grid<>();
-    private final List<MajorDTO> majors;
-    private final List<TopicDTO> topics;
-    private final List<SkillDTO> skills;
-    private List<String> newMajors, newTopics, newSkills;
-    private final List<MajorDTO> removeMajors = new ArrayList<>();
-    private final List<TopicDTO> removeTopics = new ArrayList<>();
-    private final List<SkillDTO> removeSkills = new ArrayList<>();
+    private final Set<MajorDTO> majors;
+    private final Set<TopicDTO> topics;
+    private final Set<SkillDTO> skills;
+    private Set<String> newMajors, newTopics, newSkills;
+    private final Set<MajorDTO> removeMajors = new HashSet<>();
+    private final Set<TopicDTO> removeTopics = new HashSet<>();
+    private final Set<SkillDTO> removeSkills = new HashSet<>();
 
     private final Binder<StudentDTOImpl> studentBinder = new BeanValidationBinder<>(StudentDTOImpl.class);
 
@@ -90,7 +88,7 @@ public class StudentProfileView extends ProfileView {
             });
             return deleteButton;
         });
-        formLayout.add(gridMajors, newMajorsGrid = newEntriesGrid(newMajors = new ArrayList<>()), newEntryLayout(major, newMajors, newMajorsGrid));
+        formLayout.add(gridMajors, newMajorsGrid = newEntriesGrid(newMajors = new HashSet<>()), newEntryLayout(major, newMajors, newMajorsGrid));
         gridTopics.addComponentColumn(topic -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
@@ -100,7 +98,7 @@ public class StudentProfileView extends ProfileView {
             });
             return deleteButton;
         });
-        formLayout.add(gridTopics, newTopicsGrid = newEntriesGrid(newTopics = new ArrayList<>()), newEntryLayout(topic, newTopics, newTopicsGrid));
+        formLayout.add(gridTopics, newTopicsGrid = newEntriesGrid(newTopics = new HashSet<>()), newEntryLayout(topic, newTopics, newTopicsGrid));
         gridSkills.addComponentColumn(skill -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
@@ -110,7 +108,7 @@ public class StudentProfileView extends ProfileView {
             });
             return deleteButton;
         });
-        formLayout.add(gridSkills, newSkillsGrid = newEntriesGrid(newSkills = new ArrayList<>()), newEntryLayout(skill, newSkills, newSkillsGrid));
+        formLayout.add(gridSkills, newSkillsGrid = newEntriesGrid(newSkills = new HashSet<>()), newEntryLayout(skill, newSkills, newSkillsGrid));
     }
 
     private void editLayout() {
@@ -164,7 +162,7 @@ public class StudentProfileView extends ProfileView {
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
     }
 
-    private Grid<String> newEntriesGrid(List<String> entries) {
+    private Grid<String> newEntriesGrid(Set<String> entries) {
         Grid<String> grid = new Grid<>();
         grid.addColumn(String::valueOf);
         grid.setHeightByRows(true);
@@ -179,7 +177,7 @@ public class StudentProfileView extends ProfileView {
         return grid;
     }
 
-    private FormLayout newEntryLayout(TextField input, List<String> entries, Grid<String> grid) {
+    private FormLayout newEntryLayout(TextField input, Set<String> entries, Grid<String> grid) {
         FormLayout entryForm = new FormLayout();
         Button saveButton = new Button("Hinzufügen");
         saveButton.addClickListener(e -> {

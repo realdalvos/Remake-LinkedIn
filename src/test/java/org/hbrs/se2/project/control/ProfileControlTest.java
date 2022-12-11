@@ -11,8 +11,8 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,9 +20,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ProfileControlTest {
-    List<String> major = new ArrayList<>();
-    List<String> topic = new ArrayList<>();
-    List<String> skill = new ArrayList<>();
+    Set<String> major = new HashSet<>();
+    Set<String> topic = new HashSet<>();
+    Set<String> skill = new HashSet<>();
     @Autowired
     ProfileControl profileControl;
 
@@ -72,20 +72,20 @@ class ProfileControlTest {
             throw new Error("Something went wrong with saving student data");
         }
 
-        List<MajorDTO> majorDTOs= new ArrayList<>();
+        Set<MajorDTO> majorDTOs= new HashSet<>();
         majorDTOs.add(majorRepository.findByMajor("Math"));
-        List<String> majors = majorDTOs.stream().map(MajorDTO::getMajor).collect(Collectors.toList());
-        assertEquals(majors, profileControl.getMajorOfStudent(studentID).stream().map(MajorDTO::getMajor).collect(Collectors.toList()));
+        Set<String> majors = majorDTOs.stream().map(MajorDTO::getMajor).collect(Collectors.toSet());
+        assertEquals(majors, profileControl.getMajorOfStudent(studentID).stream().map(MajorDTO::getMajor).collect(Collectors.toSet()));
 
-        List<TopicDTO> topicDTOS= new ArrayList<>();
+        Set<TopicDTO> topicDTOS= new HashSet<>();
         topicDTOS.add(topicRepository.findByTopic("Zahlen"));
-        List<String> topics = topicDTOS.stream().map(TopicDTO::getTopic).collect(Collectors.toList());
-        assertEquals(topics, profileControl.getTopicOfStudent(studentID).stream().map(TopicDTO::getTopic).collect(Collectors.toList()));
+        Set<String> topics = topicDTOS.stream().map(TopicDTO::getTopic).collect(Collectors.toSet());
+        assertEquals(topics, profileControl.getTopicOfStudent(studentID).stream().map(TopicDTO::getTopic).collect(Collectors.toSet()));
 
-        List<SkillDTO> skillDTOS= new ArrayList<>();
+        Set<SkillDTO> skillDTOS= new HashSet<>();
         skillDTOS.add(skillRepository.findBySkill("Kopfrechnen"));
-        List<String> skills = skillDTOS.stream().map(SkillDTO::getSkill).collect(Collectors.toList());
-        assertEquals(skills, profileControl.getSkillOfStudent(studentID).stream().map(SkillDTO::getSkill).collect(Collectors.toList()));
+        Set<String> skills = skillDTOS.stream().map(SkillDTO::getSkill).collect(Collectors.toSet());
+        assertEquals(skills, profileControl.getSkillOfStudent(studentID).stream().map(SkillDTO::getSkill).collect(Collectors.toSet()));
 
     }
 
