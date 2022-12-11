@@ -15,10 +15,13 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.ProfileControl;
+import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
 import org.hbrs.se2.project.util.Globals;
+import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
 import org.hbrs.se2.project.views.ProfileView;
+import org.slf4j.Logger;
 
 import java.util.stream.Stream;
 
@@ -27,7 +30,7 @@ import java.util.stream.Stream;
 @Route(value = Globals.Pages.COMPANY_PROFILE_VIEW, layout = AppView.class, registerAtStartup = false)
 @PageTitle("Profile")
 public class CompanyProfileView extends ProfileView {
-
+    private final Logger logger = Utils.getLogger(this.getClass().getName());
     private boolean banned;
     private final TextField name = new TextField("Name Ihres Unternehmens:");
     private final TextField industry = new TextField("Industrie:");
@@ -75,7 +78,12 @@ public class CompanyProfileView extends ProfileView {
         button.addClickListener(buttonClickEvent -> {
             if (userBinder.isValid() && companyBinder.isValid()) {
                 ui.makeConfirm("Möchten Sie die Änderungen an Ihrem Profil speichern?",
-                        event -> {profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());UI.getCurrent().getPage().reload();});
+                        event -> {
+                    try {
+                        profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());
+                    } catch (DatabaseUserException e) {
+                        logger.error("Something went wrong with saving company data");
+                    }UI.getCurrent().getPage().reload();});
             } else {
                 ui.makeDialog("Überprüfen Sie bitte Ihre Angaben auf Korrektheit");
             }
