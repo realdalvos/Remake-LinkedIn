@@ -127,32 +127,29 @@ public class StudentProfileView extends ProfileView {
         formLayout.add(button);
         button.addClickListener(buttonClickEvent -> {
             if (userBinder.isValid() && studentBinder.isValid()) {
-                if(userBinder.getBean().getUsername().equals(CURRENT_USER.getUsername()) || profileControl.checkUsernameUnique(username.getValue())){
-                    ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?",
-                            event -> {
-                                try {
-                                    if (!userBinder.getBean().getUsername().equals(CURRENT_USER.getUsername())) {
-                                        UI.getCurrent().getSession().setAttribute(Globals.CURRENT_USER, null);
-                                        UI.getCurrent().getSession().close();
-                                        AccessHandler.setDefaultAccess();
-                                        UI.getCurrent().getPage().setLocation("");
-                                        navigateHandler.navigateToLoginPage();
-                                    }
-                                    profileControl.saveStudentData(
-                                            userBinder.getBean(), studentBinder.getBean(),
-                                            newMajors, newTopics, newSkills);
-                                    // reload page to get updated view
-                                    UI.getCurrent().getPage().reload();
-                                } catch (DatabaseUserException e) {
-                                    logger.error("Something went wrong with saving student data");
+                ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?",
+                        event -> {
+                            try {
+                                if (!userBinder.getBean().getUsername().equals(CURRENT_USER.getUsername())) {
+                                    UI.getCurrent().getSession().setAttribute(Globals.CURRENT_USER, null);
+                                    UI.getCurrent().getSession().close();
+                                    AccessHandler.setDefaultAccess();
+                                    UI.getCurrent().getPage().setLocation("");
+                                    navigateHandler.navigateToLoginPage();
                                 }
-                                removeMajors.forEach(major -> profileControl.removeMajor(CURRENT_USER.getUserid(), major.getMajorid()));
-                                removeTopics.forEach(topic -> profileControl.removeTopic(CURRENT_USER.getUserid(), topic.getTopicid()));
-                                removeSkills.forEach(skill -> profileControl.removeSkill(CURRENT_USER.getUserid(), skill.getSkillid()));
-                            });
-                }else{
-                ui.makeDialog("Benutzername existiert bereits");
-                }
+                                profileControl.saveStudentData(
+                                        userBinder.getBean(), studentBinder.getBean(),
+                                        newMajors, newTopics, newSkills);
+                                // reload page to get updated view
+                                UI.getCurrent().getPage().reload();
+                            } catch (DatabaseUserException e) {
+                                logger.error("Something went wrong with saving student data");
+                            }
+                            removeMajors.forEach(major -> profileControl.removeMajor(CURRENT_USER.getUserid(), major.getMajorid()));
+                            removeTopics.forEach(topic -> profileControl.removeTopic(CURRENT_USER.getUserid(), topic.getTopicid()));
+                            removeSkills.forEach(skill -> profileControl.removeSkill(CURRENT_USER.getUserid(), skill.getSkillid()));
+                        });
+
             } else {
                 ui.makeDialog("Überprüfe bitte deine Angaben auf Korrektheit");
             }
