@@ -10,10 +10,25 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.textfield.TextField;
+import org.hbrs.se2.project.control.InboxControl;
+import org.hbrs.se2.project.control.UserControl;
+import org.hbrs.se2.project.dtos.ConversationDTO;
+import org.hbrs.se2.project.dtos.MessageDTO;
+import org.hbrs.se2.project.dtos.impl.ConversationDTOImpl;
+import org.hbrs.se2.project.dtos.impl.MessageDTOImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.time.Instant;
 
 @Service
 public class CommonUIElementProvider {
+
+    @Autowired
+    UserControl userControl;
+    @Autowired
+    InboxControl inboxControl;
 
     /**
      * Creates an Error Dialog
@@ -64,6 +79,38 @@ public class CommonUIElementProvider {
         hLayout.add(close, reject, save);
         vLayout.add(new Text(message), hLayout);
         vLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, hLayout);
+        dialog.add(vLayout);
+        dialog.open();
+    }
+
+    public void conversationDialog(int companyid, int studentid, int jobid) {
+        Dialog dialog = new Dialog();
+        VerticalLayout vLayout = new VerticalLayout();
+        TextField title = new TextField("Betreff");
+        TextArea content = new TextArea("Nachricht");
+        HorizontalLayout buttons = new HorizontalLayout();
+        Button close = new Button("Abbrechen");
+        close.addClickListener(event -> dialog.close());
+        Button send = new Button("Senden");
+        send.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        send.addClickListener(event -> {
+            ConversationDTO newConversation = new ConversationDTOImpl();
+            newConversation.setCompanyid(companyid);
+            newConversation.setStudentid(studentid);
+            newConversation.setJobid(jobid);
+            newConversation.setTitle(title.getValue());
+            ConversationDTO conversation = inboxControl.newConversation(newConversation);
+            MessageDTO message = new MessageDTOImpl();
+            message.setConversationid(conversation.getConversationid());
+            message.setContent(content.getValue());
+            message.setTimestamp(Instant.now());
+            message.setUserid(userControl.getCurrentUser().getUserid());
+            inboxControl.saveMessage(message);
+            dialog.close();
+        });
+        buttons.add(close, send);
+        vLayout.add(new Text("Kontakt:"), title, content, buttons);
+        vLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, buttons);
         dialog.add(vLayout);
         dialog.open();
     }

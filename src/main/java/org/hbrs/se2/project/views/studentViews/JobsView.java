@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.views.studentViews;
 
-
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -17,11 +16,11 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
+import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
-
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -39,7 +38,7 @@ public class JobsView extends Div {
     // Create a Grid bound to the list
     private final Grid<JobDTO> grid = new Grid<>();
 
-    public JobsView(JobControl jobControl, CommonUIElementProvider ui) {
+    public JobsView(JobControl jobControl, UserControl userControl, CommonUIElementProvider ui) {
         this.ui = ui;
         HorizontalLayout layout = new HorizontalLayout();
 
@@ -106,6 +105,10 @@ public class JobsView extends Div {
                         formLayout.add(field);
                     }
             );
+            Button contact = new Button("Kontaktieren");
+            contact.addClickListener(event -> ui.conversationDialog(job.getCompanyid(), userControl.getStudentProfile(
+                    userControl.getCurrentUser().getUserid()).getStudentid(), job.getJobid()));
+            formLayout.add(contact);
             formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 2));
             formLayout.setColspan(companyContactDetails, 2);
             formLayout.setColspan(jobDescription, 2);
