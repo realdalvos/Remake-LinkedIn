@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.services.impl;
 
-import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;

@@ -20,19 +20,19 @@ import java.util.Optional;
 public class InboxService {
 
     @Autowired
-    ConversationRepository conversationRepository;
+    private ConversationRepository conversationRepository;
     @Autowired
-    MessageRepository messageRepository;
+    private MessageRepository messageRepository;
     @Autowired
-    EntityCreationService entityCreationService;
+    private EntityCreationService entityCreationService;
     @Autowired
-    JobRepository jobRepository;
+    private JobRepository jobRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    StudentRepository studentRepository;
+    private StudentRepository studentRepository;
     @Autowired
-    CompanyRepository companyRepository;
+    private CompanyRepository companyRepository;
 
     private final ModelMapper mapper = new ModelMapper();
 

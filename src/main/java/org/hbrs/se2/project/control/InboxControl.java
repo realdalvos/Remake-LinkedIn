@@ -11,7 +11,7 @@ import java.util.List;
 @Controller
 public class InboxControl {
 
-    final InboxService inboxService;
+    private final InboxService inboxService;
 
     public InboxControl(InboxService inboxService) {
         this.inboxService = inboxService;

@@ -27,6 +27,8 @@ public class ProfileService implements ProfileServiceInterface {
     @Autowired
     private TopicRepository topicRepository;
     @Autowired
+    private ConversationRepository conversationRepository;
+    @Autowired
     private EntityCreationService entityCreationService;
 
     @Autowired
@@ -147,6 +149,7 @@ public class ProfileService implements ProfileServiceInterface {
         if (userRepository.deleteByUserid(user.getUserid()) != 1) {
             throw new DatabaseUserException("Wrong amount of datasets deleted");
         }
+        conversationRepository.garbageCollection();
     }
 
 }

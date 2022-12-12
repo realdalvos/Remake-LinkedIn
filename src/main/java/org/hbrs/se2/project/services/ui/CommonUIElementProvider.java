@@ -36,11 +36,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class CommonUIElementProvider {
 
     @Autowired
-    UserControl userControl;
+    private UserControl userControl;
     @Autowired
-    InboxControl inboxControl;
+    private InboxControl inboxControl;
     @Autowired
-    JobControl jobControl;
+    private JobControl jobControl;
 
     /**
      * Creates an Error Dialog
