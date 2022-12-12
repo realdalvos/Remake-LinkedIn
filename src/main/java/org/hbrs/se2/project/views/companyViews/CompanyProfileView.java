@@ -80,7 +80,7 @@ public class CompanyProfileView extends ProfileView {
             if (userBinder.isValid() && companyBinder.isValid()) {
                 ui.makeConfirm("Möchten Sie die Änderungen an Ihrem Profil speichern?",
                         event -> {
-                            if (!userBinder.getBean().getUsername().equals(CURRENT_USER.getUsername())) {
+                            if (!userBinder.getBean().getUsername().equals(userControl.getCurrentUser().getUsername())) {
                                 UI.getCurrent().getSession().close();
                                 navigateHandler.navigateToLoginPage();
                             }

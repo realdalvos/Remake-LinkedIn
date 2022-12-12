@@ -127,7 +127,7 @@ public class StudentProfileView extends ProfileView {
                 ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?",
                         event -> {
                             try {
-                                if (!userBinder.getBean().getUsername().equals(CURRENT_USER.getUsername())) {
+                                if (!userBinder.getBean().getUsername().equals(userControl.getCurrentUser().getUsername())) {
                                     UI.getCurrent().getSession().close();
                                     navigateHandler.navigateToLoginPage();
                                 }
