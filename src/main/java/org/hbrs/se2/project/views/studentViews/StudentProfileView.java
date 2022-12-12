@@ -13,7 +13,6 @@ import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
-import org.hbrs.se2.project.helper.AccessHandler;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
@@ -130,12 +129,13 @@ public class StudentProfileView extends ProfileView {
                                 if (!userBinder.getBean().getUsername().equals(userControl.getCurrentUser().getUsername())) {
                                     UI.getCurrent().getSession().close();
                                     navigateHandler.navigateToLoginPage();
+                                } else {
+                                    // reload page to get updated view
+                                    UI.getCurrent().getPage().reload();
                                 }
                                 profileControl.saveStudentData(
                                         userBinder.getBean(), studentBinder.getBean(),
                                         newMajors, newTopics, newSkills);
-                                // reload page to get updated view
-                                UI.getCurrent().getPage().reload();
                             } catch (DatabaseUserException e) {
                                 logger.error("Something went wrong with saving student data");
                             }

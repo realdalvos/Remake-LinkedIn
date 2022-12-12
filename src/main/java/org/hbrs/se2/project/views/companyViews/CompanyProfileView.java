@@ -17,7 +17,6 @@ import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.ProfileControl;
 import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
-import org.hbrs.se2.project.helper.AccessHandler;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
@@ -83,9 +82,11 @@ public class CompanyProfileView extends ProfileView {
                             if (!userBinder.getBean().getUsername().equals(userControl.getCurrentUser().getUsername())) {
                                 UI.getCurrent().getSession().close();
                                 navigateHandler.navigateToLoginPage();
+                            } else {
+                                UI.getCurrent().getPage().reload();
                             }
                             profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());
-                            UI.getCurrent().getPage().reload();});
+                        });
             } else {
                 ui.makeDialog("Überprüfen Sie bitte Ihre Angaben auf Korrektheit");
             }
