@@ -63,11 +63,14 @@ public class SearchStudentsView extends Div {
                         formLayout.add(field);
                     }
             );
-
             createGrids(student);
             formLayout.add(gridMajors);
             formLayout.add(gridSkills);
             formLayout.add(gridTopics);
+            Button contact = new Button("Kontaktieren");
+            contact.addClickListener(event ->
+                    ui.makeConversationDialogCompany(userControl.getCompanyProfile(userControl.getCurrentUser().getUserid()).getCompanyid(), student.getStudentid()));
+            formLayout.add(contact);
             return formLayout;
         }));
 

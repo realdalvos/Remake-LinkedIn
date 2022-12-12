@@ -106,7 +106,7 @@ public class JobsView extends Div {
                     }
             );
             Button contact = new Button("Kontaktieren");
-            contact.addClickListener(event -> ui.conversationDialog(job.getCompanyid(), userControl.getStudentProfile(
+            contact.addClickListener(event -> ui.makeConversationDialogStudent(job.getCompanyid(), userControl.getStudentProfile(
                     userControl.getCurrentUser().getUserid()).getStudentid(), job.getJobid()));
             formLayout.add(contact);
             formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 2));
