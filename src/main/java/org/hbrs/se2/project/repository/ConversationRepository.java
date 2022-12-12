@@ -13,8 +13,10 @@ import java.util.List;
 @Repository
 public interface ConversationRepository extends JpaRepository<Conversation, Integer> {
 
+    @Query("SELECT c FROM Conversation c JOIN c.messages m WHERE c.studentid=:studentid ORDER BY m.timestamp DESC")
     List<ConversationDTO> findByStudentid(int studentid);
 
+    @Query("SELECT c FROM Conversation c JOIN c.messages m WHERE c.companyid=:companyid ORDER BY m.timestamp DESC")
     List<ConversationDTO> findByCompanyid(int companyid);
 
     @Transactional

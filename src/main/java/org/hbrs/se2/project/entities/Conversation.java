@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="conversation", schema="mid9db")
@@ -11,6 +12,7 @@ public class Conversation {
     private Integer jobid;
     private Integer studentid;
     private Integer companyid;
+    private List<Message> messages;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,6 +63,15 @@ public class Conversation {
 
     public void setCompanyid(Integer companyid) {
         this.companyid = companyid;
+    }
+
+    @OneToMany(mappedBy="conversationid")
+    private List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 
 }
