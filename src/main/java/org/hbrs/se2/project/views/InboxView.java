@@ -102,7 +102,7 @@ public abstract class InboxView extends Div {
         return grid;
     }
 
-    protected Grid<ConversationDTO> conversationGrid(Set<ConversationDTO> conversations) {
+    protected Grid<ConversationDTO> conversationGrid(Set<ConversationDTO> conversations, int unread) {
         conversationGrid.setItems(conversations);
         conversationGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
         conversationGrid.setHeightFull();
@@ -113,7 +113,6 @@ public abstract class InboxView extends Div {
         chatHeader.setSelectionMode(Grid.SelectionMode.NONE);
         chat.setHeight("90%");
         chat.setSelectionMode(Grid.SelectionMode.NONE);
-        int unread = inboxControl.getNumberOfUnreadMessages(userControl.getCurrentUser().getUserid());
         chatHeader.addComponentColumn(component -> new H3("Du hast " + unread + " ungelesene " + (unread == 1 ? "Nachricht!" : "Nachrichten!")))
                 .setTextAlign(ColumnTextAlign.CENTER);
         return conversationGrid;

@@ -13,6 +13,7 @@ public class Message {
     private int conversationid;
     private boolean read;
     private Integer userid;
+    private Conversation conversation;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,6 +74,16 @@ public class Message {
 
     public void setUserid(Integer userid) {
         this.userid = userid;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "conversationid", insertable = false, updatable = false)
+    public Conversation getConversation() {
+        return conversation;
+    }
+
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
     }
 
 }

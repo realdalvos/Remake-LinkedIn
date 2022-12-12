@@ -72,8 +72,12 @@ public class InboxService {
         return messageRepository.getUnreadMessagesFromConversation(conversationid, userid);
     }
 
-    public int getNumberOfUnreadMessages(int userid) {
-        return messageRepository.getUnreadMessages(userid);
+    public int getNumberOfUnreadMessagesFromStudent(int userid) {
+        return messageRepository.getUnreadMessagesFromStudent(studentRepository.findByUserid(userid).getStudentid(), userid);
+    }
+
+    public int getNumberOfUnreadMessagesFromCompany(int userid) {
+        return messageRepository.getUnreadMessagesFromCompany(companyRepository.findByUserid(userid).getCompanyid(), userid);
     }
 
     public Instant getLatestMessageTime(int conversationid) {

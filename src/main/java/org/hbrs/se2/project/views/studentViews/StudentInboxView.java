@@ -17,7 +17,8 @@ public class StudentInboxView extends InboxView {
         this.inboxControl = inboxControl;
         this.userControl = userControl;
 
-        conversationGrid = conversationGrid(inboxControl.getConversationsOfStudent(userControl.getStudentProfile(userControl.getCurrentUser().getUserid()).getStudentid()));
+        conversationGrid = conversationGrid(inboxControl.getConversationsOfStudent(userControl.getStudentProfile(userControl.getCurrentUser().getUserid()).getStudentid()),
+                inboxControl.getNumberOfUnreadMessagesFromStudent(userControl.getCurrentUser().getUserid()));
         conversationGrid.addComponentColumn(conversation -> conversationComponent(conversation,
                 inboxControl.getNameOfCompanyFromConversation(conversation))).setWidth("70%").setHeader("Posteingang");
         conversationGrid.addComponentColumn(this::unreadMessages).setWidth("10%").setTextAlign(ColumnTextAlign.END);

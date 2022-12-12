@@ -37,8 +37,12 @@ public class InboxControl {
         return inboxService.getNumberOfUnreadMessagesFromConversation(conversationid, userid);
     }
 
-    public int getNumberOfUnreadMessages(int userid) {
-        return inboxService.getNumberOfUnreadMessages(userid);
+    public int getNumberOfUnreadMessagesFromStudent(int userid) {
+        return inboxService.getNumberOfUnreadMessagesFromStudent(userid);
+    }
+
+    public int getNumberOfUnreadMessagesFromCompany(int userid) {
+        return inboxService.getNumberOfUnreadMessagesFromCompany(userid);
     }
 
     public Instant getLatestMessageTime(int conversationid) {
