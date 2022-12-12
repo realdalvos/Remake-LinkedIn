@@ -113,10 +113,10 @@ public class CommonUIElementProvider {
         VerticalLayout vLayout = new VerticalLayout(new Text("Kontakt:"));
         AtomicBoolean selected = new AtomicBoolean(true);
         jobSelection.ifPresent(select -> {
-            vLayout.addComponentAtIndex(1, jobSelection.get());
-            jobSelection.get().setWidthFull();
+            vLayout.addComponentAtIndex(1, select);
+            select.setWidthFull();
             selected.set(false);
-            jobSelection.get().addValueChangeListener(listen -> selected.set(true));
+            select.addValueChangeListener(listen -> selected.set(true));
         });
         TextField title = new TextField("Betreff");
         title.setWidthFull();
@@ -136,7 +136,7 @@ public class CommonUIElementProvider {
                     newConversation.setCompanyid(companyid);
                     newConversation.setStudentid(studentid);
                     jobid.ifPresent(newConversation::setJobid);
-                    jobSelection.ifPresent(selection -> newConversation.setJobid(jobSelection.get().getValue().getJobid()));
+                    jobSelection.ifPresent(selection -> newConversation.setJobid(selection.getValue().getJobid()));
                     newConversation.setTitle(title.getValue());
                     ConversationDTO conversation = inboxControl.newConversation(newConversation);
                     MessageDTO message = new MessageDTOImpl();
@@ -145,6 +145,7 @@ public class CommonUIElementProvider {
                     message.setTimestamp(Instant.now());
                     message.setUserid(userControl.getCurrentUser().getUserid());
                     inboxControl.saveMessage(message);
+                    dialog.close();
                 });
             } else {
                 makeDialog("Fülle bitte alle Felder aus.");
