@@ -12,15 +12,15 @@ public interface ConversationDTO extends Serializable {
 
     public void setTitle(String title);
 
-    public int getJobid();
+    public Integer getJobid();
 
     public void setJobid(int jobid);
 
-    public int getStudentid();
+    public Integer getStudentid();
 
     public void setStudentid(int studentid);
 
-    public int getCompanyid();
+    public Integer getCompanyid();
 
     public void setCompanyid(int companyid);
 

@@ -21,11 +21,14 @@ import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.dtos.ConversationDTO;
 import org.hbrs.se2.project.dtos.MessageDTO;
 import org.hbrs.se2.project.dtos.impl.MessageDTOImpl;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @JsModule("@vaadin/vaadin-lumo-styles/badge.js")
 @CssImport(value = "./themes/mytheme/styles.css", include = "lumo-badge")
@@ -45,23 +48,29 @@ public abstract class InboxView extends Div {
         content.setWidth("70%");
         content.setHelperText("Nachricht");
         Button send = new Button("Senden");
-        send.addClickListener(event -> {
-            if (!content.isEmpty()) {
-                MessageListItem newMessage = new MessageListItem(
-                        content.getValue(), Instant.now(), userControl.getCurrentUser().getUsername());
-                items.add(newMessage);
-                list.setItems(items);
-                MessageDTO message = new MessageDTOImpl();
-                message.setConversationid(conversation.getConversationid());
-                message.setContent(newMessage.getText());
-                message.setTimestamp(newMessage.getTime());
-                message.setUserid(userControl.getCurrentUser().getUserid());
-                inboxControl.saveMessage(message);
-            }
-        });
         HorizontalLayout input = new HorizontalLayout(content, send);
         input.setWidth("80%");
         VerticalLayout layout = new VerticalLayout(title, list, input);
+        if (conversation.getCompanyid() != null && conversation.getStudentid() != null) {
+            send.addClickListener(event -> {
+                if (!content.isEmpty()) {
+                    MessageListItem newMessage = new MessageListItem(
+                            content.getValue(), Instant.now(), userControl.getCurrentUser().getUsername());
+                    items.add(newMessage);
+                    list.setItems(items);
+                    MessageDTO message = new MessageDTOImpl();
+                    message.setConversationid(conversation.getConversationid());
+                    message.setContent(newMessage.getText());
+                    message.setTimestamp(newMessage.getTime());
+                    message.setUserid(userControl.getCurrentUser().getUserid());
+                    inboxControl.saveMessage(message);
+                }
+            });
+        } else {
+            content.setEnabled(false);
+            content.setValue("Gesprächsteilnehmer nicht verfügbar");
+            send.setEnabled(false);
+        }
         layout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, title, list, input);
         return layout;
     }
@@ -69,7 +78,7 @@ public abstract class InboxView extends Div {
     protected Grid<ConversationDTO> conversationGrid(List<ConversationDTO> conversations) {
         grid.setItems(conversations);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        grid.setHeightByRows(true);
+        grid.setAllRowsVisible(true);
         return grid;
     }
 

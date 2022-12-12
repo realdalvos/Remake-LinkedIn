@@ -11,7 +11,7 @@ public class MessageDTOImpl implements MessageDTO {
     private Instant timestamp;
     private int conversationid;
     private boolean read;
-    private int userid;
+    private Integer userid;
 
     public int getMessageid() {
         return messageid;
@@ -53,7 +53,7 @@ public class MessageDTOImpl implements MessageDTO {
         this.read = read;
     }
 
-    public int getUserid() {
+    public Integer getUserid() {
         return userid;
     }
 

@@ -25,7 +25,7 @@ public interface MessageDTO extends Serializable {
 
     public void setRead(boolean read);
 
-    public int getUserid();
+    public Integer getUserid();
 
     public void setUserid(int userid);
 

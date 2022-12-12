@@ -8,9 +8,9 @@ public class Conversation {
 
     private int conversationid;
     private String title;
-    private int jobid;
-    private int studentid;
-    private int companyid;
+    private Integer jobid;
+    private Integer studentid;
+    private Integer companyid;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,31 +35,31 @@ public class Conversation {
 
     @Basic
     @Column(name="jobid")
-    public int getJobid() {
+    public Integer getJobid() {
         return jobid;
     }
 
-    public void setJobid(int jobid) {
+    public void setJobid(Integer jobid) {
         this.jobid = jobid;
     }
 
     @Basic
     @Column(name="studentid")
-    public int getStudentid() {
+    public Integer getStudentid() {
         return studentid;
     }
 
-    public void setStudentid(int studentid) {
+    public void setStudentid(Integer studentid) {
         this.studentid = studentid;
     }
 
     @Basic
     @Column(name="companyid")
-    public int getCompanyid() {
+    public Integer getCompanyid() {
         return companyid;
     }
 
-    public void setCompanyid(int companyid) {
+    public void setCompanyid(Integer companyid) {
         this.companyid = companyid;
     }
 

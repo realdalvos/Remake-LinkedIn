@@ -6,9 +6,9 @@ public class ConversationDTOImpl implements ConversationDTO {
 
     private int conversationid;
     private String title;
-    private int jobid;
-    private int studentid;
-    private int companyid;
+    private Integer jobid;
+    private Integer studentid;
+    private Integer companyid;
 
     public int getConversationid() {
         return conversationid;
@@ -26,7 +26,7 @@ public class ConversationDTOImpl implements ConversationDTO {
         this.title = title;
     }
 
-    public int getJobid() {
+    public Integer getJobid() {
         return jobid;
     }
 
@@ -34,7 +34,7 @@ public class ConversationDTOImpl implements ConversationDTO {
         this.jobid = jobid;
     }
 
-    public int getStudentid() {
+    public Integer getStudentid() {
         return studentid;
     }
 
@@ -42,7 +42,7 @@ public class ConversationDTOImpl implements ConversationDTO {
         this.studentid = studentid;
     }
 
-    public int getCompanyid() {
+    public Integer getCompanyid() {
         return companyid;
     }
 

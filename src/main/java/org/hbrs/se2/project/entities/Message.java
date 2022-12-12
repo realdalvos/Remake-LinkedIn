@@ -12,7 +12,7 @@ public class Message {
     private Instant timestamp;
     private int conversationid;
     private boolean read;
-    private int userid;
+    private Integer userid;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,11 +67,11 @@ public class Message {
 
     @Basic
     @Column(name="userid")
-    public int getUserid() {
+    public Integer getUserid() {
         return userid;
     }
 
-    public void setUserid(int userid) {
+    public void setUserid(Integer userid) {
         this.userid = userid;
     }
 

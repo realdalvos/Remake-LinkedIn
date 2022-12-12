@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class InboxService {
@@ -44,12 +45,16 @@ public class InboxService {
     }
 
     public MessageList getMessagesOfStudent(ConversationDTO conversation) {
-        messageRepository.setRead(conversation.getConversationid(), companyRepository.findByCompanyid(conversation.getCompanyid()).getUserid());
+        if (conversation.getStudentid() != null) {
+            messageRepository.setRead(conversation.getConversationid(), companyRepository.findByCompanyid(conversation.getCompanyid()).getUserid());
+        }
         return getMessagesFromConversation(conversation.getConversationid());
     }
 
     public MessageList getMessagesOfCompany(ConversationDTO conversation) {
-        messageRepository.setRead(conversation.getConversationid(), studentRepository.findByStudentid(conversation.getStudentid()).getUserid());
+        if (conversation.getStudentid() != null) {
+            messageRepository.setRead(conversation.getConversationid(), studentRepository.findByStudentid(conversation.getStudentid()).getUserid());
+        }
         return getMessagesFromConversation(conversation.getConversationid());
     }
 
@@ -57,7 +62,8 @@ public class InboxService {
         MessageList list = new MessageList();
         List<MessageListItem> items = new ArrayList<>();
         messageRepository.findByConversationid(conversationid).forEach(message ->
-                items.add(new MessageListItem(message.getContent(), message.getTimestamp(), userRepository.findByUserid(message.getUserid()).getUsername())));
+                items.add(new MessageListItem(message.getContent(), message.getTimestamp(),
+                        message.getUserid() != null ? userRepository.findByUserid(message.getUserid()).getUsername() : "Gelöschte*r Nutzer*in")));
         list.setItems(items);
         return list;
     }
@@ -78,17 +84,20 @@ public class InboxService {
         return mapper.map(conversationRepository.save(entityCreationService.conversationFactory().createEntity(conversation)), ConversationDTOImpl.class);
     }
 
-    public String getJob(int jobid) {
-        return jobRepository.findByJobid(jobid).getTitle();
+    public String getJob(Integer jobid) {
+        return jobid != null ? jobRepository.findByJobid(jobid).getTitle() : "Jobangebot nicht mehr verfügbar";
     }
 
     public String getNameOfStudentFromConversation(ConversationDTO conversation) {
-        StudentDTO student = studentRepository.findByStudentid(conversation.getStudentid());
-        return student.getFirstname() + " " + student.getLastname();
+        if (conversation.getStudentid() != null) {
+            StudentDTO student = studentRepository.findByStudentid(conversation.getStudentid());
+            return student.getFirstname() + " " + student.getLastname();
+        }
+        return "Gelöschte*r Student*in";
     }
 
     public String getNameOfCompanyFromConversation(ConversationDTO conversation) {
-        return companyRepository.findByCompanyid(conversation.getCompanyid()).getName();
+        return conversation.getCompanyid() != null ? companyRepository.findByCompanyid(conversation.getCompanyid()).getName() : "Gelöschtes Unternehmen";
     }
 
 }
