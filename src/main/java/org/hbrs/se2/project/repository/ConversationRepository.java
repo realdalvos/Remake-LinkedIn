@@ -7,17 +7,16 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface ConversationRepository extends JpaRepository<Conversation, Integer> {
 
     @Query("SELECT c FROM Conversation c JOIN c.messages m WHERE c.studentid=:studentid ORDER BY m.timestamp DESC")
-    List<ConversationDTO> findByStudentid(int studentid);
+    Set<ConversationDTO> findByStudentid(int studentid);
 
     @Query("SELECT c FROM Conversation c JOIN c.messages m WHERE c.companyid=:companyid ORDER BY m.timestamp DESC")
-    List<ConversationDTO> findByCompanyid(int companyid);
+    Set<ConversationDTO> findByCompanyid(int companyid);
 
     @Transactional
     @Modifying

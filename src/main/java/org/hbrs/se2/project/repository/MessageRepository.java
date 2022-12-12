@@ -20,6 +20,9 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
     @Query("SELECT COUNT(c) FROM Message c WHERE c.conversationid=:conversationid AND NOT c.userid=:userid AND c.read=FALSE")
     int getUnreadMessagesFromConversation(int conversationid, int userid);
 
+    @Query("SELECT COUNT(c) FROM Message c WHERE c.read=FALSE AND NOT c.userid=:userid")
+    int getUnreadMessages(int userid);
+
     @Query("SELECT MAX(timestamp) FROM Message m WHERE m.conversationid=:conversationid")
     Instant getLatestMessageFromConversation(int conversationid);
 

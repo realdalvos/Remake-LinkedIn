@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class InboxService {
@@ -36,11 +36,11 @@ public class InboxService {
 
     private final ModelMapper mapper = new ModelMapper();
 
-    public List<ConversationDTO> getConversationsOfStudent(int studentid) {
+    public Set<ConversationDTO> getConversationsOfStudent(int studentid) {
         return conversationRepository.findByStudentid(studentid);
     }
 
-    public List<ConversationDTO> getConversationsOfCompany(int companyid) {
+    public Set<ConversationDTO> getConversationsOfCompany(int companyid) {
         return conversationRepository.findByCompanyid(companyid);
     }
 
@@ -68,8 +68,12 @@ public class InboxService {
         return list;
     }
 
-    public int getNumberOfUnreadMessages(int conversationid, int userid) {
+    public int getNumberOfUnreadMessagesFromConversation(int conversationid, int userid) {
         return messageRepository.getUnreadMessagesFromConversation(conversationid, userid);
+    }
+
+    public int getNumberOfUnreadMessages(int userid) {
+        return messageRepository.getUnreadMessages(userid);
     }
 
     public Instant getLatestMessageTime(int conversationid) {

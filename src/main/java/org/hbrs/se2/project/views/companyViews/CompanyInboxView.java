@@ -17,15 +17,18 @@ public class CompanyInboxView extends InboxView {
         this.inboxControl = inboxControl;
         this.userControl = userControl;
 
-        grid = conversationGrid(inboxControl.getConversationsOfCompany(userControl.getCompanyProfile(userControl.getCurrentUser().getUserid()).getCompanyid()));
-        grid.addComponentColumn(conversation -> conversationComponent(conversation,
+        conversationGrid = conversationGrid(inboxControl.getConversationsOfCompany(userControl.getCompanyProfile(userControl.getCurrentUser().getUserid()).getCompanyid()));
+        conversationGrid.addComponentColumn(conversation -> conversationComponent(conversation,
                 inboxControl.getNameOfStudentFromConversation(conversation))).setWidth("70%").setHeader("Posteingang");
-        grid.addComponentColumn(this::unreadMessages).setWidth("10%").setTextAlign(ColumnTextAlign.END);
-        grid.addComponentColumn(this::latestMessage).setWidth("20%").setTextAlign(ColumnTextAlign.END);
-        grid.addSelectionListener(select -> select.getFirstSelectedItem().ifPresent(conversation ->
-                layout.replace(layout.getComponentAt(1), conversationLayout(inboxControl.getMessagesOfCompany(conversation), conversation))));
+        conversationGrid.addComponentColumn(this::unreadMessages).setWidth("10%").setTextAlign(ColumnTextAlign.END);
+        conversationGrid.addComponentColumn(this::latestMessage).setWidth("20%").setTextAlign(ColumnTextAlign.END);
+        conversationGrid.addSelectionListener(select -> select.getFirstSelectedItem().ifPresent(conversation -> {
+            chatLayout.replace(chatLayout.getComponentAt(0), conversationHeader(conversation));
+            chatLayout.replace(chatLayout.getComponentAt(1), conversationLayout(inboxControl.getMessagesOfCompany(conversation), conversation));
+        }));
         setSizeFull();
-        add(layout);
+        setHeightFull();
+        add(mainLayout);
     }
 
 }

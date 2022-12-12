@@ -6,7 +6,7 @@ import org.hbrs.se2.project.dtos.MessageDTO;
 import org.hbrs.se2.project.services.impl.InboxService;
 import org.springframework.stereotype.Controller;
 import java.time.Instant;
-import java.util.List;
+import java.util.Set;
 
 @Controller
 public class InboxControl {
@@ -17,11 +17,11 @@ public class InboxControl {
         this.inboxService = inboxService;
     }
 
-    public List<ConversationDTO> getConversationsOfStudent(int studentid) {
+    public Set<ConversationDTO> getConversationsOfStudent(int studentid) {
         return inboxService.getConversationsOfStudent(studentid);
     }
 
-    public List<ConversationDTO> getConversationsOfCompany(int companyid) {
+    public Set<ConversationDTO> getConversationsOfCompany(int companyid) {
         return inboxService.getConversationsOfCompany(companyid);
     }
 
@@ -33,8 +33,12 @@ public class InboxControl {
         return inboxService.getMessagesOfCompany(conversation);
     }
 
-    public int getNumberOfUnreadMessages(int conversationid, int userid) {
-        return inboxService.getNumberOfUnreadMessages(conversationid, userid);
+    public int getNumberOfUnreadMessagesFromConversation(int conversationid, int userid) {
+        return inboxService.getNumberOfUnreadMessagesFromConversation(conversationid, userid);
+    }
+
+    public int getNumberOfUnreadMessages(int userid) {
+        return inboxService.getNumberOfUnreadMessages(userid);
     }
 
     public Instant getLatestMessageTime(int conversationid) {
