@@ -109,7 +109,7 @@ public class CommonUIElementProvider {
 
     private Dialog conversationDialog(int companyid, int studentid, Optional<Integer> jobid, Optional<Select<JobDTO>> jobSelection) {
         Dialog dialog = new Dialog();
-        dialog.setWidth("400px");
+        dialog.setWidth("600px");
         VerticalLayout vLayout = new VerticalLayout(new Text("Kontakt:"));
         AtomicBoolean selected = new AtomicBoolean(true);
         jobSelection.ifPresent(select -> {
@@ -123,6 +123,7 @@ public class CommonUIElementProvider {
         title.setRequired(true);
         TextArea content = new TextArea("Nachricht");
         content.setWidthFull();
+        content.setHeight("200px");
         content.setRequired(true);
         HorizontalLayout buttons = new HorizontalLayout();
         Button close = new Button("Abbrechen");
