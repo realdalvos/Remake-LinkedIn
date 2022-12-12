@@ -13,8 +13,9 @@ public class Globals {
         public static final String REGISTER_COMPANY_VIEW = "register-company";
         public static final String REGISTER_STUDENT_VIEW = "register-student";
         public static final String NEW_ADD_VIEW = "new-job-ad";
-
         public static final String SEARCH_STUDENT_VIEW = "search-student-view";
+        public static final String STUDENT_INBOX_VIEW = "student-inbox";
+        public static final String COMPANY_INBOX_VIEW = "company-inbox";
     }
 
     public static class Roles {

@@ -6,6 +6,7 @@ import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
 import org.hbrs.se2.project.views.companyViews.*;
 import org.hbrs.se2.project.views.studentViews.JobsView;
+import org.hbrs.se2.project.views.studentViews.StudentInboxView;
 import org.hbrs.se2.project.views.studentViews.StudentProfileView;
 import org.hbrs.se2.project.views.studentViews.RegisterStudentView;
 
@@ -25,11 +26,13 @@ public class AccessHandler {
             configuration.setAnnotatedRoute(NewJobAdView.class);
             configuration.setAnnotatedRoute(SearchStudentsView.class);
             configuration.setAnnotatedRoute(CompanyProfileView.class);
+            configuration.setAnnotatedRoute(CompanyInboxView.class);
 
             defaultView = MyAdsView.class;
         } else {    //else student
             configuration.setAnnotatedRoute(JobsView.class);
             configuration.setAnnotatedRoute(StudentProfileView.class);
+            configuration.setAnnotatedRoute(StudentInboxView.class);
 
             defaultView = JobsView.class;
         }

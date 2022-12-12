@@ -28,6 +28,8 @@ public class ProfileService implements ProfileServiceInterface {
     @Autowired
     private TopicRepository topicRepository;
     @Autowired
+    private ConversationRepository conversationRepository;
+    @Autowired
     private EntityCreationService entityCreationService;
 
     @Autowired
@@ -102,16 +104,6 @@ public class ProfileService implements ProfileServiceInterface {
     }
 
     @Override
-    public StudentDTO getStudentProfile(int userid) {
-        return studentRepository.findByUserid(userid);
-    }
-
-    @Override
-    public CompanyDTO getCompanyProfile(int userid) {
-        return companyRepository.findByUserid(userid);
-    }
-
-    @Override
     public Set<MajorDTO> getMajorOfStudent(int userid) {
         return majorRepository.findByStudentid(studentRepository.findByUserid(userid).getStudentid());
     }
@@ -157,14 +149,11 @@ public class ProfileService implements ProfileServiceInterface {
         return studentRepository.findByKeyword(keyword);
     }
 
-    public UserDTO getUserByUserid(int userid) {
-        return userRepository.findByUserid(userid);
-    }
-
     public void deleteUser(UserDTO user) throws DatabaseUserException {
         if (userRepository.deleteByUserid(user.getUserid()) != 1) {
             throw new DatabaseUserException("Wrong amount of datasets deleted");
         }
+        conversationRepository.garbageCollection();
     }
 
     public void changeUserPassword(UserDTO user) throws Exception {

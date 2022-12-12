@@ -17,6 +17,8 @@ import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import org.hbrs.se2.project.control.ProfileControl;
 import org.hbrs.se2.project.dtos.UserDTO;
+import org.hbrs.se2.project.control.UserControl;
+import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Utils;
@@ -29,17 +31,15 @@ public abstract class ProfileView extends Div {
     private final Logger logger = Utils.getLogger(this.getClass().getName());
 
     protected ProfileControl profileControl;
+    protected UserControl userControl;
 
     @Autowired
     protected CommonUIElementProvider ui;
-
-    protected final UserDTO CURRENT_USER = Utils.getCurrentUser();
 
     protected TextField username = new TextField("Benutzername:");
     protected TextField email = new TextField("EMail-Adresse:");
     protected PasswordField password = new PasswordField("Passwort:");
     protected PasswordField passwordConfirm = new PasswordField("Passwort bestätigen:");
-
 
     protected Button button;
     protected Button delete = new Button("Account löschen");
@@ -58,7 +58,7 @@ public abstract class ProfileView extends Div {
             HorizontalLayout buttons = new HorizontalLayout();
             Dialog dialog = ui.makeGenericDialog(layout, buttons);
             Text message = new Text("Bitte gib deinen Accountnamen zur Bestätigung ein:");
-            String user = CURRENT_USER.getUsername();
+            String user = userControl.getCurrentUser().getUsername();
             TextField confirmField = new TextField();
             confirmField.setPlaceholder(user);
             confirmField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
@@ -71,7 +71,7 @@ public abstract class ProfileView extends Div {
             delete.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
             delete.addClickListener(event -> {
                 try {
-                    profileControl.deleteUser(CURRENT_USER);
+                    profileControl.deleteUser(userControl.getCurrentUser());
                     this.getUI().ifPresent(ui -> {
                         ui.getSession().close();
                         ui.getPage().setLocation("/");
@@ -117,7 +117,7 @@ public abstract class ProfileView extends Div {
     }
 
     protected void setUserBinder() {
-        passwordBinder.setBean(mapper.map(CURRENT_USER, UserDTOImpl.class));
+        passwordBinder.setBean(mapper.map(userControl.getCurrentUser(), UserDTOImpl.class));
         passwordBinder
                 .forField(password)
                 .asRequired()
@@ -131,18 +131,18 @@ public abstract class ProfileView extends Div {
         password.clear();
         passwordConfirm.clear();
 
-        userBinder.setBean(mapper.map(CURRENT_USER, UserDTOImpl.class));
+        userBinder.setBean(mapper.map(userControl.getCurrentUser(), UserDTOImpl.class));
         userBinder
                 .forField(username)
                 .asRequired("Darf nicht leer sein")
-                .withValidator(user -> user.equals(CURRENT_USER.getUsername())
+                .withValidator(user -> user.equals(userControl.getCurrentUser().getUsername())
                         || profileControl.checkUsernameUnique(user), "Benutzername existiert bereits")
                 .bind(UserDTOImpl::getUsername, UserDTOImpl::setUsername);
         userBinder
                 .forField(email)
                 .asRequired("Darf nicht leer sein")
                 .withValidator(new EmailValidator("Keine gültige EMail Adresse"))
-                .withValidator(email -> email.equals(CURRENT_USER.getEmail())
+                .withValidator(email -> email.equals(userControl.getCurrentUser().getEmail())
                         || profileControl.checkEmailUnique(email), "Email existiert bereits")
                 .bind(UserDTOImpl::getEmail, UserDTOImpl::setEmail);
     }

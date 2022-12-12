@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.services.impl;
 
-import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.JobRepository;
@@ -22,11 +21,6 @@ public class JobService implements JobServiceInterface {
 
     @Autowired
     private JobRepository jobRepository;
-
-    @Override
-    public CompanyDTO getCompanyByUserid(int id) {
-        return companyRepository.findByUserid(id);
-    }
 
     @Override
     public String getCompanyOfJob(JobDTO job) {

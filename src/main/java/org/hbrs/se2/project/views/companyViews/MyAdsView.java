@@ -16,15 +16,14 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
+import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
-import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.stream.Stream;
 
 /**
@@ -38,6 +37,7 @@ public class MyAdsView extends Div {
     private CommonUIElementProvider ui;
 
     private final JobControl jobControl;
+    private final UserControl userControl;
 
     private final TextField title = new TextField(getTranslation("view.job.text.title"));
     private final TextArea description = new TextArea(getTranslation("view.job.text.description"));
@@ -48,8 +48,10 @@ public class MyAdsView extends Div {
     private final Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
     private final ModelMapper mapper = new ModelMapper();
 
-    public MyAdsView(JobControl jobControl){
+    public MyAdsView(JobControl jobControl, UserControl userControl) {
         this.jobControl = jobControl;
+        this.userControl = userControl;
+
         title.setMaxWidth("33%");
         title.setWidthFull();
         salary.setMaxWidth("33%");
@@ -63,7 +65,7 @@ public class MyAdsView extends Div {
 
         Grid<JobDTO> grid = new Grid<>();
 
-        grid.setItems(jobControl.getAllCompanyJobs(jobControl.getCompanyByUserid(Utils.getCurrentUser().getUserid()).getCompanyid()));
+        grid.setItems(jobControl.getAllCompanyJobs(userControl.getCompanyProfile(userControl.getCurrentUser().getUserid()).getCompanyid()));
         grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.setHeightByRows(true);
         grid.addColumn(JobDTO::getTitle).setHeader(getTranslation("view.job.text.title")).setSortable(true).setWidth("20%");
@@ -73,7 +75,10 @@ public class MyAdsView extends Div {
         grid.addComponentColumn(JobDTO -> {
             Button deleteButton = new Button(getTranslation("view.job.button.delete"));
             deleteButton.addClickListener(e -> ui.makeYesNoDialog("Möchten Sie dieses Jobangebot wirklich löschen?",
-                    event -> jobControl.deleteJob(JobDTO.getJobid())));
+                    event -> {
+                        jobControl.deleteJob(JobDTO.getJobid());
+                        UI.getCurrent().getPage().reload();
+                    }));
             return deleteButton;
         });
 
@@ -106,7 +111,10 @@ public class MyAdsView extends Div {
                 save.addClickListener(saveEvent -> {
                     if (binder.isValid()) {
                         ui.makeConfirm("Möchten Sie die Änderungen an diesem Jobangebot speichern?",
-                                event -> {jobControl.createNewJobPost(binder.getBean());UI.getCurrent().getPage().reload();});
+                                event -> {
+                                    jobControl.createNewJobPost(binder.getBean());
+                                    UI.getCurrent().getPage().reload();
+                                });
                     } else {
                         ui.makeDialog("Überprüfen Sie bitte Ihre Angaben auf Korrektheit");
                     }

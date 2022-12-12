@@ -33,4 +33,6 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     @Query("SELECT COUNT(c) > 0 FROM Student s JOIN s.skills c WHERE c.skillid=:skillid")
     boolean existsSkillRelation(int skillid);
 
+    StudentDTO findByStudentid(int id);
+
 }
