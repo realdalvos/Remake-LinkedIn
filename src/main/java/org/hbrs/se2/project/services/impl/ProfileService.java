@@ -6,7 +6,6 @@ import org.hbrs.se2.project.repository.*;
 import org.hbrs.se2.project.services.ProfileServiceInterface;
 import org.hbrs.se2.project.services.factory.EntityCreationService;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,34 +14,37 @@ import java.util.*;
 
 @Service
 public class ProfileService implements ProfileServiceInterface {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private StudentRepository studentRepository;
-    @Autowired
-    private CompanyRepository companyRepository;
-    @Autowired
-    private MajorRepository majorRepository;
-    @Autowired
-    private SkillRepository skillRepository;
-    @Autowired
-    private TopicRepository topicRepository;
-    @Autowired
-    private ConversationRepository conversationRepository;
-    @Autowired
-    private EntityCreationService entityCreationService;
+    private final UserRepository userRepository;
+    private final StudentRepository studentRepository;
+    private final CompanyRepository companyRepository;
+    private final MajorRepository majorRepository;
+    private final SkillRepository skillRepository;
+    private final TopicRepository topicRepository;
+    private final ConversationRepository conversationRepository;
+    private final EntityCreationService entityCreationService;
 
-    @Autowired
-    protected CommonUIElementProvider ui;
+    protected final CommonUIElementProvider ui;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
+    public ProfileService(UserRepository userRepository, StudentRepository studentRepository, CompanyRepository companyRepository, MajorRepository majorRepository, SkillRepository skillRepository, TopicRepository topicRepository, ConversationRepository conversationRepository, EntityCreationService entityCreationService, CommonUIElementProvider ui, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.studentRepository = studentRepository;
+        this.companyRepository = companyRepository;
+        this.majorRepository = majorRepository;
+        this.skillRepository = skillRepository;
+        this.topicRepository = topicRepository;
+        this.conversationRepository = conversationRepository;
+        this.entityCreationService = entityCreationService;
+        this.ui = ui;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public void saveStudentData(UserDTO user, StudentDTO student, Set<String> major, Set<String> topic, Set<String> skill) {
         userRepository.save(entityCreationService.userFactory().createEntity(user));
         studentRepository.save(entityCreationService
-                .studentFactory(getMajors(major, student.getStudentid()), getTopics(topic, student.getStudentid()), getSkills(skill, student.getStudentid()))
+                .studentFactory(getMajors(major), getTopics(topic), getSkills(skill))
                 .createEntity(student));
     }
 
@@ -52,7 +54,7 @@ public class ProfileService implements ProfileServiceInterface {
         companyRepository.save(entityCreationService.companyFactory().createEntity(company));
     }
 
-    private Set<MajorDTO> getMajors(Set<String> major, int studentid) {
+    private Set<MajorDTO> getMajors(Set<String> major) {
         Set<MajorDTO> majors = new HashSet<>();
         // get major data from database by major attribute
         major.parallelStream().forEach(m -> {
@@ -70,7 +72,7 @@ public class ProfileService implements ProfileServiceInterface {
         return majors;
     }
 
-    private Set<TopicDTO> getTopics(Set<String> topic, int studentid) {
+    private Set<TopicDTO> getTopics(Set<String> topic) {
         Set<TopicDTO> topics = new HashSet<>();
         // get topic data from database by major attribute
         topic.parallelStream().forEach(t -> {
@@ -88,7 +90,7 @@ public class ProfileService implements ProfileServiceInterface {
         return topics;
     }
 
-    private Set<SkillDTO> getSkills(Set<String> skill, int studentid) {
+    private Set<SkillDTO> getSkills(Set<String> skill) {
         Set<SkillDTO> skills = new HashSet<>();
         // same process as in updateMajors and updateTopics
         skill.parallelStream().forEach(s -> {

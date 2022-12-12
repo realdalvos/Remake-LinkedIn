@@ -119,7 +119,7 @@ public class StudentProfileView extends ProfileView {
         setEditGrids();
 
         button = new Button("Profil speichern");
-        formLayout.add(button, delete);
+        formLayout.add(button);
         button.addClickListener(buttonClickEvent -> {
             if (userBinder.isValid() && studentBinder.isValid()) {
                 ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?",
