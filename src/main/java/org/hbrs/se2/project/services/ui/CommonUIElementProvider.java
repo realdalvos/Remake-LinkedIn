@@ -28,9 +28,9 @@ import org.hbrs.se2.project.dtos.impl.ConversationDTOImpl;
 import org.hbrs.se2.project.dtos.impl.MessageDTOImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class CommonUIElementProvider {
@@ -66,7 +66,6 @@ public class CommonUIElementProvider {
         Button yes = new Button("Ja");
         yes.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         yes.addClickListener(listener);
-        yes.addClickListener(event -> UI.getCurrent().getPage().reload());
         yes.addClickListener(event -> dialog.close());
         HorizontalLayout hLayout = new HorizontalLayout();
         vLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.END, hLayout);
@@ -112,35 +111,43 @@ public class CommonUIElementProvider {
         Dialog dialog = new Dialog();
         dialog.setWidth("400px");
         VerticalLayout vLayout = new VerticalLayout(new Text("Kontakt:"));
+        AtomicBoolean selected = new AtomicBoolean(true);
         jobSelection.ifPresent(select -> {
             vLayout.addComponentAtIndex(1, jobSelection.get());
             jobSelection.get().setWidthFull();
+            selected.set(false);
+            jobSelection.get().addValueChangeListener(listen -> selected.set(true));
         });
         TextField title = new TextField("Betreff");
         title.setWidthFull();
+        title.setRequired(true);
         TextArea content = new TextArea("Nachricht");
         content.setWidthFull();
+        content.setRequired(true);
         HorizontalLayout buttons = new HorizontalLayout();
         Button close = new Button("Abbrechen");
         close.addClickListener(event -> dialog.close());
         Button send = new Button("Senden");
         send.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         send.addClickListener(event -> {
-            if (!content.isEmpty()) {
-                ConversationDTO newConversation = new ConversationDTOImpl();
-                newConversation.setCompanyid(companyid);
-                newConversation.setStudentid(studentid);
-                jobid.ifPresent(newConversation::setJobid);
-                jobSelection.ifPresent(selection -> newConversation.setJobid(jobSelection.get().getValue().getJobid()));
-                newConversation.setTitle(title.getValue());
-                ConversationDTO conversation = inboxControl.newConversation(newConversation);
-                MessageDTO message = new MessageDTOImpl();
-                message.setConversationid(conversation.getConversationid());
-                message.setContent(content.getValue());
-                message.setTimestamp(Instant.now());
-                message.setUserid(userControl.getCurrentUser().getUserid());
-                inboxControl.saveMessage(message);
-                dialog.close();
+            if (!title.isEmpty() && !content.isEmpty() && selected.get()) {
+                makeYesNoDialog("Anfrage abschicken?", confirm -> {
+                    ConversationDTO newConversation = new ConversationDTOImpl();
+                    newConversation.setCompanyid(companyid);
+                    newConversation.setStudentid(studentid);
+                    jobid.ifPresent(newConversation::setJobid);
+                    jobSelection.ifPresent(selection -> newConversation.setJobid(jobSelection.get().getValue().getJobid()));
+                    newConversation.setTitle(title.getValue());
+                    ConversationDTO conversation = inboxControl.newConversation(newConversation);
+                    MessageDTO message = new MessageDTOImpl();
+                    message.setConversationid(conversation.getConversationid());
+                    message.setContent(content.getValue());
+                    message.setTimestamp(Instant.now());
+                    message.setUserid(userControl.getCurrentUser().getUserid());
+                    inboxControl.saveMessage(message);
+                });
+            } else {
+                makeDialog("Fülle bitte alle Felder aus.");
             }
         });
         buttons.add(close, send);

@@ -21,11 +21,9 @@ import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
-import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.stream.Stream;
 
 /**
@@ -50,7 +48,7 @@ public class MyAdsView extends Div {
     private final Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
     private final ModelMapper mapper = new ModelMapper();
 
-    public MyAdsView(JobControl jobControl, UserControl userControl){
+    public MyAdsView(JobControl jobControl, UserControl userControl) {
         this.jobControl = jobControl;
         this.userControl = userControl;
 
@@ -77,7 +75,10 @@ public class MyAdsView extends Div {
         grid.addComponentColumn(JobDTO -> {
             Button deleteButton = new Button(getTranslation("view.job.button.delete"));
             deleteButton.addClickListener(e -> ui.makeYesNoDialog("Möchten Sie dieses Jobangebot wirklich löschen?",
-                    event -> jobControl.deleteJob(JobDTO.getJobid())));
+                    event -> {
+                        jobControl.deleteJob(JobDTO.getJobid());
+                        UI.getCurrent().getPage().reload();
+                    }));
             return deleteButton;
         });
 
@@ -110,7 +111,10 @@ public class MyAdsView extends Div {
                 save.addClickListener(saveEvent -> {
                     if (binder.isValid()) {
                         ui.makeConfirm("Möchten Sie die Änderungen an diesem Jobangebot speichern?",
-                                event -> {jobControl.createNewJobPost(binder.getBean());UI.getCurrent().getPage().reload();});
+                                event -> {
+                                    jobControl.createNewJobPost(binder.getBean());
+                                    UI.getCurrent().getPage().reload();
+                                });
                     } else {
                         ui.makeDialog("Überprüfen Sie bitte Ihre Angaben auf Korrektheit");
                     }
