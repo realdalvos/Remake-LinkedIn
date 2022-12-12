@@ -15,6 +15,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.ProfileControl;
+import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
@@ -34,8 +35,9 @@ public class CompanyProfileView extends ProfileView {
 
     private final Binder<CompanyDTOImpl> companyBinder = new BeanValidationBinder<>(CompanyDTOImpl.class);
 
-    public CompanyProfileView(ProfileControl profileControl) {
+    public CompanyProfileView(ProfileControl profileControl, UserControl userControl) {
         this.profileControl = profileControl;
+        this.userControl = userControl;
 
         setSizeFull();
         add(formLayout);
@@ -84,7 +86,7 @@ public class CompanyProfileView extends ProfileView {
 
     private void setCompanyBinder() {
         companyBinder.bindInstanceFields(this);
-        companyBinder.setBean(mapper.map(profileControl.getCompanyProfile(CURRENT_USER.getUserid()), CompanyDTOImpl.class));
+        companyBinder.setBean(mapper.map(userControl.getCompanyProfile(userControl.getCurrentUser().getUserid()), CompanyDTOImpl.class));
         banned = companyBinder.getBean().getBanned();
     }
 

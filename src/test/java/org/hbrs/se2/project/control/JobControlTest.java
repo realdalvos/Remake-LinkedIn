@@ -25,6 +25,8 @@ public class JobControlTest {
     @Autowired
     CompanyDTO testCompanyDTO;
     @Autowired
+    UserControl userControl;
+    @Autowired
     HelperForTests h;
 
     @BeforeEach
@@ -205,7 +207,7 @@ public class JobControlTest {
     @Test
     @DisplayName("Testing the getCompanyByUserid Method")
     void test_getCompanyByUserid() {
-        CompanyDTO companyByUserid = jobControl.getCompanyByUserid(testCompanyDTO.getUserid());
+        CompanyDTO companyByUserid = userControl.getCompanyProfile(testCompanyDTO.getUserid());
 
         assertNotNull(companyByUserid, "Should return the test company");
 

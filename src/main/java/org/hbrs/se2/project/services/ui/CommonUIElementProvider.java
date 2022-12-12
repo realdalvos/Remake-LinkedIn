@@ -13,14 +13,34 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import org.hbrs.se2.project.util.Utils;
+import org.hbrs.se2.project.control.InboxControl;
+import org.hbrs.se2.project.control.JobControl;
+import org.hbrs.se2.project.control.UserControl;
+import org.hbrs.se2.project.dtos.ConversationDTO;
+import org.hbrs.se2.project.dtos.JobDTO;
+import org.hbrs.se2.project.dtos.MessageDTO;
+import org.hbrs.se2.project.dtos.impl.ConversationDTOImpl;
+import org.hbrs.se2.project.dtos.impl.MessageDTOImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.time.Instant;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class CommonUIElementProvider {
+
+    @Autowired
+    private UserControl userControl;
+    @Autowired
+    private InboxControl inboxControl;
+    @Autowired
+    private JobControl jobControl;
 
     /**
      * Creates an Error Dialog
@@ -46,7 +66,6 @@ public class CommonUIElementProvider {
         Button yes = new Button("Ja");
         yes.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         yes.addClickListener(listener);
-        yes.addClickListener(event -> UI.getCurrent().getPage().reload());
         yes.addClickListener(event -> dialog.close());
         HorizontalLayout hLayout = new HorizontalLayout();
         vLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.END, hLayout);
@@ -75,11 +94,76 @@ public class CommonUIElementProvider {
         dialog.open();
     }
 
+    public void makeConversationDialogStudent(int companyid, int studentid, int jobid) {
+        conversationDialog(companyid, studentid, Optional.of(jobid), Optional.empty()).open();
+    }
+
+    public void makeConversationDialogCompany(int companyid, int studentid) {
+        Select<JobDTO> jobs = new Select<>();
+        jobs.setEmptySelectionAllowed(false);
+        jobs.setPlaceholder("Stellenangebot auswählen");
+        jobs.setItems(jobControl.getAllCompanyJobs(companyid));
+        jobs.setItemLabelGenerator(JobDTO::getTitle);
+        conversationDialog(companyid, studentid, Optional.empty(), Optional.of(jobs)).open();
+    }
+
+    private Dialog conversationDialog(int companyid, int studentid, Optional<Integer> jobid, Optional<Select<JobDTO>> jobSelection) {
+        Dialog dialog = new Dialog();
+        dialog.setWidth("600px");
+        VerticalLayout vLayout = new VerticalLayout(new Text("Kontakt:"));
+        AtomicBoolean selected = new AtomicBoolean(true);
+        jobSelection.ifPresent(select -> {
+            vLayout.addComponentAtIndex(1, select);
+            select.setWidthFull();
+            selected.set(false);
+            select.addValueChangeListener(listen -> selected.set(true));
+        });
+        TextField title = new TextField("Betreff");
+        title.setWidthFull();
+        title.setRequired(true);
+        TextArea content = new TextArea("Nachricht");
+        content.setWidthFull();
+        content.setHeight("200px");
+        content.setRequired(true);
+        HorizontalLayout buttons = new HorizontalLayout();
+        Button close = new Button("Abbrechen");
+        close.addClickListener(event -> dialog.close());
+        Button send = new Button("Senden");
+        send.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        send.addClickListener(event -> {
+            if (!title.isEmpty() && !content.isEmpty() && selected.get()) {
+                makeYesNoDialog("Anfrage abschicken?", confirm -> {
+                    ConversationDTO newConversation = new ConversationDTOImpl();
+                    newConversation.setCompanyid(companyid);
+                    newConversation.setStudentid(studentid);
+                    jobid.ifPresent(newConversation::setJobid);
+                    jobSelection.ifPresent(selection -> newConversation.setJobid(selection.getValue().getJobid()));
+                    newConversation.setTitle(title.getValue());
+                    ConversationDTO conversation = inboxControl.newConversation(newConversation);
+                    MessageDTO message = new MessageDTOImpl();
+                    message.setConversationid(conversation.getConversationid());
+                    message.setContent(content.getValue());
+                    message.setTimestamp(Instant.now());
+                    message.setUserid(userControl.getCurrentUser().getUserid());
+                    inboxControl.saveMessage(message);
+                    dialog.close();
+                });
+            } else {
+                makeDialog("Fülle bitte alle Felder aus.");
+            }
+        });
+        buttons.add(close, send);
+        vLayout.add(title, content, buttons);
+        vLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, buttons);
+        dialog.add(vLayout);
+        return dialog;
+    }
+
     public void makeDeleteConfirm(String message, ComponentEventListener<ClickEvent<Button>> listener) {
         VerticalLayout vLayout = new VerticalLayout();
         Dialog dialog = new Dialog();
         TextField confirmField = new TextField();
-        String user = Utils.getCurrentUser().getUsername();
+        String user = userControl.getCurrentUser().getUsername();
         confirmField.setPlaceholder(user);
         confirmField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
         Button close = new Button("Abbrechen");
@@ -111,12 +195,12 @@ public class CommonUIElementProvider {
         vLayout.getThemeList().set("spacing-s", true);
         vLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
 
-        startText.getElement().getStyle().set("font-size","45px"); // font size
+        startText.getElement().getStyle().set("font-size", "45px"); // font size
         startText.getElement().getStyle().set("color", "#f2a6b4"); // hex value of color in custom Theme for continuity
-        startText.getElement().getStyle().set("text-align","center"); // text is now in center
+        startText.getElement().getStyle().set("text-align", "center"); // text is now in center
 
-        descriptionText.getElement().getStyle().set("font-size","20px");
-        descriptionText.getElement().getStyle().set("text-align","center");
+        descriptionText.getElement().getStyle().set("font-size", "20px");
+        descriptionText.getElement().getStyle().set("text-align", "center");
 
         vLayout.add(startText);
         vLayout.add(descriptionText);

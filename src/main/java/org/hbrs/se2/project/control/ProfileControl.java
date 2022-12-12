@@ -38,14 +38,6 @@ public class ProfileControl {
         return validationService.checkMatrikelnumberUnique(matrikelnumber);
     }
 
-    public StudentDTO getStudentProfile(int userid) {
-        return profileService.getStudentProfile(userid);
-    }
-
-    public CompanyDTO getCompanyProfile(int userid) {
-        return profileService.getCompanyProfile(userid);
-    }
-
     public Set<MajorDTO> getMajorOfStudent(int userid) {
         return profileService.getMajorOfStudent(userid);
     }
@@ -72,9 +64,8 @@ public class ProfileControl {
 
     public Set<StudentDTO> getStudentsMatchingKeyword(String keyword) {return profileService.getStudentsMatchingKeyword(keyword);}
 
-    public UserDTO getUserByUserid(int id) {return profileService.getUserByUserid(id);}
-
     public void deleteUser(UserDTO user) throws DatabaseUserException {
         profileService.deleteUser(user);
     }
+
 }
