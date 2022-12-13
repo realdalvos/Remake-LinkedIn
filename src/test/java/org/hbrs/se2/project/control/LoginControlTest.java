@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class LoginControlTest {
     @Autowired
-    LoginControl loginControl;
+    AuthorizationControl authorizationControl;
     @Autowired
     HelperForTests h;
     @Autowired
@@ -36,28 +36,28 @@ class LoginControlTest {
     void testAuthenticateWhenNoSuchUser() throws DatabaseUserException {
         h.deleteTestUsers();
 
-        assertFalse(loginControl.authenticate(testUser.getUsername(), testUser.getPassword()));
+        assertFalse(authorizationControl.authenticate(testUser.getUsername(), testUser.getPassword()));
     }
 
     @Test
     @DisplayName("LoginControl should return false since the password is correct.")
     void testAuthenticateShouldFail() throws DatabaseUserException {
-        assertFalse(loginControl.authenticate(testUser.getUsername(),testUser.getPassword() + "Mehr Zeichen"));
+        assertFalse(authorizationControl.authenticate(testUser.getUsername(),testUser.getPassword() + "Mehr Zeichen"));
     }
 
     @Test
     @DisplayName("LoginControl should return true since the password is correct for user \"JUnitTest\".")
     void testAuthenticateShouldWork() throws DatabaseUserException {
-        assertTrue(loginControl.authenticate(testUser.getUsername(), testUser.getPassword()));
+        assertTrue(authorizationControl.authenticate(testUser.getUsername(), testUser.getPassword()));
     }
 
     @Test
     @DisplayName("GetCurrentUser Method should return the last registered user, in this case user \"JUnitTest\".")
     void getCurrentUser() throws DatabaseUserException {
-        loginControl.authenticate(testUser.getUsername(),testUser.getPassword());
+        authorizationControl.authenticate(testUser.getUsername(),testUser.getPassword());
 
         //should return UserDTO of user JUnitTest
-        UserDTO currentUser = loginControl.getCurrentUser();
+        UserDTO currentUser = authorizationControl.getCurrentUser();
         assertNotNull(currentUser);
         assertEquals(testUser.getUsername(), currentUser.getUsername());
     }

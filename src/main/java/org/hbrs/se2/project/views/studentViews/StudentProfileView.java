@@ -13,7 +13,6 @@ import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
-import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
@@ -127,8 +126,7 @@ public class StudentProfileView extends ProfileView {
                         event -> {
                             try {
                                 if (!userBinder.getBean().getUsername().equals(userControl.getCurrentUser().getUsername())) {
-                                    UI.getCurrent().getSession().close();
-                                    navigateHandler.navigateToLoginPage();
+                                    authorizationControl.logoutUser();
                                 } else {
                                     // reload page to get updated view
                                     UI.getCurrent().getPage().reload();

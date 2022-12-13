@@ -17,7 +17,6 @@ import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.ProfileControl;
 import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
-import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
 import org.hbrs.se2.project.views.ProfileView;
@@ -80,8 +79,7 @@ public class CompanyProfileView extends ProfileView {
                 ui.makeConfirm("Möchten Sie die Änderungen an Ihrem Profil speichern?",
                         event -> {
                             if (!userBinder.getBean().getUsername().equals(userControl.getCurrentUser().getUsername())) {
-                                UI.getCurrent().getSession().close();
-                                navigateHandler.navigateToLoginPage();
+                                authorizationControl.logoutUser();
                             } else {
                                 UI.getCurrent().getPage().reload();
                             }
