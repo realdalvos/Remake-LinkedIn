@@ -37,7 +37,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @PageTitle("Login")
 public class LoginView extends VerticalLayout {
 
-    final CommonUIElementProvider ui;
     private final LoginControl loginControl;
 
     private LoginI18n createLoginI18n(){
@@ -62,6 +61,8 @@ public class LoginView extends VerticalLayout {
     }
 
     public LoginView(LoginControl loginControl, CommonUIElementProvider ui) {
+        this.loginControl = loginControl;
+
         AccessHandler.setDefaultAccess();
         setHeight("80%");
         LoginForm component = new LoginForm();
@@ -130,9 +131,6 @@ public class LoginView extends VerticalLayout {
         add(buttonCompany);
         this.setAlignItems(Alignment.CENTER);
         this.setJustifyContentMode(JustifyContentMode.CENTER);
-
-        this.loginControl = loginControl;
-        this.ui = ui;
     }
 
     private void grabAndSetUserIntoSession() {
