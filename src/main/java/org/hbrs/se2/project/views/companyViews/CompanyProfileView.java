@@ -77,7 +77,14 @@ public class CompanyProfileView extends ProfileView {
         button.addClickListener(buttonClickEvent -> {
             if (userBinder.isValid() && companyBinder.isValid()) {
                 ui.makeConfirm("Möchten Sie die Änderungen an Ihrem Profil speichern?",
-                        event -> {profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());UI.getCurrent().getPage().reload();});
+                        event -> {
+                            if (!userBinder.getBean().getUsername().equals(userControl.getCurrentUser().getUsername())) {
+                                authorizationControl.logoutUser();
+                            } else {
+                                UI.getCurrent().getPage().reload();
+                            }
+                            profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());
+                        });
             } else {
                 ui.makeDialog("Überprüfen Sie bitte Ihre Angaben auf Korrektheit");
             }

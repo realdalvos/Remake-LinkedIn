@@ -16,7 +16,6 @@ import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.PWA;
 import org.hbrs.se2.project.control.AuthorizationControl;
-import org.hbrs.se2.project.control.LoginControl;
 import org.hbrs.se2.project.helper.navigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
@@ -28,6 +27,7 @@ import org.hbrs.se2.project.views.studentViews.JobsView;
 import org.hbrs.se2.project.views.studentViews.StudentInboxView;
 import org.hbrs.se2.project.views.studentViews.StudentProfileView;
 import org.slf4j.Logger;
+
 import java.util.Optional;
 
 @PWA(name="HBRS Collab", shortName = "HBRScollab", enableInstallPrompt = false)
@@ -37,12 +37,12 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     private H1 viewTitle;
     private H4 helloUser;
 
-    final LoginControl loginControl;
-    private AuthorizationControl authorizationControl;
+    private final AuthorizationControl authorizationControl;
 
-    public AppView(LoginControl loginControl) {
-        this.loginControl = loginControl;
-        if(loginControl.getCurrentUser() == null) {
+    public AppView(AuthorizationControl authorizationControl) {
+        this.authorizationControl = authorizationControl;
+
+        if(authorizationControl.getCurrentUser() == null) {
             logger.info("In Constructor of App View - No User given");
         } else {
             setUpUI();
@@ -61,7 +61,6 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     }
 
     private Component createHeaderContent() {
-        authorizationControl = new AuthorizationControl();
         // a few basic settings
         // everything is set into the horizontal layout
         HorizontalLayout layout = new HorizontalLayout();
@@ -93,23 +92,16 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
 
         // Only if role is equal to company
-        if(this.authorizationControl.hasUserRole(loginControl.getCurrentUser(), Globals.Roles.company)) {
+        if(authorizationControl.hasUserRole(authorizationControl.getCurrentUser(), Globals.Roles.company)) {
             bar.addItem(getTranslation("view.main.bar.newJob"), e -> navigateHandler.navigateToNewJob());
         }
 
         // for all roles add following bar items
-        bar.addItem(getTranslation("view.main.bar.logout"), e -> logoutUser());
+        bar.addItem(getTranslation("view.main.bar.logout"), e -> authorizationControl.logoutUser());
         topRightPanel.add(bar);
 
         layout.add( topRightPanel );
         return layout;
-    }
-
-    private void logoutUser() {
-        this.getUI().ifPresent(ui -> {
-            ui.getSession().close();
-            ui.getPage().setLocation("/");
-        });
     }
 
     /**
@@ -156,20 +148,18 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
 
     private Component[] createMenuItems() {
-        // get authentication control
-        authorizationControl = new AuthorizationControl();
         // tabs for vertical bar (drawer)
         Tab[] tabs = new Tab[]{};
 
         // if the user has the role "student" he has the tabs "Jobs"
-        if(this.authorizationControl.hasUserRole(loginControl.getCurrentUser(), Globals.Roles.student)) {
+        if(authorizationControl.hasUserRole(authorizationControl.getCurrentUser(), Globals.Roles.student)) {
             logger.info("User is student");
             tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.jobs"), JobsView.class));
             tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.profile"), StudentProfileView.class));
             tabs = Utils.append(tabs, createTab("Kommunikation", StudentInboxView.class));
         } else
             // has the user the role "company" they have the tabs "My Ads"
-            if(this.authorizationControl.hasUserRole(loginControl.getCurrentUser(), Globals.Roles.company)) {
+            if(authorizationControl.hasUserRole(authorizationControl.getCurrentUser(), Globals.Roles.company)) {
                 logger.info("User is company");
                 tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.myjobs"), MyAdsView.class));
                 tabs = Utils.append(tabs, createTab("Studentensuche", SearchStudentsView.class));
@@ -210,7 +200,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     }
 
     private String getCurrentNameOfUser() {
-        return loginControl.getCurrentUser().getUsername();
+        return authorizationControl.getCurrentUser().getUsername();
     }
 
     /**
@@ -222,7 +212,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
      */
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        if (loginControl.getCurrentUser() == null){
+        if (authorizationControl.getCurrentUser() == null){
             beforeEnterEvent.rerouteTo(Globals.Pages.LOGIN_VIEW);
         }
     }
