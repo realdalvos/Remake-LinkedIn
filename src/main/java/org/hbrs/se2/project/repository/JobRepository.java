@@ -15,6 +15,8 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
 
         List<JobDTO> findByCompanyid(int id);
 
+        JobDTO findByJobid(int id);
+
         @Query("SELECT j FROM Job j")
         List<JobDTO> getAll();
 

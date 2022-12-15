@@ -8,13 +8,6 @@ import java.util.List;
 public interface JobServiceInterface {
 
     /**
-     * Get the Company of a User
-     * @param id id of User
-     * @return Company of the User
-     */
-    CompanyDTO getCompanyByUserid(int id);
-
-    /**
      * Get Company Name for a Job
      * @param job Job
      * @return Company Name for the Job

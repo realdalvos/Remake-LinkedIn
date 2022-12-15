@@ -1,10 +1,8 @@
 package org.hbrs.se2.project.control;
 
-import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.services.impl.JobService;
 import org.springframework.stereotype.Controller;
-
 import java.util.List;
 
 @Controller
@@ -13,15 +11,6 @@ public class JobControl {
 
     public JobControl(JobService jobService) {
         this.jobService = jobService;
-    }
-
-    /**
-     * Get the Company of a User
-     * @param id id of User
-     * @return Company of the User
-     */
-    public CompanyDTO getCompanyByUserid(int id) {
-        return jobService.getCompanyByUserid(id);
     }
 
     /**

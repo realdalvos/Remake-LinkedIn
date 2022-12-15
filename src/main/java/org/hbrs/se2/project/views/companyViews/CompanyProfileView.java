@@ -15,6 +15,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.ProfileControl;
+import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
 import org.hbrs.se2.project.util.Globals;
@@ -37,8 +38,9 @@ public class CompanyProfileView extends ProfileView {
 
     private final Binder<CompanyDTOImpl> companyBinder = new BeanValidationBinder<>(CompanyDTOImpl.class);
 
-    public CompanyProfileView(ProfileControl profileControl) {
+    public CompanyProfileView(ProfileControl profileControl, UserControl userControl) {
         this.profileControl = profileControl;
+        this.userControl = userControl;
 
         setSizeFull();
         add(formLayout);
@@ -79,11 +81,13 @@ public class CompanyProfileView extends ProfileView {
             if (userBinder.isValid() && companyBinder.isValid()) {
                 ui.makeConfirm("Möchten Sie die Änderungen an Ihrem Profil speichern?",
                         event -> {
-                    try {
-                        profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());
-                    } catch (DatabaseUserException e) {
-                        logger.error("Something went wrong with saving company data");
-                    }UI.getCurrent().getPage().reload();});
+                            if (!userBinder.getBean().getUsername().equals(userControl.getCurrentUser().getUsername())) {
+                                authorizationControl.logoutUser();
+                            } else {
+                                UI.getCurrent().getPage().reload();
+                            }
+                            profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());
+                        });
             } else {
                 ui.makeDialog("Überprüfen Sie bitte Ihre Angaben auf Korrektheit");
             }
@@ -92,7 +96,7 @@ public class CompanyProfileView extends ProfileView {
 
     private void setCompanyBinder() {
         companyBinder.bindInstanceFields(this);
-        companyBinder.setBean(mapper.map(profileControl.getCompanyProfile(CURRENT_USER.getUserid()), CompanyDTOImpl.class));
+        companyBinder.setBean(mapper.map(userControl.getCompanyProfile(userControl.getCurrentUser().getUserid()), CompanyDTOImpl.class));
         banned = companyBinder.getBean().getBanned();
     }
 

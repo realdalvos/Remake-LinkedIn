@@ -6,9 +6,10 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
+import org.hbrs.se2.project.control.AuthorizationControl;
 import org.hbrs.se2.project.control.ProfileControl;
+import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Utils;
@@ -21,11 +22,12 @@ public abstract class ProfileView extends Div {
     private final Logger logger = Utils.getLogger(this.getClass().getName());
 
     protected ProfileControl profileControl;
+    protected UserControl userControl;
+    @Autowired
+    protected AuthorizationControl authorizationControl;
 
     @Autowired
     protected CommonUIElementProvider ui;
-
-    protected final UserDTO CURRENT_USER = Utils.getCurrentUser();
 
     protected final TextField username = new TextField("Benutzername:");
     protected final TextField email = new TextField("EMail-Adresse:");
@@ -40,11 +42,8 @@ public abstract class ProfileView extends Div {
     public ProfileView() {
         delete.addClickListener(buttonClickEvent -> ui.makeDeleteConfirm("Bitte gib deinen Accountnamen zur Bestätigung ein:", event -> {
             try {
-                profileControl.deleteUser(CURRENT_USER);
-                this.getUI().ifPresent(ui -> {
-                    ui.getSession().close();
-                    ui.getPage().setLocation("/");
-                });
+                profileControl.deleteUser(userControl.getCurrentUser());
+                authorizationControl.logoutUser();
             } catch (DatabaseUserException e) {
                 logger.error("Something went wrong when deleting student from DB");
             }
@@ -53,19 +52,19 @@ public abstract class ProfileView extends Div {
 
     protected void setUserBinder() {
         userBinder.bindInstanceFields(this);
-        userBinder.setBean(mapper.map(Utils.getCurrentUser(), UserDTOImpl.class));
+        userBinder.setBean(mapper.map(userControl.getCurrentUser(), UserDTOImpl.class));
         userBinder
                 .forField(username)
                 .asRequired("Darf nicht leer sein")
                 .withValidator(validation -> !username.getValue().isBlank(), "Darf nicht leer sein")
-                .withValidator(validation -> username.getValue().equals(CURRENT_USER.getUsername())
+                .withValidator(validation -> username.getValue().equals(userControl.getCurrentUser().getUsername())
                         || profileControl.checkUsernameUnique(username.getValue()), "Benutzername existiert bereits")
                 .bind(UserDTOImpl::getUsername, UserDTOImpl::setUsername);
         userBinder
                 .forField(email)
                 .asRequired("Darf nicht leer sein")
                 .withValidator(new EmailValidator("Keine gültige EMail Adresse"))
-                .withValidator(validation -> email.getValue().equals(CURRENT_USER.getEmail())
+                .withValidator(validation -> email.getValue().equals(userControl.getCurrentUser().getEmail())
                         || profileControl.checkEmailUnique(email.getValue()), "Email existiert bereits")
                 .bind(UserDTOImpl::getEmail, UserDTOImpl::setEmail);
         username.addValueChangeListener(

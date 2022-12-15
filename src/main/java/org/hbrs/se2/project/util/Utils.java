@@ -44,15 +44,6 @@ public class Utils {
     }
 
     /**
-     * Returns the current logged in User from Vaadin session
-     *
-     * @return The currently logged in user as UserDTO
-     */
-    public static UserDTO getCurrentUser() {
-        return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
-    }
-
-    /**
      * Creates a logger with specified name
      *
      * @param s the logger identifier, for example class name

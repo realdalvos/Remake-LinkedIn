@@ -9,7 +9,6 @@ import org.hbrs.se2.project.repository.TopicRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Set;
 
 @Service
@@ -99,6 +98,14 @@ public class EntityCreationService {
             s.setSkill(skill);
             return  s;
         };
+    }
+
+    public AbstractEntityFactory<Conversation, ConversationDTO> conversationFactory() {
+        return conversation -> mapper.map(conversation, Conversation.class);
+    }
+
+    public AbstractEntityFactory<Message, MessageDTO> messageFactory() {
+        return message -> mapper.map(message, Message.class);
     }
 
 }

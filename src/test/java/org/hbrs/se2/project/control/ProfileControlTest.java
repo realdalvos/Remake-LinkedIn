@@ -27,9 +27,6 @@ class ProfileControlTest {
     Set<String> skill = new HashSet<>();
     @Autowired
     ProfileControl profileControl;
-
-    @Autowired
-    StudentRepository studentRepository;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -40,6 +37,8 @@ class ProfileControlTest {
     SkillRepository skillRepository;
     @Autowired
     CompanyRepository companyRepository;
+    @Autowired
+    UserControl userControl;
     @Autowired
     HelperForTests h;
     @Autowired
@@ -176,22 +175,22 @@ class ProfileControlTest {
     @DisplayName("Checking if methods concerning company work")
     void companyTest(){
         assertDoesNotThrow(() -> profileControl.saveCompanyData(userRepository.findByUserid(companyDTO.getUserid()), companyDTO));
-        assertEquals(companyDTO.getCompanyid(), profileControl.getCompanyProfile(companyDTO.getUserid()).getCompanyid());
-        assertEquals(companyDTO.getUserid(), profileControl.getCompanyProfile(companyDTO.getUserid()).getUserid());
-        assertEquals(companyDTO.getName(), profileControl.getCompanyProfile(companyDTO.getUserid()).getName());
-        assertEquals(companyDTO.getIndustry(), profileControl.getCompanyProfile(companyDTO.getUserid()).getIndustry());
-        assertEquals(companyDTO.getBanned(), profileControl.getCompanyProfile(companyDTO.getUserid()).getBanned());
+        assertEquals(companyDTO.getCompanyid(), userControl.getCompanyProfile(companyDTO.getUserid()).getCompanyid());
+        assertEquals(companyDTO.getUserid(), userControl.getCompanyProfile(companyDTO.getUserid()).getUserid());
+        assertEquals(companyDTO.getName(), userControl.getCompanyProfile(companyDTO.getUserid()).getName());
+        assertEquals(companyDTO.getIndustry(), userControl.getCompanyProfile(companyDTO.getUserid()).getIndustry());
+        assertEquals(companyDTO.getBanned(), userControl.getCompanyProfile(companyDTO.getUserid()).getBanned());
     }
 
     @Test
     @DisplayName("Checking if getStudentProfile() works as expected")
     void getStudentProfileTest(){
-        assertEquals(studentDTO.getUserid(), profileControl.getStudentProfile(studentDTO.getUserid()).getUserid());
-        assertEquals(studentDTO.getStudentid(), profileControl.getStudentProfile(studentDTO.getUserid()).getStudentid());
-        assertEquals(studentDTO.getFirstname(), profileControl.getStudentProfile(studentDTO.getUserid()).getFirstname());
-        assertEquals(studentDTO.getLastname(), profileControl.getStudentProfile(studentDTO.getUserid()).getLastname());
-        assertEquals(studentDTO.getMatrikelnumber(), profileControl.getStudentProfile(studentDTO.getUserid()).getMatrikelnumber());
-        assertEquals(studentDTO.getUniversity(), profileControl.getStudentProfile(studentDTO.getUserid()).getUniversity());
+        assertEquals(studentDTO.getUserid(), userControl.getStudentProfile(studentDTO.getUserid()).getUserid());
+        assertEquals(studentDTO.getStudentid(), userControl.getStudentProfile(studentDTO.getUserid()).getStudentid());
+        assertEquals(studentDTO.getFirstname(), userControl.getStudentProfile(studentDTO.getUserid()).getFirstname());
+        assertEquals(studentDTO.getLastname(), userControl.getStudentProfile(studentDTO.getUserid()).getLastname());
+        assertEquals(studentDTO.getMatrikelnumber(), userControl.getStudentProfile(studentDTO.getUserid()).getMatrikelnumber());
+        assertEquals(studentDTO.getUniversity(), userControl.getStudentProfile(studentDTO.getUserid()).getUniversity());
 
     }
 
@@ -207,7 +206,7 @@ class ProfileControlTest {
     @DisplayName("Checking if getUserByUserid() works as expected")
     void getUserByUseridTest(){
         userDTO = userRepository.findByUserid(studentDTO.getUserid());
-        UserDTO userDTO2 = profileControl.getUserByUserid(userDTO.getUserid());
+        UserDTO userDTO2 = userControl.getUserByUserid(userDTO.getUserid());
         assertEquals(userDTO.getUserid(), userDTO2.getUserid());
         assertEquals(userDTO.getUsername(), userDTO2.getUsername());
         assertEquals(userDTO.getEmail(), userDTO2.getEmail());
