@@ -86,7 +86,11 @@ public class CompanyProfileView extends ProfileView {
                             } else {
                                 UI.getCurrent().getPage().reload();
                             }
-                            profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());
+                            try {
+                                profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());
+                            } catch (DatabaseUserException e) {
+                                logger.info("failed to update company information in db");
+                            }
                         });
             } else {
                 ui.makeDialog("Überprüfen Sie bitte Ihre Angaben auf Korrektheit");
