@@ -58,7 +58,6 @@ public class StudentProfileView extends ProfileView {
         skills = profileControl.getSkillOfStudent(userControl.getCurrentUser().getUserid());
 
         setSizeFull();
-        add(formLayout);
         setAllGrids();
         setUserBinder();
         setStudentBinder();
@@ -113,8 +112,8 @@ public class StudentProfileView extends ProfileView {
     }
 
     private void editLayout() {
-        Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(
-                field -> field.setReadOnly(false)
+        Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(field ->
+                field.setReadOnly(false)
         );
         setEditGrids();
 
@@ -150,12 +149,17 @@ public class StudentProfileView extends ProfileView {
 
     private void viewLayout() {
         // set value of text fields to read only for profile view
-        Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(
-                field -> {
-                    field.setReadOnly(true);
-                    formLayout.add(field);
-                }
-        );
+        Stream.of(username, email, firstname, lastname, university, matrikelnumber).forEach(field -> {
+            formLayout.add(field);
+            field.setReadOnly(true);
+        });
+        formLayout.add(username, email, firstname, lastname, university, matrikelnumber);
+        formLayout.setColspan(gridSkills, 2);
+        formLayout.setColspan(gridTopics, 2);
+        formLayout.setColspan(gridMajors, 2);
+        //Rahmen noch setzen
+        //alles zentrieren und abstand links und rechts
+        //zwischen den grids ein bisschen abstand
 
         button = new Button("Profil bearbeiten");
         formLayout.add(gridMajors, gridTopics, gridSkills, button, delete);
@@ -163,7 +167,6 @@ public class StudentProfileView extends ProfileView {
             formLayout.remove(gridMajors, gridTopics, gridSkills, button, delete);
             editLayout();
         });
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
     }
 
     private Grid<String> newEntriesGrid(Set<String> entries) {
