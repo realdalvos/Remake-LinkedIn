@@ -3,6 +3,7 @@ package org.hbrs.se2.project.views;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
@@ -33,6 +34,7 @@ public abstract class ProfileView extends Div {
     protected final TextField email = new TextField("EMail-Adresse:");
     protected Button button;
     protected Button delete = new Button("Account löschen");
+    protected final HorizontalLayout layout = new HorizontalLayout();
     protected final FormLayout formLayout = new FormLayout();
 
     protected final Binder<UserDTOImpl> userBinder = new Binder<>(UserDTOImpl.class);
@@ -40,6 +42,14 @@ public abstract class ProfileView extends Div {
     protected final ModelMapper mapper = new ModelMapper();
 
     public ProfileView() {
+        layout.add(formLayout);
+        formLayout.setWidth("80%");
+        formLayout.setResponsiveSteps(
+                // Use two columns by default
+                new FormLayout.ResponsiveStep("0", 2)
+        );
+        layout.getStyle().set("margin-left", "var(--lumo-space-xl");
+        add(layout);
         delete.addClickListener(buttonClickEvent -> ui.makeDeleteConfirm("Bitte gib deinen Accountnamen zur Bestätigung ein:", event -> {
             try {
                 profileControl.deleteUser(userControl.getCurrentUser());
