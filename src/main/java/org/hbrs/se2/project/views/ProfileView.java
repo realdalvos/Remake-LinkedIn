@@ -6,6 +6,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
+import org.hbrs.se2.project.control.AuthorizationControl;
 import org.hbrs.se2.project.control.ProfileControl;
 import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
@@ -22,6 +23,8 @@ public abstract class ProfileView extends Div {
 
     protected ProfileControl profileControl;
     protected UserControl userControl;
+    @Autowired
+    protected AuthorizationControl authorizationControl;
 
     @Autowired
     protected CommonUIElementProvider ui;
@@ -40,10 +43,7 @@ public abstract class ProfileView extends Div {
         delete.addClickListener(buttonClickEvent -> ui.makeDeleteConfirm("Bitte gib deinen Accountnamen zur Bestätigung ein:", event -> {
             try {
                 profileControl.deleteUser(userControl.getCurrentUser());
-                this.getUI().ifPresent(ui -> {
-                    ui.getSession().close();
-                    ui.getPage().setLocation("/");
-                });
+                authorizationControl.logoutUser();
             } catch (DatabaseUserException e) {
                 logger.error("Something went wrong when deleting student from DB");
             }
