@@ -44,7 +44,14 @@ public class LoginViewTest {
 
     @BeforeAll
     static void start(){
-        System.setProperty("webdriver.chrome.driver","src/test/java/org/hbrs/se2/project/selenium/chromedriver.exe");
+
+        if(System.getenv().get("OS").matches("Windows")){
+            System.setProperty("webdriver.chrome.driver","src/test/java/org/hbrs/se2/project/selenium/chromedriver.exe");
+        }else{
+            System.out.println("\n\nYou might use linux or mac. If linux then everything is fine. If mac then select rigth driver in line below\n\n");
+            String driver= "chromedriver_linux64";
+            System.setProperty("webdriver.chrome.driver","src/test/java/org/hbrs/se2/project/selenium/" + driver);
+        }
     }
 
     @BeforeEach
