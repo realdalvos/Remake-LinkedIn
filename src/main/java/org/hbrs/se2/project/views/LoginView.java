@@ -27,6 +27,7 @@ import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
 import javax.servlet.http.Cookie;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -71,14 +72,11 @@ public class LoginView extends VerticalLayout {
         component.setI18n(createLoginI18n());
 
         AtomicBoolean understood = new AtomicBoolean(false);
-        Cookie[] cookies = VaadinRequest.getCurrent().getCookies();
-        if (cookies != null) {
-            Arrays.stream(cookies).forEach(cookie -> {
-                if (cookie.getName().equals("understood") && cookie.getValue().equals("true")) {
-                    understood.set(true);
-                }
-            });
-        }
+        Optional.ofNullable(VaadinRequest.getCurrent().getCookies()).ifPresent(cookies -> Arrays.stream(cookies).forEach(cookie -> {
+            if (cookie.getName().equals("understood") && cookie.getValue().equals("true")) {
+                understood.set(true);
+            }
+        }));
         if (!understood.get()) {
             cookieBanner();
         }
