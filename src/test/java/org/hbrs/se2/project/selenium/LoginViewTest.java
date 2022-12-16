@@ -41,6 +41,11 @@ public class LoginViewTest {
     @Autowired
     HelperForTests h;
     WebDriver webDriver;
+    WebElement textfieldUsername;
+    WebElement textfieldPassword;
+    WebElement buttonLogin;
+    WebElement buttonRegisterAsStudent;
+    WebElement buttonRegisterAsCompany;
 
     @BeforeAll
     static void start(){
@@ -61,36 +66,52 @@ public class LoginViewTest {
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         webDriver.manage().window().maximize();
         webDriver.get("http://localhost:8080");
+        textfieldUsername = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-login-form/vaadin-login-form-wrapper/form/vaadin-text-field/input"));
+        textfieldPassword = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-login-form/vaadin-login-form-wrapper/form/vaadin-password-field/input"));
+        buttonLogin = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-login-form/vaadin-login-form-wrapper/form/vaadin-button"));
+        buttonRegisterAsStudent = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-button[1]"));
+        buttonRegisterAsCompany = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-button[2]"));
     }
     @AfterEach
     void tearDown(){
         h.deleteTestUsers();
-        //webDriver.close();
         webDriver.quit();
     }
 
     @Test
-    @Description("Tests Login as Testuser")
-    public void login() throws InterruptedException {
-        WebElement textfieldUsername = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-login-form/vaadin-login-form-wrapper/form/vaadin-text-field/input"));
-        textfieldUsername.sendKeys(userDTO.getUsername());
-        WebElement textfieldPassword = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-login-form/vaadin-login-form-wrapper/form/vaadin-password-field/input"));
-        textfieldPassword.sendKeys(userDTO.getPassword());
-        WebElement buttonLogin = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-login-form/vaadin-login-form-wrapper/form/vaadin-button"));
-        buttonLogin.click();
-        h.synchronizedwait(webDriver,MAXIMUM_PAGE_LOADINGTIME);
-        assertEquals("Meine Stellen",webDriver.getTitle());
-    }
-    @Test
     @Description("Tests Login with wrong password")
     public void wronglogin(){
-        WebElement textfieldUsername = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-login-form/vaadin-login-form-wrapper/form/vaadin-text-field/input"));
         textfieldUsername.sendKeys(userDTO.getUsername());
-        WebElement textfieldPassword = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-login-form/vaadin-login-form-wrapper/form/vaadin-password-field/input"));
         textfieldPassword.sendKeys(userDTO.getUsername()+"X");
-        WebElement buttonLogin = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-login-form/vaadin-login-form-wrapper/form/vaadin-button"));
         buttonLogin.click();
         h.synchronizedwait(webDriver,MAXIMUM_PAGE_LOADINGTIME);
         assertEquals("Login", webDriver.getTitle());
+        assertEquals("http://localhost:8080/", webDriver.getCurrentUrl());
+    }
+    @Test
+    @Description("Tests Login as Testuser")
+    public void login() throws InterruptedException {
+        textfieldUsername.sendKeys(userDTO.getUsername());
+        textfieldPassword.sendKeys(userDTO.getPassword());
+        buttonLogin.click();
+        h.synchronizedwait(webDriver,MAXIMUM_PAGE_LOADINGTIME);
+        assertEquals("Meine Stellen",webDriver.getTitle());
+        assertEquals("http://localhost:8080/myads", webDriver.getCurrentUrl());
+    }
+    @Test
+    @Description("Tests website navigation with registerAsStudent button")
+    public void testButtonRegisterAsStudent(){
+        buttonRegisterAsStudent.click();
+        h.synchronizedwait(webDriver,MAXIMUM_PAGE_LOADINGTIME);
+        assertEquals("Als Student registrieren", webDriver.getTitle());
+        assertEquals("http://localhost:8080/register-student", webDriver.getCurrentUrl());
+    }
+    @Test
+    @Description("Tests website naviagtion with registerAsCompany button")
+    public void testButtonRegisterAsCompany(){
+        buttonRegisterAsCompany.click();
+        h.synchronizedwait(webDriver,MAXIMUM_PAGE_LOADINGTIME);
+        assertEquals("Als Unternehmen registrieren", webDriver.getTitle());
+        assertEquals("http://localhost:8080/register-company", webDriver.getCurrentUrl());
     }
 }

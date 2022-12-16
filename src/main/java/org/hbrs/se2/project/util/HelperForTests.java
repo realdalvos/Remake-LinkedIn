@@ -214,7 +214,7 @@ public class HelperForTests {
     private StudentDTO clone(StudentDTO s){
         return new StudentDTOImpl(s.getUserid(), s.getFirstname(), s.getFirstname(), s.getMatrikelnumber(), s.getUniversity());
     }
-    public static void synchronizedwait(Object object, long timeoutMillis){
+    public void synchronizedwait(Object object, long timeoutMillis){
         synchronized (object){
             try {
                 object.wait(timeoutMillis);
