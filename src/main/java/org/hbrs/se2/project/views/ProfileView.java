@@ -14,6 +14,7 @@ import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
+import org.hbrs.se2.project.control.AuthorizationControl;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import org.hbrs.se2.project.control.ProfileControl;
 import org.hbrs.se2.project.control.UserControl;
@@ -30,6 +31,8 @@ public abstract class ProfileView extends Div {
 
     protected ProfileControl profileControl;
     protected UserControl userControl;
+    @Autowired
+    protected AuthorizationControl authorizationControl;
 
     @Autowired
     protected CommonUIElementProvider ui;
@@ -41,6 +44,7 @@ public abstract class ProfileView extends Div {
 
     protected Button button;
     protected Button delete = new Button("Account löschen");
+    protected HorizontalLayout layout = new HorizontalLayout();
     protected Button changePasswd = new Button("Passwort ändern");
     protected FormLayout formLayout = new FormLayout();
 
@@ -51,6 +55,14 @@ public abstract class ProfileView extends Div {
     protected final ModelMapper mapper = new ModelMapper();
 
     public ProfileView() {
+        layout.add(formLayout);
+        formLayout.setWidth("80%");
+        formLayout.setResponsiveSteps(
+                // Use two columns by default
+                new FormLayout.ResponsiveStep("0", 2)
+        );
+        layout.getStyle().set("margin-left", "var(--lumo-space-xl");
+        add(layout);
         delete.addClickListener(buttonClickEvent -> {
             VerticalLayout layout = new VerticalLayout();
             HorizontalLayout buttons = new HorizontalLayout();
@@ -70,10 +82,7 @@ public abstract class ProfileView extends Div {
             delete.addClickListener(event -> {
                 try {
                     profileControl.deleteUser(userControl.getCurrentUser());
-                    this.getUI().ifPresent(ui -> {
-                        ui.getSession().close();
-                        ui.getPage().setLocation("/");
-                    });
+                    authorizationControl.logoutUser();
                 } catch (Exception e) {
                     logger.error("Something went wrong when deleting student from DB");
                 }

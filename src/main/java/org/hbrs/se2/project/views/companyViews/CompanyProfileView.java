@@ -4,7 +4,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -30,7 +29,7 @@ import java.util.stream.Stream;
 public class CompanyProfileView extends ProfileView {
 
     private boolean banned;
-    private final TextField name = new TextField("Name Ihres Unternehmens:");
+    private final TextField name = new TextField("Name des Unternehmens:");
     private final TextField industry = new TextField("Industrie:");
 
     private final Binder<CompanyDTOImpl> companyBinder = new BeanValidationBinder<>(CompanyDTOImpl.class);
@@ -40,7 +39,6 @@ public class CompanyProfileView extends ProfileView {
         this.userControl = userControl;
 
         setSizeFull();
-        add(formLayout);
         setUserBinder();
         setCompanyBinder();
         viewLayout();
@@ -65,7 +63,7 @@ public class CompanyProfileView extends ProfileView {
             formLayout.remove(button, changePasswd, delete);
             editLayout();
         });
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
+        formLayout.setColspan(status, 2);
     }
 
     private void editLayout() {
@@ -77,7 +75,14 @@ public class CompanyProfileView extends ProfileView {
         button.addClickListener(buttonClickEvent -> {
             if (userBinder.isValid() && companyBinder.isValid()) {
                 ui.makeConfirm("Möchten Sie die Änderungen an Ihrem Profil speichern?",
-                        event -> {profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());UI.getCurrent().getPage().reload();});
+                        event -> {
+                            if (!userBinder.getBean().getUsername().equals(userControl.getCurrentUser().getUsername())) {
+                                authorizationControl.logoutUser();
+                            } else {
+                                UI.getCurrent().getPage().reload();
+                            }
+                            profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());
+                        });
             } else {
                 ui.makeDialog("Überprüfen Sie bitte Ihre Angaben auf Korrektheit");
             }

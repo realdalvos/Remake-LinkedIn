@@ -14,7 +14,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
-import org.hbrs.se2.project.control.LoginControl;
+import org.hbrs.se2.project.control.AuthorizationControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.helper.AccessHandler;
@@ -32,7 +32,7 @@ import org.hbrs.se2.project.util.Globals;
 public class LoginView extends VerticalLayout {
 
     final CommonUIElementProvider ui;
-    private final LoginControl loginControl;
+    private final AuthorizationControl authorizationControl;
 
     private LoginI18n createLoginI18n(){
         LoginI18n i18n = LoginI18n.createDefault();
@@ -55,7 +55,10 @@ public class LoginView extends VerticalLayout {
         return i18n;
     }
 
-    public LoginView(LoginControl loginControl, CommonUIElementProvider ui) {
+    public LoginView(AuthorizationControl authorizationControl, CommonUIElementProvider ui) {
+        this.authorizationControl = authorizationControl;
+        this.ui = ui;
+
         AccessHandler.setDefaultAccess();
         setSizeFull();
         Avatar avatarBasic = new Avatar();
@@ -80,7 +83,7 @@ public class LoginView extends VerticalLayout {
             boolean isAuthenticated = false;
             try {
                 // authenticate user
-                isAuthenticated = loginControl.authenticate(e.getUsername(), e.getPassword());
+                isAuthenticated = authorizationControl.authenticate(e.getUsername(), e.getPassword());
             } catch (DatabaseUserException ex) {
                 // Error dialog
                 ui.makeDialog(ex.getMessage());
@@ -90,12 +93,12 @@ public class LoginView extends VerticalLayout {
                 VaadinService.reinitializeSession(VaadinService.getCurrentRequest());
                 // create session for user
                 grabAndSetUserIntoSession();
-                AccessHandler.setAccess(loginControl.getCurrentUser());
+                AccessHandler.setAccess(authorizationControl.getCurrentUser());
 
-                if(loginControl.getCurrentUser().getRole().equals(Globals.Roles.student)) {
+                if(authorizationControl.getCurrentUser().getRole().equals(Globals.Roles.student)) {
                     // navigate to jobs view for student
                     navigateHandler.navigateToJobsView();
-                } else if(loginControl.getCurrentUser().getRole().equals(Globals.Roles.company)) {
+                } else if(authorizationControl.getCurrentUser().getRole().equals(Globals.Roles.company)) {
                     // navigate to my ads view for companies
                     navigateHandler.navigateToMyAdsView();
                 }
@@ -112,13 +115,10 @@ public class LoginView extends VerticalLayout {
         add(buttonStudent);
         add(buttonCompany);
         this.setAlignItems(Alignment.CENTER);
-
-        this.loginControl = loginControl;
-        this.ui = ui;
     }
 
     private void grabAndSetUserIntoSession() {
-        UserDTO userDTO = loginControl.getCurrentUser();
+        UserDTO userDTO = authorizationControl.getCurrentUser();
         UI.getCurrent().getSession().setAttribute(Globals.CURRENT_USER, userDTO);
     }
 }
