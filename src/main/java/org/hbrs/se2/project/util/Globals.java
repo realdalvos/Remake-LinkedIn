@@ -2,6 +2,7 @@ package org.hbrs.se2.project.util;
 
 public class Globals {
     public static final String CURRENT_USER = "current_User";
+    public static final long MAXIMUM_PAGE_LOADINGTIME = 1000;
 
     public static class Pages {
         public static final String MAIN_VIEW = "main";
