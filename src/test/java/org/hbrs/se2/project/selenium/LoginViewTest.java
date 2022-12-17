@@ -1,12 +1,14 @@
 package org.hbrs.se2.project.selenium;
 
 import jdk.jfr.Description;
+import org.hbrs.se2.project.Application;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.repository.MajorRepository;
 import org.hbrs.se2.project.repository.SkillRepository;
 import org.hbrs.se2.project.repository.TopicRepository;
 import org.hbrs.se2.project.repository.UserRepository;
+import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.HelperForTests;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -48,15 +50,18 @@ public class LoginViewTest {
     WebElement buttonRegisterAsCompany;
 
     @BeforeAll
-    static void start(){
-            /*if (System.getenv().get("OS") != null && System.getenv().get("OS").matches("^.*[wW]indows.*$")) {
-                System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/chromedriver.exe");
-            } else {
-                System.out.println("\n\nYou might use linux or mac. If linux then everything is fine. If mac then select the right driver from this current folder in the line below\n\n");
-                String driver = "chromedriver_linux64";
-                System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/" + driver);
-            }*/
-        String os = System.getProperty("os.name").toUpperCase();
+    static void start() throws Exception {
+
+        //Starts the Webserver (Needs a running server for the tests but roughly 35 Seconds to build)
+        Application.main(new String[]{});
+
+        String os;
+        try{
+            os = System.getProperty("os.name").toUpperCase();
+        }
+        catch (NullPointerException x){
+            throw new Globals.IllegalOSExcpetion("Your OS is not shown under the java system properties. Try to fix this problem on your own");
+        }
             if(os.contains("WIN")){
             System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/chromedriver.exe");
             } else if (os.contains("MAC")) {
@@ -65,8 +70,10 @@ public class LoginViewTest {
                 }else {
                     System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/chromedriver_mac64");
                 }
-            }else {
+            }else if(os.contains("NIX") || os.contains("NUX") || os.contains("AIX")){
                 System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/chromedriver_linux64");
+            } else {
+                throw new Globals.IllegalOSExcpetion("You are using an uncommon OS: "+ System.getProperty("os.name")+" . please use either windows, mac or linux for this program");
             }
     }
 

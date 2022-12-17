@@ -30,4 +30,9 @@ public class Globals {
         public static final String SQLERROR = "sql";
         public static final String DATABASE = "database";
     }
+    public static class IllegalOSExcpetion extends Exception{
+        public IllegalOSExcpetion(String warning){
+            super(warning);
+        }
+    }
 }
