@@ -19,6 +19,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.concurrent.TimeUnit;
@@ -48,6 +49,9 @@ public class LoginViewTest {
     WebElement buttonLogin;
     WebElement buttonRegisterAsStudent;
     WebElement buttonRegisterAsCompany;
+
+    @Value("${server.port: 8080}")
+    private int port;
 
     @BeforeAll
     static void start() throws Exception {
@@ -84,7 +88,7 @@ public class LoginViewTest {
         webDriver = new ChromeDriver();
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         webDriver.manage().window().maximize();
-        webDriver.get("http://localhost:8080");
+        webDriver.get("http://localhost:" + port);
         textfieldUsername = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-login-form/vaadin-login-form-wrapper/form/vaadin-text-field/input"));
         textfieldPassword = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-login-form/vaadin-login-form-wrapper/form/vaadin-password-field/input"));
         buttonLogin = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-login-form/vaadin-login-form-wrapper/form/vaadin-button"));
@@ -105,7 +109,7 @@ public class LoginViewTest {
         buttonLogin.click();
         h.synchronizedwait(webDriver,MAXIMUM_PAGE_LOADINGTIME);
         assertEquals("Login", webDriver.getTitle());
-        assertEquals("http://localhost:8080/", webDriver.getCurrentUrl());
+        assertEquals("http://localhost:" + port + "/", webDriver.getCurrentUrl());
     }
     @Test
     @Description("Tests Login as Testuser")
@@ -115,7 +119,7 @@ public class LoginViewTest {
         buttonLogin.click();
         h.synchronizedwait(webDriver,MAXIMUM_PAGE_LOADINGTIME);
         assertEquals("Meine Stellen",webDriver.getTitle());
-        assertEquals("http://localhost:8080/myads", webDriver.getCurrentUrl());
+        assertEquals("http://localhost:" + port + "/myads", webDriver.getCurrentUrl());
     }
     @Test
     @Description("Tests website navigation with registerAsStudent button")
@@ -123,7 +127,7 @@ public class LoginViewTest {
         buttonRegisterAsStudent.click();
         h.synchronizedwait(webDriver,MAXIMUM_PAGE_LOADINGTIME);
         assertEquals("Als Student registrieren", webDriver.getTitle());
-        assertEquals("http://localhost:8080/register-student", webDriver.getCurrentUrl());
+        assertEquals("http://localhost:" + port + "/register-student", webDriver.getCurrentUrl());
     }
     @Test
     @Description("Tests website naviagtion with registerAsCompany button")
@@ -131,6 +135,6 @@ public class LoginViewTest {
         buttonRegisterAsCompany.click();
         h.synchronizedwait(webDriver,MAXIMUM_PAGE_LOADINGTIME);
         assertEquals("Als Unternehmen registrieren", webDriver.getTitle());
-        assertEquals("http://localhost:8080/register-company", webDriver.getCurrentUrl());
+        assertEquals("http://localhost:" + port + "/register-company", webDriver.getCurrentUrl());
     }
 }
