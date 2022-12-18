@@ -130,7 +130,7 @@ public class JobControlTest {
     @DisplayName("Testing if getAllCompanyJobs works as expected.")
     void test_getAllCompanyJobs(){
         //2 companies are needed for testing
-        List<CompanyDTO> listOfCompanies = h.registerTestCompany(2);
+        List<CompanyDTO> listOfCompanies = h.registerTestCompanies(2);
         testCompanyDTO = listOfCompanies.get(0);
         CompanyDTO testCompanyDTO2 = listOfCompanies.get(1);
 
