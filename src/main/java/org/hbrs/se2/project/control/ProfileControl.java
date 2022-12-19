@@ -22,7 +22,7 @@ public class ProfileControl {
         profileService.saveStudentData(user, student, major, topic, skill);
     }
 
-    public void saveCompanyData(UserDTO user, CompanyDTO company) {
+    public void saveCompanyData(UserDTO user, CompanyDTO company) throws DatabaseUserException {
         profileService.saveCompanyData(user, company);
     }
 
