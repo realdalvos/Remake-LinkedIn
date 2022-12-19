@@ -8,7 +8,6 @@ import org.hbrs.se2.project.repository.MajorRepository;
 import org.hbrs.se2.project.repository.SkillRepository;
 import org.hbrs.se2.project.repository.TopicRepository;
 import org.hbrs.se2.project.repository.UserRepository;
-import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.HelperForTests;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,11 +17,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.concurrent.TimeUnit;
 
 import static org.hbrs.se2.project.util.Globals.MAXIMUM_PAGE_LOADINGTIME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,6 +44,7 @@ public class LoginViewTest {
     UserDTO userDTO;
     @Autowired
     HelperForTests h;
+    static String browser;
     WebDriver webDriver;
     WebElement textfieldUsername;
     WebElement textfieldPassword;
@@ -58,37 +60,34 @@ public class LoginViewTest {
 
         //Starts the Webserver (Needs a running server for the tests but roughly 35 Seconds to build)
         Application.main(new String[]{});
-
-        String os;
+        browser = "chrome";
         try{
-            os = System.getProperty("os.name").toUpperCase();
+            HelperForTests.setDriverSystemProperties(browser);
+            WebDriver checkDriver = new ChromeDriver();
+            checkDriver.quit();
+        }catch(Exception x){
+            browser = "edge";
         }
-        catch (NullPointerException x){
-            throw new Globals.IllegalOSExcpetion("Your OS is not shown under the java system properties. Try to fix this problem on your own");
-        }
-            if(os.contains("WIN")){
-            System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/chromedriver.exe");
-            } else if (os.contains("MAC")) {
-                if(os.contains("ARM")) {
-                    System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/chromedriver_arm64");
-                }else {
-                    System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/chromedriver_mac64");
-                }
-            }else if(os.contains("NIX") || os.contains("NUX") || os.contains("AIX")){
-                System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/chromedriver_linux64");
-            } else {
-                throw new Globals.IllegalOSExcpetion("You are using an uncommon OS: "+ System.getProperty("os.name")+" . please use either windows, mac or linux for this program");
-            }
+        HelperForTests.setDriverSystemProperties(browser);
     }
 
     @BeforeEach
     void setUp(){
         companyDTO = h.registerTestCompany();
         userDTO = h.getUserDTOForCompany();
-        webDriver = new ChromeDriver();
-        webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        if(browser.equals("chrome")) {
+            webDriver = new ChromeDriver();
+        } else if (browser.equals("edge")) {
+            webDriver = new EdgeDriver();
+        } else if (browser.equals("firefox")) {
+            FirefoxOptions options = new FirefoxOptions();
+            options.addArguments("-headless");
+            options.setProfile(new FirefoxProfile());
+            webDriver = new FirefoxDriver(options);
+        }
         webDriver.manage().window().maximize();
-        webDriver.get("http://localhost:" + port);
+        webDriver.get("http://localhost:" + port + "/");
+        HelperForTests.synchronizedwait(webDriver,1000);
         textfieldUsername = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-login-form/vaadin-login-form-wrapper/form/vaadin-text-field/input"));
         textfieldPassword = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-login-form/vaadin-login-form-wrapper/form/vaadin-password-field/input"));
         buttonLogin = webDriver.findElement(By.xpath("/html/body/vaadin-vertical-layout/vaadin-login-form/vaadin-login-form-wrapper/form/vaadin-button"));
