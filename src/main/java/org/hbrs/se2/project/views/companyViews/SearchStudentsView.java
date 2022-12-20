@@ -5,6 +5,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -31,6 +32,10 @@ public class SearchStudentsView extends Div {
     CommonUIElementProvider ui;
     private final TextField searchField = new TextField();
     private final Button searchButton = new Button("Suchen");
+
+    // A Company can have all students displayed with the following button
+    private final  Button allStudentsButton = new Button("Alle Studenten");
+
     private final Grid<StudentDTO> grid = new Grid<>();
     private Grid<MajorDTO> gridMajors;
     private Grid<TopicDTO> gridTopics;
@@ -73,6 +78,10 @@ public class SearchStudentsView extends Div {
             formLayout.add(contact);
             return formLayout;
         }));
+
+        // Row Stripes and Column Borders for improved usability and continuity (similar to Job List View of student)
+        grid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
+        grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
 
         createLayouts();
         /*
@@ -124,6 +133,7 @@ public class SearchStudentsView extends Div {
         // adding TextField and 2 buttons
         topLayout.add(searchField);
         topLayout.add(searchButton);
+        topLayout.add(allStudentsButton);
 
         layout.add(topLayout);
         layout.add(new Label());
@@ -137,6 +147,10 @@ public class SearchStudentsView extends Div {
         searchField.addKeyPressListener(Key.ENTER, event -> searchButton.clickInClient());
         // to implement
         searchButton.addClickListener(event -> {grid.setItems(profileControl.getStudentsMatchingKeyword(searchField.getValue())); searchField.clear();});
+
+        // allStudentsButton will show all registrated students
+        allStudentsButton.addClickListener(event -> {grid.setItems(profileControl.getStudentsMatchingKeyword(""));});
+
 
     }
 }
