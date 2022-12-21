@@ -98,6 +98,7 @@ public class SearchStudentsView extends Div {
         contactText.getElement().getStyle().set("font-size", "20px");
         contactText.getElement().getStyle().set("text-align", "center");
 
+
         add(contactText);
         add(topLayout);
         add(grid);
