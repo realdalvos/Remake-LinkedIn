@@ -7,6 +7,7 @@ import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -88,7 +89,16 @@ public class SearchStudentsView extends Div {
         with introductionText() below the career page will show information and help the user
         guide through the option of either filtering the job ads or showing all available job ads
         */
-        add(ui.introductionText("Finden Sie hier Ihren zukünftigen Angestellten", "Finden Sie Studenten mit passenden Skills, Themen, Studiengang und Universität"));
+        add(ui.introductionText("Finden Sie hier Ihren zukünftigen Angestellten",
+                "Finden Sie Studenten mit passenden Skills, Themen, Studiengang und Universität. " ));
+
+        // Adding contactText to inform the company of the possibility of starting a conversation with a student after seeing the profile
+        H3 contactText = new H3("Sie haben auch die Möglichkeit nach dem Ansehen des Profils eine Person zu kontaktieren! ");
+
+        contactText.getElement().getStyle().set("font-size", "20px");
+        contactText.getElement().getStyle().set("text-align", "center");
+
+        add(contactText);
         add(topLayout);
         add(grid);
     }
@@ -120,20 +130,29 @@ public class SearchStudentsView extends Div {
         // changing width of textField, buttonFilter and buttonAllJobs to improve on usability
         searchField.setWidth("25");
         searchButton.setWidth("25%");
+        allStudentsButton.setWidth("25%");
 
         searchField.setPlaceholder("Studentensuche");
 
         searchField.getStyle().set("margin-center", "auto");
         searchButton.getStyle().set("margin-center", "auto");
+        allStudentsButton.getStyle().set("margin-center", "auto");
 
         // Center Alignment
         topLayout.setAlignItems(FlexComponent.Alignment.CENTER);
         topLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
+
+
         // adding TextField and 2 buttons
         topLayout.add(searchField);
         topLayout.add(searchButton);
         topLayout.add(allStudentsButton);
+
+
+        // improved spacing - visible on buttons and textfield
+        layout.setSpacing(false);
+        layout.getThemeList().add("spacing-m");
 
         layout.add(topLayout);
         layout.add(new Label());
