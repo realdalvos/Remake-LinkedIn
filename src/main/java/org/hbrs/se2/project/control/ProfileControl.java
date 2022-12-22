@@ -62,6 +62,8 @@ public class ProfileControl {
         profileService.removeSkill(userid, skillid);
     }
 
+    /**
+     * @return set of StudentDTOs, where either skills, topics, majors or university match the given keyword.*/
     public Set<StudentDTO> getStudentsMatchingKeyword(String keyword) {return profileService.getStudentsMatchingKeyword(keyword);}
 
     public void deleteUser(UserDTO user) throws DatabaseUserException {
