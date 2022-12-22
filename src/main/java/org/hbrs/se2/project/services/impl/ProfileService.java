@@ -141,6 +141,8 @@ public class ProfileService implements ProfileServiceInterface {
         }
     }
 
+    /**
+     * @return set of StudentDTOs, where either skills, topics, majors or university match the given keyword.*/
     public Set<StudentDTO> getStudentsMatchingKeyword(String keyword) {
         return studentRepository.findByKeyword(keyword);
     }
