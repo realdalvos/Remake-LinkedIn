@@ -380,11 +380,17 @@ class ProfileControlTest {
         List<StudentDTO> students = h.registerTestStudents(1);
         StudentDTO student0 = students.get(0);
 
+        /*
+        * Currently this test will fail because of a bug, after the bug got fixed this test should work just fine.
+        *
+        * */
+
+        /*
         //if not present getStudentsMatchingKeyword Method fails for keyword of university
         HashSet<String> hashSetWithEmptyString = new HashSet<>(List.of(""));
         profileControl.saveStudentData(userRepository.findByUserid(student0.getUserid()), student0,
                 hashSetWithEmptyString, hashSetWithEmptyString, hashSetWithEmptyString);
-
+        */
         Set<StudentDTO> results = profileControl.getStudentsMatchingKeyword("HBRS");
         assertEquals(1, results.stream().
             map(StudentDTO::getStudentid).
