@@ -93,7 +93,7 @@ public class HelperForTests {
      * Registering the test student and returning a StudentDTO of the registered student.
      * If needed, you can get the raw StudentDTO with getStudentDTO() and the corresponding raw UserDTO with getUserDTOForStudent().
      * NOTE: Since the student was saved in the database the user id will be set (So if you want the corresponding user from the database u can find him by this user id).
-     * @return StudentDTO of the test company.
+     * @return StudentDTO of the test student.
      * </pre>*/
     public StudentDTO registerTestStudent(){
         return registerTestStudents(1).get(0);
@@ -102,8 +102,8 @@ public class HelperForTests {
     /**
      * A way to register multiple students.
      * NOTE: All already registered test students created with registerTestStudent() or registerTestStudent(int) will be deleted.
-     * @param n number of companies.
-     * @return List of Companies.*/
+     * @param n number of students.
+     * @return List of students.*/
     public List<StudentDTO> registerTestStudents(int n){
         ArrayList<StudentDTO> list = new ArrayList<>();
         if(n < 1){
