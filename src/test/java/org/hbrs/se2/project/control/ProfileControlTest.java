@@ -160,7 +160,7 @@ class ProfileControlTest {
         List<StudentDTO> students = h.registerTestStudents(1);
         StudentDTO student0 = students.get(0);
 
-        String[] keywordsMajorTopicSkill = new String[]{"major0", "topic0", "skill0", "HRBS"};
+        String[] keywordsMajorTopicSkill = new String[]{"major0", "topic0", "skill0"};
         ArrayList<Set<String>> setsOfKeywords = new ArrayList<>();
         for(String keyword: keywordsMajorTopicSkill){
             setsOfKeywords.add(new HashSet<String>(List.of(keyword)));
@@ -380,11 +380,10 @@ class ProfileControlTest {
         List<StudentDTO> students = h.registerTestStudents(1);
         StudentDTO student0 = students.get(0);
 
-        //HashSet<String> hashSetWithEmptyString = new HashSet<>(List.of(""));
-        //HashSet<String> hashSetWithEmptyString = new HashSet<>(); #does not find student like this
-
-        //profileControl.saveStudentData(userRepository.findByUserid(student0.getUserid()), student0,
-        //        hashSetWithEmptyString, hashSetWithEmptyString, hashSetWithEmptyString);
+        //if not present getStudentsMatchingKeyword Method fails for keyword of university
+        HashSet<String> hashSetWithEmptyString = new HashSet<>(List.of(""));
+        profileControl.saveStudentData(userRepository.findByUserid(student0.getUserid()), student0,
+                hashSetWithEmptyString, hashSetWithEmptyString, hashSetWithEmptyString);
 
         Set<StudentDTO> results = profileControl.getStudentsMatchingKeyword("HBRS");
         assertEquals(1, results.stream().
