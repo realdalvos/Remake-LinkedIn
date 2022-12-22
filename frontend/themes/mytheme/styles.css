@@ -54,3 +54,9 @@ html {
 .v-horizontal > .v-spacing {
     width: 70px;
 }
+
+
+vaadin-notification-card flow-component-renderer,
+vaadin-notification-card flow-component-renderer > div {
+    display: contents;
+}
