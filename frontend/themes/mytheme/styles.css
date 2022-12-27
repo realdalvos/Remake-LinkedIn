@@ -59,3 +59,9 @@ html {
     .dark.v-app .v-horizontal > .v-spacing {
     width: 100px;
 }
+
+
+vaadin-notification-card flow-component-renderer,
+vaadin-notification-card flow-component-renderer > div {
+    display: contents;
+}

@@ -2,6 +2,8 @@ package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
+import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
+import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.repository.*;
 import org.hbrs.se2.project.util.HelperForTests;
 import org.junit.jupiter.api.AfterEach;
@@ -34,6 +36,8 @@ class ProfileControlTest {
     @Autowired
     SkillRepository skillRepository;
     @Autowired
+    CompanyRepository companyRepository;
+    @Autowired
     UserControl userControl;
     @Autowired
     HelperForTests h;
@@ -43,7 +47,11 @@ class ProfileControlTest {
     StudentDTO studentDTO;
     @Autowired
     CompanyDTO companyDTO;
-
+    static String changedUsername = "OtherTestUserCompany";
+    static String changedEmail = "OthertestUser@JUnitTest.de";
+    static String changedName = "OtherTestCompany";
+    static String changedIndustry = "OtherTestIndustry";
+    static boolean changedBann = true;
     @BeforeEach
     void setUp() {
         studentDTO = h.registerTestStudent();
@@ -87,7 +95,51 @@ class ProfileControlTest {
         assertEquals(skills, profileControl.getSkillOfStudent(studentID).stream().map(SkillDTO::getSkill).collect(Collectors.toSet()));
 
     }
-
+    @Test
+    @DisplayName("Tries to save a companyDTO in the DB")
+    void saveCompanyTest(){
+        userDTO = userRepository.findByUserid(companyDTO.getUserid());
+        try {
+            profileControl.saveCompanyData(userDTO, companyDTO);
+        }
+        catch(DatabaseUserException e){
+            throw new Error("Something went wrong with saving company data");
+        }
+        assertEquals(companyDTO.getName(),companyRepository.findByUserid(companyDTO.getUserid()).getName());
+        assertEquals(companyDTO.getIndustry(),companyRepository.findByUserid(companyDTO.getUserid()).getIndustry());
+        assertEquals(companyDTO.getBanned(),companyRepository.findByUserid(companyDTO.getUserid()).getBanned());
+    }
+    @Test
+    @DisplayName("Tries to alter values name, industry and banned from testcompany")
+    void alterCompanyProfileTest1(){
+        CompanyDTO alteredCompanyDTO = new CompanyDTOImpl(companyDTO.getUserid(),changedName,changedIndustry,changedBann);
+        alteredCompanyDTO.setCompanyid(companyDTO.getCompanyid());
+        userDTO = userRepository.findByUserid(alteredCompanyDTO.getUserid());
+        try {
+            profileControl.saveCompanyData(userDTO, alteredCompanyDTO);
+        }
+        catch(DatabaseUserException e){
+            throw new Error("Something went wrong with saving company data");
+        }
+        assertEquals(changedName,companyRepository.findByUserid(companyDTO.getUserid()).getName());
+        assertEquals(changedIndustry,companyRepository.findByUserid(companyDTO.getUserid()).getIndustry());
+        assertEquals(changedBann,companyRepository.findByUserid(companyDTO.getUserid()).getBanned());
+    }
+    @Test
+    @DisplayName("tries to alter values username and email from testcompany")
+    void alterCompanyProfileTest2(){
+        userDTO = userRepository.findByUserid(companyDTO.getUserid());
+        UserDTO alteredUserDTO = new UserDTOImpl(changedUsername,userDTO.getPassword(),changedEmail,userDTO.getRole());
+        alteredUserDTO.setUserid(companyDTO.getUserid());
+        try {
+            profileControl.saveCompanyData(alteredUserDTO, companyDTO);
+        }
+        catch(DatabaseUserException e){
+            throw new Error("Something went wrong with saving company data");
+        }
+        assertEquals(changedUsername,userRepository.findByUserid(companyDTO.getUserid()).getUsername());
+        assertEquals(changedEmail,userRepository.findByUserid(companyDTO.getUserid()).getEmail());
+    }
     @Test
     @DisplayName("Checking if the remove Methods work as expected")
     void removeTest(){
