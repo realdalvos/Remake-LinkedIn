@@ -1,6 +1,8 @@
 package org.hbrs.se2.project.dtos;
 
-public interface ReportsDTO {
+import java.io.Serializable;
+
+public interface ReportsDTO extends Serializable {
     int getReportid();
 
     int getCompanyid();

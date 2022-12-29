@@ -12,12 +12,17 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
 import org.hbrs.se2.project.control.UserControl;
+import org.hbrs.se2.project.control.ReportsControl;
 import org.hbrs.se2.project.dtos.JobDTO;
+import org.hbrs.se2.project.dtos.ReportsDTO;
+import org.hbrs.se2.project.dtos.impl.ReportsDTOImpl;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
@@ -38,7 +43,7 @@ public class JobsView extends Div {
     // Create a Grid bound to the list
     private final Grid<JobDTO> grid = new Grid<>();
 
-    public JobsView(JobControl jobControl, UserControl userControl, CommonUIElementProvider ui) {
+    public JobsView(JobControl jobControl, UserControl userControl, CommonUIElementProvider ui, ReportsControl reportsControl) {
         this.ui = ui;
         HorizontalLayout layout = new HorizontalLayout();
 
@@ -109,6 +114,14 @@ public class JobsView extends Div {
             contact.addClickListener(event -> ui.makeConversationDialogStudent(job.getCompanyid(), userControl.getStudentProfile(
                     userControl.getCurrentUser().getUserid()).getStudentid(), job.getJobid()));
             formLayout.add(contact);
+            Button report = new Button("Melden");
+            report.addClickListener(event -> {
+                Binder<ReportsDTOImpl> binder = new BeanValidationBinder<>(ReportsDTOImpl.class);
+                binder.setBean(new ReportsDTOImpl(job.getCompanyid(), userControl.getStudentProfile(
+                        userControl.getCurrentUser().getUserid()).getStudentid()));
+                reportsControl.createReport(binder.getBean());
+            });
+            formLayout.add(report);
             formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 2));
             formLayout.setColspan(companyContactDetails, 2);
             formLayout.setColspan(jobDescription, 2);
