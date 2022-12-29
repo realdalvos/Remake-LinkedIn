@@ -18,4 +18,9 @@ public class ReportsService implements ReportsServiceInterface {
     public void createReport(ReportsDTO reportsDTO){
     this.reportsRepository.save(entityCreationService.reportsFactory().createEntity(reportsDTO));
     }
+
+    @Override
+    public boolean studentHasReportedCompany(int companyid, int studentid){
+        return this.reportsRepository.studentHasReportedCompany(companyid, studentid);
+    }
 }

@@ -11,4 +11,6 @@ import java.util.Set;
 public interface ReportsRepository extends JpaRepository<Reports, Integer>{
     @Query("SELECT COUNT(r) > 4 FROM Reports  r WHERE r.companyid =: companyid ")
     boolean shouldBeBanned(int companyid);
+    @Query("SELECT COUNT(r) > 0 FROM Reports r WHERE r.companyid = :companyid AND r.studentid = :studentid")
+    boolean studentHasReportedCompany(int companyid, int studentid);
 }

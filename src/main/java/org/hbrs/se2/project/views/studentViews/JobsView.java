@@ -2,6 +2,7 @@ package org.hbrs.se2.project.views.studentViews;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -114,14 +115,21 @@ public class JobsView extends Div {
             contact.addClickListener(event -> ui.makeConversationDialogStudent(job.getCompanyid(), userControl.getStudentProfile(
                     userControl.getCurrentUser().getUserid()).getStudentid(), job.getJobid()));
             formLayout.add(contact);
-            Button report = new Button("Melden");
-            report.addClickListener(event -> {
-                Binder<ReportsDTOImpl> binder = new BeanValidationBinder<>(ReportsDTOImpl.class);
-                binder.setBean(new ReportsDTOImpl(job.getCompanyid(), userControl.getStudentProfile(
-                        userControl.getCurrentUser().getUserid()).getStudentid()));
-                reportsControl.createReport(binder.getBean());
-            });
-            formLayout.add(report);
+            if(!reportsControl.studentHasReportedCompany(job.getCompanyid(),  userControl.getStudentProfile(
+                    userControl.getCurrentUser().getUserid()).getStudentid())) {
+                Button report = new Button("Melden");
+                report.addClickListener(event -> {
+                    Binder<ReportsDTOImpl> binder = new BeanValidationBinder<>(ReportsDTOImpl.class);
+                    binder.setBean(new ReportsDTOImpl(job.getCompanyid(), userControl.getStudentProfile(
+                            userControl.getCurrentUser().getUserid()).getStudentid()));
+                    reportsControl.createReport(binder.getBean());
+                    UI.getCurrent().getPage().reload();
+                });
+                formLayout.add(report);
+            } else {
+                Button report = new Button("Bereits gemeldet");
+                formLayout.add(report);
+            }
             formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 2));
             formLayout.setColspan(companyContactDetails, 2);
             formLayout.setColspan(jobDescription, 2);

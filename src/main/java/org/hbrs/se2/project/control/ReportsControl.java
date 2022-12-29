@@ -15,4 +15,8 @@ public class ReportsControl {
     public void createReport(ReportsDTO reportsDTO){
         reportsService.createReport(reportsDTO);
     }
+
+    public boolean studentHasReportedCompany(int companyid, int studentid){
+        return  reportsService.studentHasReportedCompany(companyid, studentid);
+    }
 }

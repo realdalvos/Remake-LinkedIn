@@ -8,4 +8,6 @@ public interface ReportsServiceInterface {
      * @param reportsDTO A reports object
      */
     void createReport(ReportsDTO reportsDTO);
+
+    boolean studentHasReportedCompany(int companyid, int studentid);
 }
