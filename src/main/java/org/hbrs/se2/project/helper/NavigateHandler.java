@@ -3,7 +3,11 @@ package org.hbrs.se2.project.helper;
 import com.vaadin.flow.component.UI;
 import org.hbrs.se2.project.util.Globals;
 
-public class navigateHandler {
+public abstract class NavigateHandler {
+
+    private NavigateHandler() {
+        throw new IllegalStateException("Utility class; cannot be instantiated!");
+    }
 
     /**You cant go to the login page while being logged in, that would make no sense and lead to errors.*/
     public static void navigateToLoginPage() {

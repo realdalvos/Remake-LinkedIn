@@ -16,7 +16,7 @@ import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.JobControl;
 import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
-import org.hbrs.se2.project.helper.navigateHandler;
+import org.hbrs.se2.project.helper.NavigateHandler;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
@@ -98,7 +98,8 @@ public class NewJobAdView extends Div {
         postButton.addClickListener(e -> {
             if (binder.isValid()) {
                 ui.makeConfirm("Möchtest du die Jobanzeige so veröffentlichen?",
-                        event -> {jobControl.createNewJobPost(binder.getBean());navigateHandler.navigateToMyAdsView();});
+                        event -> {jobControl.createNewJobPost(binder.getBean());
+                            NavigateHandler.navigateToMyAdsView();});
             } else {
                 ui.makeDialog("Fülle bitte alle Felder aus");
                 logger.info("Not all fields have been filled in");
@@ -175,7 +176,7 @@ public class NewJobAdView extends Div {
         save.addClickListener(event -> {
             // call job control to save new job post entity
             jobControl.createNewJobPost(binder.getBean());
-            navigateHandler.navigateToMyAdsView();
+            NavigateHandler.navigateToMyAdsView();
         });
         return save;
     }

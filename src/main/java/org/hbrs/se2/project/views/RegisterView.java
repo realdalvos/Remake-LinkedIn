@@ -13,7 +13,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
 import org.hbrs.se2.project.control.RegistrationControl;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
-import org.hbrs.se2.project.helper.navigateHandler;
+import org.hbrs.se2.project.helper.NavigateHandler;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,7 +31,7 @@ public abstract class RegisterView extends VerticalLayout {
 
     protected Button loginButton() {
         Button loginButton = new Button("Zum Login");
-        loginButton.addClickListener(event -> navigateHandler.navigateToDefaultPage());
+        loginButton.addClickListener(event -> NavigateHandler.navigateToDefaultPage());
         return loginButton;
     }
 

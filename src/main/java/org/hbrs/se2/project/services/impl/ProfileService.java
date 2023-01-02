@@ -9,7 +9,6 @@ import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.*;
 
 @Service
@@ -35,10 +34,10 @@ public class ProfileService implements ProfileServiceInterface {
     protected CommonUIElementProvider ui;
 
     @Override
-    public void saveStudentData(UserDTO user, StudentDTO student, Set<String> major, Set<String> topic, Set<String> skill) {
+    public void saveStudentData(UserDTO user, StudentDTO student, Set<String> majors, Set<String> topics, Set<String> skills) {
         userRepository.save(entityCreationService.userFactory().createEntity(user));
         studentRepository.save(entityCreationService
-                .studentFactory(getMajors(major, student.getStudentid()), getTopics(topic, student.getStudentid()), getSkills(skill, student.getStudentid()))
+                .studentFactory(getMajors(majors), getTopics(topics), getSkills(skills))
                 .createEntity(student));
     }
 
@@ -48,54 +47,27 @@ public class ProfileService implements ProfileServiceInterface {
         companyRepository.save(entityCreationService.companyFactory().createEntity(company));
     }
 
-    private Set<MajorDTO> getMajors(Set<String> major, int studentid) {
+    private Set<MajorDTO> getMajors(Set<String> newMajors) {
         Set<MajorDTO> majors = new HashSet<>();
         // get major data from database by major attribute
-        major.parallelStream().forEach(m -> {
-            MajorDTO majorDTO = majorRepository.findByMajor(m);
-            // check if found major is null
-            if (majorDTO == null) {
-                // if major does not exist, create new major from input
-                majorRepository.save(entityCreationService.majorFactory().createEntity(m));
-                // get saved major data
-                majors.add(majorRepository.findByMajor(m));
-            } else {
-                majors.add(majorDTO);
-            }
-        });
+        newMajors.parallelStream().forEach(newMajor -> Optional.ofNullable(majorRepository.findByMajor(newMajor)).ifPresentOrElse(majors::add, () ->
+                majors.add(majorRepository.findByMajor(majorRepository.save(entityCreationService.majorFactory().createEntity(newMajor)).getMajor()))));
         return majors;
     }
 
-    private Set<TopicDTO> getTopics(Set<String> topic, int studentid) {
+    private Set<TopicDTO> getTopics(Set<String> newTopics) {
         Set<TopicDTO> topics = new HashSet<>();
         // get topic data from database by major attribute
-        topic.parallelStream().forEach(t -> {
-            TopicDTO topicDTO = topicRepository.findByTopic(t);
-            // check if found topic is null
-            if (topicDTO == null) {
-                // if topic does not exist, create new topic from input
-                topicRepository.save(entityCreationService.topicFactory().createEntity(t));
-                // get topic major data
-                topics.add(topicRepository.findByTopic(t));
-            } else {
-                topics.add(topicDTO);
-            }
-        });
+        newTopics.parallelStream().forEach(newTopic -> Optional.ofNullable(topicRepository.findByTopic(newTopic)).ifPresentOrElse(topics::add, () ->
+                topics.add(topicRepository.findByTopic(topicRepository.save(entityCreationService.topicFactory().createEntity(newTopic)).getTopic()))));
         return topics;
     }
 
-    private Set<SkillDTO> getSkills(Set<String> skill, int studentid) {
+    private Set<SkillDTO> getSkills(Set<String> newSkills) {
         Set<SkillDTO> skills = new HashSet<>();
         // same process as in updateMajors and updateTopics
-        skill.parallelStream().forEach(s -> {
-            SkillDTO skillDTO = skillRepository.findBySkill(s);
-            if (skillDTO == null) {
-                skillRepository.save(entityCreationService.skillFactory().createEntity(s));
-                skills.add(skillRepository.findBySkill(s));
-            } else {
-                skills.add(skillDTO);
-            }
-        });
+        newSkills.parallelStream().forEach(newSkill -> Optional.ofNullable(skillRepository.findBySkill(newSkill)).ifPresentOrElse(skills::add, () ->
+                skills.add(skillRepository.findBySkill(skillRepository.save(entityCreationService.skillFactory().createEntity(newSkill)).getSkill()))));
         return skills;
     }
 

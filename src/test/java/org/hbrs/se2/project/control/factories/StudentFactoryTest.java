@@ -26,7 +26,7 @@ class StudentFactoryTest {
 
     @BeforeEach
     void setUp() {
-        testUser = new UserDTOImpl("JUnitTest", "SicheresPasswort", "testUser@JUnitTest.de", Globals.Roles.student);
+        testUser = new UserDTOImpl("JUnitTest", "SicheresPasswort", "testUser@JUnitTest.de", Globals.Roles.STUDENT);
         testUser.setUserid(99999);
 
         testStudent = new StudentDTOImpl(testUser.getUserid(), "Test", "Student", "1234", "HRBS");

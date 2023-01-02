@@ -22,9 +22,9 @@ public class HelperForTests {
     final StudentRepository studentRepository;
     final RegistrationControl registrationControl;
 
-    private UserDTO testUserForCompany = new UserDTOImpl("TestUserCompany", "SicheresPasswort", "testUser@JUnitTest.de", Globals.Roles.company);
+    private UserDTO testUserForCompany = new UserDTOImpl("TestUserCompany", "SicheresPasswort", "testUser@JUnitTest.de", Globals.Roles.COMPANY);
     private CompanyDTOImpl testCompany = new CompanyDTOImpl(0, "TestCompany", "Testindustry", false);
-    private UserDTO testUserForStudent = new UserDTOImpl("TestUserStudent", "SicheresPasswort", "testUser2@JUnitTest.de", Globals.Roles.student);
+    private UserDTO testUserForStudent = new UserDTOImpl("TestUserStudent", "SicheresPasswort", "testUser2@JUnitTest.de", Globals.Roles.STUDENT);
     private StudentDTO testStudent = new StudentDTOImpl(0, "Stan", "Student", "123456", "HBRS");
 
     private List<CompanyDTO> registeredCompanies = new ArrayList<>();

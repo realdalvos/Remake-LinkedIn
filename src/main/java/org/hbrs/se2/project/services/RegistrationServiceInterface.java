@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.services;
 
+import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.StudentDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
@@ -12,7 +13,7 @@ public interface RegistrationServiceInterface {
      * @param student Student profile to be created
      * @throws Exception Data already exists
      */
-    void registerStudent(UserDTO user, StudentDTO student) throws Exception;
+    void registerStudent(UserDTO user, StudentDTO student) throws DatabaseUserException;
 
     /**
      * Create a new Company and save it to the database
@@ -20,5 +21,5 @@ public interface RegistrationServiceInterface {
      * @param company The new Company to be created
      * @throws Exception Data already exists
      */
-    void registerCompany(UserDTO user, CompanyDTO company) throws Exception;
+    void registerCompany(UserDTO user, CompanyDTO company) throws DatabaseUserException;
 }

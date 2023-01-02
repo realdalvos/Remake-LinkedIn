@@ -42,6 +42,8 @@ public class CommonUIElementProvider {
     @Autowired
     private JobControl jobControl;
 
+    private static final String CLOSE = "Abbrechen";
+
     /**
      * Creates an Error Dialog
      *
@@ -78,7 +80,7 @@ public class CommonUIElementProvider {
     public void makeConfirm(String message, ComponentEventListener<ClickEvent<Button>> listener) {
         VerticalLayout vLayout = new VerticalLayout();
         Dialog dialog = new Dialog();
-        Button close = new Button("Abbrechen");
+        Button close = new Button(CLOSE);
         close.addClickListener(event -> dialog.close());
         Button reject = new Button("Verwerfen");
         reject.addClickListener(event -> UI.getCurrent().getPage().reload());
@@ -126,7 +128,7 @@ public class CommonUIElementProvider {
         content.setHeight("200px");
         content.setRequired(true);
         HorizontalLayout buttons = new HorizontalLayout();
-        Button close = new Button("Abbrechen");
+        Button close = new Button(CLOSE);
         close.addClickListener(event -> dialog.close());
         Button send = new Button("Senden");
         send.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -166,7 +168,7 @@ public class CommonUIElementProvider {
         String user = userControl.getCurrentUser().getUsername();
         confirmField.setPlaceholder(user);
         confirmField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
-        Button close = new Button("Abbrechen");
+        Button close = new Button(CLOSE);
         close.addClickListener(event -> dialog.close());
         Button delete = new Button("Löschen");
         delete.setEnabled(false);
