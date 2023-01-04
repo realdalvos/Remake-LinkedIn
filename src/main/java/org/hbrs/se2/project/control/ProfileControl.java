@@ -4,10 +4,10 @@ import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.services.impl.ProfileService;
 import org.hbrs.se2.project.services.impl.ValidationService;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import java.util.Set;
 
-@Component
+@Controller
 public class ProfileControl {
 
     final ProfileService profileService;
@@ -64,8 +64,7 @@ public class ProfileControl {
 
     public Set<StudentDTO> getStudentsMatchingKeyword(String keyword) {return profileService.getStudentsMatchingKeyword(keyword);}
 
-    public void deleteUser(UserDTO user) throws DatabaseUserException {
-        profileService.deleteUser(user);
-    }
+    public void deleteUser(UserDTO user) throws DatabaseUserException { profileService.deleteUser(user); }
 
+    public void changeUserPassword(UserDTO user) throws Exception { profileService.changeUserPassword(user); }
 }

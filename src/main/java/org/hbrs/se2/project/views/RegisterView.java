@@ -37,13 +37,9 @@ public abstract class RegisterView extends VerticalLayout {
 
     protected PasswordField createPasswordField(){
         PasswordField userpassword = new PasswordField("Passwort");
-        userpassword.setRequired(true);
-        userpassword.setMinLength(8);
         userpassword.setRevealButtonVisible(true);
         userpassword.setHelperText("Mindestens 8 Zeichen bestehend aus Buchstaben, Zahlen und Sonderzeichen");
         //The Pattern matches with from left to right: At least one letter, at least one digit, at lest one special character and at least 8 characters
-        userpassword.setPattern("^(?=.+[a-zA-Z])(?=.+[\\d])(?=.+[\\W]).{8,}$");
-        userpassword.setErrorMessage("Dein Passwort ist wahrscheinlich nicht sicher genug. Halte dich bitte an die Vorgaben");
         return userpassword;
     }
 
@@ -51,9 +47,7 @@ public abstract class RegisterView extends VerticalLayout {
         EmailField email = new EmailField("E-Mail");
         email.getElement().setAttribute("name", "email");
         email.setPlaceholder("username@example.com");
-        email.setErrorMessage("Bitte gib eine gültige E-Mail-Adresse ein");
         email.setClearButtonVisible(true);
-        email.setPattern("^(.+)@(\\S+)$");
         return email;
     }
 
@@ -69,30 +63,30 @@ public abstract class RegisterView extends VerticalLayout {
     }
 
     protected void setUserBinder() {
-        // Map input field values to DTO variables based on chosen names
-        userBinder.bindInstanceFields(this);
-        // checks if both passwords are equal
-        Binder.Binding<UserDTOImpl, String> confirmPasswordBinding =
-                userBinder
-                        .forField(confirmPassword)
-                        .asRequired()
-                        .withValidator(pw -> pw.equals(userPassword.getValue()), "Passwörter stimmen nicht überein")
-                        .bind(UserDTOImpl::getPassword, UserDTOImpl::setPassword);
         //The Pattern matches from left to right: At least one letter, at least one digit, at lest one special character and at least 8 characters
         userBinder
-                .withValidator(validation -> userPassword.getValue().matches("^(?=.+[a-zA-Z])(?=.+[\\d])(?=.+[\\W]).{8,}$"),"Dein Passwort ist wahrscheinlich nicht sicher genug. Halte dich bitte an die Vorgaben");
+                .forField(userPassword)
+                .asRequired("Darf nicht leer sein")
+                .withValidator(pw -> pw.matches("^(?=.+[a-zA-Z])(?=.+\\d)(?=.+\\W).{8,}$"),"Dein Passwort ist wahrscheinlich nicht sicher genug. Halte dich bitte an die Vorgaben")
+                .bind(UserDTOImpl::getPassword, UserDTOImpl::setPassword);
+        // checks if both passwords are equal
+        userBinder
+                .forField(confirmPassword)
+                .asRequired()
+                .withValidator(pw -> pw.equals(userPassword.getValue()), "Passwörter stimmen nicht überein")
+                .bind(UserDTOImpl::getPassword, UserDTOImpl::setPassword);
         userBinder
                 .forField(username)
                 .asRequired("Darf nicht leer sein")
-                .withValidator(validation -> registrationControl.checkUsernameUnique(username.getValue()), "Benutzername existiert bereits")
+                .withValidator(user -> registrationControl.checkUsernameUnique(user), "Benutzername existiert bereits")
                 .bind(UserDTOImpl::getUsername, UserDTOImpl::setUsername);
         userBinder
                 .forField(email)
                 .asRequired("Darf nicht leer sein")
                 .withValidator(new EmailValidator("Keine gültige EMail Adresse"))
-                .withValidator(validation -> registrationControl.checkEmailUnique(email.getValue()), "Email existiert bereits")
+                .withValidator(email -> registrationControl.checkEmailUnique(email), "Email existiert bereits")
                 .bind(UserDTOImpl::getEmail, UserDTOImpl::setEmail);
-        userPassword.addValueChangeListener(
-                event -> confirmPasswordBinding.validate());
+        // Map input field values to DTO variables based on chosen names
+        userBinder.bindInstanceFields(this);
     }
 }
