@@ -161,30 +161,6 @@ public class CommonUIElementProvider {
         return dialog;
     }
 
-    public void makeDeleteConfirm(String message, ComponentEventListener<ClickEvent<Button>> listener) {
-        VerticalLayout vLayout = new VerticalLayout();
-        Dialog dialog = new Dialog();
-        TextField confirmField = new TextField();
-        String user = userControl.getCurrentUser().getUsername();
-        confirmField.setPlaceholder(user);
-        confirmField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
-        Button close = new Button(CLOSE);
-        close.addClickListener(event -> dialog.close());
-        Button delete = new Button("Löschen");
-        delete.setEnabled(false);
-        confirmField.setValueChangeMode(ValueChangeMode.EAGER);
-        confirmField.addValueChangeListener(event -> delete.setEnabled(confirmField.getValue().equals(user)));
-        delete.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        delete.addClickListener(listener);
-        delete.addClickListener(event -> dialog.close());
-        HorizontalLayout hLayout = new HorizontalLayout();
-        hLayout.add(close, delete);
-        vLayout.add(new Text(message), confirmField, hLayout);
-        vLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        dialog.add(vLayout);
-        dialog.open();
-    }
-
     public VerticalLayout introductionText(String headline, String description) {
         VerticalLayout vLayout = new VerticalLayout();
         H2 startText = new H2(headline);
@@ -218,4 +194,5 @@ public class CommonUIElementProvider {
         dialog.add(layout);
         return dialog;
     }
+
 }
