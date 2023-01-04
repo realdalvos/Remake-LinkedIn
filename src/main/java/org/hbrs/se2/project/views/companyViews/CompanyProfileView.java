@@ -61,9 +61,9 @@ public class CompanyProfileView extends ProfileView {
                 }
         );
         button = new Button("Profil bearbeiten");
-        formLayout.add(button, delete);
+        formLayout.add(button, changePasswd, delete);
         button.addClickListener(buttonClickEvent -> {
-            formLayout.remove(button);
+            formLayout.remove(button, changePasswd, delete);
             editLayout();
         });
         formLayout.setColspan(status, 2);
@@ -97,8 +97,8 @@ public class CompanyProfileView extends ProfileView {
     }
 
     private void setCompanyBinder() {
-        companyBinder.bindInstanceFields(this);
         companyBinder.setBean(mapper.map(userControl.getCompanyProfile(userControl.getCurrentUser().getUserid()), CompanyDTOImpl.class));
+        companyBinder.bindInstanceFields(this);
         banned = companyBinder.getBean().getBanned();
     }
 

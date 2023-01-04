@@ -16,8 +16,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.textfield.TextFieldVariant;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import org.hbrs.se2.project.control.InboxControl;
 import org.hbrs.se2.project.control.JobControl;
 import org.hbrs.se2.project.control.UserControl;
@@ -26,7 +24,6 @@ import org.hbrs.se2.project.dtos.JobDTO;
 import org.hbrs.se2.project.dtos.MessageDTO;
 import org.hbrs.se2.project.dtos.impl.ConversationDTOImpl;
 import org.hbrs.se2.project.dtos.impl.MessageDTOImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Optional;
@@ -35,12 +32,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Service
 public class CommonUIElementProvider {
 
-    @Autowired
-    private UserControl userControl;
-    @Autowired
-    private InboxControl inboxControl;
-    @Autowired
-    private JobControl jobControl;
+    private final UserControl userControl;
+    private final InboxControl inboxControl;
+    private final JobControl jobControl;
+
+    public CommonUIElementProvider(UserControl userControl, InboxControl inboxControl, JobControl jobControl) {
+        this.userControl = userControl;
+        this.inboxControl = inboxControl;
+        this.jobControl = jobControl;
+    }
 
     private static final String CLOSE = "Abbrechen";
 
@@ -211,4 +211,11 @@ public class CommonUIElementProvider {
         return vLayout;
     }
 
+    public Dialog makeGenericDialog(VerticalLayout layout, HorizontalLayout buttons) {
+        Dialog dialog = new Dialog();
+        layout.add(buttons);
+        layout.setAlignItems(FlexComponent.Alignment.CENTER);
+        dialog.add(layout);
+        return dialog;
+    }
 }
