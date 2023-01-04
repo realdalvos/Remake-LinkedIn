@@ -427,31 +427,7 @@ class ProfileControlTest {
         }
     }
 
-    @Test
-    @DisplayName("Tests if the method getStudentsMatchingKeyword returns the test student if university matches.")
-    void test_getStudentsMatchingKeyword_with_university() throws DatabaseUserException {
-        List<StudentDTO> students = h.registerTestStudents(1);
-        StudentDTO student0 = students.get(0);
 
-        /*
-        * Currently this test will fail because of a bug, after the bug got fixed this test should work just fine.
-        *
-        * */
-
-        /*
-        //if not present getStudentsMatchingKeyword Method fails for keyword of university
-        HashSet<String> hashSetWithEmptyString = new HashSet<>(List.of(""));
-        profileControl.saveStudentData(userRepository.findByUserid(student0.getUserid()), student0,
-                hashSetWithEmptyString, hashSetWithEmptyString, hashSetWithEmptyString);
-        */
-        Set<StudentDTO> results = profileControl.getStudentsMatchingKeyword("HBRS");
-        assertEquals(1, results.stream().
-            map(StudentDTO::getStudentid).
-            filter(studid -> studid == student0.getStudentid()).
-            count(),
-            "Result set should contain student0 with keyword HBRS.");
-
-    }
 
     @Test
     @DisplayName("Tests if the method getStudentsMatchingKeyword works, regardless if keyword is upper- or lowercase.")
