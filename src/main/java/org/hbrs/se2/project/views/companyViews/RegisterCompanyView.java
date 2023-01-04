@@ -11,7 +11,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
-import org.hbrs.se2.project.helper.navigateHandler;
+import org.hbrs.se2.project.helper.NavigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.RegisterView;
@@ -48,9 +48,9 @@ public class RegisterCompanyView extends RegisterView {
 
         Button confirmButton = new Button("Jetzt als Unternehmen registrieren");
 
-        registerStudentButton.addClickListener(event -> navigateHandler.navigateToRegisterStudentPage());
+        registerStudentButton.addClickListener(event -> NavigateHandler.navigateToRegisterStudentPage());
 
-        userBinder.setBean(new UserDTOImpl(Globals.Roles.company));
+        userBinder.setBean(new UserDTOImpl(Globals.Roles.COMPANY));
         setUserBinder();
         companyBinder.setBean(new CompanyDTOImpl());
         companyBinder.bindInstanceFields(this);
@@ -68,7 +68,7 @@ public class RegisterCompanyView extends RegisterView {
                 if (userBinder.isValid() && companyBinder.isValid()) {
                     // function to register new company
                     registrationControl.registerCompany(userBinder.getBean(), companyBinder.getBean());
-                    navigateHandler.navigateToDefaultPage();
+                    NavigateHandler.navigateToDefaultPage();
                 } else {
                     ui.makeDialog("Überprüfen Sie bitte Ihre Eingaben");
                     logger.info("Not all fields have been filled in");

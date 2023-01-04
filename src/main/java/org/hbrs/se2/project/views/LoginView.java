@@ -22,7 +22,7 @@ import org.hbrs.se2.project.control.AuthorizationControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.helper.AccessHandler;
-import org.hbrs.se2.project.helper.navigateHandler;
+import org.hbrs.se2.project.helper.NavigateHandler;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
 import javax.servlet.http.Cookie;
@@ -112,20 +112,20 @@ public class LoginView extends VerticalLayout {
                 grabAndSetUserIntoSession();
                 AccessHandler.setAccess(authorizationControl.getCurrentUser());
 
-                if(authorizationControl.getCurrentUser().getRole().equals(Globals.Roles.student)) {
+                if(authorizationControl.getCurrentUser().getRole().equals(Globals.Roles.STUDENT)) {
                     // navigate to jobs view for student
-                    navigateHandler.navigateToJobsView();
-                } else if(authorizationControl.getCurrentUser().getRole().equals(Globals.Roles.company)) {
+                    NavigateHandler.navigateToJobsView();
+                } else if(authorizationControl.getCurrentUser().getRole().equals(Globals.Roles.COMPANY)) {
                     // navigate to my ads view for companies
-                    navigateHandler.navigateToMyAdsView();
+                    NavigateHandler.navigateToMyAdsView();
                 }
             } else {
                 component.setError(true);
             }
         });
         // navigate to student or company register page
-        buttonStudent.addClickListener(event -> navigateHandler.navigateToRegisterStudentPage());
-        buttonCompany.addClickListener(event -> navigateHandler.navigateToRegisterCompanyPage());
+        buttonStudent.addClickListener(event -> NavigateHandler.navigateToRegisterStudentPage());
+        buttonCompany.addClickListener(event -> NavigateHandler.navigateToRegisterCompanyPage());
         // add components to View
         add(component);
         add(buttonStudent);

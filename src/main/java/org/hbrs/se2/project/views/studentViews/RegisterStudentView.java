@@ -9,7 +9,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
-import org.hbrs.se2.project.helper.navigateHandler;
+import org.hbrs.se2.project.helper.NavigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.RegisterView;
@@ -55,9 +55,9 @@ public class RegisterStudentView extends RegisterView {
 
         Button confirmButton = new Button("Jetzt als Student registrieren");
 
-        registerCompanyButton.addClickListener(event -> navigateHandler.navigateToRegisterCompanyPage());
+        registerCompanyButton.addClickListener(event -> NavigateHandler.navigateToRegisterCompanyPage());
 
-        userBinder.setBean(new UserDTOImpl(Globals.Roles.student));
+        userBinder.setBean(new UserDTOImpl(Globals.Roles.STUDENT));
         setUserBinder();
         setStudentBinder();
 
@@ -75,7 +75,7 @@ public class RegisterStudentView extends RegisterView {
                 if (userBinder.isValid() && studentBinder.isValid()) {
                     // function to register new company
                     registrationControl.registerStudent(userBinder.getBean(), studentBinder.getBean());
-                    navigateHandler.navigateToDefaultPage();
+                    NavigateHandler.navigateToDefaultPage();
                 } else {
                     ui.makeDialog("Überprüfe bitte deine Eingaben");
                     logger.info("Not all fields have been filled in");

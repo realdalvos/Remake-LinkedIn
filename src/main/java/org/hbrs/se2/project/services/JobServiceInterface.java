@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.services;
 
-import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.JobDTO;
 
 import java.util.List;

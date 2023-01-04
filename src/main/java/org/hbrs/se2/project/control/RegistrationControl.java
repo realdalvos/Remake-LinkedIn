@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.control;
 
+import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.StudentDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
@@ -24,7 +25,7 @@ public class RegistrationControl {
      * @param student Student profile to be created
      * @throws Exception Data already exists
      */
-    public void registerStudent(UserDTO user, StudentDTO student) throws Exception {
+    public void registerStudent(UserDTO user, StudentDTO student) throws DatabaseUserException {
         registrationService.registerStudent(user, student);
     }
 
@@ -34,7 +35,7 @@ public class RegistrationControl {
      * @param company The new Company to be created
      * @throws Exception Data already exists
      */
-    public void registerCompany(UserDTO user, CompanyDTO company) throws Exception {
+    public void registerCompany(UserDTO user, CompanyDTO company) throws DatabaseUserException {
         registrationService.registerCompany(user, company);
     }
 

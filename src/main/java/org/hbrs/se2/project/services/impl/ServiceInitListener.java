@@ -28,11 +28,8 @@ public class ServiceInitListener implements VaadinServiceInitListener {
 
     @Override
     public void serviceInit(ServiceInitEvent serviceInitEvent) {
-        serviceInitEvent.getSource().addUIInitListener(uiInitEvent -> {
-
-            // Whenever a new user arrives, determine locale
-            initLanguage(uiInitEvent.getUI());
-        });
+        // Whenever a new user arrives, determine locale
+        serviceInitEvent.getSource().addUIInitListener(uiInitEvent -> initLanguage(uiInitEvent.getUI()));
     }
 
     private void initLanguage(UI ui) {

@@ -58,7 +58,7 @@ class RegistrationControlTest {
     @Test
     @DisplayName("Successful Registration for company")
     void registerCompanySuccess() {
-        userDTO.setRole(Globals.Roles.company);
+        userDTO.setRole(Globals.Roles.COMPANY);
         assertDoesNotThrow(() -> registrationControl.registerCompany(userDTO, companyDTO));
         assertNotNull(userRepository.findByUsername(userDTO.getUsername()), "Can not find user in database after registration");
         assertNotNull(companyRepository.findByUserid(userRepository.findByUsername(userDTO.getUsername()).getUserid()), "Can not find company in database after registration");
@@ -67,7 +67,7 @@ class RegistrationControlTest {
     @Test
     @DisplayName("Throw an error if an unique field in database already exists")
     void registerCompanyUnique() {
-        userDTO.setRole(Globals.Roles.company);
+        userDTO.setRole(Globals.Roles.COMPANY);
         assertDoesNotThrow(() -> registrationControl.registerCompany(userDTO, companyDTO));
         UserDTO userDTOTmp = new UserDTOImpl();
         CompanyDTO companyDTOTmp = new CompanyDTOImpl();
@@ -85,7 +85,7 @@ class RegistrationControlTest {
     @Test
     @DisplayName("Successful Registration for student")
     void registerStudentSuccess() {
-        userDTO.setRole(Globals.Roles.student);
+        userDTO.setRole(Globals.Roles.STUDENT);
         assertDoesNotThrow(() -> registrationControl.registerStudent(userDTO, studentDTO));
         assertNotNull(userRepository.findByUsername(userDTO.getUsername()), "Can not find user in database after registration");
         assertNotNull(studentRepository.findByUserid(userRepository.findByUsername(userDTO.getUsername()).getUserid()), "Can not find company in database after registration");
@@ -94,7 +94,7 @@ class RegistrationControlTest {
     @Test
     @DisplayName("Throw an error if an unique field in database already exists")
     void registerStudentUnique() {
-        userDTO.setRole(Globals.Roles.student);
+        userDTO.setRole(Globals.Roles.STUDENT);
         assertDoesNotThrow(() -> registrationControl.registerStudent(userDTO, studentDTO));
         UserDTO userDTOTmp = new UserDTOImpl();
         StudentDTO studentDTOTmp = new StudentDTOImpl();
