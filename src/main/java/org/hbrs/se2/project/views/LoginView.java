@@ -116,14 +116,7 @@ public class LoginView extends VerticalLayout {
                     // navigate to jobs view for student
                     NavigateHandler.navigateToJobsView();
                 } else if(authorizationControl.getCurrentUser().getRole().equals(Globals.Roles.COMPANY)) {
-                    boolean isBanned = false;
-
-                    try {
-                        isBanned = authorizationControl.isBannedCompany(authorizationControl.getCurrentUser());
-                    } catch (DatabaseUserException ex) {
-                        // Error dialog
-                        ui.makeDialog(ex.getMessage());;
-                    }
+                    boolean isBanned = authorizationControl.isBannedCompany(authorizationControl.getCurrentUser());
 
                     if(isBanned){
                         // setting access
