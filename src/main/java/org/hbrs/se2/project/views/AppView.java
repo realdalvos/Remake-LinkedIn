@@ -161,10 +161,15 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             // has the user the role "company" they have the tabs "My Ads"
             if(authorizationControl.hasUserRole(authorizationControl.getCurrentUser(), Globals.Roles.COMPANY)) {
                 logger.info("User is company");
-                tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.myjobs"), MyAdsView.class));
-                tabs = Utils.append(tabs, createTab("Studentensuche", SearchStudentsView.class));
-                tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.profile"), CompanyProfileView.class));
-                tabs = Utils.append(tabs, createTab("Kommunikation", CompanyInboxView.class));
+                if(!authorizationControl.isBannedCompany(authorizationControl.getCurrentUser())) {
+                    logger.info("User is company and not banned");
+                    tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.myjobs"), MyAdsView.class));
+                    tabs = Utils.append(tabs, createTab("Studentensuche", SearchStudentsView.class));
+                    tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.profile"), CompanyProfileView.class));
+                    tabs = Utils.append(tabs, createTab("Kommunikation", CompanyInboxView.class));
+                } else {
+                    logger.info("User is company and banned!");
+                }
             }
         return tabs;
     }
