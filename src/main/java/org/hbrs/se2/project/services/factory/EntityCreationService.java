@@ -112,4 +112,8 @@ public class EntityCreationService {
         return  reports -> mapper.map(reports, Reports.class);
     }
 
+    public AbstractEntityFactory<Rating, RatingDTO> ratingFactory(){
+        return  rating -> mapper.map(rating, Rating.class);
+    }
+
 }
