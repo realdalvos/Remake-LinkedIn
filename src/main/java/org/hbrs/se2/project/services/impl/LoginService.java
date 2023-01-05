@@ -49,4 +49,8 @@ public class LoginService implements LoginServiceInterface {
         }
         return userTmp;
     }
+
+    public boolean isBannedCompany() {
+        return false;
+    }
 }
