@@ -207,7 +207,7 @@ public class StudentProfileView extends ProfileView {
                 .withValidator(matrikelnumber -> matrikelnumber.matches("-?\\d+")
                         && matrikelnumber.length() <= 7, "Keine gültige Matrikelnummer")
                 .withValidator(matrikelnumber -> matrikelnumber.equals(userControl.getStudentProfile(userControl.getCurrentUser().getUserid()).getMatrikelnumber())
-                        || profileControl.checkMatrikelnumberUnique(matrikelnumber), "Matrikelnummer existiert bereits")
+                        || userControl.checkMatrikelnumberUnique(matrikelnumber), "Matrikelnummer existiert bereits")
                 .bind(StudentDTOImpl::getMatrikelnumber, StudentDTOImpl::setMatrikelnumber);
         studentBinder.bindInstanceFields(this);
     }
