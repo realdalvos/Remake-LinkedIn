@@ -16,6 +16,7 @@ import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.PWA;
 import org.hbrs.se2.project.control.AuthorizationControl;
+import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.helper.NavigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
@@ -161,7 +162,13 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             // has the user the role "company" they have the tabs "My Ads"
             if(authorizationControl.hasUserRole(authorizationControl.getCurrentUser(), Globals.Roles.COMPANY)) {
                 logger.info("User is company");
-                if(!authorizationControl.isBannedCompany(authorizationControl.getCurrentUser())) {
+                boolean banned = true;
+                try {
+                    banned = authorizationControl.isBannedCompany(authorizationControl.getCurrentUser());
+                } catch (DatabaseUserException ex) {
+                    logger.info("Fehler");
+                }
+                if(!banned) {
                     logger.info("User is company and not banned");
                     tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.myjobs"), MyAdsView.class));
                     tabs = Utils.append(tabs, createTab("Studentensuche", SearchStudentsView.class));
