@@ -162,7 +162,12 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             // has the user the role "company" they have the tabs "My Ads"
             if(authorizationControl.hasUserRole(authorizationControl.getCurrentUser(), Globals.Roles.COMPANY)) {
                 logger.info("User is company");
-                boolean banned = authorizationControl.isBannedCompany(authorizationControl.getCurrentUser());
+                boolean banned = true;
+                try{
+                    banned = authorizationControl.isCompanyOfUserBanned(authorizationControl.getCurrentUser());
+                } catch (DatabaseUserException ex){
+
+                }
 
                 if(!banned) {
                     logger.info("User is company and not banned");
