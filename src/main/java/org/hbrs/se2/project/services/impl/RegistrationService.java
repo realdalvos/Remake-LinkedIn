@@ -35,7 +35,7 @@ public class RegistrationService implements RegistrationServiceInterface {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public void registerStudent(UserDTO user, StudentDTO student) throws Exception {
+    public void registerStudent(UserDTO user, StudentDTO student) throws DatabaseUserException {
         if (!validationService.checkUsernameUnique(user.getUsername())) {
             throw new DatabaseUserException("Username already exists");
         } else if (!validationService.checkEmailUnique(user.getEmail())) {
@@ -53,7 +53,7 @@ public class RegistrationService implements RegistrationServiceInterface {
     }
 
     @Override
-    public void registerCompany(UserDTO user, CompanyDTO company) throws Exception {
+    public void registerCompany(UserDTO user, CompanyDTO company) throws DatabaseUserException {
         if (!validationService.checkUsernameUnique(user.getUsername())) {
             throw new DatabaseUserException("Username already exists");
         } else if (!validationService.checkEmailUnique(user.getEmail())) {

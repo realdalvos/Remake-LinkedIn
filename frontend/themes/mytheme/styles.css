@@ -45,12 +45,23 @@ html {
     --lumo-error-color-10pct: rgba(199, 59, 51, 0.1);
     --lumo-error-color: hsl(3, 59%, 49%);
     --lumo-font-family: "Georgia";
+    --lumo-space-xl: 2.5;
+    --lumo-space-wide-xl: 2.5;
+    --lumo-space-tall-xl: 2.5;
+
 }
 
-.v-vertical > .v-spacing {
-    height: 70px;
+
+   .dark.v-app .v-vertical > .v-spacing {
+    height: 100px;
 }
 
-.v-horizontal > .v-spacing {
-    width: 70px;
+    .dark.v-app .v-horizontal > .v-spacing {
+    width: 100px;
+}
+
+
+vaadin-notification-card flow-component-renderer,
+vaadin-notification-card flow-component-renderer > div {
+    display: contents;
 }

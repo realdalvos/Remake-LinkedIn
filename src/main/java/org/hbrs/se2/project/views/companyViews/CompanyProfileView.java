@@ -4,7 +4,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -16,10 +15,13 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.control.ProfileControl;
 import org.hbrs.se2.project.control.UserControl;
+import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
 import org.hbrs.se2.project.util.Globals;
+import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.AppView;
 import org.hbrs.se2.project.views.ProfileView;
+import org.slf4j.Logger;
 
 import java.util.stream.Stream;
 
@@ -28,9 +30,9 @@ import java.util.stream.Stream;
 @Route(value = Globals.Pages.COMPANY_PROFILE_VIEW, layout = AppView.class, registerAtStartup = false)
 @PageTitle("Profile")
 public class CompanyProfileView extends ProfileView {
-
+    private final Logger logger = Utils.getLogger(this.getClass().getName());
     private boolean banned;
-    private final TextField name = new TextField("Name Ihres Unternehmens:");
+    private final TextField name = new TextField("Name des Unternehmens:");
     private final TextField industry = new TextField("Industrie:");
 
     private final Binder<CompanyDTOImpl> companyBinder = new BeanValidationBinder<>(CompanyDTOImpl.class);
@@ -40,7 +42,6 @@ public class CompanyProfileView extends ProfileView {
         this.userControl = userControl;
 
         setSizeFull();
-        add(formLayout);
         setUserBinder();
         setCompanyBinder();
         viewLayout();
@@ -60,12 +61,12 @@ public class CompanyProfileView extends ProfileView {
                 }
         );
         button = new Button("Profil bearbeiten");
-        formLayout.add(button, delete);
+        formLayout.add(button, changePasswd, delete);
         button.addClickListener(buttonClickEvent -> {
-            formLayout.remove(button);
+            formLayout.remove(button, changePasswd, delete);
             editLayout();
         });
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
+        formLayout.setColspan(status, 2);
     }
 
     private void editLayout() {
@@ -83,7 +84,11 @@ public class CompanyProfileView extends ProfileView {
                             } else {
                                 UI.getCurrent().getPage().reload();
                             }
-                            profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());
+                            try {
+                                profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());
+                            } catch (DatabaseUserException e) {
+                                logger.info("failed to update company information in db");
+                            }
                         });
             } else {
                 ui.makeDialog("Überprüfen Sie bitte Ihre Angaben auf Korrektheit");
@@ -92,8 +97,8 @@ public class CompanyProfileView extends ProfileView {
     }
 
     private void setCompanyBinder() {
-        companyBinder.bindInstanceFields(this);
         companyBinder.setBean(mapper.map(userControl.getCompanyProfile(userControl.getCurrentUser().getUserid()), CompanyDTOImpl.class));
+        companyBinder.bindInstanceFields(this);
         banned = companyBinder.getBean().getBanned();
     }
 

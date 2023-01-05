@@ -16,7 +16,7 @@ import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.PWA;
 import org.hbrs.se2.project.control.AuthorizationControl;
-import org.hbrs.se2.project.helper.navigateHandler;
+import org.hbrs.se2.project.helper.NavigateHandler;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.util.Utils;
 import org.hbrs.se2.project.views.companyViews.CompanyInboxView;
@@ -92,8 +92,8 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
 
         // Only if role is equal to company
-        if(authorizationControl.hasUserRole(authorizationControl.getCurrentUser(), Globals.Roles.company)) {
-            bar.addItem(getTranslation("view.main.bar.newJob"), e -> navigateHandler.navigateToNewJob());
+        if(authorizationControl.hasUserRole(authorizationControl.getCurrentUser(), Globals.Roles.COMPANY)) {
+            bar.addItem(getTranslation("view.main.bar.newJob"), e -> NavigateHandler.navigateToNewJob());
         }
 
         // for all roles add following bar items
@@ -152,14 +152,14 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         Tab[] tabs = new Tab[]{};
 
         // if the user has the role "student" he has the tabs "Jobs"
-        if(authorizationControl.hasUserRole(authorizationControl.getCurrentUser(), Globals.Roles.student)) {
+        if(authorizationControl.hasUserRole(authorizationControl.getCurrentUser(), Globals.Roles.STUDENT)) {
             logger.info("User is student");
             tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.jobs"), JobsView.class));
             tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.profile"), StudentProfileView.class));
             tabs = Utils.append(tabs, createTab("Kommunikation", StudentInboxView.class));
         } else
             // has the user the role "company" they have the tabs "My Ads"
-            if(authorizationControl.hasUserRole(authorizationControl.getCurrentUser(), Globals.Roles.company)) {
+            if(authorizationControl.hasUserRole(authorizationControl.getCurrentUser(), Globals.Roles.COMPANY)) {
                 logger.info("User is company");
                 tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.myjobs"), MyAdsView.class));
                 tabs = Utils.append(tabs, createTab("Studentensuche", SearchStudentsView.class));

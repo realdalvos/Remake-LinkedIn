@@ -23,7 +23,7 @@ class CompanyFactoryTest {
 
     @BeforeEach
     void setUp() {
-        testUser = new UserDTOImpl("JUnitTest", "SicheresPasswort", "testUser@JUnitTest.de", Globals.Roles.company);
+        testUser = new UserDTOImpl("JUnitTest", "SicheresPasswort", "testUser@JUnitTest.de", Globals.Roles.COMPANY);
         testUser.setUserid(99999);
 
         testCompany = new CompanyDTOImpl(testUser.getUserid(), "JUnitTestCompany", "Test-Industry", false);

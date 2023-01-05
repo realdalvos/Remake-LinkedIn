@@ -108,4 +108,8 @@ public class EntityCreationService {
         return message -> mapper.map(message, Message.class);
     }
 
+    public AbstractEntityFactory<Reports, ReportsDTO> reportsFactory(){
+        return  reports -> mapper.map(reports, Reports.class);
+    }
+
 }

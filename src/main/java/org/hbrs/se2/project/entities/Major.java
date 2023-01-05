@@ -8,7 +8,7 @@ import java.util.Set;
 @Table(name= "major", schema = "mid9db")
 public class Major {
     private int majorid;
-    private String major;
+    private String value;
     private Set<Student> students = new HashSet<>();
 
     @Id
@@ -25,11 +25,11 @@ public class Major {
     @Basic
     @Column(name = "major")
     public String getMajor() {
-        return major;
+        return value;
     }
 
     public void setMajor(String major) {
-        this.major = major;
+        this.value = major;
     }
 
     @ManyToMany(mappedBy = "majors")

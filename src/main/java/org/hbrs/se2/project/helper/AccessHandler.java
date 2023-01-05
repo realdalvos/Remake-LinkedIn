@@ -11,6 +11,11 @@ import org.hbrs.se2.project.views.studentViews.StudentProfileView;
 import org.hbrs.se2.project.views.studentViews.RegisterStudentView;
 
 public class AccessHandler {
+
+    private AccessHandler() {
+        throw new IllegalStateException("Utility class; cannot be instantiated!");
+    }
+
     /**
      * Set specific access for the user, depending on the role given to the user.*/
     public static void setAccess(UserDTO user) {
@@ -21,7 +26,7 @@ public class AccessHandler {
             When adding a new view, its Route also has to be set to "RegisterAtStartup = false" and
             get activated here with setAnnotatedRoute(NewView.class). */
         Class defaultView;
-        if (user.getRole().equals(Globals.Roles.company)) {  //If company
+        if (user.getRole().equals(Globals.Roles.COMPANY)) {  //If company
             configuration.setAnnotatedRoute(MyAdsView.class);
             configuration.setAnnotatedRoute(NewJobAdView.class);
             configuration.setAnnotatedRoute(SearchStudentsView.class);

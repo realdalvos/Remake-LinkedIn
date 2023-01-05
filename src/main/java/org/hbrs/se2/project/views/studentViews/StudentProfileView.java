@@ -58,7 +58,6 @@ public class StudentProfileView extends ProfileView {
         skills = profileControl.getSkillOfStudent(userControl.getCurrentUser().getUserid());
 
         setSizeFull();
-        add(formLayout);
         setAllGrids();
         setUserBinder();
         setStudentBinder();
@@ -113,13 +112,13 @@ public class StudentProfileView extends ProfileView {
     }
 
     private void editLayout() {
-        Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(
-                field -> field.setReadOnly(false)
+        Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(field ->
+                field.setReadOnly(false)
         );
         setEditGrids();
 
         button = new Button("Profil speichern");
-        formLayout.add(button, delete);
+        formLayout.add(button);
         button.addClickListener(buttonClickEvent -> {
             if (userBinder.isValid() && studentBinder.isValid()) {
                 ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?",
@@ -150,20 +149,24 @@ public class StudentProfileView extends ProfileView {
 
     private void viewLayout() {
         // set value of text fields to read only for profile view
-        Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(
-                field -> {
-                    field.setReadOnly(true);
-                    formLayout.add(field);
-                }
-        );
+        Stream.of(username, email, firstname, lastname, university, matrikelnumber).forEach(field -> {
+            formLayout.add(field);
+            field.setReadOnly(true);
+        });
+        formLayout.add(username, email, firstname, lastname, university, matrikelnumber);
+        formLayout.setColspan(gridSkills, 2);
+        formLayout.setColspan(gridTopics, 2);
+        formLayout.setColspan(gridMajors, 2);
+        //Rahmen noch setzen
+        //alles zentrieren und abstand links und rechts
+        //zwischen den grids ein bisschen abstand
 
         button = new Button("Profil bearbeiten");
-        formLayout.add(gridMajors, gridTopics, gridSkills, button, delete);
+        formLayout.add(gridMajors, gridTopics, gridSkills, button, changePasswd, delete);
         button.addClickListener(buttonClickEvent -> {
-            formLayout.remove(gridMajors, gridTopics, gridSkills, button, delete);
+            formLayout.remove(gridMajors, gridTopics, gridSkills, button, changePasswd, delete);
             editLayout();
         });
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
     }
 
     private Grid<String> newEntriesGrid(Set<String> entries) {
@@ -197,18 +200,15 @@ public class StudentProfileView extends ProfileView {
     }
 
     private void setStudentBinder() {
-        studentBinder.bindInstanceFields(this);
         studentBinder.setBean(mapper.map(userControl.getStudentProfile(userControl.getCurrentUser().getUserid()), StudentDTOImpl.class));
         studentBinder
                 .forField(matrikelnumber)
                 .asRequired("Darf nicht leer sein")
-                .withValidator(validation -> matrikelnumber.getValue().matches("-?\\d+")
-                        && matrikelnumber.getValue().length() <= 7, "Keine gültige Matrikelnummer")
-                .withValidator(validation -> matrikelnumber.getValue().equals(userControl.getStudentProfile(userControl.getCurrentUser().getUserid()).getMatrikelnumber())
-                        || profileControl.checkMatrikelnumberUnique(matrikelnumber.getValue()), "Matrikelnummer existiert bereits")
+                .withValidator(matrikelnumber -> matrikelnumber.matches("-?\\d+")
+                        && matrikelnumber.length() <= 7, "Keine gültige Matrikelnummer")
+                .withValidator(matrikelnumber -> matrikelnumber.equals(userControl.getStudentProfile(userControl.getCurrentUser().getUserid()).getMatrikelnumber())
+                        || userControl.checkMatrikelnumberUnique(matrikelnumber), "Matrikelnummer existiert bereits")
                 .bind(StudentDTOImpl::getMatrikelnumber, StudentDTOImpl::setMatrikelnumber);
-        matrikelnumber.addValueChangeListener(
-                event -> studentBinder.validate());
+        studentBinder.bindInstanceFields(this);
     }
-
 }

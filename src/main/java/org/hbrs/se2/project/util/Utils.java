@@ -1,15 +1,14 @@
 package org.hbrs.se2.project.util;
 
-import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
-import org.hbrs.se2.project.dtos.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 
 public class Utils {
+
+    private Utils() {
+        throw new IllegalStateException("Utility class; cannot be instantiated!");
+    }
 
     /**
      * Adding a generic element to an array of the same type
@@ -52,5 +51,5 @@ public class Utils {
     public static Logger getLogger(String s) {
         return LoggerFactory.getLogger(s);
     }
-}
 
+}
