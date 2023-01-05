@@ -248,7 +248,8 @@ public class HelperForTests {
         return new StudentDTOImpl(s.getUserid(), s.getFirstname(), s.getFirstname(), s.getMatrikelnumber(), s.getUniversity());
     }
     public static void synchronizedwait(WebDriver driver, long timeoutMillis){
-        synchronized (driver){
+        final WebDriver webdriver = driver;
+        synchronized (webdriver){
             try {
                 driver.wait(timeoutMillis);
             } catch (InterruptedException e) {
