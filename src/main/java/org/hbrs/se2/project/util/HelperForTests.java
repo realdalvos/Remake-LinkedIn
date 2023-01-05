@@ -252,7 +252,6 @@ public class HelperForTests {
             try {
                 driver.wait(timeoutMillis);
             } catch (InterruptedException e) {
-                e.printStackTrace();
                 Logger logger = Utils.getLogger("HelperForTests");
                 logger.warn("Method synchronized wait failed", e);
                 // Restore interrupted state...
