@@ -106,5 +106,5 @@ public class ProfileControl {
      * Change a user's password
      * @param user Updated UserDTO with new password
      */
-    public void changeUserPassword(UserDTO user) throws Exception { profileService.changeUserPassword(user); }
+    public void changeUserPassword(UserDTO user) throws DatabaseUserException { profileService.changeUserPassword(user); }
 }

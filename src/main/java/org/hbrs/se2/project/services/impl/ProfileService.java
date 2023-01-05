@@ -6,6 +6,7 @@ import org.hbrs.se2.project.repository.*;
 import org.hbrs.se2.project.services.ProfileServiceInterface;
 import org.hbrs.se2.project.services.factory.EntityCreationService;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,31 +14,26 @@ import java.util.*;
 
 @Service
 public class ProfileService implements ProfileServiceInterface {
-    private final UserRepository userRepository;
-    private final StudentRepository studentRepository;
-    private final CompanyRepository companyRepository;
-    private final MajorRepository majorRepository;
-    private final SkillRepository skillRepository;
-    private final TopicRepository topicRepository;
-    private final ConversationRepository conversationRepository;
-    private final EntityCreationService entityCreationService;
-
-    protected final CommonUIElementProvider ui;
-
-    private final PasswordEncoder passwordEncoder;
-
-    public ProfileService(UserRepository userRepository, StudentRepository studentRepository, CompanyRepository companyRepository, MajorRepository majorRepository, SkillRepository skillRepository, TopicRepository topicRepository, ConversationRepository conversationRepository, EntityCreationService entityCreationService, CommonUIElementProvider ui, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.studentRepository = studentRepository;
-        this.companyRepository = companyRepository;
-        this.majorRepository = majorRepository;
-        this.skillRepository = skillRepository;
-        this.topicRepository = topicRepository;
-        this.conversationRepository = conversationRepository;
-        this.entityCreationService = entityCreationService;
-        this.ui = ui;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
+    @Autowired
+    private MajorRepository majorRepository;
+    @Autowired
+    private SkillRepository skillRepository;
+    @Autowired
+    private TopicRepository topicRepository;
+    @Autowired
+    private ConversationRepository conversationRepository;
+    @Autowired
+    private EntityCreationService entityCreationService;
+    @Autowired
+    private CommonUIElementProvider ui;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void saveStudentData(UserDTO user, StudentDTO student, Set<String> majors, Set<String> topics, Set<String> skills) {
@@ -132,7 +128,7 @@ public class ProfileService implements ProfileServiceInterface {
         conversationRepository.garbageCollection();
     }
 
-    public void changeUserPassword(UserDTO user) throws Exception {
+    public void changeUserPassword(UserDTO user) throws DatabaseUserException {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (userRepository.updateUserSetPasswordForUserid(user.getPassword(), user.getUserid()) != 1)
             throw new DatabaseUserException("A Failure occurred while saving a user account in the database at createAccount");
