@@ -18,4 +18,6 @@ public interface LoginServiceInterface {
      * @return last successfully authenticated user as UserDTO
      * */
     UserDTO getCurrentUser();
+
+    boolean isCompanyOfUserBanned(UserDTO user) throws DatabaseUserException;
 }

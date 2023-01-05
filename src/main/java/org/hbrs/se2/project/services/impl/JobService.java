@@ -44,7 +44,7 @@ public class JobService implements JobServiceInterface {
      * @return Filtered List of Jobs
      */
     public List<JobDTO> getJobsMatchingKeyword(String keyword) {
-        return jobRepository.findByKeyword(keyword);
+        return jobRepository.findByKeyword(keyword).parallelStream().filter(job -> !companyRepository.findByCompanyid(job.getCompanyid()).getBanned()).collect(Collectors.toList());
     }
 
     /**

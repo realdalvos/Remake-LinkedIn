@@ -51,4 +51,8 @@ public class AuthorizationControl {
         UI.getCurrent().getSession().close();
         UI.getCurrent().getPage().setLocation("/");
     }
+
+    public boolean isCompanyOfUserBanned(UserDTO user) throws DatabaseUserException {
+        return loginService.isCompanyOfUserBanned(user);
+    }
 }

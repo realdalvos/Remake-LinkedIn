@@ -15,7 +15,7 @@ public class CompanyDTOImpl implements CompanyDTO {
 
     public CompanyDTOImpl(){}
 
-    public CompanyDTOImpl(int userid,String name, String industy, boolean banned){
+    public CompanyDTOImpl(int userid, String name, String industy, boolean banned){
         this.userid=userid;
         this.name=name;
         this.industry=industy;

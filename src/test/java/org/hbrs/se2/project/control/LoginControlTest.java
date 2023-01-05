@@ -1,7 +1,9 @@
 package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
+import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
+import org.hbrs.se2.project.repository.UserRepository;
 import org.hbrs.se2.project.util.HelperForTests;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +19,15 @@ class LoginControlTest {
     HelperForTests h;
     @Autowired
     UserDTO testUser;
+    @Autowired
+    UserRepository userRepository;
+
+    private CompanyDTO registeredTestCompany;
 
     @BeforeEach
     @DisplayName("Registering a test company in the database called \"JUnitTest\" exists.")
     void init(){
-        h.registerTestCompany();
+        registeredTestCompany = h.registerTestCompany();
         testUser = h.getUserDTOForCompany();
     }
 
@@ -53,12 +59,24 @@ class LoginControlTest {
 
     @Test
     @DisplayName("GetCurrentUser Method should return the last registered user, in this case user \"JUnitTest\".")
-    void getCurrentUser() throws DatabaseUserException {
+    void testGetCurrentUser() throws DatabaseUserException {
         authorizationControl.authenticate(testUser.getUsername(),testUser.getPassword());
 
         //should return UserDTO of user JUnitTest
         UserDTO currentUser = authorizationControl.getCurrentUser();
         assertNotNull(currentUser);
         assertEquals(testUser.getUsername(), currentUser.getUsername());
+    }
+
+    @Test
+    @DisplayName("Test if the isBannedCompany works as expected.")
+    void testIsBannedCompany() throws DatabaseUserException {
+        assertFalse(authorizationControl.isCompanyOfUserBanned(userRepository.findByUserid(registeredTestCompany.getUserid())), "Company has banned set to false, so the method should return false.");
+
+        h.deleteTestUsers();
+
+        CompanyDTO comp = h.registerTestCompanyBanned();
+
+        assertTrue(authorizationControl.isCompanyOfUserBanned(userRepository.findByUserid(comp.getUserid())), "Company has banned set to true, so the method should return true.");
     }
 }

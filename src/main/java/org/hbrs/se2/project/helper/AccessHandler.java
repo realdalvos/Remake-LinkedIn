@@ -49,6 +49,21 @@ public class AccessHandler {
         configuration.removeRoute(RegisterStudentView.class);
     }
 
+    public static void setAccessBanned(UserDTO currentUser) {
+        RouteConfiguration configuration = RouteConfiguration
+                .forSessionScope();
+
+        Class defaultView;
+
+        configuration.setAnnotatedRoute(CompanyProfileView.class);
+        defaultView = CompanyProfileView.class;
+
+        //mapping path "", which previously led to the LoginView, to defaultView which differs in case of student and company
+        configuration.setRoute("", defaultView, AppView.class);
+        //removing Route to RegisterViews
+        configuration.removeRoute(RegisterCompanyView.class);
+        configuration.removeRoute(RegisterStudentView.class);
+    }
     /**
      * Sets the default access. A user that is not logged in can visit both register pages and the login page.*/
     public static void setDefaultAccess() {

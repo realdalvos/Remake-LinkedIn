@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.control;
 
+import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.ReportsDTO;
 import org.hbrs.se2.project.services.impl.ReportsService;
 import org.springframework.stereotype.Controller;
@@ -28,5 +29,11 @@ public class ReportsControl {
      */
     public boolean studentHasReportedCompany(int companyid, int studentid){
         return  reportsService.studentHasReportedCompany(companyid, studentid);
+    }
+
+    /**
+     * Checks if the company has more than 4 reports and thus should be banned*/
+    public boolean companyShouldBeBanned(CompanyDTO c){
+        return reportsService.companyShouldBeBanned(c);
     }
 }
