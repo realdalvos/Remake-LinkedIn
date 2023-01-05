@@ -1,7 +1,9 @@
 package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
+import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
+import org.hbrs.se2.project.repository.UserRepository;
 import org.hbrs.se2.project.util.HelperForTests;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ class LoginControlTest {
     HelperForTests h;
     @Autowired
     UserDTO testUser;
+    @Autowired
+    UserRepository userRepository;
 
     @BeforeEach
     @DisplayName("Registering a test company in the database called \"JUnitTest\" exists.")
@@ -60,5 +64,20 @@ class LoginControlTest {
         UserDTO currentUser = authorizationControl.getCurrentUser();
         assertNotNull(currentUser);
         assertEquals(testUser.getUsername(), currentUser.getUsername());
+    }
+
+    @Test
+    @DisplayName("Test if the isBannedCompany works as expected.")
+    void testIsBannedCompany(){
+        CompanyDTO comp = h.registerTestCompanies(1).get(0);
+        userRepository.findByUserid(comp.getUserid());
+
+        assertFalse(authorizationControl.isBannedCompany(userRepository.findByUserid(comp.getUserid())), "Company has banned set to false, so the method should return false.");
+
+        h.deleteTestUsers();
+
+        comp = h.registerTestCompanyBanned();
+
+        assertTrue(authorizationControl.isBannedCompany(userRepository.findByUserid(comp.getUserid())), "Company has banned set to true, so the method should return true.");
     }
 }
