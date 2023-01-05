@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.services.impl;
 
+import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.ReportsDTO;
 import org.hbrs.se2.project.repository.ReportsRepository;
 import org.hbrs.se2.project.services.ReportsServiceInterface;
@@ -22,5 +23,10 @@ public class ReportsService implements ReportsServiceInterface {
     @Override
     public boolean studentHasReportedCompany(int companyid, int studentid){
         return this.reportsRepository.studentHasReportedCompany(companyid, studentid);
+    }
+
+    @Override
+    public boolean companyShouldBeBanned(CompanyDTO c){
+        return reportsRepository.shouldBeBanned(c.getCompanyid());
     }
 }
