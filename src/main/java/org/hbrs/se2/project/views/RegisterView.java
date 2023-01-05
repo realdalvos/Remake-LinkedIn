@@ -12,6 +12,7 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
 import org.hbrs.se2.project.control.RegistrationControl;
+import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.helper.NavigateHandler;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
@@ -20,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class RegisterView extends VerticalLayout {
     @Autowired
     protected RegistrationControl registrationControl;
+    @Autowired
+    protected UserControl userControl;
     @Autowired
     protected CommonUIElementProvider ui;
     protected H4 registerText = new H4();
@@ -78,13 +81,13 @@ public abstract class RegisterView extends VerticalLayout {
         userBinder
                 .forField(username)
                 .asRequired("Darf nicht leer sein")
-                .withValidator(user -> registrationControl.checkUsernameUnique(user), "Benutzername existiert bereits")
+                .withValidator(user -> userControl.checkUsernameUnique(user), "Benutzername existiert bereits")
                 .bind(UserDTOImpl::getUsername, UserDTOImpl::setUsername);
         userBinder
                 .forField(email)
                 .asRequired("Darf nicht leer sein")
                 .withValidator(new EmailValidator("Keine gültige EMail Adresse"))
-                .withValidator(email -> registrationControl.checkEmailUnique(email), "Email existiert bereits")
+                .withValidator(email -> userControl.checkEmailUnique(email), "Email existiert bereits")
                 .bind(UserDTOImpl::getEmail, UserDTOImpl::setEmail);
         // Map input field values to DTO variables based on chosen names
         userBinder.bindInstanceFields(this);

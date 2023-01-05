@@ -170,9 +170,9 @@ class ProfileControlTest {
     @DisplayName("Checking if the methods testing for unique work as expected")
     void uniqueTest(){
         userDTO = userRepository.findByUserid(studentDTO.getUserid());
-        assertFalse(profileControl.checkUsernameUnique(userDTO.getUsername()));
-        assertFalse(profileControl.checkEmailUnique(userDTO.getEmail()));
-        assertFalse(profileControl.checkMatrikelnumberUnique(studentDTO.getMatrikelnumber()));
+        assertFalse(userControl.checkUsernameUnique(userDTO.getUsername()));
+        assertFalse(userControl.checkEmailUnique(userDTO.getEmail()));
+        assertFalse(userControl.checkMatrikelnumberUnique(studentDTO.getMatrikelnumber()));
     }
 
     @Test

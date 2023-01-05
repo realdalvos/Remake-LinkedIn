@@ -143,14 +143,14 @@ public abstract class ProfileView extends Div {
                 .forField(username)
                 .asRequired("Darf nicht leer sein")
                 .withValidator(user -> user.equals(userControl.getCurrentUser().getUsername())
-                        || profileControl.checkUsernameUnique(user), "Benutzername existiert bereits")
+                        || userControl.checkUsernameUnique(user), "Benutzername existiert bereits")
                 .bind(UserDTOImpl::getUsername, UserDTOImpl::setUsername);
         userBinder
                 .forField(email)
                 .asRequired("Darf nicht leer sein")
                 .withValidator(new EmailValidator("Keine gültige EMail Adresse"))
                 .withValidator(email -> email.equals(userControl.getCurrentUser().getEmail())
-                        || profileControl.checkEmailUnique(email), "Email existiert bereits")
+                        || userControl.checkEmailUnique(email), "Email existiert bereits")
                 .bind(UserDTOImpl::getEmail, UserDTOImpl::setEmail);
     }
 }

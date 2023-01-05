@@ -56,6 +56,10 @@ public class JobControl {
         jobService.removeJob(jobid);
     }
 
+    /**
+     * Get a list of all currently available jobs
+     * @return List of all available jobs
+     */
     public List<JobDTO> getAllJobs() { return jobService.getAllJobs();}
 }
 

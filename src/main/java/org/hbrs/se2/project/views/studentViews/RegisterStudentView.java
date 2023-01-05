@@ -96,7 +96,7 @@ public class RegisterStudentView extends RegisterView {
                 .asRequired("Darf nicht leer sein")
                 .withValidator(matrikelnumber -> matrikelnumber.matches("-?\\d+")
                         && matrikelnumber.length() <= 7, "Keine gültige Matrikelnummer")
-                .withValidator(matrikelnumber -> registrationControl.checkMatrikelnumberUnique(matrikelnumber), "Matrikelnummer existiert bereits")
+                .withValidator(matrikelnumber -> userControl.checkMatrikelnumberUnique(matrikelnumber), "Matrikelnummer existiert bereits")
                 .bind(StudentDTOImpl::getMatrikelnumber, StudentDTOImpl::setMatrikelnumber);
         studentBinder.bindInstanceFields(this);
     }
