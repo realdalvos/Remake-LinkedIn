@@ -35,4 +35,9 @@ public class Globals {
 
     }
 
+    public static class IllegalOSExcpetion extends Exception{
+        public IllegalOSExcpetion(String warning){
+            super(warning);
+        }
+    }
 }
