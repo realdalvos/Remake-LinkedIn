@@ -68,5 +68,5 @@ public class ProfileControl {
 
     public void deleteUser(UserDTO user) throws DatabaseUserException { profileService.deleteUser(user); }
 
-    public void changeUserPassword(UserDTO user) throws Exception { profileService.changeUserPassword(user); }
+    public void changeUserPassword(UserDTO user) throws DatabaseUserException { profileService.changeUserPassword(user); }
 }
