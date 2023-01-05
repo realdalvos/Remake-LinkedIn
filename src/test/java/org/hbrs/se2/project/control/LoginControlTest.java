@@ -53,7 +53,7 @@ class LoginControlTest {
 
     @Test
     @DisplayName("GetCurrentUser Method should return the last registered user, in this case user \"JUnitTest\".")
-    void getCurrentUser() throws DatabaseUserException {
+    void testGetCurrentUser() throws DatabaseUserException {
         authorizationControl.authenticate(testUser.getUsername(),testUser.getPassword());
 
         //should return UserDTO of user JUnitTest
