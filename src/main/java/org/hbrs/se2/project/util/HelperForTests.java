@@ -245,4 +245,73 @@ public class HelperForTests {
     private StudentDTO clone(StudentDTO s){
         return new StudentDTOImpl(s.getUserid(), s.getFirstname(), s.getFirstname(), s.getMatrikelnumber(), s.getUniversity());
     }
+    public static void synchronizedwait(Object object, long timeoutMillis){
+        synchronized (object){
+            try {
+                object.wait(timeoutMillis);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public static void setDriverSystemProperties(String browser) throws Globals.IllegalOSExcpetion {
+        String os;
+        try{
+            os = System.getProperty("os.name").toUpperCase();
+        }
+        catch (NullPointerException x){
+            throw new Globals.IllegalOSExcpetion("Your OS is not shown under the java system properties. Try to fix this problem on your own");
+        }
+        switch(browser){
+            case "chrome":{
+                if(os.contains("WIN")){
+                    System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/chromedriver_win64.exe");
+                } else if (os.contains("MAC")) {
+                    if(os.contains("ARM")) {
+                        System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/chromedriver_arm64");
+                    }else {
+                        System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/chromedriver_mac64");
+                    }
+                }else if(os.contains("NIX") || os.contains("NUX") || os.contains("AIX")){
+                    System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/chromedriver_linux64");
+                } else {
+                    throw new Globals.IllegalOSExcpetion("You are using an uncommon OS: "+ System.getProperty("os.name")+" . please use either windows, mac or linux for this program");
+                }
+                return;
+            }
+            case "edge":{
+                if(os.contains("WIN")){
+                    System.setProperty("webdriver.edge.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/msedgedriver_win64.exe");
+                } else if (os.contains("MAC")) {
+                    if(os.contains("ARM")) {
+                        System.setProperty("webdriver.edge.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/msedgedriver_arm64.exe");
+                    }else {
+                        System.setProperty("webdriver.edge.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/msedgedriver_mac64");
+                    }
+                }else if(os.contains("NIX") || os.contains("NUX") || os.contains("AIX")){
+                    System.setProperty("webdriver.edge.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/msedgedriver_linux64");
+                } else {
+                    throw new Globals.IllegalOSExcpetion("You are using an uncommon OS: "+ System.getProperty("os.name")+" . please use either windows, mac or linux for this program");
+                }
+                return;
+            }/*
+            case "firefox":{
+                if(os.contains("WIN")){
+                    System.setProperty("webdriver.gecko.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/geckodriver_win64.exe");
+                } else if (os.contains("MAC")) {
+                    if(os.contains("ARM")) {
+                        System.setProperty("webdriver.gecko.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/gecjodriver_arm64.exe");
+                    }else {
+                        System.setProperty("webdriver.gecko.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/geckodriver_mac64");
+                    }
+                }else if(os.contains("NIX") || os.contains("NUX") || os.contains("AIX")){
+                    System.setProperty("webdriver.gecko.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/geckodriver_linux64");
+                } else {
+                    throw new Globals.IllegalOSExcpetion("You are using an uncommon OS: "+ System.getProperty("os.name")+" . please use either windows, mac or linux for this program");
+                }
+                return;
+            }*/
+        }
+
+    }
 }
