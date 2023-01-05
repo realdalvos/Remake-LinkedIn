@@ -97,6 +97,25 @@ public class JobControlTest {
         assertTrue(containsTestJob(list), "Only first job should be returned");
     }
 
+    @Test
+    @DisplayName("Testing the getJobsMatchingKeywords Method with banned companies")
+    void getJobsMatchingKeyword_bannedCompany() {
+        tearDown();
+
+        //registering banned company
+        testCompanyDTO = h.registerTestCompanyBanned();
+
+        // create and save a new job
+        testJob = new JobDTOImpl(
+                testCompanyDTO.getCompanyid(), "Test title", "Testbeschreibung. assembly programmer.", 20, "Test location", "Test contactdetails");
+        jobControl.createNewJobPost(testJob);
+
+        testJob = jobRepository.findByCompanyidAndTitle(testJob.getCompanyid(), testJob.getTitle());
+
+        List<JobDTO> list = jobControl.getJobsMatchingKeyword("Test");
+        assertFalse(containsTestJob(list), "Since the issuing company is banned the test job should not be contained.");
+    }
+
     /**
      * Checks if the job testJob is contained in the list.*/
     private boolean containsTestJob(List<JobDTO> list){
