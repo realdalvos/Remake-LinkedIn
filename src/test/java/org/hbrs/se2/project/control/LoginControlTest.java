@@ -22,10 +22,12 @@ class LoginControlTest {
     @Autowired
     UserRepository userRepository;
 
+    private CompanyDTO registeredTestCompany;
+
     @BeforeEach
     @DisplayName("Registering a test company in the database called \"JUnitTest\" exists.")
     void init(){
-        h.registerTestCompany();
+        registeredTestCompany = h.registerTestCompany();
         testUser = h.getUserDTOForCompany();
     }
 
@@ -68,16 +70,13 @@ class LoginControlTest {
 
     @Test
     @DisplayName("Test if the isBannedCompany works as expected.")
-    void testIsBannedCompany(){
-        /*CompanyDTO comp = h.registerTestCompanies(1).get(0);
-        userRepository.findByUserid(comp.getUserid());
-
-        assertFalse(authorizationControl.isBannedCompany(userRepository.findByUserid(comp.getUserid())), "Company has banned set to false, so the method should return false.");
+    void testIsBannedCompany() throws DatabaseUserException {
+        assertFalse(authorizationControl.isCompanyOfUserBanned(userRepository.findByUserid(registeredTestCompany.getUserid())), "Company has banned set to false, so the method should return false.");
 
         h.deleteTestUsers();
-*/
-        //CompanyDTO comp = h.;
 
-        //assertTrue(authorizationControl.isBannedCompany(userRepository.findByUserid(comp.getUserid())), "Company has banned set to true, so the method should return true.");
+        CompanyDTO comp = h.registerTestCompanyBanned();
+
+        assertTrue(authorizationControl.isCompanyOfUserBanned(userRepository.findByUserid(comp.getUserid())), "Company has banned set to true, so the method should return true.");
     }
 }
