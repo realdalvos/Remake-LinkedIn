@@ -110,14 +110,25 @@ public class LoginView extends VerticalLayout {
                 VaadinService.reinitializeSession(VaadinService.getCurrentRequest());
                 // create session for user
                 grabAndSetUserIntoSession();
-                AccessHandler.setAccess(authorizationControl.getCurrentUser());
 
                 if(authorizationControl.getCurrentUser().getRole().equals(Globals.Roles.STUDENT)) {
+                    AccessHandler.setAccess(authorizationControl.getCurrentUser());
                     // navigate to jobs view for student
                     NavigateHandler.navigateToJobsView();
                 } else if(authorizationControl.getCurrentUser().getRole().equals(Globals.Roles.COMPANY)) {
-                    // navigate to my ads view for companies
-                    NavigateHandler.navigateToMyAdsView();
+                    boolean isBanned = authorizationControl.isBannedCompany(authorizationControl.getCurrentUser());
+
+                    if(isBanned){
+                        // setting access
+                        AccessHandler.setAccessBanned(authorizationControl.getCurrentUser());
+                        // navigate to ""
+                        NavigateHandler.navigateToDefaultPage();
+                    }else{
+                        // setting access
+                        AccessHandler.setAccess(authorizationControl.getCurrentUser());
+                        // navigate to my ads view for companies
+                        NavigateHandler.navigateToMyAdsView();
+                    }
                 }
             } else {
                 component.setError(true);
