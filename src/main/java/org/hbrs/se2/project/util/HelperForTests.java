@@ -48,6 +48,13 @@ public class HelperForTests {
         return registerTestCompanies(1).get(0);
     }
 
+    public CompanyDTO registerTestCompanyBanned(){
+        testCompany.setBanned(true);
+        CompanyDTO c = registerTestCompanies(1).get(0);
+        testCompany.setBanned(false);
+        return c;
+    }
+
     /**
      * A way to register multiple companies.
      * NOTE: All already registered test companies created with registerTestCompany() or registerTestCompany(int) will be deleted.
