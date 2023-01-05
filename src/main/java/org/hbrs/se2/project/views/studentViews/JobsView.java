@@ -44,13 +44,12 @@ import java.util.stream.Stream;
 @Route(value = Globals.Pages.JOBS_VIEW, layout = AppView.class, registerAtStartup = false)
 @PageTitle("Jobs")
 public class JobsView extends Div {
-    CommonUIElementProvider ui;
-    UserControl userControl;
-    RatingControl ratingControl;
+    private final CommonUIElementProvider ui;
+    private final UserControl userControl;
+    private final RatingControl ratingControl;
     // interactive search field
     private final TextField searchField = new TextField();
     private final Button searchButton = new Button(getTranslation("view.job.button.search"));
-    private final Button buttonAllJobs = new Button("Alle Jobs");
     // Create a Grid bound to the list
     private final Grid<JobDTO> grid = new Grid<>();
 
@@ -70,6 +69,7 @@ public class JobsView extends Div {
         // changing width of textField, buttonFilter and buttonAllJobs to improve on usability
         searchField.setWidth("25");
         searchButton.setWidth("25%");
+        Button buttonAllJobs = new Button("Alle Jobs");
         buttonAllJobs.setWidth("25%");
 
         searchField.setPlaceholder(getTranslation("view.job.text.search"));
@@ -108,7 +108,7 @@ public class JobsView extends Div {
             FormLayout buttons = new FormLayout();
 
             final TextField companyName = new TextField(getTranslation("view.job.text.company"));
-            final Span rating = ratingControl.getRating(job.getCompanyid());
+            final Span rating = getRating(job.getCompanyid());
             final TextField jobLocation = new TextField(getTranslation("view.job.text.location"));
             final TextField companyContactDetails = new TextField(getTranslation("view.job.text.contactDetails"));
             final TextArea jobDescription = new TextArea(getTranslation("view.job.text.description"));
@@ -122,9 +122,7 @@ public class JobsView extends Div {
             // add textFields to FormLayout
             formLayout.add(companyName, rating, jobLocation, companyContactDetails, jobDescription);
             Stream.of(companyName, jobLocation, companyContactDetails, jobDescription).forEach(
-                    field -> {
-                        field.setReadOnly(true);
-                    }
+                    field -> field.setReadOnly(true)
             );
 
             Button contact = new Button("Kontaktieren");
@@ -151,9 +149,7 @@ public class JobsView extends Div {
             if(!ratingControl.studentHasRatedCompany(job.getCompanyid(),  userControl.getStudentProfile(
                     userControl.getCurrentUser().getUserid()).getStudentid())) {
                 Button rate = new Button("Bewerten");
-                rate.addClickListener(event -> {
-                    rateDialog(job);
-                });
+                rate.addClickListener(event -> rateDialog(job));
                 buttons.add(rate);
             } else {
                 Button rate = new Button("Bereits bewertet");
@@ -208,6 +204,25 @@ public class JobsView extends Div {
         add(jobCountText);
     }
 
+    private Span getRating(int companyid){
+        Span rating = new Span("Unternehmensreputation: ");
+        Float avg = ratingControl.getRating(companyid);
+        if (avg == null) {
+            avg = 0.0F;
+        }
+        for (int i = 0; i < 5; i++) {
+            if (avg >= 1) {
+                rating.add(new Icon(VaadinIcon.STAR));
+            } else if (avg > 0.25 && avg < 0.75) {
+                rating.add(new Icon(VaadinIcon.STAR_HALF_LEFT_O));
+            } else {
+                rating.add(new Icon(VaadinIcon.STAR_O));
+            }
+            avg = avg - 1;
+        }
+        return rating;
+    }
+
     private void rateDialog(JobDTO job){
         Dialog dialog = new Dialog();
         AtomicInteger rating = new AtomicInteger();
@@ -220,14 +235,12 @@ public class JobsView extends Div {
         AtomicReference<Icon> fiveStars = new AtomicReference<>(new Icon(VaadinIcon.STAR_O));
         HorizontalLayout stars = new HorizontalLayout(oneStar.get(), twoStars.get(), threeStars.get(), fourStars.get(), fiveStars.get());
         Button confirm = new Button("Bewertung abgeben");
-        confirm.addClickListener(event -> {
-            ui.makeYesNoDialog("Möchtest du die Bewertung so einreichen?", click -> {
-                RatingDTO ratingDTO = new RatingDTOImpl(userControl.getStudentProfile(userControl.getCurrentUser().getUserid()).getStudentid(),
-                        job.getCompanyid(), rating.get());
-                ratingControl.createRating(ratingDTO);
-                UI.getCurrent().getPage().reload();
-            });
-        });
+        confirm.addClickListener(event -> ui.makeYesNoDialog("Möchtest du die Bewertung so einreichen?", click -> {
+            RatingDTO ratingDTO = new RatingDTOImpl(userControl.getStudentProfile(userControl.getCurrentUser().getUserid()).getStudentid(),
+                    job.getCompanyid(), rating.get());
+            ratingControl.createRating(ratingDTO);
+            UI.getCurrent().getPage().reload();
+        }));
         confirm.setEnabled(false);
         HorizontalLayout buttons = new HorizontalLayout(close, confirm);
         VerticalLayout layout = new VerticalLayout(new Text("Wie zufrieden bist du mit dem Unternehmen von einem Stern (nicht zufrieden) bis fünf Sternen (sehr zufrieden)?"),
