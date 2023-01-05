@@ -299,25 +299,7 @@ public class HelperForTests {
                 } else {
                     throw new Globals.IllegalOSExcpetion("You are using an uncommon OS: "+ System.getProperty("os.name")+" . please use either windows, mac or linux for this program");
                 }
-                return;
-            }/*
-            case "firefox":{
-                if(os.contains("WIN")){
-                    System.setProperty("webdriver.gecko.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/geckodriver_win64.exe");
-                } else if (os.contains("MAC")) {
-                    if(os.contains("ARM")) {
-                        System.setProperty("webdriver.gecko.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/gecjodriver_arm64.exe");
-                    }else {
-                        System.setProperty("webdriver.gecko.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/geckodriver_mac64");
-                    }
-                }else if(os.contains("NIX") || os.contains("NUX") || os.contains("AIX")){
-                    System.setProperty("webdriver.gecko.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/geckodriver_linux64");
-                } else {
-                    throw new Globals.IllegalOSExcpetion("You are using an uncommon OS: "+ System.getProperty("os.name")+" . please use either windows, mac or linux for this program");
-                }
-                return;
-            }*/
+            }
         }
-
     }
 }
