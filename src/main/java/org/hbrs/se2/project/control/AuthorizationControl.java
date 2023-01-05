@@ -52,7 +52,7 @@ public class AuthorizationControl {
         UI.getCurrent().getPage().setLocation("/");
     }
 
-    public boolean isBannedCompany(UserDTO user) {
-        return loginService.isBannedCompany(user);
+    public boolean isCompanyOfUserBanned(UserDTO user) throws DatabaseUserException {
+        return loginService.isCompanyOfUserBanned(user);
     }
 }

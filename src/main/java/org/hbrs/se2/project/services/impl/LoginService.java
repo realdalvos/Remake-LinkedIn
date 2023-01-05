@@ -1,5 +1,7 @@
 package org.hbrs.se2.project.services.impl;
 
+import org.hbrs.se2.project.control.ProfileControl;
+import org.hbrs.se2.project.control.ReportsControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
@@ -19,6 +21,10 @@ public class LoginService implements LoginServiceInterface {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private CompanyRepository companyRepository;
+    @Autowired
+    private ReportsControl reportsControl;
+    @Autowired
+    private ProfileControl profileControl;
 
     private UserDTO userDTO = null;
 
@@ -54,11 +60,17 @@ public class LoginService implements LoginServiceInterface {
         return userTmp;
     }
 
-    public boolean isBannedCompany(UserDTO user) {
+    public boolean isCompanyOfUserBanned(UserDTO user) throws DatabaseUserException {
         CompanyDTO company = companyRepository.findByUserid(user.getUserid());
         if(company == null){
             return false;
         }
+
+        if(reportsControl.companyShouldBeBanned(company)){
+            company.setBanned(true);
+            profileControl.saveCompanyData(user, company);
+        }
+        company = companyRepository.findByUserid(user.getUserid());
         return company.getBanned();
     }
 }

@@ -19,5 +19,5 @@ public interface LoginServiceInterface {
      * */
     UserDTO getCurrentUser();
 
-    boolean isBannedCompany(UserDTO user);
+    boolean isCompanyOfUserBanned(UserDTO user) throws DatabaseUserException;
 }
