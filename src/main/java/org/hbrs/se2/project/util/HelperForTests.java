@@ -10,6 +10,8 @@ import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.StudentRepository;
 import org.hbrs.se2.project.repository.UserRepository;
+import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
@@ -245,12 +247,16 @@ public class HelperForTests {
     private StudentDTO clone(StudentDTO s){
         return new StudentDTOImpl(s.getUserid(), s.getFirstname(), s.getFirstname(), s.getMatrikelnumber(), s.getUniversity());
     }
-    public static void synchronizedwait(Object object, long timeoutMillis){
-        synchronized (object){
+    public static void synchronizedwait(WebDriver driver, long timeoutMillis){
+        synchronized (driver){
             try {
-                object.wait(timeoutMillis);
+                driver.wait(timeoutMillis);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Logger logger = Utils.getLogger("HelperForTests");
+                logger.warn("Method synchronized wait failed", e);
+                // Restore interrupted state...
+                Thread.currentThread().interrupt();
             }
         }
     }
