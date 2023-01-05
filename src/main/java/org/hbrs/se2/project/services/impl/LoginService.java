@@ -5,6 +5,8 @@ import org.hbrs.se2.project.control.ReportsControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
+import org.hbrs.se2.project.dtos.impl.CompanyDTOImpl;
+import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.repository.CompanyRepository;
 import org.hbrs.se2.project.repository.UserRepository;
 import org.hbrs.se2.project.services.LoginServiceInterface;
@@ -67,8 +69,10 @@ public class LoginService implements LoginServiceInterface {
         }
 
         if(reportsControl.companyShouldBeBanned(company)){
-            company.setBanned(true);
-            profileControl.saveCompanyData(user, company);
+            CompanyDTOImpl changedCompany = new CompanyDTOImpl(company.getUserid(), company.getName(), company.getIndustry(), true);
+            changedCompany.setCompanyid(company.getCompanyid());
+
+            profileControl.saveCompanyData(user, changedCompany);
         }
         company = companyRepository.findByUserid(user.getUserid());
         return company.getBanned();
