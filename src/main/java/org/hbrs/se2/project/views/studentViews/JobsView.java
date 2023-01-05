@@ -2,7 +2,6 @@ package org.hbrs.se2.project.views.studentViews;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -46,16 +45,23 @@ import java.util.stream.Stream;
 public class JobsView extends Div {
     private final CommonUIElementProvider ui;
     private final UserControl userControl;
+    private final ReportsControl reportsControl;
     private final RatingControl ratingControl;
     // interactive search field
     private final TextField searchField = new TextField();
     private final Button searchButton = new Button(getTranslation("view.job.button.search"));
+    private Button report;
+    private Button rate;
+    private Button noReport;
+    private Button noRate;
+    private final HorizontalLayout buttons = new HorizontalLayout();
     // Create a Grid bound to the list
     private final Grid<JobDTO> grid = new Grid<>();
 
     public JobsView(JobControl jobControl, UserControl userControl, CommonUIElementProvider ui, ReportsControl reportsControl, RatingControl ratingControl) {
         this.userControl = userControl;
         this.ui = ui;
+        this.reportsControl = reportsControl;
         this.ratingControl = ratingControl;
 
         HorizontalLayout layout = new HorizontalLayout();
@@ -103,9 +109,14 @@ public class JobsView extends Div {
         searchButton.addClickListener(event -> {grid.setItems(jobControl.getJobsMatchingKeyword(searchField.getValue())); searchField.clear();});
         // set items details renderer
         grid.setItemDetailsRenderer(new ComponentRenderer<>(job -> {
+            buttons.removeAll();
+            Button contact = new Button("Kontaktieren");
+            report = new Button("Melden");
+            rate = new Button("Bewerten");
+            noReport = new Button("Bereits gemeldet");
+            noRate = new Button("Bereits bewertet");
             VerticalLayout vLayout = new VerticalLayout();
             FormLayout formLayout = new FormLayout();
-            FormLayout buttons = new FormLayout();
 
             final TextField companyName = new TextField(getTranslation("view.job.text.company"));
             final Span rating = getRating(job.getCompanyid());
@@ -125,41 +136,32 @@ public class JobsView extends Div {
                     field -> field.setReadOnly(true)
             );
 
-            Button contact = new Button("Kontaktieren");
             contact.addClickListener(event -> ui.makeConversationDialogStudent(job.getCompanyid(), userControl.getStudentProfile(
                     userControl.getCurrentUser().getUserid()).getStudentid(), job.getJobid()));
             buttons.add(contact);
-            if(!reportsControl.studentHasReportedCompany(job.getCompanyid(),  userControl.getStudentProfile(
+
+            noReport.setEnabled(false);
+            noRate.setEnabled(false);
+
+            if(!reportsControl.studentHasReportedCompany(job.getCompanyid(), userControl.getStudentProfile(
                     userControl.getCurrentUser().getUserid()).getStudentid())) {
-                Button report = new Button("Melden");
-                report.addClickListener(event -> {
-                    Binder<ReportsDTOImpl> binder = new BeanValidationBinder<>(ReportsDTOImpl.class);
-                    binder.setBean(new ReportsDTOImpl(job.getCompanyid(), userControl.getStudentProfile(
-                            userControl.getCurrentUser().getUserid()).getStudentid()));
-                    reportsControl.createReport(binder.getBean());
-                    UI.getCurrent().getPage().reload();
-                });
+                report.addClickListener(event -> reportDialog(job.getCompanyid(), userControl.getStudentProfile(
+                        userControl.getCurrentUser().getUserid()).getStudentid()));
                 buttons.add(report);
             } else {
-                Button report = new Button("Bereits gemeldet");
-                report.setEnabled(false);
-                buttons.add(report);
+                buttons.add(noReport);
             }
 
             if(!ratingControl.studentHasRatedCompany(job.getCompanyid(),  userControl.getStudentProfile(
                     userControl.getCurrentUser().getUserid()).getStudentid())) {
-                Button rate = new Button("Bewerten");
                 rate.addClickListener(event -> rateDialog(job));
                 buttons.add(rate);
             } else {
-                Button rate = new Button("Bereits bewertet");
-                rate.setEnabled(false);
-                buttons.add(rate);
+                buttons.add(noRate);
             }
 
             formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 2));
             formLayout.setColspan(jobDescription, 2);
-            buttons.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 3));
 
             vLayout.add(formLayout, buttons);
             return vLayout;
@@ -186,7 +188,7 @@ public class JobsView extends Div {
         List<JobDTO> jobDetails = jobControl.getAllJobs();
 
         int jobCount = jobDetails.size();
-        String s = "Es sind momentan " + jobCount + " Jobs für Sie verfügbar! ";
+        String s = "Es sind momentan " + jobCount + " Jobs für dich verfügbar! ";
         H2 jobCountText = new H2(s);
 
         jobCountText.getElement().getStyle().set("font-size","15px");
@@ -198,7 +200,7 @@ public class JobsView extends Div {
         with introductionText() below the career page will show information and help the user
         guide through the option of either filtering the job ads or showing all available job ads
         */
-        add(ui.introductionText("Willkommen auf Ihrer Karriereseite!", "Sie können nach Jobs filtern oder sich direkt alle anzeigen lassen!"));
+        add(ui.introductionText("Willkommen auf deiner Karriereseite!", "Du kannst nach Jobs filtern oder dir direkt alle anzeigen lassen!"));
         add(topLayout);
         add(grid);
         add(jobCountText);
@@ -223,6 +225,39 @@ public class JobsView extends Div {
         return rating;
     }
 
+    private void reportDialog(int companyid, int studentid) {
+        Dialog dialog = new Dialog();
+        dialog.setWidth("600px");
+        VerticalLayout layout = new VerticalLayout(new Text("Hier kannst du ein Unternehmen wegen Fehlverhaltens oder schlechten Erfahrungen melden. " +
+                "Gib bitte eine kurze Beschreibung des zu Grunde liegenden Sachverhaltes an."));
+        TextArea content = new TextArea("Grund der Meldung:");
+        content.setWidthFull();
+        content.setHeight("200px");
+        content.setRequired(true);
+        HorizontalLayout reportButtons = new HorizontalLayout();
+        Button close = new Button("Abbrechen");
+        close.addClickListener(event -> dialog.close());
+        Button send = new Button("Senden");
+        send.addClickListener(event -> {
+            if (!content.isEmpty()) {
+                ui.makeYesNoDialog("Anfrage abschicken?", confirm -> {
+                    Binder<ReportsDTOImpl> binder = new BeanValidationBinder<>(ReportsDTOImpl.class);
+                    binder.setBean(new ReportsDTOImpl(companyid, studentid, content.getValue()));
+                    reportsControl.createReport(binder.getBean());
+                    buttons.replace(report, noReport);
+                    dialog.close();
+                });
+            } else {
+                ui.makeDialog("Gib bitte einen Grund für die Meldung an.");
+            }
+        });
+        reportButtons.add(close, send);
+        layout.add(content, reportButtons);
+        layout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, reportButtons);
+        dialog.add(layout);
+        dialog.open();
+    }
+
     private void rateDialog(JobDTO job){
         Dialog dialog = new Dialog();
         AtomicInteger rating = new AtomicInteger();
@@ -239,13 +274,15 @@ public class JobsView extends Div {
             RatingDTO ratingDTO = new RatingDTOImpl(userControl.getStudentProfile(userControl.getCurrentUser().getUserid()).getStudentid(),
                     job.getCompanyid(), rating.get());
             ratingControl.createRating(ratingDTO);
-            UI.getCurrent().getPage().reload();
+            buttons.replace(rate, noRate);
+            dialog.close();
         }));
         confirm.setEnabled(false);
-        HorizontalLayout buttons = new HorizontalLayout(close, confirm);
+        HorizontalLayout rateButtons = new HorizontalLayout(close, confirm);
         VerticalLayout layout = new VerticalLayout(new Text("Wie zufrieden bist du mit dem Unternehmen von einem Stern (nicht zufrieden) bis fünf Sternen (sehr zufrieden)?"),
-                stars, buttons);
+                stars, rateButtons);
         layout.setWidth("400px");
+        layout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, stars, rateButtons);
         oneStar.get().addClickListener(event -> {
             oneStar.set(new Icon(VaadinIcon.STAR));
             rating.set(1);
