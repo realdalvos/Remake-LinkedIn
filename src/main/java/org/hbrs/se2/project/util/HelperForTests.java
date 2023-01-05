@@ -48,13 +48,6 @@ public class HelperForTests {
         return registerTestCompanies(1).get(0);
     }
 
-    public CompanyDTO registerTestCompanyBanned(){
-        testCompany.setBanned(true);
-        CompanyDTO c = registerTestCompanies(1).get(0);
-        testCompany.setBanned(false);
-        return c;
-    }
-
     /**
      * A way to register multiple companies.
      * NOTE: All already registered test companies created with registerTestCompany() or registerTestCompany(int) will be deleted.
@@ -74,6 +67,7 @@ public class HelperForTests {
             UserDTOImpl testUser = new UserDTOImpl(tmp.getUsername() + suffix, tmp.getPassword() + suffix, tmp.getEmail() + suffix, tmp.getRole());
 
             CompanyDTO tmpC = getCompanyDTO();
+            //System.out.println(tmpC.getBanned());
             CompanyDTOImpl testCompany = new CompanyDTOImpl(0, tmpC.getName() + suffix, tmpC.getIndustry() + suffix, false);
 
             //make space for user
@@ -244,6 +238,7 @@ public class HelperForTests {
     /*
      * Same concerns as in the clone Method for users.*/
     private CompanyDTO clone(CompanyDTO c){
+        System.out.println("isbanned" + c.getBanned());
         return new CompanyDTOImpl(c.getUserid(), c.getName(), c.getIndustry(), c.getBanned());
     }
 
