@@ -21,6 +21,8 @@ public class InboxControlTest {
     @Autowired
     InboxControl inboxControl;
     @Autowired
+    ConversationRepository conversationRepository;
+    @Autowired
     UserRepository userRepository;
     @Autowired
     JobControl jobControl;
@@ -51,6 +53,7 @@ public class InboxControlTest {
     @DisplayName("Deleting the user called \"JUnitTest\". By deleting both users, all conversations, including the messages, involving the users get deleted")
     void tearDown() {
         h.deleteTestUsers();
+        conversationRepository.garbageCollection();
     }
 
     @Test
