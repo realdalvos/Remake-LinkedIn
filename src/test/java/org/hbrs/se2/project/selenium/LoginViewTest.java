@@ -9,6 +9,7 @@ import org.hbrs.se2.project.repository.SkillRepository;
 import org.hbrs.se2.project.repository.TopicRepository;
 import org.hbrs.se2.project.repository.UserRepository;
 import org.hbrs.se2.project.util.HelperForTests;
+import org.junit.Ignore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +30,7 @@ import static org.hbrs.se2.project.util.Globals.MAXIMUM_PAGE_LOADINGTIME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@Ignore("Will not run on jenkins")
 public class LoginViewTest {
     @Autowired
     UserRepository userRepository;
