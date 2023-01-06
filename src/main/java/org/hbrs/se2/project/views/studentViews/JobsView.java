@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.views.studentViews;
 
+import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -268,7 +269,12 @@ public class JobsView extends Div {
         AtomicReference<Icon> threeStars = new AtomicReference<>(new Icon(VaadinIcon.STAR_O));
         AtomicReference<Icon> fourStars = new AtomicReference<>(new Icon(VaadinIcon.STAR_O));
         AtomicReference<Icon> fiveStars = new AtomicReference<>(new Icon(VaadinIcon.STAR_O));
-        HorizontalLayout stars = new HorizontalLayout(oneStar.get(), twoStars.get(), threeStars.get(), fourStars.get(), fiveStars.get());
+        Span one = new Span(oneStar.get());
+        Span two = new Span(twoStars.get());
+        Span three = new Span(threeStars.get());
+        Span four = new Span(fourStars.get());
+        Span five = new Span(fiveStars.get());
+        HorizontalLayout stars = new HorizontalLayout(one, two, three, four, five);
         Button confirm = new Button("Bewertung abgeben");
         confirm.addClickListener(event -> ui.makeYesNoDialog("Möchtest du die Bewertung so einreichen?", click -> {
             RatingDTO ratingDTO = new RatingDTOImpl(userControl.getStudentProfile(userControl.getCurrentUser().getUserid()).getStudentid(),
@@ -283,49 +289,59 @@ public class JobsView extends Div {
                 stars, rateButtons);
         layout.setWidth("400px");
         layout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, stars, rateButtons);
-        oneStar.get().addClickListener(event -> {
+        one.addClickListener(event -> {
             oneStar.set(new Icon(VaadinIcon.STAR));
+            twoStars.set(new Icon(VaadinIcon.STAR_O));
+            threeStars.set(new Icon(VaadinIcon.STAR_O));
+            fourStars.set(new Icon(VaadinIcon.STAR_O));
+            fiveStars.set(new Icon(VaadinIcon.STAR_O));
             rating.set(1);
-            stars.removeAll();
-            stars.add(oneStar.get(), twoStars.get(), threeStars.get(), fourStars.get(), fiveStars.get());
+            Stream.of(one, two, three, four, five).forEach(HasComponents::removeAll);
+            one.add(oneStar.get()); two.add(twoStars.get()); three.add(threeStars.get()); four.add(fourStars.get()); five.add(fiveStars.get());
             confirm.setEnabled(true);
         });
-        twoStars.get().addClickListener(event -> {
+        two.addClickListener(event -> {
             oneStar.set(new Icon(VaadinIcon.STAR));
             twoStars.set(new Icon(VaadinIcon.STAR));
+            threeStars.set(new Icon(VaadinIcon.STAR_O));
+            fourStars.set(new Icon(VaadinIcon.STAR_O));
+            fiveStars.set(new Icon(VaadinIcon.STAR_O));
             rating.set(2);
-            stars.removeAll();
-            stars.add(oneStar.get(), twoStars.get(), threeStars.get(), fourStars.get(), fiveStars.get());
+            Stream.of(one, two, three, four, five).forEach(HasComponents::removeAll);
+            one.add(oneStar.get()); two.add(twoStars.get()); three.add(threeStars.get()); four.add(fourStars.get()); five.add(fiveStars.get());
             confirm.setEnabled(true);
         });
-        threeStars.get().addClickListener(event -> {
+        three.addClickListener(event -> {
             oneStar.set(new Icon(VaadinIcon.STAR));
             twoStars.set(new Icon(VaadinIcon.STAR));
             threeStars.set(new Icon(VaadinIcon.STAR));
+            fourStars.set(new Icon(VaadinIcon.STAR_O));
+            fiveStars.set(new Icon(VaadinIcon.STAR_O));
             rating.set(3);
-            stars.removeAll();
-            stars.add(oneStar.get(), twoStars.get(), threeStars.get(), fourStars.get(), fiveStars.get());
+            Stream.of(one, two, three, four, five).forEach(HasComponents::removeAll);
+            one.add(oneStar.get()); two.add(twoStars.get()); three.add(threeStars.get()); four.add(fourStars.get()); five.add(fiveStars.get());
             confirm.setEnabled(true);
         });
-        fourStars.get().addClickListener(event -> {
+        four.addClickListener(event -> {
             oneStar.set(new Icon(VaadinIcon.STAR));
             twoStars.set(new Icon(VaadinIcon.STAR));
             threeStars.set(new Icon(VaadinIcon.STAR));
             fourStars.set(new Icon(VaadinIcon.STAR));
+            fiveStars.set(new Icon(VaadinIcon.STAR_O));
             rating.set(4);
-            stars.removeAll();
-            stars.add(oneStar.get(), twoStars.get(), threeStars.get(), fourStars.get(), fiveStars.get());
+            Stream.of(one, two, three, four, five).forEach(HasComponents::removeAll);
+            one.add(oneStar.get()); two.add(twoStars.get()); three.add(threeStars.get()); four.add(fourStars.get()); five.add(fiveStars.get());
             confirm.setEnabled(true);
         });
-        fiveStars.get().addClickListener(event -> {
+        five.addClickListener(event -> {
             oneStar.set(new Icon(VaadinIcon.STAR));
             twoStars.set(new Icon(VaadinIcon.STAR));
             threeStars.set(new Icon(VaadinIcon.STAR));
             fourStars.set(new Icon(VaadinIcon.STAR));
             fiveStars.set(new Icon(VaadinIcon.STAR));
             rating.set(5);
-            stars.removeAll();
-            stars.add(oneStar.get(), twoStars.get(), threeStars.get(), fourStars.get(), fiveStars.get());
+            Stream.of(one, two, three, four, five).forEach(HasComponents::removeAll);
+            one.add(oneStar.get()); two.add(twoStars.get()); three.add(threeStars.get()); four.add(fourStars.get()); five.add(fiveStars.get());
             confirm.setEnabled(true);
         });
         dialog.add(layout);
