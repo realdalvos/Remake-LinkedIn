@@ -2,13 +2,11 @@ package org.hbrs.se2.project.control;
 
 import org.hbrs.se2.project.dtos.CompanyDTO;
 import org.hbrs.se2.project.dtos.JobDTO;
-import org.hbrs.se2.project.dtos.ReportsDTO;
 import org.hbrs.se2.project.dtos.StudentDTO;
 import org.hbrs.se2.project.dtos.impl.JobDTOImpl;
 import org.hbrs.se2.project.dtos.impl.ReportsDTOImpl;
 import org.hbrs.se2.project.repository.JobRepository;
 import org.hbrs.se2.project.repository.ReportsRepository;
-import org.hbrs.se2.project.services.impl.ReportsService;
 import org.hbrs.se2.project.util.HelperForTests;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,14 +36,11 @@ public class ReportsControlTest {
     @Autowired
     CompanyDTO testCompanyDTO;
     @Autowired
-    UserControl userControl;
-    @Autowired
     StudentDTO testStudent;
     @Autowired
     ReportsRepository reportsRepository;
 
     List<StudentDTO> registeredStudents = new ArrayList<>();
-
 
     @BeforeEach
     void setUp(){
