@@ -38,7 +38,7 @@ public class ConversationDTOImpl implements ConversationDTO {
         return studentid;
     }
 
-    public void setStudentid(int studentid) {
+    public void setStudentid(Integer studentid) {
         this.studentid = studentid;
     }
 
@@ -46,7 +46,7 @@ public class ConversationDTOImpl implements ConversationDTO {
         return companyid;
     }
 
-    public void setCompanyid(int companyid) {
+    public void setCompanyid(Integer companyid) {
         this.companyid = companyid;
     }
 

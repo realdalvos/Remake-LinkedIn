@@ -134,4 +134,20 @@ public class InboxControl {
         return  inboxService.getNameOfCompanyFromConversation(conversation);
     }
 
+    /**
+     * Remove the student from a given conversation
+     * @param conversation ConversationDTO representing the conversation
+     */
+    public void endConversationStudent(ConversationDTO conversation) {
+        inboxService.endConversationStudent(conversation);
+    }
+
+    /**
+     * Remove the company from a given conversation
+     * @param conversation ConversationDTO representing the conversation
+     */
+    public void endConversationCompany(ConversationDTO conversation) {
+        inboxService.endConversationCompany(conversation);
+    }
+
 }

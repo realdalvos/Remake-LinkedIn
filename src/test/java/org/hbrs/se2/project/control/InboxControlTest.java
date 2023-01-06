@@ -196,6 +196,24 @@ public class InboxControlTest {
         assertEquals(inboxControl.getNumberOfUnreadMessagesFromConversation(conversationDTO.getConversationid(), companyDTO.getUserid()), inboxControl.getNumberOfUnreadMessagesFromCompany(companyDTO.getUserid()));
     }
 
+    @Test
+    @DisplayName("Tests if users get removed correctly from a conversation when ending them.")
+    void endConversationTest(){
+        ConversationDTO conversationStudentTest = createConversation("removeStudentTest");
+        ConversationDTO conversationCompanyTest = createConversation("removeCompanyTest");
+
+        inboxControl.endConversationStudent(conversationStudentTest);
+        inboxControl.endConversationCompany(conversationCompanyTest);
+
+        ConversationDTO conversationStudent = conversationRepository.findByConversationid(conversationStudentTest.getConversationid());
+        ConversationDTO conversationCompany = conversationRepository.findByConversationid(conversationCompanyTest.getConversationid());
+
+        assertEquals(companyDTO.getCompanyid(), conversationStudent.getCompanyid());
+        assertNull(conversationStudent.getStudentid());
+        assertEquals(studentDTO.getStudentid(), conversationCompany.getStudentid());
+        assertNull(conversationCompany.getCompanyid());
+    }
+
     private ConversationDTO createConversation(String title){
         ConversationDTO conversationDTO = new ConversationDTOImpl();
         conversationDTO.setCompanyid(companyDTO.getCompanyid());

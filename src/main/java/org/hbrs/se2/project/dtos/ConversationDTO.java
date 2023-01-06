@@ -18,10 +18,10 @@ public interface ConversationDTO extends Serializable {
 
     public Integer getStudentid();
 
-    public void setStudentid(int studentid);
+    public void setStudentid(Integer studentid);
 
     public Integer getCompanyid();
 
-    public void setCompanyid(int companyid);
+    public void setCompanyid(Integer companyid);
 
 }
