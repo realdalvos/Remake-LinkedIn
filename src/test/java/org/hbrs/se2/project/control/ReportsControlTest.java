@@ -41,7 +41,6 @@ public class ReportsControlTest {
 
     List<StudentDTO> registeredStudents = new ArrayList<>();
 
-
     @BeforeEach
     void setUp(){
         testCompanyDTO = helper.registerTestCompany();

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 public class RatingControl {
 
     @Autowired
-    RatingService ratingService;
+    private RatingService ratingService;
 
     /**
      * Get the average rating of a company
