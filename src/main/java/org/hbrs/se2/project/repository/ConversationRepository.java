@@ -12,6 +12,8 @@ import java.util.Set;
 @Repository
 public interface ConversationRepository extends JpaRepository<Conversation, Integer> {
 
+    ConversationDTO findByConversationid(int id);
+
     @Query("SELECT c FROM Conversation c JOIN c.messages m WHERE c.studentid=:studentid ORDER BY m.timestamp DESC")
     Set<ConversationDTO> findByStudentid(int studentid);
 

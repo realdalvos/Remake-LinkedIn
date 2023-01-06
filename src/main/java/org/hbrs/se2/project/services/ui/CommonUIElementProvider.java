@@ -42,8 +42,6 @@ public class CommonUIElementProvider {
         this.jobControl = jobControl;
     }
 
-    private static final String CLOSE = "Abbrechen";
-
     /**
      * Creates an Error Dialog
      *
@@ -80,7 +78,7 @@ public class CommonUIElementProvider {
     public void makeConfirm(String message, ComponentEventListener<ClickEvent<Button>> listener) {
         VerticalLayout vLayout = new VerticalLayout();
         Dialog dialog = new Dialog();
-        Button close = new Button(CLOSE);
+        Button close = new Button("Abbrechen");
         close.addClickListener(event -> dialog.close());
         Button reject = new Button("Verwerfen");
         reject.addClickListener(event -> UI.getCurrent().getPage().reload());
@@ -97,7 +95,7 @@ public class CommonUIElementProvider {
     }
 
     public void makeConversationDialogStudent(int companyid, int studentid, int jobid) {
-        conversationDialog(companyid, studentid, Optional.of(jobid), Optional.empty()).open();
+        conversationDialog(companyid, studentid, Optional.of(jobid), Optional.empty());
     }
 
     public void makeConversationDialogCompany(int companyid, int studentid) {
@@ -106,10 +104,10 @@ public class CommonUIElementProvider {
         jobs.setPlaceholder("Stellenangebot auswählen");
         jobs.setItems(jobControl.getAllCompanyJobs(companyid));
         jobs.setItemLabelGenerator(JobDTO::getTitle);
-        conversationDialog(companyid, studentid, Optional.empty(), Optional.of(jobs)).open();
+        conversationDialog(companyid, studentid, Optional.empty(), Optional.of(jobs));
     }
 
-    private Dialog conversationDialog(int companyid, int studentid, Optional<Integer> jobid, Optional<Select<JobDTO>> jobSelection) {
+    private void conversationDialog(int companyid, int studentid, Optional<Integer> jobid, Optional<Select<JobDTO>> jobSelection) {
         Dialog dialog = new Dialog();
         dialog.setWidth("600px");
         VerticalLayout vLayout = new VerticalLayout(new Text("Kontakt:"));
@@ -128,7 +126,7 @@ public class CommonUIElementProvider {
         content.setHeight("200px");
         content.setRequired(true);
         HorizontalLayout buttons = new HorizontalLayout();
-        Button close = new Button(CLOSE);
+        Button close = new Button("Abbrechen");
         close.addClickListener(event -> dialog.close());
         Button send = new Button("Senden");
         send.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -158,7 +156,7 @@ public class CommonUIElementProvider {
         vLayout.add(title, content, buttons);
         vLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, buttons);
         dialog.add(vLayout);
-        return dialog;
+        dialog.open();
     }
 
     public VerticalLayout introductionText(String headline, String description) {

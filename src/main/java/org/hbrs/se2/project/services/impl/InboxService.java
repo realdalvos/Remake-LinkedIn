@@ -101,11 +101,23 @@ public class InboxService {
             StudentDTO student = studentRepository.findByStudentid(conversation.getStudentid());
             return student.getFirstname() + " " + student.getLastname();
         }
-        return "Gelöschte*r Student*in";
+        return "Gesprächsteilnehmer nicht mehr verfügbar";
     }
 
     public String getNameOfCompanyFromConversation(ConversationDTO conversation) {
-        return conversation.getCompanyid() != null ? companyRepository.findByCompanyid(conversation.getCompanyid()).getName() : "Gelöschtes Unternehmen";
+        return conversation.getCompanyid() != null ? companyRepository.findByCompanyid(conversation.getCompanyid()).getName() : "Gesprächsteilnehmer nicht mehr verfügbar";
+    }
+
+    public void endConversationStudent(ConversationDTO conversation) {
+        conversation.setStudentid(null);
+        conversationRepository.save(entityCreationService.conversationFactory().createEntity(conversation));
+        conversationRepository.garbageCollection();
+    }
+
+    public void endConversationCompany(ConversationDTO conversation) {
+        conversation.setCompanyid(null);
+        conversationRepository.save(entityCreationService.conversationFactory().createEntity(conversation));
+        conversationRepository.garbageCollection();
     }
 
 }
