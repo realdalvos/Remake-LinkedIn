@@ -2,7 +2,6 @@ package org.hbrs.se2.project.dtos.impl;
 
 import org.hbrs.se2.project.dtos.ReportsDTO;
 import org.springframework.stereotype.Component;
-
 import javax.validation.constraints.NotNull;
 
 @Component
@@ -18,16 +17,10 @@ public class ReportsDTOImpl implements  ReportsDTO{
 
     public ReportsDTOImpl(){}
 
-    public  ReportsDTOImpl(int companyid, int studentid){
+    public  ReportsDTOImpl(int companyid, int studentid, String text){
         this.companyid = companyid;
         this.studentid = studentid;
-        this.text = "";
-    }
-    public ReportsDTOImpl(int reportid, int companyid, String text, int studentid){
-        this.reportid = reportid;
-        this.companyid = companyid;
         this.text = text;
-        this.studentid = studentid;
     }
 
     @Override
@@ -69,4 +62,5 @@ public class ReportsDTOImpl implements  ReportsDTO{
     public void setStudentid(int studentid) {
         this.studentid = studentid;
     }
+
 }
