@@ -2,7 +2,7 @@ package org.hbrs.se2.project.util;
 
 public class Globals {
     public static final String CURRENT_USER = "current_User";
-    public static final long MAXIMUM_PAGE_LOADINGTIME = 1000;
+    public static final long MAXIMUM_PAGE_LOADINGTIME = 2000;
 
     private Globals() {
         throw new IllegalStateException("Utility class; cannot be instantiated!");
