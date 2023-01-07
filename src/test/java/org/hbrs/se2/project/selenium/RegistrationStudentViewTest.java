@@ -7,7 +7,6 @@ import org.hbrs.se2.project.dtos.StudentDTO;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.repository.*;
 import org.hbrs.se2.project.util.HelperForTests;
-import org.junit.Ignore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +27,6 @@ import static org.hbrs.se2.project.util.Globals.MAXIMUM_PAGE_LOADINGTIME;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Ignore("Will not run on jenkins")
 public class RegistrationStudentViewTest {
     @Autowired
     UserRepository userRepository;
