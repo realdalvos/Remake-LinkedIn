@@ -74,10 +74,10 @@ public class JobsView extends Div {
         searchField.setClearButtonVisible(true); // possibility to delete filter words
 
         // changing width of textField, buttonFilter and buttonAllJobs to improve on usability
-        searchField.setWidth("25");
-        searchButton.setWidth("25%");
+        searchField.setWidth("450px");
+        searchButton.setWidth("15%");
         Button buttonAllJobs = new Button("Alle Jobs");
-        buttonAllJobs.setWidth("25%");
+        buttonAllJobs.setWidth("15%");
 
         searchField.setPlaceholder(getTranslation("view.job.text.search"));
 
@@ -188,9 +188,7 @@ public class JobsView extends Div {
 
         List<JobDTO> jobDetails = jobControl.getAllJobs();
 
-        int jobCount = jobDetails.size();
-        String s = "Es sind momentan " + jobCount + " Jobs für dich verfügbar! ";
-        H2 jobCountText = new H2(s);
+        H2 jobCountText = new H2("Es sind momentan " + jobDetails.size() + " Jobs für dich verfügbar!");
 
         jobCountText.getElement().getStyle().set("font-size","15px");
         jobCountText.getElement().getStyle().set("text-align","center");
@@ -232,6 +230,7 @@ public class JobsView extends Div {
         VerticalLayout layout = new VerticalLayout(new Text("Hier kannst du ein Unternehmen wegen Fehlverhaltens oder schlechten Erfahrungen melden. " +
                 "Gib bitte eine kurze Beschreibung des zu Grunde liegenden Sachverhaltes an."));
         TextArea content = new TextArea("Grund der Meldung:");
+        content.setMaxLength(1000);
         content.setWidthFull();
         content.setHeight("200px");
         content.setRequired(true);
@@ -247,6 +246,7 @@ public class JobsView extends Div {
                     reportsControl.createReport(binder.getBean());
                     buttons.replace(report, noReport);
                     dialog.close();
+                    ui.throwNotification("Unternehmen erfolgreich gemeldet.");
                 });
             } else {
                 ui.makeDialog("Gib bitte einen Grund für die Meldung an.");
@@ -282,6 +282,7 @@ public class JobsView extends Div {
             ratingControl.createRating(ratingDTO);
             buttons.replace(rate, noRate);
             dialog.close();
+            ui.throwNotification("Unternehmen erfolgreich bewertet.");
         }));
         confirm.setEnabled(false);
         HorizontalLayout rateButtons = new HorizontalLayout(close, confirm);

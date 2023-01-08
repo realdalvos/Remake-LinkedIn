@@ -79,7 +79,7 @@ public class LoginView extends VerticalLayout {
         }));
         if (!understood.get() && UI.getCurrent().getSession().getAttribute("banner") == null) {
             UI.getCurrent().getSession().setAttribute("banner", true);
-            cookieBanner().open();
+            cookieBanner();
         }
 
         // buttons
@@ -157,7 +157,7 @@ public class LoginView extends VerticalLayout {
         UI.getCurrent().getSession().setAttribute(Globals.CURRENT_USER, userDTO);
     }
 
-    private Notification cookieBanner() {
+    private void cookieBanner() {
         Notification notification = new Notification();
         notification.setPosition(Notification.Position.BOTTOM_STRETCH);
         Span text = new Span("Diese Website verwendet für die technische Funktionalität notwendige Cookies.");
@@ -174,7 +174,7 @@ public class LoginView extends VerticalLayout {
         info.setVerticalComponentAlignment(Alignment.CENTER, text, link);
         consent.getElement().getStyle().set("margin-left", "auto");
         notification.add(info);
-        return notification;
+        notification.open();
     }
 
 }

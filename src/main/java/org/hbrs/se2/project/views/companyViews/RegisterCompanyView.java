@@ -43,6 +43,7 @@ public class RegisterCompanyView extends RegisterView {
 
         //set layout for text input
         HorizontalLayout inputTextLayout = new HorizontalLayout();
+        name.setMaxLength(32);
         inputTextLayout.add(createFormLayout(new Component[]{name,username,email,userPassword,confirmPassword}));
         inputTextLayout.setAlignItems(Alignment.CENTER);
 
@@ -69,6 +70,7 @@ public class RegisterCompanyView extends RegisterView {
                     // function to register new company
                     registrationControl.registerCompany(userBinder.getBean(), companyBinder.getBean());
                     NavigateHandler.navigateToDefaultPage();
+                    ui.throwNotification("Erfolgreich registriert. Du kannst dich nun einloggen.");
                 } else {
                     ui.makeDialog("Überprüfen Sie bitte Ihre Eingaben");
                     logger.info("Not all fields have been filled in");

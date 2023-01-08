@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.views.companyViews;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -53,31 +52,36 @@ public class MyAdsView extends Div {
         this.userControl = userControl;
 
         title.setMaxWidth("33%");
+        title.setMaxLength(75);
         title.setWidthFull();
         salary.setMaxWidth("33%");
         salary.setWidthFull();
         location.setMaxWidth("33%");
+        location.setMaxLength(64);
         location.setWidthFull();
         description.setMaxWidth("55%");
+        description.setMaxLength(1024);
         description.setWidthFull();
         contactdetails.setMaxWidth("30%");
+        contactdetails.setMaxLength(100);
         contactdetails.setWidthFull();
 
         Grid<JobDTO> grid = new Grid<>();
 
         grid.setItems(jobControl.getAllCompanyJobs(userControl.getCompanyProfile(userControl.getCurrentUser().getUserid()).getCompanyid()));
         grid.setSelectionMode(Grid.SelectionMode.NONE);
-        grid.setHeightByRows(true);
+        grid.setAllRowsVisible(true);
         grid.addColumn(JobDTO::getTitle).setHeader(getTranslation("view.job.text.title")).setSortable(true).setWidth("20%");
         grid.addColumn(JobDTO::getDescription).setHeader(getTranslation("view.job.text.description")).setWidth("30%");
         grid.addColumn(JobDTO::getSalary).setHeader(getTranslation("view.job.text.salary")).setSortable(true).setWidth("15%");
         grid.addColumn(JobDTO::getLocation).setHeader(getTranslation("view.job.text.location")).setWidth("15%");
         grid.addComponentColumn(JobDTO -> {
             Button deleteButton = new Button(getTranslation("view.job.button.delete"));
-            deleteButton.addClickListener(e -> ui.makeYesNoDialog("Möchten Sie dieses Jobangebot wirklich löschen?",
+            deleteButton.addClickListener(e -> ui.makeYesNoDialog("Möchtest du dieses Jobangebot wirklich löschen?",
                     event -> {
                         jobControl.deleteJob(JobDTO.getJobid());
-                        UI.getCurrent().getPage().reload();
+                        grid.setItems(jobControl.getAllCompanyJobs(userControl.getCompanyProfile(userControl.getCurrentUser().getUserid()).getCompanyid()));
+                        ui.throwNotification("Jobanzeige erfolgreich gelöscht.");
                     }));
             return deleteButton;
         });
@@ -110,13 +114,14 @@ public class MyAdsView extends Div {
                 buttons.add(cancel, save);
                 save.addClickListener(saveEvent -> {
                     if (binder.isValid()) {
-                        ui.makeConfirm("Möchten Sie die Änderungen an diesem Jobangebot speichern?",
+                        ui.makeConfirm("Möchtest du die Änderungen an dieser Jobanzeige speichern?",
                                 event -> {
                                     jobControl.createNewJobPost(binder.getBean());
-                                    UI.getCurrent().getPage().reload();
+                                    grid.setItems(jobControl.getAllCompanyJobs(userControl.getCompanyProfile(userControl.getCurrentUser().getUserid()).getCompanyid()));
+                                    ui.throwNotification("Jobanzeige erfolgreich geändert.");
                                 });
                     } else {
-                        ui.makeDialog("Überprüfen Sie bitte Ihre Angaben auf Korrektheit");
+                        ui.makeDialog("Überprüfe bitte deine Angaben auf Korrektheit");
                     }
                 });
                 cancel.addClickListener(saveEvent -> {
@@ -136,7 +141,7 @@ public class MyAdsView extends Div {
             return layout;
         }));
         grid.setHeight("100%");
-        H3 title = new H3(" Übersicht über ihre aktuellen Stellenausschreibungen");
+        H3 title = new H3(" Übersicht über deine aktuellen Stellenausschreibungen");
         title.getElement().getStyle().set("color", "#f2a6b4");
         title.getElement().getStyle().set("text-align", "center");
         add(title);

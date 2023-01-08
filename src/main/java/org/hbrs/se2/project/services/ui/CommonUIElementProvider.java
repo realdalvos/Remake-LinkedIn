@@ -10,6 +10,10 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -119,9 +123,11 @@ public class CommonUIElementProvider {
             select.addValueChangeListener(listen -> selected.set(true));
         });
         TextField title = new TextField("Betreff");
+        title.setMaxLength(64);
         title.setWidthFull();
         title.setRequired(true);
         TextArea content = new TextArea("Nachricht");
+        content.setMaxLength(3000);
         content.setWidthFull();
         content.setHeight("200px");
         content.setRequired(true);
@@ -147,6 +153,7 @@ public class CommonUIElementProvider {
                     message.setUserid(userControl.getCurrentUser().getUserid());
                     inboxControl.saveMessage(message);
                     dialog.close();
+                    throwNotification("Anfrage wurde gesendet. Nutze für weitere Nachrichten an den Gesprächsteilnehmer die Chatfunktion unter Kommunikation.");
                 });
             } else {
                 makeDialog("Fülle bitte alle Felder aus.");
@@ -191,6 +198,17 @@ public class CommonUIElementProvider {
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
         dialog.add(layout);
         return dialog;
+    }
+
+    public void throwNotification(String text) {
+        Notification notification = new Notification();
+        notification.setPosition(Notification.Position.BOTTOM_END);
+        Icon icon = new Icon(VaadinIcon.CHECK_CIRCLE);
+        Span span = new Span(text);
+        span.getStyle().set("color", "var(--lumo-success-text-color)");
+        notification.add(new HorizontalLayout(icon, span));
+        notification.setDuration(5000);
+        notification.open();
     }
 
 }

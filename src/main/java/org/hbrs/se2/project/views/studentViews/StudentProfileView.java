@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.views.studentViews;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -28,20 +27,20 @@ public class StudentProfileView extends ProfileView {
 
     private final Logger logger = Utils.getLogger(this.getClass().getName());
 
-    private final TextField major = new TextField("Füge neuen Major hinzu:");
-    private final TextField topic = new TextField("Füge neuen Topic hinzu:");
-    private final TextField skill = new TextField("Füge neuen Skill hinzu:");
+    private final TextField major = new TextField("Füge einen neuen Studiengang hinzu:");
+    private final TextField topic = new TextField("Füge ein neues Interessengebiet hinzu:");
+    private final TextField skill = new TextField("Füge eine neue Fähigkeit hinzu:");
     private final TextField firstname = new TextField("Vorname:");
     private final TextField lastname = new TextField("Nachname:");
     private final TextField university = new TextField("Universität:");
     private final TextField matrikelnumber = new TextField("Matrikelnummer:");
 
-    private final Grid<MajorDTO> gridMajors = new Grid<>();
-    private final Grid<TopicDTO> gridTopics = new Grid<>();
-    private final Grid<SkillDTO> gridSkills = new Grid<>();
-    private final Set<MajorDTO> majors;
-    private final Set<TopicDTO> topics;
-    private final Set<SkillDTO> skills;
+    private Grid<MajorDTO> gridMajors;
+    private Grid<TopicDTO> gridTopics;
+    private Grid<SkillDTO> gridSkills;
+    private Set<MajorDTO> majors;
+    private Set<TopicDTO> topics;
+    private Set<SkillDTO> skills;
     private Set<String> newMajors, newTopics, newSkills;
     private final Set<MajorDTO> removeMajors = new HashSet<>();
     private final Set<TopicDTO> removeTopics = new HashSet<>();
@@ -53,32 +52,33 @@ public class StudentProfileView extends ProfileView {
         this.profileControl = profileControl;
         this.userControl = userControl;
 
-        majors = profileControl.getMajorOfStudent(userControl.getCurrentUser().getUserid());
-        topics = profileControl.getTopicOfStudent(userControl.getCurrentUser().getUserid());
-        skills = profileControl.getSkillOfStudent(userControl.getCurrentUser().getUserid());
-
         setSizeFull();
-        setAllGrids();
         setUserBinder();
         setStudentBinder();
         viewLayout();
     }
 
     private void setAllGrids() {
+        gridMajors = new Grid<>();
+        gridTopics = new Grid<>();
+        gridSkills = new Grid<>();
         // Create grids for skills, topics and majors
-        gridMajors.setAllRowsVisible(true);
-        gridMajors.addColumn(MajorDTO::getMajor).setHeader("Majors:");
+        gridMajors.addColumn(MajorDTO::getMajor).setHeader("Studiengänge:");
         gridMajors.setItems(majors);
-        gridTopics.setAllRowsVisible(true);
-        gridTopics.addColumn(TopicDTO::getTopic).setHeader("Topics:");
+        gridTopics.addColumn(TopicDTO::getTopic).setHeader("Interessen:");
         gridTopics.setItems(topics);
-        gridSkills.setAllRowsVisible(true);
-        gridSkills.addColumn(SkillDTO::getSkill).setHeader("Skills:");
+        gridSkills.addColumn(SkillDTO::getSkill).setHeader("Fähigkeiten:");
         gridSkills.setItems(skills);
     }
 
-    private void setEditGrids() {
+    private void editLayout() {
+        setAllGrids();
         Grid<String> newMajorsGrid, newTopicsGrid, newSkillsGrid;
+        FormLayout editLayout = profileLayout();
+        Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(field -> {
+            editLayout.add(field);
+            field.setReadOnly(false);
+        });
         gridMajors.addComponentColumn(major -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
@@ -88,7 +88,7 @@ public class StudentProfileView extends ProfileView {
             });
             return deleteButton;
         });
-        formLayout.add(gridMajors, newMajorsGrid = newEntriesGrid(newMajors = new HashSet<>()), newEntryLayout(major, newMajors, newMajorsGrid));
+        editLayout.add(gridMajors, newMajorsGrid = newEntriesGrid(newMajors = new HashSet<>()), newEntryLayout(major, newMajors, newMajorsGrid));
         gridTopics.addComponentColumn(topic -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
@@ -98,7 +98,7 @@ public class StudentProfileView extends ProfileView {
             });
             return deleteButton;
         });
-        formLayout.add(gridTopics, newTopicsGrid = newEntriesGrid(newTopics = new HashSet<>()), newEntryLayout(topic, newTopics, newTopicsGrid));
+        editLayout.add(gridTopics, newTopicsGrid = newEntriesGrid(newTopics = new HashSet<>()), newEntryLayout(topic, newTopics, newTopicsGrid));
         gridSkills.addComponentColumn(skill -> {
             Button deleteButton = new Button("Entfernen");
             deleteButton.addClickListener(e -> {
@@ -108,18 +108,15 @@ public class StudentProfileView extends ProfileView {
             });
             return deleteButton;
         });
-        formLayout.add(gridSkills, newSkillsGrid = newEntriesGrid(newSkills = new HashSet<>()), newEntryLayout(skill, newSkills, newSkillsGrid));
-    }
-
-    private void editLayout() {
-        Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(field ->
-                field.setReadOnly(false)
-        );
-        setEditGrids();
-
-        button = new Button("Profil speichern");
-        formLayout.add(button);
-        button.addClickListener(buttonClickEvent -> {
+        editLayout.add(gridSkills, newSkillsGrid = newEntriesGrid(newSkills = new HashSet<>()), newEntryLayout(skill, newSkills, newSkillsGrid));
+        Stream.of(gridMajors, newMajorsGrid, gridTopics, newTopicsGrid, gridSkills, newSkillsGrid).forEach(grid -> {
+            grid.setAllRowsVisible(true);
+            editLayout.setColspan(grid, 2);
+        });
+        save = new Button("Profil speichern");
+        buttonLayout.add(save);
+        layout.add(editLayout, buttonLayout);
+        save.addClickListener(buttonClickEvent -> {
             if (userBinder.isValid() && studentBinder.isValid()) {
                 ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?",
                         event -> {
@@ -127,8 +124,10 @@ public class StudentProfileView extends ProfileView {
                                 if (!userBinder.getBean().getUsername().equals(userControl.getCurrentUser().getUsername())) {
                                     authorizationControl.logoutUser();
                                 } else {
-                                    // reload page to get updated view
-                                    UI.getCurrent().getPage().reload();
+                                    buttonLayout.removeAll();
+                                    layout.removeAll();
+                                    viewLayout();
+                                    ui.throwNotification("Profil erfolgreich gespeichert.");
                                 }
                                 profileControl.saveStudentData(
                                         userBinder.getBean(), studentBinder.getBean(),
@@ -148,23 +147,27 @@ public class StudentProfileView extends ProfileView {
     }
 
     private void viewLayout() {
+        FormLayout viewLayout = profileLayout();
+        majors = profileControl.getMajorOfStudent(userControl.getCurrentUser().getUserid());
+        topics = profileControl.getTopicOfStudent(userControl.getCurrentUser().getUserid());
+        skills = profileControl.getSkillOfStudent(userControl.getCurrentUser().getUserid());
         // set value of text fields to read only for profile view
         Stream.of(username, email, firstname, lastname, university, matrikelnumber).forEach(field -> {
-            formLayout.add(field);
+            viewLayout.add(field);
             field.setReadOnly(true);
         });
-        formLayout.add(username, email, firstname, lastname, university, matrikelnumber);
-        formLayout.setColspan(gridSkills, 2);
-        formLayout.setColspan(gridTopics, 2);
-        formLayout.setColspan(gridMajors, 2);
-        //Rahmen noch setzen
-        //alles zentrieren und abstand links und rechts
-        //zwischen den grids ein bisschen abstand
-
-        button = new Button("Profil bearbeiten");
-        formLayout.add(gridMajors, gridTopics, gridSkills, button, changePasswd, delete);
-        button.addClickListener(buttonClickEvent -> {
-            formLayout.remove(gridMajors, gridTopics, gridSkills, button, changePasswd, delete);
+        Stream.of(firstname, lastname, university, matrikelnumber).forEach(field -> field.setMaxLength(32));
+        setAllGrids();
+        Stream.of(gridMajors, gridTopics, gridSkills).forEach(grid -> {
+            grid.setAllRowsVisible(true);
+            viewLayout.add(grid);
+            viewLayout.setColspan(grid, 2);
+        });
+        buttonLayout.add(edit, changePasswd, delete);
+        layout.add(viewLayout, buttonLayout);
+        edit.addClickListener(buttonClickEvent -> {
+            buttonLayout.removeAll();
+            layout.removeAll();
             editLayout();
         });
     }
@@ -186,6 +189,7 @@ public class StudentProfileView extends ProfileView {
 
     private FormLayout newEntryLayout(TextField input, Set<String> entries, Grid<String> grid) {
         FormLayout entryForm = new FormLayout();
+        input.setMaxLength(32);
         Button saveButton = new Button("Hinzufügen");
         saveButton.addClickListener(e -> {
             if (!input.getValue().isBlank()) {
@@ -194,8 +198,7 @@ public class StudentProfileView extends ProfileView {
             }
             input.clear();
         });
-        entryForm.add(input);
-        entryForm.add(saveButton);
+        entryForm.add(input, saveButton);
         return entryForm;
     }
 
@@ -211,4 +214,5 @@ public class StudentProfileView extends ProfileView {
                 .bind(StudentDTOImpl::getMatrikelnumber, StudentDTOImpl::setMatrikelnumber);
         studentBinder.bindInstanceFields(this);
     }
+
 }
