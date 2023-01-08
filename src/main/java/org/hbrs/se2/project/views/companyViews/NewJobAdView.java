@@ -46,7 +46,7 @@ public class NewJobAdView extends Div {
      */
 
     // Job title text area
-    private TextField title = createTitleField();
+    private final TextField title = createTitleField();
     // Job Description text area
     private final TextArea description = createDescriptionArea();
     // Contact details
@@ -66,9 +66,9 @@ public class NewJobAdView extends Div {
 
      */
 
-    private Button postButton = new Button(getTranslation("view.job.button.create"));
+    private final Button postButton = new Button(getTranslation("view.job.button.create"));
 
-    private Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
+    private final Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
 
     public NewJobAdView(JobControl jobControl, UserControl userControl, CommonUIElementProvider ui) {
         this.jobControl = jobControl;
@@ -78,14 +78,6 @@ public class NewJobAdView extends Div {
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.setAlignSelf(FlexComponent.Alignment.CENTER);
         verticalLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-
-        /*
-        entryData
-
-        formLayout.add(title, description, contactdetails, salary, location, entryDate, postButton);
-
-        (remove formLayout.add(title, description, contactdetails, salary, location, postButton);)
-         */
 
         verticalLayout.add(title, description, contactdetails, salary, location, postButton);
 
@@ -97,18 +89,20 @@ public class NewJobAdView extends Div {
 
         postButton.addClickListener(e -> {
             if (binder.isValid()) {
-                ui.makeConfirm("Möchtest du die Jobanzeige so veröffentlichen?",
-                        event -> {jobControl.createNewJobPost(binder.getBean());
-                            NavigateHandler.navigateToMyAdsView();});
+                ui.makeConfirm("Möchtest du die Jobanzeige so veröffentlichen?", event -> {
+                    jobControl.createNewJobPost(binder.getBean());
+                    NavigateHandler.navigateToMyAdsView();
+                    ui.throwNotification("Jobanzeige erfolgreich veröffentlicht.");
+                });
             } else {
-                ui.makeDialog("Fülle bitte alle Felder aus");
+                ui.makeDialog("Überprüfe bitte deine Angaben auf Korrektheit.");
                 logger.info("Not all fields have been filled in");
             }
         });
 
         // add an introduction text for further information
-        add(ui.introductionText("Hier können Sie eine neue Anzeige anfertigen!",
-                "Füllen Sie die unteren Felder aus und bestätigen Sie mit dem Button unten um dann Ihre Anzeige öffentlich zu machen"));
+        add(ui.introductionText("Hier kannst du eine neue Anzeige anfertigen!",
+                "Fülle die unteren Felder aus und bestätige mit dem Button unten, um die Anzeige öffentlich zu machen."));
         // add verticalLayout
         add(verticalLayout);
         this.setWidth("60%");
@@ -146,6 +140,7 @@ public class NewJobAdView extends Div {
         EmailField email = new EmailField(getTranslation("view.job.text.contactDetails"));
         email.getElement().setAttribute("name", "email");
         email.setPlaceholder(getTranslation("view.job.text.placeholder.contactDetails"));
+        email.setMaxLength(100);
         return email;
     }
 
@@ -170,27 +165,5 @@ public class NewJobAdView extends Div {
         location.setClearButtonVisible(true);
         return location;
     }
-
-    private Button confirm() {
-        Button save = new Button();
-        save.addClickListener(event -> {
-            // call job control to save new job post entity
-            jobControl.createNewJobPost(binder.getBean());
-            NavigateHandler.navigateToMyAdsView();
-        });
-        return save;
-    }
-
-    /*
-    entryData
-
-        private DatePicker createEntryDate() {
-        DatePicker entryDate = new DatePicker("frühstmöglicher Einstiegsbeginn");
-        Locale locale = new Locale("de", "DE");
-        entryDate.setLocale(locale);
-        return entryDate;
-    }
-
-     */
 
 }

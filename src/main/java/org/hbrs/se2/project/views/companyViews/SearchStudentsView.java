@@ -11,6 +11,7 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
@@ -54,7 +55,7 @@ public class SearchStudentsView extends Div {
         grid.setItemDetailsRenderer(new ComponentRenderer<>(student -> {
             FormLayout formLayout = new FormLayout();
 
-            final TextField username = new TextField("Username");
+            final TextField username = new TextField("Benutzername");
             final TextField email = new TextField("Email");
 
             UserDTO userDTO = userControl.getUserByUserid(student.getUserid());
@@ -70,14 +71,12 @@ public class SearchStudentsView extends Div {
                     }
             );
             createGrids(student);
-            formLayout.add(gridMajors);
-            formLayout.add(gridSkills);
-            formLayout.add(gridTopics);
+            FormLayout gridLayout = new FormLayout(gridMajors, gridTopics, gridSkills);
+            gridLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 3));
             Button contact = new Button("Kontaktieren");
             contact.addClickListener(event ->
                     ui.makeConversationDialogCompany(userControl.getCompanyProfile(userControl.getCurrentUser().getUserid()).getCompanyid(), student.getStudentid()));
-            formLayout.add(contact);
-            return formLayout;
+            return new VerticalLayout(formLayout, gridLayout, contact);
         }));
 
         // Row Stripes and Column Borders for improved usability and continuity (similar to Job List View of student)
@@ -89,11 +88,11 @@ public class SearchStudentsView extends Div {
         with introductionText() below the career page will show information and help the user
         guide through the option of either filtering the job ads or showing all available job ads
         */
-        add(ui.introductionText("Finden Sie hier Ihren zukünftigen Angestellten",
-                "Finden Sie Studenten mit passenden Skills, Themen, Studiengang und Universität. " ));
+        add(ui.introductionText("Finde hier deinen zukünftigen Angestellten",
+                "Finde Studenten mit passenden Fähigkeiten, Themen, Studiengängen und Universität. " ));
 
         // Adding contactText to inform the company of the possibility of starting a conversation with a student after seeing the profile
-        H3 contactText = new H3("Sie haben auch die Möglichkeit nach dem Ansehen des Profils eine Person zu kontaktieren! ");
+        H3 contactText = new H3("Du hast auch die Möglichkeit nach dem Ansehen des Profils eine Person zu kontaktieren! ");
 
         contactText.getElement().getStyle().set("font-size", "20px");
         contactText.getElement().getStyle().set("text-align", "center");
@@ -106,17 +105,17 @@ public class SearchStudentsView extends Div {
 
     private void createGrids(StudentDTO student) {
         gridMajors = new Grid<>();
-        gridSkills = new Grid<>();
         gridTopics = new Grid<>();
+        gridSkills = new Grid<>();
         // Create grids for skills, topics and majors
         gridMajors.setAllRowsVisible(true);
-        gridMajors.addColumn(MajorDTO::getMajor).setHeader("Majors:");
+        gridMajors.addColumn(MajorDTO::getMajor).setHeader("Studiengänge:");
         gridMajors.setItems(profileControl.getMajorOfStudent(student.getUserid()));
         gridTopics.setAllRowsVisible(true);
-        gridTopics.addColumn(TopicDTO::getTopic).setHeader("Topics:");
+        gridTopics.addColumn(TopicDTO::getTopic).setHeader("Interessengebiete:");
         gridTopics.setItems(profileControl.getTopicOfStudent(student.getUserid()));
         gridSkills.setAllRowsVisible(true);
-        gridSkills.addColumn(SkillDTO::getSkill).setHeader("Skills:");
+        gridSkills.addColumn(SkillDTO::getSkill).setHeader("Fähigkeiten:");
         gridSkills.setItems(profileControl.getSkillOfStudent(student.getUserid()));
     }
 
@@ -129,9 +128,9 @@ public class SearchStudentsView extends Div {
         searchField.setClearButtonVisible(true); // possibility to delete filter words
 
         // changing width of textField, buttonFilter and buttonAllJobs to improve on usability
-        searchField.setWidth("25");
-        searchButton.setWidth("25%");
-        allStudentsButton.setWidth("25%");
+        searchField.setWidth("450px");
+        searchButton.setWidth("15%");
+        allStudentsButton.setWidth("15%");
 
         searchField.setPlaceholder("Studentensuche");
 
@@ -143,13 +142,8 @@ public class SearchStudentsView extends Div {
         topLayout.setAlignItems(FlexComponent.Alignment.CENTER);
         topLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
-
-
         // adding TextField and 2 buttons
-        topLayout.add(searchField);
-        topLayout.add(searchButton);
-        topLayout.add(allStudentsButton);
-
+        topLayout.add(searchField, searchButton, allStudentsButton);
 
         // improved spacing - visible on buttons and textfield
         layout.setSpacing(false);
@@ -170,7 +164,6 @@ public class SearchStudentsView extends Div {
 
         // allStudentsButton will show all registrated students
         allStudentsButton.addClickListener(event -> {grid.setItems(profileControl.getStudentsMatchingKeyword(""));});
-
-
     }
+
 }

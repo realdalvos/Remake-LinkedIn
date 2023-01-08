@@ -1,9 +1,9 @@
 package org.hbrs.se2.project.views.companyViews;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -48,41 +48,50 @@ public class CompanyProfileView extends ProfileView {
     }
 
     private void viewLayout() {
+        FormLayout viewLayout = profileLayout();
         HorizontalLayout status = new HorizontalLayout();
         status.add("Accountstatus:");
         status.add(statusBadge());
         status.setPadding(true);
-        formLayout.add(status);
+        viewLayout.add(status);
         // set value of text fields to read only for profile view
         Stream.of(username, name, email, industry).forEach(
                 field -> {
                     field.setReadOnly(true);
-                    formLayout.add(field);
+                    viewLayout.add(field);
                 }
         );
-        button = new Button("Profil bearbeiten");
-        formLayout.add(button, changePasswd, delete);
-        button.addClickListener(buttonClickEvent -> {
-            formLayout.remove(button, changePasswd, delete);
+        Stream.of(name, industry).forEach(field -> field.setMaxLength(32));
+        buttonLayout.add(edit, changePasswd, delete);
+        layout.add(viewLayout, buttonLayout);
+        edit.addClickListener(buttonClickEvent -> {
+            buttonLayout.removeAll();
+            layout.removeAll();
             editLayout();
         });
-        formLayout.setColspan(status, 2);
+        viewLayout.setColspan(status, 2);
     }
 
     private void editLayout() {
-        Stream.of(username, name, email, industry).forEach(
-                field -> field.setReadOnly(false)
-        );
-        button = new Button("Profil speichern");
-        formLayout.add(button);
-        button.addClickListener(buttonClickEvent -> {
+        FormLayout editLayout = profileLayout();
+        Stream.of(username, name, email, industry).forEach(field -> {
+            field.setReadOnly(false);
+            editLayout.add(field);
+        });
+        save = new Button("Profil speichern");
+        buttonLayout.add(save);
+        layout.add(editLayout, buttonLayout);
+        save.addClickListener(buttonClickEvent -> {
             if (userBinder.isValid() && companyBinder.isValid()) {
-                ui.makeConfirm("Möchten Sie die Änderungen an Ihrem Profil speichern?",
+                ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?",
                         event -> {
                             if (!userBinder.getBean().getUsername().equals(userControl.getCurrentUser().getUsername())) {
                                 authorizationControl.logoutUser();
                             } else {
-                                UI.getCurrent().getPage().reload();
+                                buttonLayout.removeAll();
+                                layout.removeAll();
+                                viewLayout();
+                                ui.throwNotification("Profil erfolgreich gespeichert.");
                             }
                             try {
                                 profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());
@@ -91,7 +100,7 @@ public class CompanyProfileView extends ProfileView {
                             }
                         });
             } else {
-                ui.makeDialog("Überprüfen Sie bitte Ihre Angaben auf Korrektheit");
+                ui.makeDialog("Überprüfe bitte deine Angaben auf Korrektheit");
             }
         });
     }

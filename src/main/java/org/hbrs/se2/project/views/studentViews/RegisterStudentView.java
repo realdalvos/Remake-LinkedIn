@@ -17,6 +17,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.slf4j.Logger;
+import java.util.stream.Stream;
 
 /**
  * Register View - Form to register as a student
@@ -50,6 +51,7 @@ public class RegisterStudentView extends RegisterView {
 
         //set layout for text input
         HorizontalLayout inputTextLayout = new HorizontalLayout();
+        Stream.of(firstname, lastname, matrikelnumber).forEach(field -> field.setMaxLength(32));
         inputTextLayout.add(createFormLayout(new Component[]{firstname,lastname,username,matrikelnumber,email ,userPassword,confirmPassword}));
         inputTextLayout.setAlignItems(Alignment.CENTER);
 
@@ -76,6 +78,7 @@ public class RegisterStudentView extends RegisterView {
                     // function to register new company
                     registrationControl.registerStudent(userBinder.getBean(), studentBinder.getBean());
                     NavigateHandler.navigateToDefaultPage();
+                    ui.throwNotification("Erfolgreich registriert. Du kannst dich nun einloggen.");
                 } else {
                     ui.makeDialog("Überprüfe bitte deine Eingaben");
                     logger.info("Not all fields have been filled in");

@@ -74,10 +74,10 @@ public class JobsView extends Div {
         searchField.setClearButtonVisible(true); // possibility to delete filter words
 
         // changing width of textField, buttonFilter and buttonAllJobs to improve on usability
-        searchField.setWidth("25");
-        searchButton.setWidth("25%");
+        searchField.setWidth("450px");
+        searchButton.setWidth("15%");
         Button buttonAllJobs = new Button("Alle Jobs");
-        buttonAllJobs.setWidth("25%");
+        buttonAllJobs.setWidth("15%");
 
         searchField.setPlaceholder(getTranslation("view.job.text.search"));
 
@@ -247,6 +247,7 @@ public class JobsView extends Div {
                     reportsControl.createReport(binder.getBean());
                     buttons.replace(report, noReport);
                     dialog.close();
+                    ui.throwNotification("Unternehmen erfolgreich gemeldet.");
                 });
             } else {
                 ui.makeDialog("Gib bitte einen Grund für die Meldung an.");
@@ -282,6 +283,7 @@ public class JobsView extends Div {
             ratingControl.createRating(ratingDTO);
             buttons.replace(rate, noRate);
             dialog.close();
+            ui.throwNotification("Unternehmen erfolgreich bewertet.");
         }));
         confirm.setEnabled(false);
         HorizontalLayout rateButtons = new HorizontalLayout(close, confirm);

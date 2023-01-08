@@ -38,15 +38,16 @@ public abstract class ProfileView extends Div {
     protected CommonUIElementProvider ui;
 
     protected TextField username = new TextField("Benutzername:");
-    protected TextField email = new TextField("EMail-Adresse:");
+    protected TextField email = new TextField("Email-Adresse:");
     protected PasswordField password = new PasswordField("Passwort:");
     protected PasswordField passwordConfirm = new PasswordField("Passwort bestätigen:");
 
-    protected Button button;
+    protected Button edit = new Button("Profil bearbeiten");
+    protected Button save;
     protected Button delete = new Button("Account löschen");
-    protected HorizontalLayout layout = new HorizontalLayout();
     protected Button changePasswd = new Button("Passwort ändern");
-    protected FormLayout formLayout = new FormLayout();
+    protected VerticalLayout layout = new VerticalLayout();
+    protected FormLayout buttonLayout = new FormLayout();
 
     protected Binder<UserDTOImpl> userBinder = new BeanValidationBinder<>(UserDTOImpl.class);
     protected Binder<UserDTOImpl> passwordBinder = new BeanValidationBinder<>(UserDTOImpl.class);
@@ -55,14 +56,13 @@ public abstract class ProfileView extends Div {
     protected final ModelMapper mapper = new ModelMapper();
 
     public ProfileView() {
-        layout.add(formLayout);
-        formLayout.setWidth("80%");
-        formLayout.setResponsiveSteps(
-                // Use two columns by default
-                new FormLayout.ResponsiveStep("0", 2)
-        );
+        username.setMaxLength(32);
+        email.setMaxLength(100);
+        buttonLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 3));
+        buttonLayout.setWidth("80%");
         layout.getStyle().set("margin-left", "var(--lumo-space-xl");
         add(layout);
+
         delete.addClickListener(buttonClickEvent -> {
             VerticalLayout layout = new VerticalLayout();
             HorizontalLayout buttons = new HorizontalLayout();
@@ -121,6 +121,16 @@ public abstract class ProfileView extends Div {
             layout.add(message, password, passwordConfirm, buttons);
             dialog.open();
         });
+    }
+
+    protected FormLayout profileLayout() {
+        FormLayout formLayout = new FormLayout();
+        formLayout.setWidth("80%");
+        formLayout.setResponsiveSteps(
+                // Use two columns by default
+                new FormLayout.ResponsiveStep("0", 2)
+        );
+        return formLayout;
     }
 
     protected void setUserBinder() {

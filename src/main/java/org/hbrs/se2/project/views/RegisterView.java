@@ -51,10 +51,12 @@ public abstract class RegisterView extends VerticalLayout {
         email.getElement().setAttribute("name", "email");
         email.setPlaceholder("username@example.com");
         email.setClearButtonVisible(true);
+        email.setMaxLength(100);
         return email;
     }
 
     protected FormLayout createFormLayout(Component[] components) {
+        username.setMaxLength(32);
         FormLayout formLayout = new FormLayout();
         formLayout.add(components);
         formLayout.setResponsiveSteps(
@@ -92,4 +94,5 @@ public abstract class RegisterView extends VerticalLayout {
         // Map input field values to DTO variables based on chosen names
         userBinder.bindInstanceFields(this);
     }
+
 }
