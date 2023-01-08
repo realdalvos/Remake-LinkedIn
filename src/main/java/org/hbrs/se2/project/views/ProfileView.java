@@ -163,4 +163,5 @@ public abstract class ProfileView extends Div {
                         || userControl.checkEmailUnique(email), "Email existiert bereits")
                 .bind(UserDTOImpl::getEmail, UserDTOImpl::setEmail);
     }
+
 }

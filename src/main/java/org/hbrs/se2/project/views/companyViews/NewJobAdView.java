@@ -38,13 +38,6 @@ public class NewJobAdView extends Div {
 
     private final Logger logger = Utils.getLogger(this.getClass().getName());
 
-    /*
-    entryDate is an option for now and will be implemented as a comment.
-    In order to implement it uncomment all comments with "entryDate" on top.
-    In that case formLayout.add(title, description, contactdetails, salary, location, postButton); should be
-    removed too
-     */
-
     // Job title text area
     private final TextField title = createTitleField();
     // Job Description text area
@@ -58,14 +51,6 @@ public class NewJobAdView extends Div {
     // Location text field
     private final TextField location = createWorkLocation();
     // post new job button
-
-    /*
-    entryDate
-
-    private DatePicker entryDate = createEntryDate();
-
-     */
-
     private final Button postButton = new Button(getTranslation("view.job.button.create"));
 
     private final Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);

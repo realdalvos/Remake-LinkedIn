@@ -28,7 +28,6 @@ import org.hbrs.se2.project.dtos.impl.MessageDTOImpl;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -63,6 +62,7 @@ public abstract class InboxView extends Div {
             list.setWidth("70%");
             List<MessageListItem> items = new ArrayList<>(list.getItems());
             TextArea content = new TextArea();
+            content.setMaxLength(3000);
             content.setWidth("70%");
             content.setHelperText("Nachricht");
             Button send = new Button("Senden");

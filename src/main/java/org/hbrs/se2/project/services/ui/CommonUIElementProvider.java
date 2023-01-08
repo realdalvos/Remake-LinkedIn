@@ -123,9 +123,11 @@ public class CommonUIElementProvider {
             select.addValueChangeListener(listen -> selected.set(true));
         });
         TextField title = new TextField("Betreff");
+        title.setMaxLength(64);
         title.setWidthFull();
         title.setRequired(true);
         TextArea content = new TextArea("Nachricht");
+        content.setMaxLength(3000);
         content.setWidthFull();
         content.setHeight("200px");
         content.setRequired(true);

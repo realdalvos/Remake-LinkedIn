@@ -214,4 +214,5 @@ public class StudentProfileView extends ProfileView {
                 .bind(StudentDTOImpl::getMatrikelnumber, StudentDTOImpl::setMatrikelnumber);
         studentBinder.bindInstanceFields(this);
     }
+
 }

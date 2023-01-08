@@ -188,9 +188,7 @@ public class JobsView extends Div {
 
         List<JobDTO> jobDetails = jobControl.getAllJobs();
 
-        int jobCount = jobDetails.size();
-        String s = "Es sind momentan " + jobCount + " Jobs für dich verfügbar! ";
-        H2 jobCountText = new H2(s);
+        H2 jobCountText = new H2("Es sind momentan " + jobDetails.size() + " Jobs für dich verfügbar!");
 
         jobCountText.getElement().getStyle().set("font-size","15px");
         jobCountText.getElement().getStyle().set("text-align","center");
@@ -232,6 +230,7 @@ public class JobsView extends Div {
         VerticalLayout layout = new VerticalLayout(new Text("Hier kannst du ein Unternehmen wegen Fehlverhaltens oder schlechten Erfahrungen melden. " +
                 "Gib bitte eine kurze Beschreibung des zu Grunde liegenden Sachverhaltes an."));
         TextArea content = new TextArea("Grund der Meldung:");
+        content.setMaxLength(1000);
         content.setWidthFull();
         content.setHeight("200px");
         content.setRequired(true);
