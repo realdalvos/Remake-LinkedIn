@@ -59,7 +59,9 @@ public class LoginViewTest {
     static void start() throws Exception {
 
         //Starts the Webserver (Needs a running server for the tests but roughly 35 Seconds to build)
-        Application.main(new String[]{});
+        try {
+            Application.main(new String[]{});
+        }catch(Exception x){}
         browser = "chrome";
         try{
             HelperForTests.setDriverSystemProperties(browser);
