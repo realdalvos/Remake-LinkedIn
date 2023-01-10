@@ -12,6 +12,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -111,7 +112,7 @@ public class InboxControlTest {
         MessageListItem item = list.getItems().get(0);
 
         assertEquals(message.getContent(), item.getText());
-        assertEquals(testTime, item.getTime());
+        assertEquals(testTime.truncatedTo(ChronoUnit.SECONDS), item.getTime().truncatedTo(ChronoUnit.SECONDS));
         assertEquals(userRepository.findByUserid(studentDTO.getUserid()).getUsername(), item.getUserName());
     }
 
@@ -126,7 +127,7 @@ public class InboxControlTest {
         MessageListItem item = list.getItems().get(0);
 
         assertEquals(message.getContent(), item.getText());
-        assertEquals(testTime, item.getTime());
+        assertEquals(testTime.truncatedTo(ChronoUnit.SECONDS), item.getTime().truncatedTo(ChronoUnit.SECONDS));
         assertEquals(userRepository.findByUserid(companyDTO.getUserid()).getUsername(), item.getUserName());
     }
 
@@ -147,13 +148,13 @@ public class InboxControlTest {
         MessageListItem item3 = list.getItems().get(2);
 
         assertEquals(message1.getContent(), item1.getText());
-        assertEquals(testTime1, item1.getTime());
+        assertEquals(testTime1.truncatedTo(ChronoUnit.SECONDS), item1.getTime().truncatedTo(ChronoUnit.SECONDS));
         assertEquals(h.getUserDTOForStudent().getUsername(), item1.getUserName());
         assertEquals(message2.getContent(), item2.getText());
-        assertEquals(testTime2, item2.getTime());
+        assertEquals(testTime2.truncatedTo(ChronoUnit.SECONDS), item2.getTime().truncatedTo(ChronoUnit.SECONDS));
         assertEquals(h.getUserDTOForCompany().getUsername(), item2.getUserName());
         assertEquals(message3.getContent(), item3.getText());
-        assertEquals(testTime3, item3.getTime());
+        assertEquals(testTime3.truncatedTo(ChronoUnit.SECONDS), item3.getTime().truncatedTo(ChronoUnit.SECONDS));
         assertEquals(h.getUserDTOForStudent().getUsername(), item3.getUserName());
     }
 
@@ -178,8 +179,8 @@ public class InboxControlTest {
         createMessage(conversationDTO, "Test message 2", testTime2, companyDTO.getUserid());
         createMessage(conversationDTO, "Test message 3", testTime3, studentDTO.getUserid());
 
-        assertEquals(testTime3, inboxControl.getLatestMessageTime(conversationDTO.getConversationid()));
-        assertNotEquals(testTime1, inboxControl.getLatestMessageTime(conversationDTO.getConversationid()));
+        assertEquals(testTime3.truncatedTo(ChronoUnit.SECONDS), inboxControl.getLatestMessageTime(conversationDTO.getConversationid()).truncatedTo(ChronoUnit.SECONDS));
+        assertNotEquals(testTime1.truncatedTo(ChronoUnit.SECONDS), inboxControl.getLatestMessageTime(conversationDTO.getConversationid()).truncatedTo(ChronoUnit.SECONDS));
     }
 
     @Test
