@@ -5,14 +5,15 @@
     <artifactId>mid9</artifactId>
     <name>HBRScollab</name>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <properties>
         <java.version>11</java.version>
         <vaadin.version>14.8.20</vaadin.version>
+        <jacoco.version>0.8.6</jacoco.version>
+        <war.plugin.version>3.3.2</war.plugin.version>
 
         <!-- JaCoCo Properties -->
-        <jacoco.version>0.8.6</jacoco.version>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
@@ -74,7 +75,7 @@
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.6</version>
+            <version>0.8.8</version>
         </dependency>
 
         <dependency>
@@ -120,6 +121,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
@@ -130,11 +132,13 @@
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -145,6 +149,7 @@
             <artifactId>vaadin-testbench</artifactId>
             <scope>test</scope>
         </dependency>
+
         <!-- Include JUnit 4 support for TestBench and others -->
         <dependency>
             <groupId>org.junit.vintage</groupId>
@@ -157,41 +162,70 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
-            <version>5.3.0</version>
+            <version>5.3.1</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.5.0</version>
+            <version>42.5.1</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
-            <version>3.1.0</version>
+            <version>3.1.1</version>
         </dependency>
+
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>4.1.1</version>
+            <version>4.7.1</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin -->
         <dependency>
-            <groupId>io.github.bonigarcia</groupId>
-            <artifactId>webdrivermanager</artifactId>
-            <version>5.1.0</version>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <version>3.0.0-M7</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-war-plugin -->
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>${war.plugin.version}</version>
         </dependency>
     </dependencies>
 
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.0.0-M7</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -245,6 +279,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
+                    <excludes>
+                        <exclude>src/main/resources/scripts/</exclude>
+                    </excludes>
                     <source>11</source>
                     <target>11</target>
                 </configuration>
@@ -256,6 +293,9 @@
         <profile>
             <!-- Production mode is activated using -Pproduction -->
             <id>production</id>
+            <properties>
+                <vaadin.productionMode>true</vaadin.productionMode>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -272,6 +312,16 @@
                         </executions>
                         <configuration>
                             <productionMode>true</productionMode>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${war.plugin.version}</version>
+                        <configuration>
+                            <warName>mid9</warName>
+                            <failOnMissingWebXml>false</failOnMissingWebXml>
                         </configuration>
                     </plugin>
                 </plugins>
