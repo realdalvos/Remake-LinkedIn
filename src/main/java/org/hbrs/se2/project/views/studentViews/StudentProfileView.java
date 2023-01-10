@@ -126,7 +126,6 @@ public class StudentProfileView extends ProfileView {
                                 } else {
                                     buttonLayout.removeAll();
                                     layout.removeAll();
-                                    viewLayout();
                                     ui.throwNotification("Profil erfolgreich gespeichert.");
                                 }
                                 profileControl.saveStudentData(
@@ -138,6 +137,7 @@ public class StudentProfileView extends ProfileView {
                             removeMajors.forEach(major -> profileControl.removeMajor(userControl.getCurrentUser().getUserid(), major.getMajorid()));
                             removeTopics.forEach(topic -> profileControl.removeTopic(userControl.getCurrentUser().getUserid(), topic.getTopicid()));
                             removeSkills.forEach(skill -> profileControl.removeSkill(userControl.getCurrentUser().getUserid(), skill.getSkillid()));
+                            viewLayout();
                         });
 
             } else {
