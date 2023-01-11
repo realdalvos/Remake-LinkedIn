@@ -136,7 +136,9 @@ public class InboxControlTest {
     void multipleMessagesTest(){
         ConversationDTO conversationDTO = createConversation("multipleMessagesTest");
         Instant testTime1 = Instant.now();
+        waitOneSec();
         Instant testTime2 = Instant.now();
+        waitOneSec();
         Instant testTime3 = Instant.now();
         MessageDTO message1 = createMessage(conversationDTO, "Test message 1", testTime1, studentDTO.getUserid());
         MessageDTO message2 = createMessage(conversationDTO, "Test message 2", testTime2, companyDTO.getUserid());
