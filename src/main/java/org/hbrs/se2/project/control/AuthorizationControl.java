@@ -3,6 +3,7 @@ package org.hbrs.se2.project.control;
 import com.vaadin.flow.component.UI;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.UserDTO;
+import org.hbrs.se2.project.helper.NavigateHandler;
 import org.hbrs.se2.project.services.impl.LoginService;
 import org.springframework.stereotype.Controller;
 
@@ -49,7 +50,7 @@ public class AuthorizationControl {
      */
     public void logoutUser() {
         UI.getCurrent().getSession().close();
-        UI.getCurrent().getPage().setLocation("/");
+        NavigateHandler.navigateToDefaultPage();
     }
 
     public boolean isCompanyOfUserBanned(UserDTO user) throws DatabaseUserException {
