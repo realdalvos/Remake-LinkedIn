@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.views.companyViews;
+package org.hbrs.se2.project.views.company;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;

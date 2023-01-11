@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.views.studentViews;
+package org.hbrs.se2.project.views.student;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -48,7 +48,7 @@ public class StudentProfileView extends ProfileView {
     private final Set<TopicDTO> removeTopics = new HashSet<>();
     private final Set<SkillDTO> removeSkills = new HashSet<>();
 
-    private final static String DELETE = "Entfernen";
+    private static final String DELETE = "Entfernen";
 
     private final Binder<StudentDTOImpl> studentBinder = new BeanValidationBinder<>(StudentDTOImpl.class);
 

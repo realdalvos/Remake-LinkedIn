@@ -32,6 +32,9 @@ public class HelperForTests {
 
     private List<StudentDTO> registeredStudents = new ArrayList<>();
 
+    private static final String DRIVER_CHROME = "webdriver.chrome.driver";
+    private static final String DRIVER_EDGE = "webdriver.edge.driver";
+
     public HelperForTests(UserRepository userRepository, CompanyRepository companyRepository, StudentRepository studentRepository, RegistrationControl registrationControl) {
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
@@ -277,15 +280,15 @@ public class HelperForTests {
         switch(browser){
             case "chrome":{
                 if(os.contains("WIN")){
-                    System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/chromedriver_win64.exe");
+                    System.setProperty(DRIVER_CHROME, "src/test/java/org/hbrs/se2/project/selenium/driver/chromedriver_win64.exe");
                 } else if (os.contains("MAC")) {
                     if(os.contains("ARM")) {
-                        System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/chromedriver_arm64");
+                        System.setProperty(DRIVER_CHROME, "src/test/java/org/hbrs/se2/project/selenium/driver/chromedriver_arm64");
                     }else {
-                        System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/chromedriver_mac64");
+                        System.setProperty(DRIVER_CHROME, "src/test/java/org/hbrs/se2/project/selenium/driver/chromedriver_mac64");
                     }
                 }else if(os.contains("NIX") || os.contains("NUX") || os.contains("AIX")){
-                    System.setProperty("webdriver.chrome.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/chromedriver_linux64");
+                    System.setProperty(DRIVER_CHROME, "src/test/java/org/hbrs/se2/project/selenium/driver/chromedriver_linux64");
                 } else {
                     throw new Globals.IllegalOSExcpetion("You are using an uncommon OS: "+ System.getProperty("os.name")+" . please use either windows, mac or linux for this program");
                 }
@@ -293,15 +296,15 @@ public class HelperForTests {
             }
             case "edge":{
                 if(os.contains("WIN")){
-                    System.setProperty("webdriver.edge.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/msedgedriver_win64.exe");
+                    System.setProperty(DRIVER_EDGE, "src/test/java/org/hbrs/se2/project/selenium/driver/msedgedriver_win64.exe");
                 } else if (os.contains("MAC")) {
                     if(os.contains("ARM")) {
-                        System.setProperty("webdriver.edge.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/msedgedriver_arm64.exe");
+                        System.setProperty(DRIVER_EDGE, "src/test/java/org/hbrs/se2/project/selenium/driver/msedgedriver_arm64.exe");
                     }else {
-                        System.setProperty("webdriver.edge.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/msedgedriver_mac64");
+                        System.setProperty(DRIVER_EDGE, "src/test/java/org/hbrs/se2/project/selenium/driver/msedgedriver_mac64");
                     }
                 }else if(os.contains("NIX") || os.contains("NUX") || os.contains("AIX")){
-                    System.setProperty("webdriver.edge.driver", "src/test/java/org/hbrs/se2/project/selenium/driver/msedgedriver_linux64");
+                    System.setProperty(DRIVER_EDGE, "src/test/java/org/hbrs/se2/project/selenium/driver/msedgedriver_linux64");
                 } else {
                     throw new Globals.IllegalOSExcpetion("You are using an uncommon OS: "+ System.getProperty("os.name")+" . please use either windows, mac or linux for this program");
                 }
