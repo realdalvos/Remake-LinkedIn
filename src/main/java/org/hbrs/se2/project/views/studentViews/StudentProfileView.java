@@ -48,7 +48,7 @@ public class StudentProfileView extends ProfileView {
     private final Set<TopicDTO> removeTopics = new HashSet<>();
     private final Set<SkillDTO> removeSkills = new HashSet<>();
 
-    private final String DELETE = "Entfernen";
+    private final static String DELETE = "Entfernen";
 
     private final Binder<StudentDTOImpl> studentBinder = new BeanValidationBinder<>(StudentDTOImpl.class);
 
