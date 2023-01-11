@@ -45,12 +45,10 @@ public class SearchStudentsView extends Div {
     private final HorizontalLayout layout = new HorizontalLayout();
     private final HorizontalLayout topLayout = new HorizontalLayout();
     private final ProfileControl profileControl;
-    private final UserControl userControl;
 
     public SearchStudentsView(ProfileControl profileControl, UserControl userControl, CommonUIElementProvider ui) {
         this.ui = ui;
         this.profileControl = profileControl;
-        this.userControl = userControl;
 
         grid.setItemDetailsRenderer(new ComponentRenderer<>(student -> {
             FormLayout formLayout = new FormLayout();
@@ -133,10 +131,7 @@ public class SearchStudentsView extends Div {
         allStudentsButton.setWidth("15%");
 
         searchField.setPlaceholder("Studentensuche");
-
-        searchField.getStyle().set("margin-center", "auto");
-        searchButton.getStyle().set("margin-center", "auto");
-        allStudentsButton.getStyle().set("margin-center", "auto");
+        Stream.of(searchField, searchButton, allStudentsButton).forEach(element -> element.getStyle().set("margin-center", "auto"));
 
         // Center Alignment
         topLayout.setAlignItems(FlexComponent.Alignment.CENTER);
@@ -163,7 +158,7 @@ public class SearchStudentsView extends Div {
         searchButton.addClickListener(event -> {grid.setItems(profileControl.getStudentsMatchingKeyword(searchField.getValue())); searchField.clear();});
 
         // allStudentsButton will show all registrated students
-        allStudentsButton.addClickListener(event -> {grid.setItems(profileControl.getStudentsMatchingKeyword(""));});
+        allStudentsButton.addClickListener(event -> grid.setItems(profileControl.getStudentsMatchingKeyword("")));
     }
 
 }

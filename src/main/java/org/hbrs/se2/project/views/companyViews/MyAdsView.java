@@ -35,9 +35,6 @@ public class MyAdsView extends Div {
     @Autowired
     private CommonUIElementProvider ui;
 
-    private final JobControl jobControl;
-    private final UserControl userControl;
-
     private final TextField title = new TextField(getTranslation("view.job.text.title"));
     private final TextArea description = new TextArea(getTranslation("view.job.text.description"));
     private final TextField salary = new TextField(getTranslation("view.job.text.salary"));
@@ -48,8 +45,6 @@ public class MyAdsView extends Div {
     private final ModelMapper mapper = new ModelMapper();
 
     public MyAdsView(JobControl jobControl, UserControl userControl) {
-        this.jobControl = jobControl;
-        this.userControl = userControl;
 
         title.setMaxWidth("33%");
         title.setMaxLength(75);
@@ -75,11 +70,11 @@ public class MyAdsView extends Div {
         grid.addColumn(JobDTO::getDescription).setHeader(getTranslation("view.job.text.description")).setWidth("30%");
         grid.addColumn(JobDTO::getSalary).setHeader(getTranslation("view.job.text.salary")).setSortable(true).setWidth("15%");
         grid.addColumn(JobDTO::getLocation).setHeader(getTranslation("view.job.text.location")).setWidth("15%");
-        grid.addComponentColumn(JobDTO -> {
+        grid.addComponentColumn(jobDTO -> {
             Button deleteButton = new Button(getTranslation("view.job.button.delete"));
             deleteButton.addClickListener(e -> ui.makeYesNoDialog("Möchtest du dieses Jobangebot wirklich löschen?",
                     event -> {
-                        jobControl.deleteJob(JobDTO.getJobid());
+                        jobControl.deleteJob(jobDTO.getJobid());
                         grid.setItems(jobControl.getAllCompanyJobs(userControl.getCompanyProfile(userControl.getCurrentUser().getUserid()).getCompanyid()));
                         ui.throwNotification("Jobanzeige erfolgreich gelöscht.");
                     }));
@@ -141,10 +136,10 @@ public class MyAdsView extends Div {
             return layout;
         }));
         grid.setHeight("100%");
-        H3 title = new H3(" Übersicht über deine aktuellen Stellenausschreibungen");
-        title.getElement().getStyle().set("color", "#f2a6b4");
-        title.getElement().getStyle().set("text-align", "center");
-        add(title);
+        H3 pageTitle = new H3(" Übersicht über deine aktuellen Stellenausschreibungen");
+        pageTitle.getElement().getStyle().set("color", "#f2a6b4");
+        pageTitle.getElement().getStyle().set("text-align", "center");
+        add(pageTitle);
         add(grid);
         setHeight("100%");
     }

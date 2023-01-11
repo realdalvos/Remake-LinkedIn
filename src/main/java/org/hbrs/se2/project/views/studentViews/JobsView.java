@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.views.studentViews;
 
-import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -33,6 +32,8 @@ import org.hbrs.se2.project.dtos.impl.ReportsDTOImpl;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -55,6 +56,12 @@ public class JobsView extends Div {
     private Button rate;
     private Button noReport;
     private Button noRate;
+    Button confirm = new Button("Bewertung abgeben");
+    private final Span one = new Span();
+    private final Span two = new Span();
+    private final Span three = new Span();
+    private final Span four = new Span();
+    private final Span five = new Span();
     private final HorizontalLayout buttons = new HorizontalLayout();
     // Create a Grid bound to the list
     private final Grid<JobDTO> grid = new Grid<>();
@@ -83,9 +90,7 @@ public class JobsView extends Div {
 
         HorizontalLayout topLayout = new HorizontalLayout();
 
-        searchField.getStyle().set("margin-center", "auto");
-        searchButton.getStyle().set("margin-center", "auto");
-        buttonAllJobs.getStyle().set("margin-center", "auto");
+        Stream.of(searchField, searchButton, buttonAllJobs).forEach(element -> element.getStyle().set("margin-center", "auto"));
 
         // Center Alignment
         topLayout.setAlignItems(FlexComponent.Alignment.CENTER);
@@ -264,18 +269,8 @@ public class JobsView extends Div {
         AtomicInteger rating = new AtomicInteger();
         Button close = new Button("Abbrechen");
         close.addClickListener(event -> dialog.close());
-        AtomicReference<Icon> oneStar = new AtomicReference<>(new Icon(VaadinIcon.STAR_O));
-        AtomicReference<Icon> twoStars = new AtomicReference<>(new Icon(VaadinIcon.STAR_O));
-        AtomicReference<Icon> threeStars = new AtomicReference<>(new Icon(VaadinIcon.STAR_O));
-        AtomicReference<Icon> fourStars = new AtomicReference<>(new Icon(VaadinIcon.STAR_O));
-        AtomicReference<Icon> fiveStars = new AtomicReference<>(new Icon(VaadinIcon.STAR_O));
-        Span one = new Span(oneStar.get());
-        Span two = new Span(twoStars.get());
-        Span three = new Span(threeStars.get());
-        Span four = new Span(fourStars.get());
-        Span five = new Span(fiveStars.get());
-        HorizontalLayout stars = new HorizontalLayout(one, two, three, four, five);
-        Button confirm = new Button("Bewertung abgeben");
+        updateStars(ratingStars(0));
+        HorizontalLayout starsLayout = new HorizontalLayout(one, two, three, four, five);
         confirm.addClickListener(event -> ui.makeYesNoDialog("Möchtest du die Bewertung so einreichen?", click -> {
             RatingDTO ratingDTO = new RatingDTOImpl(userControl.getStudentProfile(userControl.getCurrentUser().getUserid()).getStudentid(),
                     job.getCompanyid(), rating.get());
@@ -287,66 +282,58 @@ public class JobsView extends Div {
         confirm.setEnabled(false);
         HorizontalLayout rateButtons = new HorizontalLayout(close, confirm);
         VerticalLayout layout = new VerticalLayout(new Text("Wie zufrieden bist du mit dem Unternehmen von einem Stern (nicht zufrieden) bis fünf Sternen (sehr zufrieden)?"),
-                stars, rateButtons);
+                starsLayout, rateButtons);
         layout.setWidth("400px");
-        layout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, stars, rateButtons);
+        layout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, starsLayout, rateButtons);
         one.addClickListener(event -> {
-            oneStar.set(new Icon(VaadinIcon.STAR));
-            twoStars.set(new Icon(VaadinIcon.STAR_O));
-            threeStars.set(new Icon(VaadinIcon.STAR_O));
-            fourStars.set(new Icon(VaadinIcon.STAR_O));
-            fiveStars.set(new Icon(VaadinIcon.STAR_O));
             rating.set(1);
-            Stream.of(one, two, three, four, five).forEach(HasComponents::removeAll);
-            one.add(oneStar.get()); two.add(twoStars.get()); three.add(threeStars.get()); four.add(fourStars.get()); five.add(fiveStars.get());
-            confirm.setEnabled(true);
+            updateStars(ratingStars(1));
         });
         two.addClickListener(event -> {
-            oneStar.set(new Icon(VaadinIcon.STAR));
-            twoStars.set(new Icon(VaadinIcon.STAR));
-            threeStars.set(new Icon(VaadinIcon.STAR_O));
-            fourStars.set(new Icon(VaadinIcon.STAR_O));
-            fiveStars.set(new Icon(VaadinIcon.STAR_O));
             rating.set(2);
-            Stream.of(one, two, three, four, five).forEach(HasComponents::removeAll);
-            one.add(oneStar.get()); two.add(twoStars.get()); three.add(threeStars.get()); four.add(fourStars.get()); five.add(fiveStars.get());
-            confirm.setEnabled(true);
+            updateStars(ratingStars(2));
         });
         three.addClickListener(event -> {
-            oneStar.set(new Icon(VaadinIcon.STAR));
-            twoStars.set(new Icon(VaadinIcon.STAR));
-            threeStars.set(new Icon(VaadinIcon.STAR));
-            fourStars.set(new Icon(VaadinIcon.STAR_O));
-            fiveStars.set(new Icon(VaadinIcon.STAR_O));
             rating.set(3);
-            Stream.of(one, two, three, four, five).forEach(HasComponents::removeAll);
-            one.add(oneStar.get()); two.add(twoStars.get()); three.add(threeStars.get()); four.add(fourStars.get()); five.add(fiveStars.get());
-            confirm.setEnabled(true);
+            updateStars(ratingStars(3));
         });
         four.addClickListener(event -> {
-            oneStar.set(new Icon(VaadinIcon.STAR));
-            twoStars.set(new Icon(VaadinIcon.STAR));
-            threeStars.set(new Icon(VaadinIcon.STAR));
-            fourStars.set(new Icon(VaadinIcon.STAR));
-            fiveStars.set(new Icon(VaadinIcon.STAR_O));
             rating.set(4);
-            Stream.of(one, two, three, four, five).forEach(HasComponents::removeAll);
-            one.add(oneStar.get()); two.add(twoStars.get()); three.add(threeStars.get()); four.add(fourStars.get()); five.add(fiveStars.get());
-            confirm.setEnabled(true);
+            updateStars(ratingStars(4));
         });
         five.addClickListener(event -> {
-            oneStar.set(new Icon(VaadinIcon.STAR));
-            twoStars.set(new Icon(VaadinIcon.STAR));
-            threeStars.set(new Icon(VaadinIcon.STAR));
-            fourStars.set(new Icon(VaadinIcon.STAR));
-            fiveStars.set(new Icon(VaadinIcon.STAR));
             rating.set(5);
-            Stream.of(one, two, three, four, five).forEach(HasComponents::removeAll);
-            one.add(oneStar.get()); two.add(twoStars.get()); three.add(threeStars.get()); four.add(fourStars.get()); five.add(fiveStars.get());
-            confirm.setEnabled(true);
+            updateStars(ratingStars(5));
         });
         dialog.add(layout);
         dialog.open();
+    }
+
+    private List<AtomicReference<Icon>> ratingStars(int rating){
+        AtomicInteger stars = new AtomicInteger(rating);
+        List<AtomicReference<Icon>> references = new ArrayList<>();
+        AtomicReference<Icon> oneStar = new AtomicReference<>(new Icon(VaadinIcon.STAR_O));
+        AtomicReference<Icon> twoStars = new AtomicReference<>(new Icon(VaadinIcon.STAR_O));
+        AtomicReference<Icon> threeStars = new AtomicReference<>(new Icon(VaadinIcon.STAR_O));
+        AtomicReference<Icon> fourStars = new AtomicReference<>(new Icon(VaadinIcon.STAR_O));
+        AtomicReference<Icon> fiveStars = new AtomicReference<>(new Icon(VaadinIcon.STAR_O));
+        Stream.of(oneStar, twoStars, threeStars, fourStars, fiveStars).forEach(star -> {
+            if (stars.getAndDecrement() >= 1) {
+                star.set(new Icon(VaadinIcon.STAR));
+            } else {
+                star.set(new Icon(VaadinIcon.STAR_O));
+            }
+            references.add(star);
+        });
+        return references;
+    }
+
+    private void updateStars(List<AtomicReference<Icon>> icons){
+        Stream.of(one, two, three, four, five).forEach(star -> {
+            star.removeAll();
+            star.add(icons.remove(0).get());
+        });
+        confirm.setEnabled(true);
     }
 
 }

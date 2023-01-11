@@ -101,16 +101,14 @@ public abstract class InboxView extends Div {
     protected Grid<ConversationDTO> conversationHeader(ConversationDTO conversation) {
         H3 title = new H3(conversation.getTitle());
         Button delete = new Button(new Icon(VaadinIcon.TRASH));
-        delete.addClickListener(click -> {
-            ui.makeYesNoDialog("Möchtest du die Konversation beenden und aus deiner Übersicht entfernen?", event -> {
-                if(Objects.equals(userControl.getCurrentUser().getRole(), Globals.Roles.STUDENT)) {
-                    inboxControl.endConversationStudent(conversation);
-                } else if(Objects.equals(userControl.getCurrentUser().getRole(), Globals.Roles.COMPANY)) {
-                    inboxControl.endConversationCompany(conversation);
-                }
-                UI.getCurrent().getPage().reload();
-            });
-        });
+        delete.addClickListener(click -> ui.makeYesNoDialog("Möchtest du die Konversation beenden und aus deiner Übersicht entfernen?", event -> {
+            if(Objects.equals(userControl.getCurrentUser().getRole(), Globals.Roles.STUDENT)) {
+                inboxControl.endConversationStudent(conversation);
+            } else if(Objects.equals(userControl.getCurrentUser().getRole(), Globals.Roles.COMPANY)) {
+                inboxControl.endConversationCompany(conversation);
+            }
+            UI.getCurrent().getPage().reload();
+        }));
         Grid<ConversationDTO> grid = new Grid<>();
         grid.setItems(conversation);
         grid.setHeight("10%");
