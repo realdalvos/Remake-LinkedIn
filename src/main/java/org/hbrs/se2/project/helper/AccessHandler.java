@@ -1,14 +1,15 @@
 package org.hbrs.se2.project.helper;
 
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.RouteConfiguration;
 import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.util.Globals;
 import org.hbrs.se2.project.views.AppView;
-import org.hbrs.se2.project.views.companyViews.*;
-import org.hbrs.se2.project.views.studentViews.JobsView;
-import org.hbrs.se2.project.views.studentViews.StudentInboxView;
-import org.hbrs.se2.project.views.studentViews.StudentProfileView;
-import org.hbrs.se2.project.views.studentViews.RegisterStudentView;
+import org.hbrs.se2.project.views.company.*;
+import org.hbrs.se2.project.views.student.JobsView;
+import org.hbrs.se2.project.views.student.StudentInboxView;
+import org.hbrs.se2.project.views.student.StudentProfileView;
+import org.hbrs.se2.project.views.student.RegisterStudentView;
 
 public class AccessHandler {
 
@@ -25,7 +26,7 @@ public class AccessHandler {
         /*setAnnotatedRoute activates the Route specified in given View for this session
             When adding a new view, its Route also has to be set to "RegisterAtStartup = false" and
             get activated here with setAnnotatedRoute(NewView.class). */
-        Class defaultView;
+        Class<? extends Div> defaultView;
         if (user.getRole().equals(Globals.Roles.COMPANY)) {  //If company
             configuration.setAnnotatedRoute(MyAdsView.class);
             configuration.setAnnotatedRoute(NewJobAdView.class);
@@ -53,7 +54,7 @@ public class AccessHandler {
         RouteConfiguration configuration = RouteConfiguration
                 .forSessionScope();
 
-        Class defaultView;
+        Class<? extends Div> defaultView;
 
         configuration.setAnnotatedRoute(CompanyProfileView.class);
         defaultView = CompanyProfileView.class;

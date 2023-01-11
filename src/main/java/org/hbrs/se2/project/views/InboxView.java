@@ -7,9 +7,7 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.messages.MessageList;
@@ -49,8 +47,10 @@ public abstract class InboxView extends Div {
     protected Grid<ConversationDTO> conversationGrid = new Grid<>();
     protected Grid<ConversationDTO> chatHeader = new Grid<>();
     protected Grid<ConversationDTO> chat = new Grid<>();
-    protected VerticalLayout chatLayout = new VerticalLayout(chatHeader, chat);
-    protected SplitLayout mainLayout = new SplitLayout(conversationGrid, chatLayout);
+
+    protected VerticalLayout mainLeft = new VerticalLayout(conversationGrid);
+    protected VerticalLayout mainRight = new VerticalLayout(chatHeader, chat);
+    protected SplitLayout mainLayout = new SplitLayout(mainLeft, mainRight);
 
     protected Grid<ConversationDTO> conversationLayout(MessageList list, ConversationDTO conversation) {
         Grid<ConversationDTO> grid = new Grid<>();
@@ -99,7 +99,7 @@ public abstract class InboxView extends Div {
     }
 
     protected Grid<ConversationDTO> conversationHeader(ConversationDTO conversation) {
-        H3 title = new H3(conversation.getTitle());
+        H4 title = new H4(conversation.getTitle());
         Button delete = new Button(new Icon(VaadinIcon.TRASH));
         delete.addClickListener(click -> ui.makeYesNoDialog("Möchtest du die Konversation beenden und aus deiner Übersicht entfernen?", event -> {
             if(Objects.equals(userControl.getCurrentUser().getRole(), Globals.Roles.STUDENT)) {
@@ -111,10 +111,10 @@ public abstract class InboxView extends Div {
         }));
         Grid<ConversationDTO> grid = new Grid<>();
         grid.setItems(conversation);
-        grid.setHeight("10%");
+        grid.setHeight("15%");
         grid.setWidthFull();
         grid.setSelectionMode(Grid.SelectionMode.NONE);
-        grid.addComponentColumn(component -> title).setTextAlign(ColumnTextAlign.END);
+        grid.addComponentColumn(component -> title).setTextAlign(ColumnTextAlign.START);
         grid.addComponentColumn(component -> delete).setWidth("10%").setTextAlign(ColumnTextAlign.END);
         return grid;
     }
@@ -126,11 +126,11 @@ public abstract class InboxView extends Div {
         mainLayout.setSplitterPosition(40);
         mainLayout.setHeight("100%");
         chatHeader.setItems(new ConversationDTOImpl());
-        chatHeader.setHeight("10%");
+        chatHeader.setHeight("15%");
         chatHeader.setSelectionMode(Grid.SelectionMode.NONE);
-        chat.setHeight("90%");
+        chat.setHeight("85%");
         chat.setSelectionMode(Grid.SelectionMode.NONE);
-        chatHeader.addComponentColumn(component -> new H3("Du hast " + unread + " ungelesene " + (unread == 1 ? "Nachricht!" : "Nachrichten!")))
+        chatHeader.addComponentColumn(component -> new H4("Du hast " + unread + " ungelesene " + (unread == 1 ? "Nachricht!" : "Nachrichten!")))
                 .setTextAlign(ColumnTextAlign.CENTER);
         return conversationGrid;
     }
