@@ -30,6 +30,8 @@ public abstract class RegisterView extends VerticalLayout {
     protected PasswordField confirmPassword = new PasswordField("Passwort bestätigen");
     protected TextField username = new TextField("Benutzername");
     protected EmailField email = createEmailField();
+
+    protected final String NOTEMPTY = "Darf nicht leer sein";
     protected Binder<UserDTOImpl> userBinder = new BeanValidationBinder<>(UserDTOImpl.class);
 
     protected Button loginButton() {
@@ -47,12 +49,12 @@ public abstract class RegisterView extends VerticalLayout {
     }
 
     protected EmailField createEmailField() {
-        EmailField email = new EmailField("E-Mail");
-        email.getElement().setAttribute("name", "email");
-        email.setPlaceholder("username@example.com");
-        email.setClearButtonVisible(true);
-        email.setMaxLength(100);
-        return email;
+        EmailField emailField = new EmailField("E-Mail");
+        emailField.getElement().setAttribute("name", "email");
+        emailField.setPlaceholder("username@example.com");
+        emailField.setClearButtonVisible(true);
+        emailField.setMaxLength(100);
+        return emailField;
     }
 
     protected FormLayout createFormLayout(Component[] components) {
@@ -71,7 +73,7 @@ public abstract class RegisterView extends VerticalLayout {
         //The Pattern matches from left to right: At least one letter, at least one digit, at lest one special character and at least 8 characters
         userBinder
                 .forField(userPassword)
-                .asRequired("Darf nicht leer sein")
+                .asRequired(NOTEMPTY)
                 .withValidator(pw -> pw.matches("^(?=.+[a-zA-Z])(?=.+\\d)(?=.+\\W).{8,}$"),"Dein Passwort ist wahrscheinlich nicht sicher genug. Halte dich bitte an die Vorgaben")
                 .bind(UserDTOImpl::getPassword, UserDTOImpl::setPassword);
         // checks if both passwords are equal
@@ -82,14 +84,14 @@ public abstract class RegisterView extends VerticalLayout {
                 .bind(UserDTOImpl::getPassword, UserDTOImpl::setPassword);
         userBinder
                 .forField(username)
-                .asRequired("Darf nicht leer sein")
+                .asRequired(NOTEMPTY)
                 .withValidator(user -> userControl.checkUsernameUnique(user), "Benutzername existiert bereits")
                 .bind(UserDTOImpl::getUsername, UserDTOImpl::setUsername);
         userBinder
                 .forField(email)
-                .asRequired("Darf nicht leer sein")
-                .withValidator(new EmailValidator("Keine gültige EMail Adresse"))
-                .withValidator(email -> userControl.checkEmailUnique(email), "Email existiert bereits")
+                .asRequired(NOTEMPTY)
+                .withValidator(new EmailValidator("Keine gültige Email Adresse"))
+                .withValidator(mail -> userControl.checkEmailUnique(mail), "Email existiert bereits")
                 .bind(UserDTOImpl::getEmail, UserDTOImpl::setEmail);
         // Map input field values to DTO variables based on chosen names
         userBinder.bindInstanceFields(this);

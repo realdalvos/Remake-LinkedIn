@@ -43,14 +43,6 @@ public class LoginView extends VerticalLayout {
 
     private LoginI18n createLoginI18n(){
         LoginI18n i18n = LoginI18n.createDefault();
-
-	    /*  not sure if needed
-	    i18n.setHeader(new LoginI18n.Header());
-	    i18n.setForm(new LoginI18n.Form());
-	    i18n.setErrorMessage(new LoginI18n.ErrorMessage());
-        i18n.getHeader().setTitle("HEADER");
-        i18n.getHeader().setDescription("HEADER DESCRIPTION");
-	     */
         i18n.getForm().setUsername(getTranslation("view.login.text.username"));
         i18n.getForm().setTitle(getTranslation("view.login.text.title"));
         i18n.getForm().setSubmit(getTranslation("view.login.text.submit"));
@@ -127,7 +119,7 @@ public class LoginView extends VerticalLayout {
 
                     if(isBanned){
                         // setting access
-                        AccessHandler.setAccessBanned(authorizationControl.getCurrentUser());
+                        AccessHandler.setAccessBanned();
                         // navigate to ""
                         NavigateHandler.navigateToDefaultPage();
                     }else{

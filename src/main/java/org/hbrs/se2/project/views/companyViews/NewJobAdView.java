@@ -33,9 +33,6 @@ public class NewJobAdView extends Div {
 
     CommonUIElementProvider ui;
 
-    private final JobControl jobControl;
-    private final UserControl userControl;
-
     private final Logger logger = Utils.getLogger(this.getClass().getName());
 
     // Job title text area
@@ -43,8 +40,6 @@ public class NewJobAdView extends Div {
     // Job Description text area
     private final TextArea description = createDescriptionArea();
     // Contact details
-
-    // Changed TextField to EmailField to check email addresses
     private final EmailField contactdetails = createEmailField();
     // Salary text field
     private final IntegerField salary = createSalaryField();
@@ -56,8 +51,6 @@ public class NewJobAdView extends Div {
     private final Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
 
     public NewJobAdView(JobControl jobControl, UserControl userControl, CommonUIElementProvider ui) {
-        this.jobControl = jobControl;
-        this.userControl = userControl;
         this.ui = ui;
 
         VerticalLayout verticalLayout = new VerticalLayout();
@@ -97,28 +90,28 @@ public class NewJobAdView extends Div {
     // Added character counts, placeholders and delete options
 
     private TextField createTitleField() {
-        TextField title = new TextField(getTranslation("view.job.text.title"));
+        TextField titleField = new TextField(getTranslation("view.job.text.title"));
         int charLimitTitle = 75;    // smaller character Limit for title
-        title.setWidthFull();
-        title.setMaxLength(charLimitTitle);
-        title.setValueChangeMode(ValueChangeMode.EAGER); // changing character counter while typing
-        title.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitTitle));
-        title.setPlaceholder(getTranslation("view.job.text.placeholder.title"));
-        title.setClearButtonVisible(true); // opens oportunity to delete text
-        return title;
+        titleField.setWidthFull();
+        titleField.setMaxLength(charLimitTitle);
+        titleField.setValueChangeMode(ValueChangeMode.EAGER); // changing character counter while typing
+        titleField.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitTitle));
+        titleField.setPlaceholder(getTranslation("view.job.text.placeholder.title"));
+        titleField.setClearButtonVisible(true); // opens oportunity to delete text
+        return titleField;
     }
 
     private TextArea createDescriptionArea() {
-        TextArea description = new TextArea(getTranslation("view.job.text.description"));
-        description.getElement().setAttribute("name", "description");
+        TextArea descriptionArea = new TextArea(getTranslation("view.job.text.description"));
+        descriptionArea.getElement().setAttribute("name", "description");
         int charLimitDescr = 1024;
-        description.setWidthFull();
-        description.setMaxLength(charLimitDescr);
-        description.setValueChangeMode(ValueChangeMode.EAGER);
-        description.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
-        description.setPlaceholder(getTranslation("view.job.text.placeholder.description"));
-        description.setClearButtonVisible(true);
-        return description;
+        descriptionArea.setWidthFull();
+        descriptionArea.setMaxLength(charLimitDescr);
+        descriptionArea.setValueChangeMode(ValueChangeMode.EAGER);
+        descriptionArea.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
+        descriptionArea.setPlaceholder(getTranslation("view.job.text.placeholder.description"));
+        descriptionArea.setClearButtonVisible(true);
+        return descriptionArea;
     }
 
     private EmailField  createEmailField() {
@@ -140,15 +133,15 @@ public class NewJobAdView extends Div {
     }
 
     private TextField createWorkLocation() {
-        TextField location = new TextField(getTranslation("view.job.text.location"));
+        TextField locationField = new TextField(getTranslation("view.job.text.location"));
         int charLimitDescr = 100;
-        location.setWidthFull();
-        location.setMaxLength(charLimitDescr);
-        location.setValueChangeMode(ValueChangeMode.EAGER);
-        location.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
-        location.setPlaceholder(getTranslation("view.job.text.placeholder.location")); // added Placeholder for continuity in job offers
-        location.setClearButtonVisible(true);
-        return location;
+        locationField.setWidthFull();
+        locationField.setMaxLength(charLimitDescr);
+        locationField.setValueChangeMode(ValueChangeMode.EAGER);
+        locationField.addValueChangeListener(e -> e.getSource().setHelperText(e.getValue().length() + "/" + charLimitDescr));
+        locationField.setPlaceholder(getTranslation("view.job.text.placeholder.location")); // added Placeholder for continuity in job offers
+        locationField.setClearButtonVisible(true);
+        return locationField;
     }
 
 }

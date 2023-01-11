@@ -18,6 +18,7 @@ import org.hbrs.se2.project.control.AuthorizationControl;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import org.hbrs.se2.project.control.ProfileControl;
 import org.hbrs.se2.project.control.UserControl;
+import org.hbrs.se2.project.dtos.UserDTO;
 import org.hbrs.se2.project.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
 import org.hbrs.se2.project.util.Utils;
@@ -42,9 +43,9 @@ public abstract class ProfileView extends Div {
     protected PasswordField password = new PasswordField("Passwort:");
     protected PasswordField passwordConfirm = new PasswordField("Passwort bestätigen:");
 
-    protected Button edit = new Button("Profil bearbeiten");
-    protected Button save;
-    protected Button delete = new Button("Account löschen");
+    protected Button editUser = new Button("Profil bearbeiten");
+    protected Button saveChanges;
+    protected Button deleteUser = new Button("Account löschen");
     protected Button changePasswd = new Button("Passwort ändern");
     protected VerticalLayout layout = new VerticalLayout();
     protected FormLayout buttonLayout = new FormLayout();
@@ -63,10 +64,10 @@ public abstract class ProfileView extends Div {
         layout.getStyle().set("margin-left", "var(--lumo-space-xl");
         add(layout);
 
-        delete.addClickListener(buttonClickEvent -> {
-            VerticalLayout layout = new VerticalLayout();
+        deleteUser.addClickListener(buttonClickEvent -> {
+            VerticalLayout deleteLayout = new VerticalLayout();
             HorizontalLayout buttons = new HorizontalLayout();
-            Dialog dialog = ui.makeGenericDialog(layout, buttons);
+            Dialog dialog = ui.makeGenericDialog(deleteLayout, buttons);
             Text message = new Text("Bitte gib deinen Accountnamen zur Bestätigung ein:");
             String user = userControl.getCurrentUser().getUsername();
             TextField confirmField = new TextField();
@@ -81,22 +82,23 @@ public abstract class ProfileView extends Div {
             delete.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
             delete.addClickListener(event -> {
                 try {
-                    profileControl.deleteUser(userControl.getCurrentUser());
+                    UserDTO currentUser = userControl.getCurrentUser();
                     authorizationControl.logoutUser();
+                    profileControl.deleteUser(currentUser);
                 } catch (Exception e) {
                     logger.error("Something went wrong when deleting student from DB");
                 }
                 dialog.close();
             });
             buttons.add(close, delete);
-            layout.add(message, confirmField, buttons);
+            deleteLayout.add(message, confirmField, buttons);
             dialog.open();
         });
 
         changePasswd.addClickListener(buttonClickEvent -> {
-            VerticalLayout layout = new VerticalLayout();
+            VerticalLayout changeLayout = new VerticalLayout();
             HorizontalLayout buttons = new HorizontalLayout();
-            Dialog dialog = ui.makeGenericDialog(layout, buttons);
+            Dialog dialog = ui.makeGenericDialog(changeLayout, buttons);
             Text message = new Text("Bitte gib dein neues Passwort ein und bestätige es:");
             password.setHelperText("Mindestens 8 Zeichen bestehend aus Buchstaben, Zahlen und Sonderzeichen");
             Button close = new Button("Abbrechen");
@@ -118,7 +120,7 @@ public abstract class ProfileView extends Div {
                 }
             });
             buttons.add(close, save);
-            layout.add(message, password, passwordConfirm, buttons);
+            changeLayout.add(message, password, passwordConfirm, buttons);
             dialog.open();
         });
     }
@@ -159,8 +161,8 @@ public abstract class ProfileView extends Div {
                 .forField(email)
                 .asRequired("Darf nicht leer sein")
                 .withValidator(new EmailValidator("Keine gültige EMail Adresse"))
-                .withValidator(email -> email.equals(userControl.getCurrentUser().getEmail())
-                        || userControl.checkEmailUnique(email), "Email existiert bereits")
+                .withValidator(mail -> mail.equals(userControl.getCurrentUser().getEmail())
+                        || userControl.checkEmailUnique(mail), "Email existiert bereits")
                 .bind(UserDTOImpl::getEmail, UserDTOImpl::setEmail);
     }
 
