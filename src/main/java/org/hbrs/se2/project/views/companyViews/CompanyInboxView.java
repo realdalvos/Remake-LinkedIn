@@ -10,7 +10,7 @@ import org.hbrs.se2.project.views.AppView;
 import org.hbrs.se2.project.views.InboxView;
 
 @Route(value = Globals.Pages.COMPANY_INBOX_VIEW, layout = AppView.class, registerAtStartup = false)
-@PageTitle("Posteingang")
+@PageTitle("Postfach")
 public class CompanyInboxView extends InboxView {
 
     public CompanyInboxView(InboxControl inboxControl, UserControl userControl) {
@@ -24,8 +24,8 @@ public class CompanyInboxView extends InboxView {
         conversationGrid.addComponentColumn(this::unreadMessages).setWidth("10%").setTextAlign(ColumnTextAlign.END);
         conversationGrid.addComponentColumn(this::latestMessage).setWidth("20%").setTextAlign(ColumnTextAlign.END);
         conversationGrid.addSelectionListener(select -> select.getFirstSelectedItem().ifPresent(conversation -> {
-            chatLayout.replace(chatLayout.getComponentAt(0), conversationHeader(conversation));
-            chatLayout.replace(chatLayout.getComponentAt(1), conversationLayout(inboxControl.getMessagesOfCompany(conversation), conversation));
+            mainRight.replace(mainRight.getComponentAt(0), conversationHeader(conversation));
+            mainRight.replace(mainRight.getComponentAt(1), conversationLayout(inboxControl.getMessagesOfCompany(conversation), conversation));
         }));
         setSizeFull();
         setHeightFull();

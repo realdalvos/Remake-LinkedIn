@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 
 import java.util.Optional;
 
-@PWA(name="HBRS Collab", shortName = "HBRScollab", enableInstallPrompt = false)
+@PWA(name="Coll@HBRS", shortName = "Collaborating @HBRS", enableInstallPrompt = false)
 public class AppView extends AppLayout implements BeforeEnterObserver {
     private final Logger logger = Utils.getLogger(this.getClass().getName());
     private Tabs menu;
@@ -118,7 +118,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
         // add logo with alignment
         logoLayout.setId("logo");
-        H1 hbrsc = new H1("HBRS Collab");
+        H1 hbrsc = new H1(getTranslation("view.main.logo"));
         hbrsc.getElement().getStyle().set("font-size","45px"); // changed font size
         hbrsc.getElement().getStyle().set("text-align","center"); // logo is now in center
         logoLayout.add(hbrsc);
@@ -157,7 +157,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             logger.info("User is student");
             tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.jobs"), JobsView.class));
             tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.profile"), StudentProfileView.class));
-            tabs = Utils.append(tabs, createTab("Kommunikation", StudentInboxView.class));
+            tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.mailbox"), StudentInboxView.class));
         } else
             // has the user the role "company" they have the tabs "My Ads"
             if(authorizationControl.hasUserRole(authorizationControl.getCurrentUser(), Globals.Roles.COMPANY)) {
@@ -172,9 +172,9 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
                 if(!banned) {
                     logger.info("User is company and not banned");
                     tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.myjobs"), MyAdsView.class));
-                    tabs = Utils.append(tabs, createTab("Studentensuche", SearchStudentsView.class));
+                    tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.students"), SearchStudentsView.class));
                     tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.profile"), CompanyProfileView.class));
-                    tabs = Utils.append(tabs, createTab("Kommunikation", CompanyInboxView.class));
+                    tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.mailbox"), CompanyInboxView.class));
                 } else {
                     logger.info("User is company and banned!");
                 }

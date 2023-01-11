@@ -29,11 +29,11 @@ import java.util.stream.Stream;
  * Company - Students List View
  */
 @Route(value = Globals.Pages.SEARCH_STUDENT_VIEW, layout = AppView.class, registerAtStartup = false)
-@PageTitle("Student")
+@PageTitle("Studentensuche")
 public class SearchStudentsView extends Div {
     CommonUIElementProvider ui;
     private final TextField searchField = new TextField();
-    private final Button searchButton = new Button("Suchen");
+    private final Button searchButton = new Button(getTranslation("view.button.search"));
 
     // A Company can have all students displayed with the following button
     private final  Button allStudentsButton = new Button("Alle Studenten");

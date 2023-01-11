@@ -37,10 +37,10 @@ public abstract class ProfileView extends Div {
     @Autowired
     protected CommonUIElementProvider ui;
 
-    protected TextField username = new TextField("Benutzername:");
-    protected TextField email = new TextField("Email-Adresse:");
-    protected PasswordField password = new PasswordField("Passwort:");
-    protected PasswordField passwordConfirm = new PasswordField("Passwort bestätigen:");
+    protected TextField username = new TextField("Benutzername");
+    protected TextField email = new TextField("Email-Adresse");
+    protected PasswordField password = new PasswordField("Passwort");
+    protected PasswordField passwordConfirm = new PasswordField("Passwort bestätigen");
 
     protected Button edit = new Button("Profil bearbeiten");
     protected Button save;
@@ -67,14 +67,14 @@ public abstract class ProfileView extends Div {
             VerticalLayout layout = new VerticalLayout();
             HorizontalLayout buttons = new HorizontalLayout();
             Dialog dialog = ui.makeGenericDialog(layout, buttons);
-            Text message = new Text("Bitte gib deinen Accountnamen zur Bestätigung ein:");
+            Text message = new Text("Bitte gib deinen Accountnamen zur Bestätigung ein");
             String user = userControl.getCurrentUser().getUsername();
             TextField confirmField = new TextField();
             confirmField.setPlaceholder(user);
             confirmField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
             Button close = new Button("Abbrechen");
             close.addClickListener(event -> dialog.close());
-            Button delete = new Button("Löschen");
+            Button delete = new Button(getTranslation("view.button.search"));
             delete.setEnabled(false);
             confirmField.setValueChangeMode(ValueChangeMode.EAGER);
             confirmField.addValueChangeListener(event -> delete.setEnabled(confirmField.getValue().equals(user)));
@@ -97,7 +97,7 @@ public abstract class ProfileView extends Div {
             VerticalLayout layout = new VerticalLayout();
             HorizontalLayout buttons = new HorizontalLayout();
             Dialog dialog = ui.makeGenericDialog(layout, buttons);
-            Text message = new Text("Bitte gib dein neues Passwort ein und bestätige es:");
+            Text message = new Text("Bitte gib dein neues Passwort ein und bestätige es");
             password.setHelperText("Mindestens 8 Zeichen bestehend aus Buchstaben, Zahlen und Sonderzeichen");
             Button close = new Button("Abbrechen");
             close.addClickListener(event -> dialog.close());

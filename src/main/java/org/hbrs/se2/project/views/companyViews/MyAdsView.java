@@ -76,7 +76,7 @@ public class MyAdsView extends Div {
         grid.addColumn(JobDTO::getSalary).setHeader(getTranslation("view.job.text.salary")).setSortable(true).setWidth("15%");
         grid.addColumn(JobDTO::getLocation).setHeader(getTranslation("view.job.text.location")).setWidth("15%");
         grid.addComponentColumn(JobDTO -> {
-            Button deleteButton = new Button(getTranslation("view.job.button.delete"));
+            Button deleteButton = new Button(getTranslation("view.button.delete"));
             deleteButton.addClickListener(e -> ui.makeYesNoDialog("Möchtest du dieses Jobangebot wirklich löschen?",
                     event -> {
                         jobControl.deleteJob(JobDTO.getJobid());

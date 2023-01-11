@@ -51,7 +51,7 @@ public class NewJobAdView extends Div {
     // Location text field
     private final TextField location = createWorkLocation();
     // post new job button
-    private final Button postButton = new Button(getTranslation("view.job.button.create"));
+    private final Button postButton = new Button(getTranslation("view.button.create"));
 
     private final Binder<JobDTOImpl> binder = new BeanValidationBinder<>(JobDTOImpl.class);
 
