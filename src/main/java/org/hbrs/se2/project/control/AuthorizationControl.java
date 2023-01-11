@@ -46,11 +46,11 @@ public class AuthorizationControl {
     }
 
     /**
-     * Logout the current user by closing his session and redirecting him to the default page (login page)
+     * Logout the current user by closing his session and redirecting him to the login page
      */
     public void logoutUser() {
         UI.getCurrent().getSession().close();
-        NavigateHandler.navigateToDefaultPage();
+        NavigateHandler.navigateToLoginPage();
     }
 
     public boolean isCompanyOfUserBanned(UserDTO user) throws DatabaseUserException {
