@@ -27,9 +27,9 @@ public class StudentProfileView extends ProfileView {
 
     private final Logger logger = Utils.getLogger(this.getClass().getName());
 
-    private final TextField major = new TextField("Füge einen neuen Studiengang hinzu:");
-    private final TextField topic = new TextField("Füge ein neues Interessengebiet hinzu:");
-    private final TextField skill = new TextField("Füge eine neue Fähigkeit hinzu:");
+    private final TextField newMajor = new TextField("Füge einen neuen Studiengang hinzu:");
+    private final TextField newTopic = new TextField("Füge ein neues Interessengebiet hinzu:");
+    private final TextField newSkill = new TextField("Füge eine neue Fähigkeit hinzu:");
     private final TextField firstname = new TextField("Vorname");
     private final TextField lastname = new TextField("Nachname");
     private final TextField university = new TextField("Universität");
@@ -41,10 +41,14 @@ public class StudentProfileView extends ProfileView {
     private Set<MajorDTO> majors;
     private Set<TopicDTO> topics;
     private Set<SkillDTO> skills;
-    private Set<String> newMajors, newTopics, newSkills;
+    private Set<String> newMajors;
+    private Set<String> newTopics;
+    private Set<String> newSkills;
     private final Set<MajorDTO> removeMajors = new HashSet<>();
     private final Set<TopicDTO> removeTopics = new HashSet<>();
     private final Set<SkillDTO> removeSkills = new HashSet<>();
+
+    private final static String DELETE = "Entfernen";
 
     private final Binder<StudentDTOImpl> studentBinder = new BeanValidationBinder<>(StudentDTOImpl.class);
 
@@ -73,14 +77,16 @@ public class StudentProfileView extends ProfileView {
 
     private void editLayout() {
         setAllGrids();
-        Grid<String> newMajorsGrid, newTopicsGrid, newSkillsGrid;
+        Grid<String> newMajorsGrid;
+        Grid<String> newTopicsGrid;
+        Grid<String> newSkillsGrid;
         FormLayout editLayout = profileLayout();
         Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(field -> {
             editLayout.add(field);
             field.setReadOnly(false);
         });
         gridMajors.addComponentColumn(major -> {
-            Button deleteButton = new Button("Entfernen");
+            Button deleteButton = new Button(DELETE);
             deleteButton.addClickListener(e -> {
                 removeMajors.add(major);
                 majors.remove(major);
@@ -88,9 +94,11 @@ public class StudentProfileView extends ProfileView {
             });
             return deleteButton;
         });
-        editLayout.add(gridMajors, newMajorsGrid = newEntriesGrid(newMajors = new HashSet<>()), newEntryLayout(major, newMajors, newMajorsGrid));
+        newMajors = new HashSet<>();
+        newMajorsGrid = newEntriesGrid(newMajors);
+        editLayout.add(gridMajors, newMajorsGrid, newEntryLayout(newMajor, newMajors, newMajorsGrid));
         gridTopics.addComponentColumn(topic -> {
-            Button deleteButton = new Button("Entfernen");
+            Button deleteButton = new Button(DELETE);
             deleteButton.addClickListener(e -> {
                 removeTopics.add(topic);
                 topics.remove(topic);
@@ -98,9 +106,11 @@ public class StudentProfileView extends ProfileView {
             });
             return deleteButton;
         });
-        editLayout.add(gridTopics, newTopicsGrid = newEntriesGrid(newTopics = new HashSet<>()), newEntryLayout(topic, newTopics, newTopicsGrid));
+        newTopics = new HashSet<>();
+        newTopicsGrid = newEntriesGrid(newTopics);
+        editLayout.add(gridTopics, newTopicsGrid, newEntryLayout(newTopic, newTopics, newTopicsGrid));
         gridSkills.addComponentColumn(skill -> {
-            Button deleteButton = new Button("Entfernen");
+            Button deleteButton = new Button(DELETE);
             deleteButton.addClickListener(e -> {
                 removeSkills.add(skill);
                 skills.remove(skill);
@@ -108,15 +118,17 @@ public class StudentProfileView extends ProfileView {
             });
             return deleteButton;
         });
-        editLayout.add(gridSkills, newSkillsGrid = newEntriesGrid(newSkills = new HashSet<>()), newEntryLayout(skill, newSkills, newSkillsGrid));
+        newSkills = new HashSet<>();
+        newSkillsGrid = newEntriesGrid(newSkills);
+        editLayout.add(gridSkills, newSkillsGrid, newEntryLayout(newSkill, newSkills, newSkillsGrid));
         Stream.of(gridMajors, newMajorsGrid, gridTopics, newTopicsGrid, gridSkills, newSkillsGrid).forEach(grid -> {
             grid.setAllRowsVisible(true);
             editLayout.setColspan(grid, 2);
         });
-        save = new Button("Profil speichern");
-        buttonLayout.add(save);
+        saveChanges = new Button("Profil speichern");
+        buttonLayout.add(saveChanges);
         layout.add(editLayout, buttonLayout);
-        save.addClickListener(buttonClickEvent -> {
+        saveChanges.addClickListener(buttonClickEvent -> {
             if (userBinder.isValid() && studentBinder.isValid()) {
                 ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?",
                         event -> {
@@ -134,9 +146,9 @@ public class StudentProfileView extends ProfileView {
                             } catch (DatabaseUserException e) {
                                 logger.error("Something went wrong with saving student data");
                             }
-                            removeMajors.forEach(major -> profileControl.removeMajor(userControl.getCurrentUser().getUserid(), major.getMajorid()));
-                            removeTopics.forEach(topic -> profileControl.removeTopic(userControl.getCurrentUser().getUserid(), topic.getTopicid()));
-                            removeSkills.forEach(skill -> profileControl.removeSkill(userControl.getCurrentUser().getUserid(), skill.getSkillid()));
+                            removeMajors.forEach(majorDTO -> profileControl.removeMajor(userControl.getCurrentUser().getUserid(), majorDTO.getMajorid()));
+                            removeTopics.forEach(topicDTO -> profileControl.removeTopic(userControl.getCurrentUser().getUserid(), topicDTO.getTopicid()));
+                            removeSkills.forEach(skillDTO -> profileControl.removeSkill(userControl.getCurrentUser().getUserid(), skillDTO.getSkillid()));
                             viewLayout();
                         });
 
@@ -163,9 +175,9 @@ public class StudentProfileView extends ProfileView {
             viewLayout.add(grid);
             viewLayout.setColspan(grid, 2);
         });
-        buttonLayout.add(edit, changePasswd, delete);
+        buttonLayout.add(editUser, changePasswd, deleteUser);
         layout.add(viewLayout, buttonLayout);
-        edit.addClickListener(buttonClickEvent -> {
+        editUser.addClickListener(buttonClickEvent -> {
             buttonLayout.removeAll();
             layout.removeAll();
             editLayout();
@@ -177,7 +189,7 @@ public class StudentProfileView extends ProfileView {
         grid.addColumn(String::valueOf);
         grid.setAllRowsVisible(true);
         grid.addComponentColumn(newEntry -> {
-            Button deleteButton = new Button("Entfernen");
+            Button deleteButton = new Button(DELETE);
             deleteButton.addClickListener(e -> {
                 entries.remove(newEntry);
                 grid.setItems(entries);
@@ -207,10 +219,10 @@ public class StudentProfileView extends ProfileView {
         studentBinder
                 .forField(matrikelnumber)
                 .asRequired("Darf nicht leer sein")
-                .withValidator(matrikelnumber -> matrikelnumber.matches("-?\\d+")
-                        && matrikelnumber.length() <= 7, "Keine gültige Matrikelnummer")
-                .withValidator(matrikelnumber -> matrikelnumber.equals(userControl.getStudentProfile(userControl.getCurrentUser().getUserid()).getMatrikelnumber())
-                        || userControl.checkMatrikelnumberUnique(matrikelnumber), "Matrikelnummer existiert bereits")
+                .withValidator(mn -> mn.matches("-?\\d+")
+                        && mn.length() <= 7, "Keine gültige Matrikelnummer")
+                .withValidator(mn -> mn.equals(userControl.getStudentProfile(userControl.getCurrentUser().getUserid()).getMatrikelnumber())
+                        || userControl.checkMatrikelnumberUnique(mn), "Matrikelnummer existiert bereits")
                 .bind(StudentDTOImpl::getMatrikelnumber, StudentDTOImpl::setMatrikelnumber);
         studentBinder.bindInstanceFields(this);
     }

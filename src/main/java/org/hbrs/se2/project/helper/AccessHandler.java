@@ -49,7 +49,7 @@ public class AccessHandler {
         configuration.removeRoute(RegisterStudentView.class);
     }
 
-    public static void setAccessBanned(UserDTO currentUser) {
+    public static void setAccessBanned() {
         RouteConfiguration configuration = RouteConfiguration
                 .forSessionScope();
 

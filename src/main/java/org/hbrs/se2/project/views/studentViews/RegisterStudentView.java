@@ -96,10 +96,10 @@ public class RegisterStudentView extends RegisterView {
         studentBinder.setBean(new StudentDTOImpl());
         studentBinder
                 .forField(matrikelnumber)
-                .asRequired("Darf nicht leer sein")
-                .withValidator(matrikelnumber -> matrikelnumber.matches("-?\\d+")
-                        && matrikelnumber.length() <= 7, "Keine gültige Matrikelnummer")
-                .withValidator(matrikelnumber -> userControl.checkMatrikelnumberUnique(matrikelnumber), "Matrikelnummer existiert bereits")
+                .asRequired(NOTEMPTY)
+                .withValidator(mn -> mn.matches("-?\\d+")
+                        && mn.length() <= 7, "Keine gültige Matrikelnummer")
+                .withValidator(mn -> userControl.checkMatrikelnumberUnique(mn), "Matrikelnummer existiert bereits")
                 .bind(StudentDTOImpl::getMatrikelnumber, StudentDTOImpl::setMatrikelnumber);
         studentBinder.bindInstanceFields(this);
     }

@@ -166,7 +166,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
                 try{
                     banned = authorizationControl.isCompanyOfUserBanned(authorizationControl.getCurrentUser());
                 } catch (DatabaseUserException ex){
-
+                    logger.info("User is not available");
                 }
 
                 if(!banned) {

@@ -62,9 +62,9 @@ public class CompanyProfileView extends ProfileView {
                 }
         );
         Stream.of(name, industry).forEach(field -> field.setMaxLength(32));
-        buttonLayout.add(edit, changePasswd, delete);
+        buttonLayout.add(editUser, changePasswd, deleteUser);
         layout.add(viewLayout, buttonLayout);
-        edit.addClickListener(buttonClickEvent -> {
+        editUser.addClickListener(buttonClickEvent -> {
             buttonLayout.removeAll();
             layout.removeAll();
             editLayout();
@@ -78,10 +78,10 @@ public class CompanyProfileView extends ProfileView {
             field.setReadOnly(false);
             editLayout.add(field);
         });
-        save = new Button("Profil speichern");
-        buttonLayout.add(save);
+        saveChanges = new Button("Profil speichern");
+        buttonLayout.add(saveChanges);
         layout.add(editLayout, buttonLayout);
-        save.addClickListener(buttonClickEvent -> {
+        saveChanges.addClickListener(buttonClickEvent -> {
             if (userBinder.isValid() && companyBinder.isValid()) {
                 ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?",
                         event -> {
@@ -113,7 +113,8 @@ public class CompanyProfileView extends ProfileView {
 
     private Span statusBadge() {
         Icon icon;
-        Span info, badge;
+        Span info;
+        Span badge;
         if (banned) {
             icon = new Icon(VaadinIcon.INFO_CIRCLE);
             icon.getStyle().set("padding", "var(--lumo-space-xs");
