@@ -245,7 +245,7 @@ public class JobsView extends Div {
         Button send = new Button("Senden");
         send.addClickListener(event -> {
             if (!content.isEmpty()) {
-                ui.makeYesNoDialog("Anfrage abschicken?", confirm -> {
+                ui.makeYesNoDialog("Anfrage abschicken?", click -> {
                     Binder<ReportsDTOImpl> binder = new BeanValidationBinder<>(ReportsDTOImpl.class);
                     binder.setBean(new ReportsDTOImpl(companyid, studentid, content.getValue()));
                     reportsControl.createReport(binder.getBean());
