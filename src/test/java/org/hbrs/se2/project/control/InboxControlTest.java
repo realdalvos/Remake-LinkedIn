@@ -136,7 +136,9 @@ public class InboxControlTest {
     void multipleMessagesTest(){
         ConversationDTO conversationDTO = createConversation("multipleMessagesTest");
         Instant testTime1 = Instant.now();
+        waitOneSec();
         Instant testTime2 = Instant.now();
+        waitOneSec();
         Instant testTime3 = Instant.now();
         MessageDTO message1 = createMessage(conversationDTO, "Test message 1", testTime1, studentDTO.getUserid());
         MessageDTO message2 = createMessage(conversationDTO, "Test message 2", testTime2, companyDTO.getUserid());
@@ -173,7 +175,9 @@ public class InboxControlTest {
     void getLatestMessageTimeTest(){
         ConversationDTO conversationDTO = createConversation("timeTest");
         Instant testTime1 = Instant.now();
+        waitOneSec();
         Instant testTime2 = Instant.now();
+        waitOneSec();
         Instant testTime3 = Instant.now();
         createMessage(conversationDTO, "Test message 1", testTime1, studentDTO.getUserid());
         createMessage(conversationDTO, "Test message 2", testTime2, companyDTO.getUserid());
@@ -236,8 +240,18 @@ public class InboxControlTest {
 
     private void createMultipleMessages(ConversationDTO conversationDTO){
         createMessage(conversationDTO, "Test message 1", Instant.now(), studentDTO.getUserid());
+        waitOneSec();
         createMessage(conversationDTO, "Test message 2", Instant.now(), companyDTO.getUserid());
+        waitOneSec();
         createMessage(conversationDTO, "Test message 3", Instant.now(), studentDTO.getUserid());
+    }
+
+    private void waitOneSec(){
+        try {
+            Thread.sleep(1000);
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
     }
 
 }
