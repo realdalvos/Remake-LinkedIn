@@ -70,7 +70,7 @@ class org.hbrs.se2.project.entities.Student {
 + void addTopic(Topic)
 + void removeTopic(Topic)
 }
-class org.hbrs.se2.project.views.companyViews.CompanyProfileView {
+class org.hbrs.se2.project.views.company.CompanyProfileView {
 - Logger logger
 - boolean banned
 - TextField name
@@ -269,7 +269,7 @@ class org.hbrs.se2.project.views.LoginView {
 - void grabAndSetUserIntoSession()
 - void cookieBanner()
 }
-class org.hbrs.se2.project.views.companyViews.NewJobAdView {
+class org.hbrs.se2.project.views.company.NewJobAdView {
 ~ CommonUIElementProvider ui
 - JobControl jobControl
 - UserControl userControl
@@ -294,7 +294,7 @@ class org.hbrs.se2.project.services.impl.ServiceInitListener {
 + void serviceInit(ServiceInitEvent)
 - void initLanguage(UI)
 }
-class org.hbrs.se2.project.views.studentViews.StudentProfileView {
+class org.hbrs.se2.project.views.student.StudentProfileView {
 - Logger logger
 - TextField major
 - TextField topic
@@ -561,7 +561,7 @@ class org.hbrs.se2.project.entities.Rating {
 + int getRating()
 + void setRating(int)
 }
-class org.hbrs.se2.project.views.studentViews.StudentInboxView {
+class org.hbrs.se2.project.views.student.StudentInboxView {
 + <<Create>> StudentInboxView(InboxControl,UserControl)
 }
 interface org.hbrs.se2.project.dtos.ReportsDTO {
@@ -764,7 +764,7 @@ interface org.hbrs.se2.project.dtos.JobDTO {
 ~ String getContactdetails()
 ~ void setContactdetails(String)
 }
-class org.hbrs.se2.project.views.companyViews.SearchStudentsView {
+class org.hbrs.se2.project.views.company.SearchStudentsView {
 ~ CommonUIElementProvider ui
 - TextField searchField
 - Button searchButton
@@ -831,7 +831,7 @@ class org.hbrs.se2.project.services.impl.ProfileService {
 + void deleteUser(UserDTO)
 + void changeUserPassword(UserDTO)
 }
-class org.hbrs.se2.project.views.studentViews.RegisterStudentView {
+class org.hbrs.se2.project.views.student.RegisterStudentView {
 - Logger logger
 - TextField firstname
 - TextField lastname
@@ -889,7 +889,7 @@ class org.hbrs.se2.project.dtos.impl.UserDTOImpl {
 + String getRole()
 + String toString()
 }
-class org.hbrs.se2.project.views.studentViews.JobsView {
+class org.hbrs.se2.project.views.student.JobsView {
 - CommonUIElementProvider ui
 - UserControl userControl
 - ReportsControl reportsControl
@@ -1042,7 +1042,7 @@ interface org.hbrs.se2.project.dtos.ConversationDTO {
 class org.hbrs.se2.project.Application {
 + {static} void main(String[])
 }
-class org.hbrs.se2.project.views.companyViews.RegisterCompanyView {
+class org.hbrs.se2.project.views.company.RegisterCompanyView {
 - Logger logger
 - TextField name
 - Binder<CompanyDTOImpl> companyBinder
@@ -1078,7 +1078,7 @@ class org.hbrs.se2.project.control.UserControl {
 class org.hbrs.se2.project.helper.CryptoHandler {
 + PasswordEncoder encoder()
 }
-class org.hbrs.se2.project.views.companyViews.CompanyInboxView {
+class org.hbrs.se2.project.views.company.CompanyInboxView {
 + <<Create>> CompanyInboxView(InboxControl,UserControl)
 }
 class org.hbrs.se2.project.services.impl.ValidationService {
@@ -1088,7 +1088,7 @@ class org.hbrs.se2.project.services.impl.ValidationService {
 + boolean checkEmailUnique(String)
 + boolean checkMatrikelnumberUnique(String)
 }
-class org.hbrs.se2.project.views.companyViews.MyAdsView {
+class org.hbrs.se2.project.views.company.MyAdsView {
 - CommonUIElementProvider ui
 - JobControl jobControl
 - UserControl userControl
@@ -1144,7 +1144,7 @@ org.hbrs.se2.project.util.Globals +.. org.hbrs.se2.project.util.Globals.Roles
 org.hbrs.se2.project.util.Globals +.. org.hbrs.se2.project.util.Globals.IllegalOSExcpetion
 org.hbrs.se2.project.util.Exception <|-- org.hbrs.se2.project.util.Globals.IllegalOSExcpetion
 org.hbrs.se2.project.dtos.MajorDTO <|.. org.hbrs.se2.project.dtos.impl.MajorDTOImpl
-org.hbrs.se2.project.views.ProfileView <|-- org.hbrs.se2.project.views.companyViews.CompanyProfileView
+org.hbrs.se2.project.views.ProfileView <|-- org.hbrs.se2.project.views.company.CompanyProfileView
 org.hbrs.se2.project.dtos.StudentDTO <|.. org.hbrs.se2.project.dtos.impl.StudentDTOImpl
 org.hbrs.se2.project.dtos.RatingDTO <|.. org.hbrs.se2.project.dtos.impl.RatingDTOImpl
 org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.JobRepository
@@ -1153,9 +1153,9 @@ com.vaadin.flow.i18n.I18NProvider <|.. org.hbrs.se2.project.services.impl.Transl
 java.io.Serializable <|-- org.hbrs.se2.project.dtos.CompanyDTO
 com.vaadin.flow.component.orderedlayout.VerticalLayout <|-- org.hbrs.se2.project.views.RegisterView
 com.vaadin.flow.component.orderedlayout.VerticalLayout <|-- org.hbrs.se2.project.views.LoginView
-com.vaadin.flow.component.html.Div <|-- org.hbrs.se2.project.views.companyViews.NewJobAdView
+com.vaadin.flow.component.html.Div <|-- org.hbrs.se2.project.views.company.NewJobAdView
 com.vaadin.flow.server.VaadinServiceInitListener <|.. org.hbrs.se2.project.services.impl.ServiceInitListener
-org.hbrs.se2.project.views.ProfileView <|-- org.hbrs.se2.project.views.studentViews.StudentProfileView
+org.hbrs.se2.project.views.ProfileView <|-- org.hbrs.se2.project.views.student.StudentProfileView
 org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.UserRepository
 org.hbrs.se2.project.dtos.ReportsDTO <|.. org.hbrs.se2.project.dtos.impl.ReportsDTOImpl
 org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.MessageRepository
@@ -1168,7 +1168,7 @@ org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.
 org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.TopicRepository
 org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.StudentRepository
 org.hbrs.se2.project.dtos.CompanyDTO <|.. org.hbrs.se2.project.dtos.impl.CompanyDTOImpl
-org.hbrs.se2.project.views.InboxView <|-- org.hbrs.se2.project.views.studentViews.StudentInboxView
+org.hbrs.se2.project.views.InboxView <|-- org.hbrs.se2.project.views.student.StudentInboxView
 java.io.Serializable <|-- org.hbrs.se2.project.dtos.ReportsDTO
 org.hbrs.se2.project.services.RegistrationServiceInterface <|.. org.hbrs.se2.project.services.impl.RegistrationService
 org.hbrs.se2.project.control.exception.Exception <|-- org.hbrs.se2.project.control.exception.DatabaseUserException
@@ -1180,29 +1180,29 @@ com.vaadin.flow.component.applayout.AppLayout <|-- org.hbrs.se2.project.views.Ap
 org.hbrs.se2.project.dtos.MessageDTO <|.. org.hbrs.se2.project.dtos.impl.MessageDTOImpl
 com.vaadin.flow.component.html.Div <|-- org.hbrs.se2.project.views.ProfileView
 java.io.Serializable <|-- org.hbrs.se2.project.dtos.JobDTO
-com.vaadin.flow.component.html.Div <|-- org.hbrs.se2.project.views.companyViews.SearchStudentsView
+com.vaadin.flow.component.html.Div <|-- org.hbrs.se2.project.views.company.SearchStudentsView
 org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.CompanyRepository
 org.hbrs.se2.project.services.ProfileServiceInterface <|.. org.hbrs.se2.project.services.impl.ProfileService
-org.hbrs.se2.project.views.RegisterView <|-- org.hbrs.se2.project.views.studentViews.RegisterStudentView
+org.hbrs.se2.project.views.RegisterView <|-- org.hbrs.se2.project.views.student.RegisterStudentView
 org.hbrs.se2.project.dtos.JobDTO <|.. org.hbrs.se2.project.dtos.impl.JobDTOImpl
 org.hbrs.se2.project.dtos.UserDTO <|.. org.hbrs.se2.project.dtos.impl.UserDTOImpl
-org.hbrs.se2.project.views.studentViews.Div <|-- org.hbrs.se2.project.views.studentViews.JobsView
+org.hbrs.se2.project.views.student.Div <|-- org.hbrs.se2.project.views.student.JobsView
 java.io.Serializable <|-- org.hbrs.se2.project.dtos.MessageDTO
 java.io.Serializable <|-- org.hbrs.se2.project.dtos.StudentDTO
 org.hbrs.se2.project.services.LoginServiceInterface <|.. org.hbrs.se2.project.services.impl.LoginService
 org.hbrs.se2.project.services.ReportsServiceInterface <|.. org.hbrs.se2.project.services.impl.ReportsService
 java.io.Serializable <|-- org.hbrs.se2.project.dtos.ConversationDTO
 org.springframework.boot.web.servlet.support.SpringBootServletInitializer <|-- org.hbrs.se2.project.Application
-org.hbrs.se2.project.views.RegisterView <|-- org.hbrs.se2.project.views.companyViews.RegisterCompanyView
+org.hbrs.se2.project.views.RegisterView <|-- org.hbrs.se2.project.views.company.RegisterCompanyView
 org.springframework.data.jpa.repository.JpaRepository <|-- org.hbrs.se2.project.repository.ConversationRepository
 org.hbrs.se2.project.dtos.SkillDTO <|.. org.hbrs.se2.project.dtos.impl.SkillDTOImpl
-org.hbrs.se2.project.views.InboxView <|-- org.hbrs.se2.project.views.companyViews.CompanyInboxView
-com.vaadin.flow.component.html.Div <|-- org.hbrs.se2.project.views.companyViews.MyAdsView
-org.hbrs.se2.project.control.ProfileControl <-- org.hbrs.se2.project.views.studentViews.ProfileView
+org.hbrs.se2.project.views.InboxView <|-- org.hbrs.se2.project.views.company.CompanyInboxView
+com.vaadin.flow.component.html.Div <|-- org.hbrs.se2.project.views.company.MyAdsView
+org.hbrs.se2.project.control.ProfileControl <-- org.hbrs.se2.project.views.student.ProfileView
 org.hbrs.se2.project.control.RegistrationControl <-- org.hbrs.se2.project.views.RegisterView
 org.hbrs.se2.project.control.AuthorizationControl <-- org.hbrs.se2.project.views.LoginView
-org.hbrs.se2.project.control.JobControl <-- org.hbrs.se2.project.views.studentViews.JobsView
-org.hbrs.se2.project.control.JobControl <-- org.hbrs.se2.project.views.companyViews.MyAdsView
+org.hbrs.se2.project.control.JobControl <-- org.hbrs.se2.project.views.student.JobsView
+org.hbrs.se2.project.control.JobControl <-- org.hbrs.se2.project.views.company.MyAdsView
 org.hbrs.se2.project.entities <-- org.hbrs.se2.project.services.factory.AbstractEntityFactory : builds
 org.hbrs.se2.project.entities.Company <-- org.hbrs.se2.project.repository.CompanyRepository : creates
 org.hbrs.se2.project.entities.Student <-- org.hbrs.se2.project.repository.StudentRepository : creates
