@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.views.studentViews;
+package org.hbrs.se2.project.views.student;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 @Route(value = Globals.Pages.STUDENT_PROFILE_VIEW, layout = AppView.class, registerAtStartup = false)
-@PageTitle("Profile")
+@PageTitle("Profil")
 public class StudentProfileView extends ProfileView {
 
     private final Logger logger = Utils.getLogger(this.getClass().getName());
@@ -30,10 +30,10 @@ public class StudentProfileView extends ProfileView {
     private final TextField newMajor = new TextField("Füge einen neuen Studiengang hinzu:");
     private final TextField newTopic = new TextField("Füge ein neues Interessengebiet hinzu:");
     private final TextField newSkill = new TextField("Füge eine neue Fähigkeit hinzu:");
-    private final TextField firstname = new TextField("Vorname:");
-    private final TextField lastname = new TextField("Nachname:");
-    private final TextField university = new TextField("Universität:");
-    private final TextField matrikelnumber = new TextField("Matrikelnummer:");
+    private final TextField firstname = new TextField("Vorname");
+    private final TextField lastname = new TextField("Nachname");
+    private final TextField university = new TextField("Universität");
+    private final TextField matrikelnumber = new TextField("Matrikelnummer");
 
     private Grid<MajorDTO> gridMajors;
     private Grid<TopicDTO> gridTopics;
@@ -48,7 +48,7 @@ public class StudentProfileView extends ProfileView {
     private final Set<TopicDTO> removeTopics = new HashSet<>();
     private final Set<SkillDTO> removeSkills = new HashSet<>();
 
-    private final String DELETE = "Entfernen";
+    private static final String DELETE = "Entfernen";
 
     private final Binder<StudentDTOImpl> studentBinder = new BeanValidationBinder<>(StudentDTOImpl.class);
 

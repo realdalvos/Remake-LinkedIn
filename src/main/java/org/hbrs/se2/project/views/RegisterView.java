@@ -31,7 +31,7 @@ public abstract class RegisterView extends VerticalLayout {
     protected TextField username = new TextField("Benutzername");
     protected EmailField email = createEmailField();
 
-    protected final String NOTEMPTY = "Darf nicht leer sein";
+    protected static final String NOTEMPTY = "Darf nicht leer sein";
     protected Binder<UserDTOImpl> userBinder = new BeanValidationBinder<>(UserDTOImpl.class);
 
     protected Button loginButton() {

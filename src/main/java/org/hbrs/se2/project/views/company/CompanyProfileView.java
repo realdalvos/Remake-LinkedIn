@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.views.companyViews;
+package org.hbrs.se2.project.views.company;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -28,12 +28,12 @@ import java.util.stream.Stream;
 @JsModule("@vaadin/vaadin-lumo-styles/badge.js")
 @CssImport(value = "./themes/mytheme/styles.css", include = "lumo-badge")
 @Route(value = Globals.Pages.COMPANY_PROFILE_VIEW, layout = AppView.class, registerAtStartup = false)
-@PageTitle("Profile")
+@PageTitle("Profil")
 public class CompanyProfileView extends ProfileView {
     private final Logger logger = Utils.getLogger(this.getClass().getName());
     private boolean banned;
-    private final TextField name = new TextField("Name des Unternehmens:");
-    private final TextField industry = new TextField("Industrie:");
+    private final TextField name = new TextField("Name des Unternehmens");
+    private final TextField industry = new TextField("Industrie");
 
     private final Binder<CompanyDTOImpl> companyBinder = new BeanValidationBinder<>(CompanyDTOImpl.class);
 

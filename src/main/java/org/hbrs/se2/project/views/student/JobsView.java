@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.views.studentViews;
+package org.hbrs.se2.project.views.student;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Text;
@@ -43,7 +43,7 @@ import java.util.stream.Stream;
  * Student - Jobs list View
  */
 @Route(value = Globals.Pages.JOBS_VIEW, layout = AppView.class, registerAtStartup = false)
-@PageTitle("Jobs")
+@PageTitle("Jobsuche")
 public class JobsView extends Div {
     private final CommonUIElementProvider ui;
     private final UserControl userControl;
@@ -51,7 +51,7 @@ public class JobsView extends Div {
     private final RatingControl ratingControl;
     // interactive search field
     private final TextField searchField = new TextField();
-    private final Button searchButton = new Button(getTranslation("view.job.button.search"));
+    private final Button searchButton = new Button(getTranslation("view.button.search"));
     private Button report;
     private Button rate;
     private Button noReport;
@@ -245,7 +245,7 @@ public class JobsView extends Div {
         Button send = new Button("Senden");
         send.addClickListener(event -> {
             if (!content.isEmpty()) {
-                ui.makeYesNoDialog("Anfrage abschicken?", confirm -> {
+                ui.makeYesNoDialog("Anfrage abschicken?", click -> {
                     Binder<ReportsDTOImpl> binder = new BeanValidationBinder<>(ReportsDTOImpl.class);
                     binder.setBean(new ReportsDTOImpl(companyid, studentid, content.getValue()));
                     reportsControl.createReport(binder.getBean());
