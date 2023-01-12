@@ -16,6 +16,7 @@ import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.PWA;
 import org.hbrs.se2.project.control.AuthorizationControl;
+import org.hbrs.se2.project.control.UserControl;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.helper.NavigateHandler;
 import org.hbrs.se2.project.util.Globals;
@@ -39,11 +40,13 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     private H4 helloUser;
 
     private final AuthorizationControl authorizationControl;
+    private final UserControl userControl;
 
-    public AppView(AuthorizationControl authorizationControl) {
+    public AppView(AuthorizationControl authorizationControl, UserControl userControl) {
         this.authorizationControl = authorizationControl;
+        this.userControl = userControl;
 
-        if(authorizationControl.getCurrentUser() == null) {
+        if(userControl.getCurrentUser() == null) {
             logger.info("In Constructor of App View - No User given");
         } else {
             setUpUI();
@@ -93,7 +96,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
 
         // Only if role is equal to company
-        if(authorizationControl.hasUserRole(authorizationControl.getCurrentUser(), Globals.Roles.COMPANY)) {
+        if(authorizationControl.hasUserRole(userControl.getCurrentUser(), Globals.Roles.COMPANY)) {
             bar.addItem(getTranslation("view.main.bar.newJob"), e -> NavigateHandler.navigateToNewJob());
         }
 
@@ -153,18 +156,18 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         Tab[] tabs = new Tab[]{};
 
         // if the user has the role "student" he has the tabs "Jobs"
-        if(authorizationControl.hasUserRole(authorizationControl.getCurrentUser(), Globals.Roles.STUDENT)) {
+        if(authorizationControl.hasUserRole(userControl.getCurrentUser(), Globals.Roles.STUDENT)) {
             logger.info("User is student");
             tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.jobs"), JobsView.class));
             tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.profile"), StudentProfileView.class));
             tabs = Utils.append(tabs, createTab(getTranslation("view.main.nav.mailbox"), StudentInboxView.class));
         } else
             // has the user the role "company" they have the tabs "My Ads"
-            if(authorizationControl.hasUserRole(authorizationControl.getCurrentUser(), Globals.Roles.COMPANY)) {
+            if(authorizationControl.hasUserRole(userControl.getCurrentUser(), Globals.Roles.COMPANY)) {
                 logger.info("User is company");
                 boolean banned = true;
                 try{
-                    banned = authorizationControl.isCompanyOfUserBanned(authorizationControl.getCurrentUser());
+                    banned = authorizationControl.isCompanyOfUserBanned(userControl.getCurrentUser());
                 } catch (DatabaseUserException ex){
                     logger.info("User is not available");
                 }
@@ -213,7 +216,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     }
 
     private String getCurrentNameOfUser() {
-        return authorizationControl.getCurrentUser().getUsername();
+        return userControl.getCurrentUser().getUsername();
     }
 
     /**
@@ -225,7 +228,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
      */
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        if (authorizationControl.getCurrentUser() == null){
+        if (userControl.getCurrentUser() == null){
             beforeEnterEvent.rerouteTo(Globals.Pages.LOGIN_VIEW);
         }
     }
