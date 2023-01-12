@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.views.studentViews;
+package org.hbrs.se2.project.views.student;
 
 
 import com.vaadin.flow.component.Component;
