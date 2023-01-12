@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.views.student;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -41,12 +42,6 @@ public class StudentProfileView extends ProfileView {
     private Set<MajorDTO> majors;
     private Set<TopicDTO> topics;
     private Set<SkillDTO> skills;
-    private Set<String> newMajors;
-    private Set<String> newTopics;
-    private Set<String> newSkills;
-    private final Set<MajorDTO> removeMajors = new HashSet<>();
-    private final Set<TopicDTO> removeTopics = new HashSet<>();
-    private final Set<SkillDTO> removeSkills = new HashSet<>();
 
     private static final String DELETE = "Entfernen";
 
@@ -80,6 +75,12 @@ public class StudentProfileView extends ProfileView {
         Grid<String> newMajorsGrid;
         Grid<String> newTopicsGrid;
         Grid<String> newSkillsGrid;
+        Set<String> newMajors;
+        Set<String> newTopics;
+        Set<String> newSkills;
+        Set<MajorDTO> removeMajors = new HashSet<>();
+        Set<TopicDTO> removeTopics = new HashSet<>();
+        Set<SkillDTO> removeSkills = new HashSet<>();
         FormLayout editLayout = profileLayout();
         Stream.of(username, firstname, lastname, email, university, matrikelnumber).forEach(field -> {
             editLayout.add(field);
@@ -133,22 +134,22 @@ public class StudentProfileView extends ProfileView {
                 ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?",
                         event -> {
                             try {
-                                if (!userBinder.getBean().getUsername().equals(userControl.getCurrentUser().getUsername())) {
-                                    authorizationControl.logoutUser();
-                                } else {
-                                    buttonLayout.removeAll();
-                                    layout.removeAll();
-                                    ui.throwNotification("Profil erfolgreich gespeichert.");
-                                }
+                                removeMajors.forEach(majorDTO -> profileControl.removeMajor(userControl.getCurrentUser().getUserid(), majorDTO.getMajorid()));
+                                removeTopics.forEach(topicDTO -> profileControl.removeTopic(userControl.getCurrentUser().getUserid(), topicDTO.getTopicid()));
+                                removeSkills.forEach(skillDTO -> profileControl.removeSkill(userControl.getCurrentUser().getUserid(), skillDTO.getSkillid()));
                                 profileControl.saveStudentData(
                                         userBinder.getBean(), studentBinder.getBean(),
                                         newMajors, newTopics, newSkills);
+                                buttonLayout.removeAll();
+                                layout.removeAll();
+                                ui.throwNotification("Profil erfolgreich gespeichert.");
+                                if (!userBinder.getBean().getUsername().equals(userControl.getCurrentUser().getUsername())) {
+                                    UI.getCurrent().getSession().setAttribute(Globals.CURRENT_USER, userControl.getUserByUserid(userBinder.getBean().getUserid()));
+                                    UI.getCurrent().getPage().reload();
+                                }
                             } catch (DatabaseUserException e) {
                                 logger.error("Something went wrong with saving student data");
                             }
-                            removeMajors.forEach(majorDTO -> profileControl.removeMajor(userControl.getCurrentUser().getUserid(), majorDTO.getMajorid()));
-                            removeTopics.forEach(topicDTO -> profileControl.removeTopic(userControl.getCurrentUser().getUserid(), topicDTO.getTopicid()));
-                            removeSkills.forEach(skillDTO -> profileControl.removeSkill(userControl.getCurrentUser().getUserid(), skillDTO.getSkillid()));
                             viewLayout();
                         });
 

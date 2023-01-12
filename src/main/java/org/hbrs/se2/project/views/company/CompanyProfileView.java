@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.views.company;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
@@ -85,19 +86,19 @@ public class CompanyProfileView extends ProfileView {
             if (userBinder.isValid() && companyBinder.isValid()) {
                 ui.makeConfirm("Möchtest du die Änderungen an deinem Profil speichern?",
                         event -> {
-                            if (!userBinder.getBean().getUsername().equals(userControl.getCurrentUser().getUsername())) {
-                                authorizationControl.logoutUser();
-                            } else {
-                                buttonLayout.removeAll();
-                                layout.removeAll();
-                                viewLayout();
-                                ui.throwNotification("Profil erfolgreich gespeichert.");
-                            }
                             try {
                                 profileControl.saveCompanyData(userBinder.getBean(), companyBinder.getBean());
+                                buttonLayout.removeAll();
+                                layout.removeAll();
+                                ui.throwNotification("Profil erfolgreich gespeichert.");
+                                if (!userBinder.getBean().getUsername().equals(userControl.getCurrentUser().getUsername())) {
+                                    UI.getCurrent().getSession().setAttribute(Globals.CURRENT_USER, userControl.getUserByUserid(userBinder.getBean().getUserid()));
+                                    UI.getCurrent().getPage().reload();
+                                }
                             } catch (DatabaseUserException e) {
                                 logger.info("failed to update company information in db");
                             }
+                            viewLayout();
                         });
             } else {
                 ui.makeDialog("Überprüfe bitte deine Angaben auf Korrektheit");
