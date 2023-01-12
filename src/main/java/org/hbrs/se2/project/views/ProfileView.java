@@ -75,7 +75,7 @@ public abstract class ProfileView extends Div {
             confirmField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
             Button close = new Button("Abbrechen");
             close.addClickListener(event -> dialog.close());
-            Button delete = new Button(getTranslation("view.button.search"));
+            Button delete = new Button(getTranslation("view.button.delete"));
             delete.setEnabled(false);
             confirmField.setValueChangeMode(ValueChangeMode.EAGER);
             confirmField.addValueChangeListener(event -> delete.setEnabled(confirmField.getValue().equals(user)));
