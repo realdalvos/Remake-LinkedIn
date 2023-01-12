@@ -96,6 +96,7 @@ public abstract class ProfileView extends Div {
         });
 
         changePasswd.addClickListener(buttonClickEvent -> {
+            setPasswordBinder();
             VerticalLayout changeLayout = new VerticalLayout();
             HorizontalLayout buttons = new HorizontalLayout();
             Dialog dialog = ui.makeGenericDialog(changeLayout, buttons);
@@ -115,6 +116,7 @@ public abstract class ProfileView extends Div {
                         ui.makeDialog("Passwort NICHT geändert");
                     }
                     dialog.close();
+                    setUserBinder();
                 } else {
                     ui.makeDialog("Bitte überprüfe deine Eingaben");
                 }
@@ -135,7 +137,7 @@ public abstract class ProfileView extends Div {
         return formLayout;
     }
 
-    protected void setUserBinder() {
+    private void setPasswordBinder() {
         passwordBinder.setBean(mapper.map(userControl.getCurrentUser(), UserDTOImpl.class));
         passwordBinder
                 .forField(password)
@@ -149,7 +151,9 @@ public abstract class ProfileView extends Div {
                 .bind(UserDTOImpl::getPassword, UserDTOImpl::setPassword);
         password.clear();
         passwordConfirm.clear();
+    }
 
+    protected void setUserBinder() {
         userBinder.setBean(mapper.map(userControl.getCurrentUser(), UserDTOImpl.class));
         userBinder
                 .forField(username)

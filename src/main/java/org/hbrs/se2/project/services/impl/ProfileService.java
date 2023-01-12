@@ -1,11 +1,13 @@
 package org.hbrs.se2.project.services.impl;
 
+import com.vaadin.flow.component.UI;
 import org.hbrs.se2.project.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.dtos.*;
 import org.hbrs.se2.project.repository.*;
 import org.hbrs.se2.project.services.ProfileServiceInterface;
 import org.hbrs.se2.project.services.factory.EntityCreationService;
 import org.hbrs.se2.project.services.ui.CommonUIElementProvider;
+import org.hbrs.se2.project.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -132,5 +134,7 @@ public class ProfileService implements ProfileServiceInterface {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (userRepository.updateUserSetPasswordForUserid(user.getPassword(), user.getUserid()) != 1)
             throw new DatabaseUserException("A Failure occurred while saving a user account in the database at createAccount");
+        UI.getCurrent().getSession().setAttribute(Globals.CURRENT_USER, userRepository.findByUserid(user.getUserid()));
     }
+
 }
